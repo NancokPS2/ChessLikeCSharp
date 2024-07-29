@@ -1,0 +1,9 @@
+{
+    "dotnet.defaultSolution": "RPG.sln",
+    "launch": {
+
+        "configurations": [],
+        "compounds": []
+    },
+    "godotTools.editorPath.godot4": "\"C:\\Programs\\Godot 3.5\\Godot_v4.3-rc1_mono_win64.exe\""
+}

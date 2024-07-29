@@ -1,0 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ChessLike.Shared;
+
+public interface IManhattanDistance
+{
+    public static int GetDistance(Vector3i point_a, Vector3i point_b)
+    {
+        return point_a.DistanceManhattanTo(point_b);
+    }
+}

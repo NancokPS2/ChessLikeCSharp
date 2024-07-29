@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1te4g7l74ot1"]
+
+[ext_resource type="Script" path="res://Godot/Display/Display.cs" id="1_oyqpo"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mgvvd"]
+size = Vector2(50, 50)
+
+[sub_resource type="Environment" id="Environment_wnu7r"]
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 1.84
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_oyqpo")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.925778, 0.378067, 0, -0.378067, 0.925778, 0, 2.11298, 6.89754)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_mgvvd")
+skeleton = NodePath("../Camera3D")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, 0, 176, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wnu7r")

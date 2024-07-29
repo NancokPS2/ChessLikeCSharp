@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach",
+            "type": "godot-mono",
+            "request": "attach"
+        },
+        {
+            "name": "Play",
+            "type": "coreclr",
+            "request": "launch",
+            //"debugServer": 6006,
+            "preLaunchTask": "build",
+            "program": "C:\\Programs\\Godot 3.5\\Godot_v4.3-rc1_mono_win64.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+        }
+    ]
+}
