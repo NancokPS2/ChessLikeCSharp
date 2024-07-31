@@ -9,7 +9,19 @@ public partial class Action
 {
     public Action PresetDealDamage(float amount)
     {
-        effect_params.StatAddition[StatSet.Name.HEALTH] = amount;
+        effect_params.TargetStatChangeValue[StatSet.Name.HEALTH] = amount;
+        return this;
+    }
+
+    public Action PresetPushBack(int distance)
+    {
+        effect_params.PositionChange = Vector3i.FORWARD * distance;
+        return this;
+    }
+
+    public Action PresetConsumeEnergy(float amount)
+    {
+        effect_params.OwnerStatChangeValue[StatSet.Name.ENERGY] = amount;
         return this;
     }
 }

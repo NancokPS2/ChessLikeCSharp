@@ -27,9 +27,9 @@ public partial class Action
     }
     public string name = "Undefined Action";
 
-    public EffectFilterParams effect_filter_params;
-    public TargetParams target_params;
-    public EffectParams effect_params;
+    public EffectFilterParams effect_filter_params = new();
+    public TargetParams target_params = new();
+    public EffectParams effect_params = new();
 
 
     public virtual bool IsTargetingValid(UsageParams usage_params)
@@ -97,9 +97,9 @@ public partial class Action
     {
         foreach (Mob target in usage_params.mob_targets)
         {
-            foreach (StatSet.Name stat in effect_params.StatAddition.Keys)
+            foreach (StatSet.Name stat in effect_params.TargetStatChangeValue.Keys)
             {
-                float value = effect_params.StatAddition[stat];
+                float value = effect_params.TargetStatChangeValue[stat];
                 target.Stats.ChangeValue(stat, value);
             }
             target.Position += effect_params.PositionChange;
@@ -113,16 +113,30 @@ public partial class Action
     {
         string output = "";
 
-        foreach (StatSet.Name stat in effect_params.StatAddition.Keys)
+        //Target stat value changes.
+        foreach (StatSet.Name stat in effect_params.TargetStatChangeValue.Keys)
         {
             string? stat_string = Enum.GetName(typeof(StatSet.Name), stat);
             if (stat_string == null)
             {
                 throw new ArgumentNullException("What?");
             }
-            string stat_value = effect_params.StatAddition[stat].ToString();
+            string stat_value = effect_params.TargetStatChangeValue[stat].ToString();
 
-            output = new(output + stat_string + stat_value + "\n");
+            output = new(output + "Inflict: " + stat_string + stat_value + "\n");
+        }
+
+        //Owner stat value changes.
+        foreach (StatSet.Name stat in effect_params.TargetStatChangeValue.Keys)
+        {
+            string? stat_string = Enum.GetName(typeof(StatSet.Name), stat);
+            if (stat_string == null)
+            {
+                throw new ArgumentNullException("What?");
+            }
+            string stat_value = effect_params.TargetStatChangeValue[stat].ToString();
+
+            output = new(output + "Suffer: " + stat_string + stat_value + "\n");
         }
 
         if (effect_params.PositionChange != Vector3i.ZERO)

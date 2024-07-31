@@ -8,7 +8,7 @@ public partial class Mob
         Stats.SetStat(StatSet.Name.ENERGY, 20);
         Stats.SetStat(StatSet.Name.SPEED, 5);
 
-        actions.Add(new Action().PresetDealDamage(10));
+        actions.Add(new Action().PresetDealDamage(10).PresetPushBack(1));
         
         return this;
     }
@@ -17,6 +17,13 @@ public partial class Mob
     {
         float new_health = Stats.GetMax(StatSet.Name.HEALTH) * 0.1f;
         Stats.SetValue(StatSet.Name.HEALTH, new_health);
+        return this;
+    }
+
+    public Mob PresetWarrior()
+    {
+        //TODO
+        classes.Add(null);
         return this;
     }
 

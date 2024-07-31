@@ -31,16 +31,15 @@ public partial class Mob
     }
 
     //IRelation
-    Identity _identity = new();
-    public Identity Identity { get => _identity; set => _identity = value; }
 
-    Dictionary<Identity, float> _relation_list = new();
-    public Dictionary<Identity, float> relation_list { get => _relation_list; set => _relation_list = value; }
+    public Identity Identity { get; set; } = new(Identity.INVALID);
+
+    public Dictionary<Identity, float> RelationList { get; set; } = new();
 
     public List<Identity> GetAllWithLevel(Level level)
     {
         List<Identity> output = new();
-        foreach (Identity identity in relation_list.Keys)
+        foreach (Identity identity in RelationList.Keys)
         {
             if(IsLevel(identity, level))
             {
@@ -86,13 +85,13 @@ public partial class Mob
     public float GetRelationWith(Identity other)
     {
         float pass = 0.0f;
-        relation_list.TryGetValue(other, out pass);
+        RelationList.TryGetValue(other, out pass);
         return pass;
     }
 
     public void SetRelationWith(Identity other, float val)
     {
-        relation_list[other] = val;
+        RelationList[other] = val;
     }
 
     /// <summary>

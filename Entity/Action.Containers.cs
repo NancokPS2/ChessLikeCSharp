@@ -22,18 +22,24 @@ public partial class Action
     /// <summary>
     /// Variables for Effect usage. Must be filled in the order of the variables.
     /// </summary>
-    public struct UsageParams
+    public class UsageParams
     {
         public Mob owner;
         public Grid grid;
         public Vector3i location_selected;
-        public List<Vector3i> locations_targeted;
-        public List<Mob> mob_targets;
+        public List<Vector3i> locations_targeted = new();
+        public List<Mob> mob_targets = new();
 
+        public UsageParams(Mob owner, Grid grid, Vector3i location_selected)
+        {
+            this.owner = owner;
+            this.grid = grid;
+            this.location_selected = location_selected;
+        }
     }
 
     //Defines what can be affected with this and how.
-    public struct EffectFilterParams
+    public class EffectFilterParams
     {
         public bool AffectMob = true;
         public bool IgnoreAlly = false;
@@ -46,7 +52,7 @@ public partial class Action
     }
 
     //Properties used during the targeting phase to decide if the targets are valid.
-    public struct TargetParams
+    public class TargetParams
     {
         //Distance from the user.
         public float RangeMax = 4;
@@ -59,13 +65,16 @@ public partial class Action
     }
 
     //Decides what effect it will have on targets
-    public struct EffectParams
+    public class EffectParams
     {
-        public Dictionary<StatSet.Name, float> StatAddition = new();
+        public Dictionary<StatSet.Name, float> TargetStatChangeValue = new Dictionary<StatSet.Name, float>();
+        public Dictionary<StatSet.Name, float> OwnerStatChangeValue = new Dictionary<StatSet.Name, float>();
         public Vector3i PositionChange = Vector3i.ZERO;
 
         public EffectParams()
         {
+            PositionChange = Vector3i.ZERO;
+            TargetStatChangeValue = new Dictionary<StatSet.Name, float>();
         }
     }
 }

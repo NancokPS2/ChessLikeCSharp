@@ -11,7 +11,7 @@ public struct Faction : IRelation
 
     UniqueList<Identity> members = new();
 
-    public Dictionary<Identity, float> relation_list { get; set; } = new();
+    public Dictionary<Identity, float> RelationList { get; set; } = new();
 
     public Inventory inventory = new(0);
 
@@ -20,7 +20,7 @@ public struct Faction : IRelation
     {
         Identity = new(name, name);
         members = new();
-        relation_list = new();
+        RelationList = new();
     }
     public Faction(Identity[] members, string name) : this(name)
     {
@@ -62,7 +62,7 @@ public struct Faction : IRelation
     public List<Identity> GetAllWithLevel(Level level)
     {
         List<Identity> output = new();
-        foreach (Identity identity in relation_list.Keys)
+        foreach (Identity identity in RelationList.Keys)
         {
             if(IsLevel(identity, level))
             {
@@ -108,13 +108,13 @@ public struct Faction : IRelation
     public float GetRelationWith(Identity other)
     {
         float pass = 0.0f;
-        relation_list.TryGetValue(other, out pass);
+        RelationList.TryGetValue(other, out pass);
         return pass;
     }
 
     public void SetRelationWith(Identity other, float val)
     {
-        relation_list[other] = val;
+        RelationList[other] = val;
     }
 
     

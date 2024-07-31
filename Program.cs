@@ -34,7 +34,7 @@ public class TESTING
 
 		//dam.Use(test_params); - TODO
 		Console.WriteLine(mob.Stats.GetValue(StatSet.Name.HEALTH));
-		Console.WriteLine(mob.relation_list);
+		Console.WriteLine(mob.RelationList);
 
 	}
 

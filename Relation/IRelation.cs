@@ -9,7 +9,7 @@ namespace ChessLike.Entity.Relation;
 public interface IRelation
 {
 
-    public Dictionary<Identity, float> relation_list {set; get;}
+    public Dictionary<Identity, float> RelationList {set; get;}
     public Identity Identity {set; get;}
     public void SetRelationWith(Identity other, float val);
     public float GetRelationWith(Identity other);
