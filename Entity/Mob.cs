@@ -11,8 +11,8 @@ namespace ChessLike.Entity;
 
 
 
-public partial class Mob : IMobility, IRelation, IStats, ITurn
+public partial class Mob : IPosition, IRelation, IStats, ITurn
 {
-
+    List<Action> actions = new();
 
 }

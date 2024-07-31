@@ -7,6 +7,9 @@ public partial class Mob
         Stats.SetStat(StatSet.Name.HEALTH, 100);
         Stats.SetStat(StatSet.Name.ENERGY, 20);
         Stats.SetStat(StatSet.Name.SPEED, 5);
+
+        actions.Add(new Action().PresetDealDamage(10));
+        
         return this;
     }
 

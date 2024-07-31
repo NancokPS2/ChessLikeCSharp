@@ -16,7 +16,7 @@ public struct Cell : IEquatable<Cell>
     }
 
     public string name;
-    public Shared.IMobility occupant;
+    public Shared.IPosition occupant;
     public List<Flag> flags;
     public bool selectable;
 

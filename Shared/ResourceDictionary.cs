@@ -1,7 +1,6 @@
 using System;
 using System.Xml;
 using ChessLike.Entity;
-using ChessLike.Entity.Action;
 
 namespace ChessLike.Shared;
 
@@ -183,7 +182,7 @@ public class ResourceDictionary
             return Key.FACTION;
         }
 
-        if (obj is Effect)
+        if (obj is Entity.Action)
         {
             return Key.ACTION;
         }
@@ -207,7 +206,7 @@ public class ResourceDictionary
                 return typeof(Faction);
 
             case Key.ACTION:
-                return typeof(Effect);
+                return typeof(Entity.Action);
 
             case Key.ITEM:
                 return typeof(Storage.Item);

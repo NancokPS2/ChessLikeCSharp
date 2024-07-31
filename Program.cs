@@ -33,7 +33,7 @@ public class TESTING
 		//Create parameters for action - TODO
 
 		//dam.Use(test_params); - TODO
-		Console.WriteLine(mob.GetStatValue(IStats.Stat.HEALTH));
+		Console.WriteLine(mob.Stats.GetValue(StatSet.Name.HEALTH));
 		Console.WriteLine(mob.relation_list);
 
 	}

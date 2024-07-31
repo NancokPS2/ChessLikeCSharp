@@ -3,7 +3,7 @@ using System.Diagnostics.Tracing;
 using System.Security.Cryptography.X509Certificates;
 using ChessLike.Entity;
 
-namespace ChessLike.Entity.Action;
+namespace ChessLike.Entity;
 
 /// <summary>
 /// Usage:
@@ -16,7 +16,7 @@ namespace ChessLike.Entity.Action;
 /// Pass the result of GetTargetsAffected() to UsageParams.mob_targets
 /// 
 /// </summary>
-public class Effect
+public partial class Action
 {
     public enum EffectFilterParameter
     {
@@ -25,14 +25,8 @@ public class Effect
         AFFECT_MOB,
         AFFECT_ENTITY,
     }
+    public string name = "Undefined Action";
 
-    public enum Error
-    {
-        NONE,
-        MISSING_INTERFACES,//Missing interfaces, and therefore, the required methods for this to work.
-        PARAMETER_BLOCK,//The parameters prevented this from working.
-        FATAL,
-    }
     public EffectFilterParams effect_filter_params;
     public TargetParams target_params;
     public EffectParams effect_params;
@@ -115,5 +109,34 @@ public class Effect
     }
 
 
+    public string GetEffectDescription(UsageParams usage_params)
+    {
+        string output = "";
 
+        foreach (StatSet.Name stat in effect_params.StatAddition.Keys)
+        {
+            string? stat_string = Enum.GetName(typeof(StatSet.Name), stat);
+            if (stat_string == null)
+            {
+                throw new ArgumentNullException("What?");
+            }
+            string stat_value = effect_params.StatAddition[stat].ToString();
+
+            output = new(output + stat_string + stat_value + "\n");
+        }
+
+        if (effect_params.PositionChange != Vector3i.ZERO)
+        {
+            output = new( output + effect_params.PositionChange.ToString() + "\n" );
+        }
+
+        if (output == "")
+        {
+            output = "Sorry, nothing.";
+        }
+        return output;
+        
+            
+    }
 }
+
