@@ -10,10 +10,11 @@ namespace ChessLike;
 
 public static partial class Global
 {
-    //public static Directory directory = new();
-    public static ResourceDictionary resources = new();
+    public struct Variables
+    {
+        public string player_profile;
 
-    public static Variables variables = new();
+    }
 
 }
 

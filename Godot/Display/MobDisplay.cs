@@ -1,6 +1,6 @@
 using ChessLike.Entity;
 
-namespace Godot;
+namespace Godot.Display;
 
 
 /// <summary>
@@ -9,20 +9,13 @@ namespace Godot;
 [GlobalClass]
 public partial class MobDisplay : Godot.Node3D
 {
-
-    public static readonly Mesh DEFAULT = new SphereMesh()
-    { 
-        Radius = 0.5f,
-        Height = 1.0f,
-    };
-
-    private List<Mob> mobs = new();
-    Dictionary<Mob, MeshInstance3D> mesh_pool = new();
-    Dictionary<Mob, Label3D> name_tag_pool = new();
+    List<Mob> mobs = new();
 
     public override void _Ready()
     {
         base._Ready();
+        AddChild(mob_ui);
+        SetUIAnchors(0,0.7f, 0.4f, 1);
     }
 
     public void AddMob(Mob mob)
@@ -40,7 +33,7 @@ public partial class MobDisplay : Godot.Node3D
         AddChild(mesh_instance);
         AddChild(label);
 
-        SetMobMesh(mob, (Mesh)DEFAULT.Duplicate());
+        SetMobMesh(mob, (Mesh)MeshPreset.MOB.Duplicate());
         SetMobNameTag(mob);
     }
 
@@ -51,6 +44,7 @@ public partial class MobDisplay : Godot.Node3D
         {
             UpdateNameTagPositions();
             UpdateMeshPositions();
+            UpdateUI();
         }
     }
 
@@ -92,93 +86,6 @@ public partial class MobDisplay : Godot.Node3D
         {
             AddMob(mob);
         }
-    }
-
-    //MeshInstance3D
-    public MeshInstance3D GetMobMeshInstance(Mob mob)
-    {
-        EnsureMobValid(mob);
-        return mesh_pool[mob];
-    }
-
-    public void SetMobMesh(Mob mob, Mesh mesh)
-    {
-        EnsureMobValid(mob);
-
-        MeshInstance3D instance = GetMobMeshInstance(mob);
-        instance.Mesh = mesh;
-    }
-
-    public bool HasMeshInstance(Mob mob)
-    {
-        MeshInstance3D? output;
-        bool exists = mesh_pool.TryGetValue(mob, out output);
-        //If it doesn't exist or it is not valid.
-        if(!exists || !IsInstanceValid(output))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    public void UpdateMeshPositions()
-    {
-        foreach (Mob mob in mobs)
-        {
-            MeshInstance3D instance = GetMobMeshInstance(mob);
-            instance.Position = mob.Position.ToGVector3();
-        }
-    }
-
-    //Name tag.
-    public void SetMobNameTag(Mob mob)
-    {
-        EnsureMobValid(mob);
-
-        string name = mob.Identity.displayed_name;
-
-        Label3D name_tag = GetMobLabel3D(mob);
-        name_tag.Text = name;
-    }
-
-    public Label3D GetMobLabel3D(Mob mob)
-    {
-        EnsureMobValid(mob);
-        return name_tag_pool[mob];
-    }
-
-    public bool HasNameTag(Mob mob)
-    {
-        Label3D? output;
-        bool exists = name_tag_pool.TryGetValue(mob, out output);
-        //If it doesn't exist or it is not valid.
-        if(!exists || !IsInstanceValid(output))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    public void UpdateNameTagPositions()
-    {
-        foreach (Mob mob in mobs)
-        {
-            Label3D label = GetMobLabel3D(mob);
-            label.Position = mob.Position.ToGVector3() + Godot.Vector3.Up;
-        }
-    }
-
-    public class MeshPreset
-    {
-        public static readonly Mesh CELL = new BoxMesh()
-        { 
-            Size = new Godot.Vector3(1,1,1)
-        };
-
-        public static readonly Mesh MOB = new SphereMesh()
-        { 
-            Radius = 0.5f
-        };
     }
 
 }

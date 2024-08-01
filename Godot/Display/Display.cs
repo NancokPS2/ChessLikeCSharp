@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 
-namespace Godot;
+namespace Godot.Display;
 
 public partial class Display : Godot.Node
 {
@@ -54,6 +54,8 @@ public partial class Display : Godot.Node
                 .Update()
                 .Result()
             );
+
+        mob_display.SetMobInUI(mob_display.GetMobs()[0]);
 
         GD.Print(mob_display.GetChildren());
 
