@@ -10,7 +10,7 @@ public class StatSet
     {
         HEALTH,
         ENERGY,
-        SPEED,
+        MOVEMENT,
         DELAY,
     }
     Dictionary<Name, FloatRes> Contents {get; set;} = new();
@@ -108,6 +108,48 @@ public class StatSet
         {
             Contents[stat_name].AddType(type);
         }
+    }
+
+    //Resets the specified stats to their maximum value. If none are specified, all of them are reset.
+    public void SetToMax(Name[]? stats = null)
+    {
+        //Set ALL stats if null.
+        stats ??= GetArrayOfNames();
+
+        foreach (Name stat in stats)
+        {
+            SetStat(stat, GetMax(stat));
+        }
+    }
+
+    public static Name[] GetArrayOfNames()
+    {
+        int total_stats = Enum.GetNames(typeof(Name)).Length;
+        Name[] output = new Name[total_stats];
+
+        int index = 0;
+        foreach (Name name in Enum.GetValues(typeof(Name)))
+        {
+            output[index] = name;
+            index ++;
+        }
+        return output;
+    }
+
+    public static StatSet GetAverage(StatSet a, StatSet b)
+    {
+        StatSet output = new();
+
+        foreach (Name stat in GetArrayOfNames())
+        {
+            float average_max = (a.GetMax(stat) + b.GetMax(stat)) / 2;
+            float average_value = (a.GetValue(stat) + b.GetValue(stat)) / 2;
+
+            output.SetMax(stat, average_max);
+            output.SetValue(stat, average_value);
+        }
+
+        return output;
     }
 
 }

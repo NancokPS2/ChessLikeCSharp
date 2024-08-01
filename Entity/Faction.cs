@@ -56,7 +56,7 @@ public struct Faction : IRelation
 	}
 
     //IRelation
-    public Identity Identity { get; set; } = new Identity();
+    public Identity Identity { get; set; } = new Identity(Identity.INVALID_IDENTIFIER);
 
 
     public List<Identity> GetAllWithLevel(Level level)

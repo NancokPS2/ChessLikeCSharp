@@ -10,33 +10,49 @@ namespace Godot;
 public partial class Display : Godot.Node
 {
     public MobDisplay mob_display = new();
+    public Camera camera = new();
 
 
 
     public override void _Ready()
     {
         base._Ready();
+
         AddChild(mob_display);
+
+        AddChild(camera);
+        camera.Position = new(0,1,1);
+        camera.Watch();
+
         TestMovement();
 
-    }
-
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        mob_display.UpdateMeshPositions();
     }
 
     public void TestMovement()
     {
         mob_display.AddMob(
-            new ChessLike.Entity.Mob(){Position = new Vector3i(1,1,1)}
+            new ChessLike.Entity.Mob.Builder()
+                .SetPosition(new Vector3i(1))
+                .SetIdentity("identified", "Jhonny")
+                .SetJob(Job.Preset.Warrior())
+                .Update()
+                .Result()
             );
         mob_display.AddMob(
-            new ChessLike.Entity.Mob(){Position = new Vector3i(2,2,2)}.PresetDefaultStats()
+            new ChessLike.Entity.Mob.Builder()
+                .SetPosition(new Vector3i(2))
+                .SetJob(Job.Preset.Grunt())
+                .SetIdentity("identified2", "Potty")
+                .Update()
+                .Result()
             );
         mob_display.AddMob(
-            new ChessLike.Entity.Mob(){Position = new Vector3i(3,3,3)}.PresetCriticalHealth()
+            new ChessLike.Entity.Mob.Builder()
+                .SetPosition(new Vector3i(3))
+                .SetJob(new[]{Job.Preset.Medic(), Job.Preset.Grunt()})
+                .SetIdentity("identified", "Clone J")
+                .Update()
+                .Result()
             );
 
         GD.Print(mob_display.GetChildren());

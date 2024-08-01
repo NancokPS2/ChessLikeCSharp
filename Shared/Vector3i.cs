@@ -23,11 +23,11 @@ public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 		this.Y = yArg;
 		this.Z = zArg;
 	}
-	public Vector3i(int total)
+	public Vector3i(int all_coordinates)
 	{
-		X = total;
-		Y = total;
-		Z = total;
+		X = all_coordinates;
+		Y = all_coordinates;
+		Z = all_coordinates;
 	}
 	public Vector3i(Vector3 v1)
 	{

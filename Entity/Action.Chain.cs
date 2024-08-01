@@ -7,19 +7,19 @@ namespace ChessLike.Entity;
 
 public partial class Action
 {
-    public Action PresetDealDamage(float amount)
+    public Action ChainDealDamage(float amount)
     {
         effect_params.TargetStatChangeValue[StatSet.Name.HEALTH] = amount;
         return this;
     }
 
-    public Action PresetPushBack(int distance)
+    public Action ChainPushBack(int distance)
     {
         effect_params.PositionChange = Vector3i.FORWARD * distance;
         return this;
     }
 
-    public Action PresetConsumeEnergy(float amount)
+    public Action ChainConsumeEnergy(float amount)
     {
         effect_params.OwnerStatChangeValue[StatSet.Name.ENERGY] = amount;
         return this;

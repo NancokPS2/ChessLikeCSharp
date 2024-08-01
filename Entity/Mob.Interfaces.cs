@@ -13,7 +13,7 @@ public partial class Mob
     Vector3i _position;
     public Vector3i Position { get => _position; set => _position = value; }
 
-    public float Speed { get => Stats.GetValue(StatSet.Name.SPEED); set => Stats.SetValue(StatSet.Name.SPEED, value); }
+    public float Speed { get => Stats.GetValue(StatSet.Name.MOVEMENT); set => Stats.SetValue(StatSet.Name.MOVEMENT, value); }
 
     public float GetCellMovementCost(Cell cell)
     {
@@ -32,7 +32,7 @@ public partial class Mob
 
     //IRelation
 
-    public Identity Identity { get; set; } = new(Identity.INVALID);
+    public Identity Identity { get; set; } = new(Identity.INVALID_IDENTIFIER);
 
     public Dictionary<Identity, float> RelationList { get; set; } = new();
 

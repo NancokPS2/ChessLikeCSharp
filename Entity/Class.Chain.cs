@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity;
 
-public partial class Class
+public partial class Job
 {
-    public Class PresetCombatant()
+    public Job ChainCombatant()
     {
         stats.SetStat(StatSet.Name.HEALTH, 100);
         stats.SetStat(StatSet.Name.ENERGY, 40);
-        stats.SetStat(StatSet.Name.SPEED, 20);
-        actions.Add(new Action().PresetDealDamage(10));
+        stats.SetStat(StatSet.Name.MOVEMENT, 20);
+        stats.SetStat(StatSet.Name.DELAY, 100);
+        actions.Add(new Action().ChainDealDamage(10));
         return this;
     }
 }

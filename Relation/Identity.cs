@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity.Relation;
 
-public struct Identity : IEquatable<Identity>, IFormattable, IEquatable<string>
+public class Identity : IEquatable<Identity>, IFormattable, IEquatable<string>
 {
     
-    public const string INVALID = "_UNKNOWN";
+    public const string INVALID_IDENTIFIER = "_UNKNOWN";
     public const string UNKNOWN_STRING = "Unknown";
 
     public string unique_identifier;
-    public string displayed_name {get => concealed ? displayed_name : UNKNOWN_STRING; set => displayed_name = value;}
+    public string displayed_name = UNKNOWN_STRING;
     public bool concealed;
 
     public Identity(string unique_identifier, string displayed_name, bool concealed = false, bool allow_duplicate = true)
