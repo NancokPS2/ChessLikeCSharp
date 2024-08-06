@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace Godot.Display;
 
 public partial class Camera : Camera3D
@@ -32,7 +34,7 @@ public partial class Camera : Camera3D
 
     public float sensitivity_horizontal = 6.0f;
     public float sensitivity_vertical = 6.0f;
-    public float sensitivity_directional = 6.0f;
+    public float sensitivity_directional = 2.0f;
 
     //Pivot camera movement
     public Vector3 pivot_point = Vector3.Zero;
@@ -69,24 +71,21 @@ public partial class Camera : Camera3D
         }
 
         //Try to evaluate it as a relative action. Stop here if valid.
-        if(HandleRelativeInput(@event))
-        {
-            return;
-        }
+        HandleRelativeInput(@event);
 
-        //Try to evaluate it as a directional action. Stop here if valid.
-        if(HandleDirectionalInput(@event))
-        {
-            return;
-        }
 
     }
 
     public override void _Process(double delta)
     {
+        //Try to evaluate it as a directional action. Stop here if valid.
         base._Process(delta);
+
+        
         //The camera must be enabled.
         if (!(camera_move_held || camera_move_toggled)){return;}
+
+        HandleDirectionalInput();
 
         switch (mode)
         {
@@ -169,31 +168,32 @@ public partial class Camera : Camera3D
     /// </summary>
     /// <param name="event"></param>
     /// <returns>If the input was of a valid type.</returns>
-    public bool HandleDirectionalInput(InputEvent @event)
+    public bool HandleDirectionalInput()
     {
         directional_input += 
-        @event.IsActionPressed(GetActionName(InputType.FORWARD)) ? 
+        Input.IsActionPressed(GetActionName(InputType.FORWARD)) ? 
         Vector3.Forward * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        @event.IsActionPressed(GetActionName(InputType.BACK)) ? 
+        Input.IsActionPressed(GetActionName(InputType.BACK)) ? 
         Vector3.Back * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        @event.IsActionPressed(GetActionName(InputType.LEFT)) ? 
+        Input.IsActionPressed(GetActionName(InputType.LEFT)) ? 
         Vector3.Left * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        @event.IsActionPressed(GetActionName(InputType.RIGHT)) ? 
+        Input.IsActionPressed(GetActionName(InputType.RIGHT)) ? 
         Vector3.Right * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        @event.IsActionPressed(GetActionName(InputType.UP)) ? 
+        Input.IsActionPressed(GetActionName(InputType.UP)) ? 
         Vector3.Up * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        @event.IsActionPressed(GetActionName(InputType.DOWN)) ? 
+        Input.IsActionPressed(GetActionName(InputType.DOWN)) ? 
         Vector3.Down * sensitivity_directional : Vector3.Zero;
+
         return true;
 
 
