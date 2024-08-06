@@ -11,7 +11,7 @@ public class Grid
 
     public Vector3i boundary = new(10,10,10);
 
-    Dictionary<Vector3i, Cell> cells = new();
+    public Dictionary<Vector3i, Cell> cells_dictionary = new();
 
     public Grid()
     {
@@ -21,24 +21,24 @@ public class Grid
 
     public void SetCell(Vector3i position, Cell cell)
     {
-        cells[position] = cell;
+        cells_dictionary[position] = cell;
     }
 
     public Cell GetCell(Vector3i position)
     {
         Cell cell = Cell.Preset.Invalid;
-        cells.TryGetValue(position, out cell);
+        cells_dictionary.TryGetValue(position, out cell);
         return cell;
     }
 
     public Cell[] GetCells()
     {
-        return cells.Values.ToArray();
+        return cells_dictionary.Values.ToArray();
     }
 
     public Vector3i[] GetUsedPositions()
     {
-        return cells.Keys.ToArray();
+        return cells_dictionary.Keys.ToArray();
     }
 
     /// <summary>

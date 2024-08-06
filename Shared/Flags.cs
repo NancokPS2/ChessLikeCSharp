@@ -47,7 +47,7 @@ public struct Flags
         return output;
     }
 
-    public static bool AContainsB(Flags a, Flags b)
+    public static bool AContainsAllInB(Flags a, Flags b)
     {
         string[] set_a = a.GetAllFlags();
         string[] set_b = b.GetAllFlags();
@@ -63,7 +63,7 @@ public struct Flags
 
     public bool Contains(Flags flags)
     {
-        return AContainsB(this, flags);
+        return AContainsAllInB(this, flags);
     }
 
 
@@ -82,7 +82,7 @@ public struct Flags
 
 	public static bool operator ==(Flags a, Flags b)
 	{
-		return AContainsB(a,b);
+		return AContainsAllInB(a,b);
 	}
 
 	public static bool operator !=(Flags a, Flags b)

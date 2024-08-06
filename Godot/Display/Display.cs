@@ -4,12 +4,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.World;
 
 namespace Godot.Display;
 
 public partial class Display : Godot.Node
 {
     public MobDisplay mob_display = new();
+    public GridDisplay grid_display = new();
     public Camera camera = new();
 
 
@@ -19,12 +21,20 @@ public partial class Display : Godot.Node
         base._Ready();
 
         AddChild(mob_display);
+        AddChild(grid_display);
 
         AddChild(camera);
         camera.Position = new(0,1,1);
         camera.Watch();
 
         TestMovement();
+        TestGrid();
+
+    }
+
+    public void TestGrid()
+    {
+        grid_display.LoadGrid(Grid.Generator.GenerateFlat(new(10)));
 
     }
 

@@ -27,6 +27,8 @@ public partial class MobDisplay : Godot.Node3D
 
     public void RemoveComponents(Mob mob)
     {
+        RemoveChild(mob_components[mob].mesh_instance);
+        RemoveChild(mob_components[mob].name_tag);
         mob_components.Remove(mob);
     }
 
