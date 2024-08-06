@@ -1,3 +1,4 @@
+using System.Dynamic;
 using Shared;
 
 namespace ChessLike.Dialogue;
@@ -6,48 +7,53 @@ namespace ChessLike.Dialogue;
 /// <summary>
 /// Displays text over time based on the flags active. If the flags fail, the fallback is used.
 /// </summary>
-public class Conversation
+public partial class Conversation
 {
-    public Flags flags_required;
+    //A dictionary containing snippets and their identifiers.
+    public List<Snippet> snippets = new(){new Snippet("Nothing, sorry.")};
+    int snippet_index = 0;
+    float delta;
+    Flags flags_in_use = new();
 
-    public Font font;
-    public List<Phrase> phrases_if_true;
-    public List<Phrase> phrases_if_false;
-    public Conversation? next_conversation_true;
-    public Conversation? next_conversation_false;
-
-    public Conversation(
-        List<Phrase> phrases_if_true,
-        List<Phrase> phrases_if_false,
-        Flags flags_required,
-        Font font, 
-        Conversation? next_conversation_true = null,
-        Conversation? next_conversation_false = null
-        )
+    Snippet GetCurrentSnippet()
     {
-
-        this.phrases_if_true = phrases_if_true;
-        this.phrases_if_false = phrases_if_false;
-        this.flags_required = flags_required;
-        this.font = font;
-        this.next_conversation_true = next_conversation_true;
-        this.next_conversation_false = next_conversation_false;
-        
-        
+        return snippets[snippet_index];
     }
 
-    public Conversation(
-        List<Phrase> phrases,
-        Flags flags_required,
-        Font font) : 
-        this(phrases, phrases, flags_required, font)
-    {}
+    public void AdvanceSnippet()
+    {
+        JumpToSnippet(snippet_index += 1);
+    }
 
-    public Conversation(
-        List<Phrase> phrases,
-        Font font) : 
-        this(phrases, phrases, new Flags(), font)
-    {}
+    public void JumpToSnippet(int index)
+    {
+        snippet_index = index;
 
+        //Logic for snippet validity.
+        Flags snippet_flags = GetCurrentSnippet().flags_for_valid;
+        // If the current snippet has required flags but they are not present, jump to a set snippet.
+        if (snippet_flags != Flags.Empty && !Flags.AContainsAllInB(flags_in_use, snippet_flags))
+        {
+            JumpToSnippet(GetCurrentSnippet().snippet_if_not_valid);
+        }
+    }
+    //For jumping to snippets with an identifier.
+    public void JumpToSnippet(string snippet_identifier)
+    {
+        int index_attempt = snippets.IndexOf( snippets.First(x => x.identifier == snippet_identifier) );
 
+        //Fail if not present.
+        if(index_attempt == -1)
+        {
+            throw new ArgumentException("No snippet with this identifier was found.");
+        } else
+        {
+            JumpToSnippet(index_attempt);
+        }
+    }
+    
+    public string GetCurrentMessage()
+    {
+        return snippets[snippet_index].message;
+    }
 }

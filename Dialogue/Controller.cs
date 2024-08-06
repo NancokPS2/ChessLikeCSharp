@@ -1,102 +1,105 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Godot;
 using Shared;
 
 namespace ChessLike.Dialogue;
 
-public delegate void ChangingText(string text);
-public delegate void Finishing();
-//public delegate void ChangeConversation(Conversation conversation);
-public class DialogueController
+public partial class Controller
 {
-    public event ChangingText? TextChanged;
-    //public event ChangeConversation ConversationChanged;
-    public event Finishing? Finished;
+    public enum Command
+    {
+        SPEED,
+
+    }
+    private readonly Dictionary<char, Command> CommandDict= new(){
+        {'S' , Command.SPEED}
+    };
+    public const char COMMAND_DELIMITER = '/';
+
+    public float setting_speed_multiplier = 1;
 
     List<string> message_log = new();
-    Flags flags = new();
-    Conversation? conversation_curr = null;
-    List<Phrase> phrases_curr = new();
-    int phrase_curr_index = 0;
+    Conversation conversation_curr = new();
 
-    public void StartConversation(Conversation conversation, Flags flags)
+    float advance_delta = 0;
+    int advance_char_index = 0;
+
+    public void LoadConversation(Conversation conversation)
     {
-        this.conversation_curr = conversation;
-        this.flags = flags;
-
-        if(conversation_curr.flags_required.Contains(flags))
-        {
-            phrases_curr = conversation_curr.phrases_if_true;
-        }else
-        {
-            phrases_curr = conversation_curr.phrases_if_false;
-        }
-        phrase_curr_index = 0;
-        TextChanged?.Invoke(GetPhraseText(0));
+        conversation_curr = conversation;
+        advance_delta = 0;
+        advance_char_index = 0;
     }
 
-    public void NextPhrase()
+    public void Advance(float delta)
     {
-        //Cannot advance if no conversation has started
-        if (!IsStarted()){throw new NullReferenceException("Cannot advance, start a conversation first.");}
-
-        phrase_curr_index += 1;
-        string text = GetPhraseText(phrase_curr_index);
-        //If there is text, report it.
-        if(text != string.Empty)
+        if (conversation_curr == null)
         {
-            TextChanged?.Invoke(text);
-
-        // There is no more text, conversation ended.
-        }else{
-
-            //Start the next one if applicable.
-            // There must be a next conversation to continue.
-            if (conversation_curr?.next_conversation_true == null){return;}
-            //A conversation must have been started beforehand.
-            if(flags == Flags.Empty){throw new NullReferenceException("flags is null, tried to advance without starting a conversation.");}
-                
-            StartConversation(conversation_curr.next_conversation_true, flags);
-            
+            throw new ArgumentNullException("Load a conversation first.");
         }
+
+        advance_delta += delta * setting_speed_multiplier;
+        string message = conversation_curr.GetCurrentMessage();
+
+        while(advance_delta > 1 && advance_char_index < message.Length)
+        {
+            advance_delta -= 1;
+            advance_char_index += 1;
+        }
+    }
+/* 
+    public void ParseCommand()
+    {
+        if (!(CurrentGetLetter() != COMMAND_DELIMITER))
+        {
+            throw new InvalidExpressionException("Commands must start with a /");
+        }
+
+        //Adavance to the command key and go past.
+        CurrentChangeIndex(1);
+        Command command_current = CommandDict[CurrentGetLetter()];
+        CurrentChangeIndex(1);
+
+        //Adance trough the parameter
+        List<char> parameters_current = new();
+        while (CurrentGetLetter() != COMMAND_DELIMITER)
+        {
+            parameters_current.Add(CurrentGetLetter());
+            CurrentChangeIndex(1);
+        }
+
+        switch (command_current)
+        {
+            case Command.SPEED:
+                float param = ParseCommandParameterFloat(parameters_current);
+                setting_speed_multiplier = param;
+                break;
+            
+            default:
+                throw new Exception("???");
+        }
+
+        //Move off the final delimiter
+        CurrentChangeIndex(1);
+
+    }
+ */
+    public float ParseCommandParameterFloat(List<char> parameter_chars)
+    {
+        string output = new(parameter_chars.ToArray());
+        return float.Parse(output);
+
     }
 
     public bool IsStarted()
     {
-        return conversation_curr != null && flags != Flags.Empty;
-    }
-
-    public string GetCurrentText()
-    {
-        return GetPhraseText(null);
-    }
-
-    string GetPhraseText(int? index = null)
-    {
-        if (conversation_curr == null)
-        {
-            return string.Empty;
-        }
-        index ??= phrase_curr_index;
-
-        if(phrase_curr_index < phrases_curr.Count)
-        {
-            return phrases_curr[phrase_curr_index].message;
-        }else{
-            return string.Empty;
-        }
-    }
-
-
-    public void Finish()
-    {
-        conversation_curr = null;
-        phrase_curr_index = 0;
-        phrases_curr.Clear();
-        Finished?.Invoke();
+        return conversation_curr != null;
     }
 
     public string[] GetLogged(int max_amount = 10)
@@ -116,6 +119,11 @@ public class DialogueController
             return output;
         }
 
+    }
+
+    public string GetText()
+    {
+        return new string(conversation_curr.GetCurrentMessage().Substr(0, advance_char_index));
     }
     public void ClearLog()
     {
