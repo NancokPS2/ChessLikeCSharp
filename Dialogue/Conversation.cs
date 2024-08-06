@@ -12,7 +12,7 @@ public partial class Conversation
     //A dictionary containing snippets and their identifiers.
     public List<Snippet> snippets = new(){new Snippet("Nothing, sorry.")};
     int snippet_index = 0;
-    float delta;
+    float delta = 0;
     Flags flags_in_use = new();
 
     Snippet GetCurrentSnippet()

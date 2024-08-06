@@ -12,6 +12,9 @@ public class StatSet
         ENERGY,
         MOVEMENT,
         DELAY,
+        STRENGTH,
+        AGILITY,
+        INTELLIGENCE,
     }
     Dictionary<Name, FloatRes> Contents {get; set;} = new();
 
@@ -35,7 +38,7 @@ public class StatSet
 
     public void ChangeValue(Name stat, float amount, FloatRes.Modifier[]? modifiers = null)
     {
-        Contents[stat].ChangeCurrent(amount, modifiers);
+        Contents[stat].ChangeValue(amount, modifiers);
     }
 
     public void SetValue(Name stat, float value)
@@ -99,6 +102,17 @@ public class StatSet
     {
         SetMax(stat, value);
         SetValue(stat: stat, value);
+    }
+
+    public void MultiplyStat(Name stat, float multiplier)
+    {
+        float current = GetValue(stat);
+        SetStat(stat, current * multiplier);
+    }
+
+    public void MultiplyStat(Name stat, double multiplier)
+    {
+        MultiplyStat(stat, (float)multiplier);
     }
 
     public void SetTypes(Name stat_name, string[]? types)

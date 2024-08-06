@@ -18,18 +18,12 @@ namespace ChessLike.Entity;
 /// </summary>
 public partial class Action
 {
-    public enum EffectFilterParameter
-    {
-        IGNORE_ALLY,
-        IGNORE_ENEMY,
-        AFFECT_MOB,
-        AFFECT_ENTITY,
-    }
+
     public string name = "Undefined Action";
 
     public EffectFilterParams effect_filter_params = new();
-    public TargetParams target_params = new();
-    public EffectParams effect_params = new();
+    public TargetingParams target_params = new();
+    public List<EffectParams> effect_params = new();
 
 
     public virtual bool IsTargetingValid(UsageParams usage_params)
@@ -93,22 +87,16 @@ public partial class Action
         return output;
     }
 
-    public virtual Error Use(UsageParams usage_params)
+    public virtual void Use(UsageParams usage_params)
     {
-        foreach (Mob target in usage_params.mob_targets)
+        foreach (EffectParams effect in effect_params)
         {
-            foreach (StatSet.Name stat in effect_params.TargetStatChangeValue.Keys)
-            {
-                float value = effect_params.TargetStatChangeValue[stat];
-                target.Stats.ChangeValue(stat, value);
-            }
-            target.Position += effect_params.PositionChange;
+            effect.CustomUse(usage_params);
+            
         }
-
-        return Error.NONE;
     }
 
-
+/* 
     public string GetEffectDescription(UsageParams usage_params)
     {
         string output = "";
@@ -151,6 +139,6 @@ public partial class Action
         return output;
         
             
-    }
+    } */
 }
 

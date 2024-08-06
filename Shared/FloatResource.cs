@@ -80,7 +80,7 @@ public struct FloatRes
     /// <param name="amount">How much to change Current.</param>
     /// <param name="modifiers">Modifiers to apply to the change.</param>
     /// <returns>The actual change, including modifiers.</returns>
-    public float ChangeCurrent(float amount, Modifier[]? modifiers)
+    public float ChangeValue(float amount, Modifier[]? modifiers)
     {
         float output = amount;
         

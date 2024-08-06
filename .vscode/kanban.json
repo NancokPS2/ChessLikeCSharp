@@ -1,0 +1,36 @@
+{
+    "title": "Kanban",
+    "cols": [
+        {
+            "title": "To-Do",
+            "tasks": [
+                {
+                    "text": "Mob serialization:\n- Identity\n- Faction\n- Items\n- Inventory\n- Mob (Current jobs)",
+                    "id": "ra6iz5l4g7chvggz6wl1h480"
+                }
+            ],
+            "id": "t5b10cjn27hujjxg9rxsyrwz",
+            "color": "#fcb900"
+        },
+        {
+            "title": "Doing",
+            "tasks": [
+                {
+                    "text": "Entity and Action system\n",
+                    "id": "fb2if3elfumejh6rxeiujopb"
+                }
+            ],
+            "id": "ealjxebf0o4deh3ur9cbon9l",
+            "color": "#0693e3"
+        },
+        {
+            "title": "Done",
+            "tasks": [],
+            "id": "iv64sofsa6d5xpucq3jyksjg",
+            "color": "#00d084"
+        }
+    ],
+    "autosave": false,
+    "saveToFile": true,
+    "timestamp": 1722985654352
+}
