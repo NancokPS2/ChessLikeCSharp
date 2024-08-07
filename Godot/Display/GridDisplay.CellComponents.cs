@@ -16,7 +16,12 @@ public partial class GridDisplay : Node3D
         public CellComponents(Cell cell, Vector3i position)
         {
             mesh_instance = new MeshInstance3D();
-            mesh_instance.Mesh = new BoxMesh();
+
+            if (!cell.flags.Contains(Cell.Flag.AIR))
+            {
+                mesh_instance.Mesh = new BoxMesh();
+            }
+
             this.position = position;
             mesh_instance.Position = (Vector3)position.ToGVector3();
         }

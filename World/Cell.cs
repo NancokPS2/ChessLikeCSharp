@@ -40,7 +40,7 @@ public struct Cell : IEquatable<Cell>
         public static readonly Cell Air = new()
         {
             name = "Air",
-            flags = new List<Flag>(){Flag.SOLID},
+            flags = new List<Flag>(){Flag.AIR},
             selectable = false,
         };
         public static readonly Cell Floor = new()
