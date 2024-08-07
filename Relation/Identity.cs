@@ -11,9 +11,13 @@ public class Identity : IEquatable<Identity>, IFormattable, IEquatable<string>
     public const string INVALID_IDENTIFIER = "_UNKNOWN";
     public const string UNKNOWN_STRING = "Unknown";
 
-    public string unique_identifier;
+    public string unique_identifier = INVALID_IDENTIFIER;
     public string displayed_name = UNKNOWN_STRING;
-    public bool concealed;
+    public bool concealed = false;
+
+    public Identity()
+    {
+    }
 
     public Identity(string unique_identifier, string displayed_name, bool concealed = false, bool allow_duplicate = true)
     {
@@ -21,6 +25,7 @@ public class Identity : IEquatable<Identity>, IFormattable, IEquatable<string>
         this.displayed_name = displayed_name;
         this.concealed = concealed;
     }
+
 
     public Identity(string unique_identifier)
     {

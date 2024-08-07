@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using ChessLike;
 using ChessLike.Entity;
 using ChessLike.World;
 
@@ -64,6 +65,21 @@ public partial class Display : Godot.Node
                 .Update()
                 .Result()
             );
+        mob_display.AddMob(
+            new ChessLike.Entity.Mob.Builder()
+                .SetPosition(new Vector3i(3))
+                .SetJob(new[]{Job.Preset.Medic(), Job.Preset.Grunt()})
+                .SetIdentity("identified", "Presetted")
+                .Update()
+                .Result()
+            );
+
+        //Test with a serialized Mob.
+        string test_path = Global.Directory.UserContent + @"\new.txt";
+        Serializer.SaveAsXml(mob_display.GetMobs()[0], test_path);
+        Mob serialized_mob = Serializer.LoadAsXml<Mob>(test_path);
+        serialized_mob.Identity.displayed_name = "PERMANENT";
+        mob_display.AddMob(serialized_mob);
 
         mob_display.SetMobInUI(mob_display.GetMobs()[0]);
 

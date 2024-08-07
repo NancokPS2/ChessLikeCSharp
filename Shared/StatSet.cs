@@ -115,7 +115,7 @@ public class StatSet
         MultiplyStat(stat, (float)multiplier);
     }
 
-    public void SetTypes(Name stat_name, string[]? types)
+    public void SetTypes(Name stat_name, string[] types)
     {
         Contents[stat_name].ClearTypes();
         foreach (string type in types)
