@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Shared;
+namespace ChessLike.Shared.GenericStruct;
 
 public class UniqueList<T> : List<T>
 {

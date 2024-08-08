@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 {
 	public static readonly Vector3i INVALID = new Vector3i(int.MinValue,int.MinValue,int.MinValue);

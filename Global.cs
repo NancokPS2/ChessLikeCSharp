@@ -4,7 +4,10 @@ global using System.Linq;
 global using System.IO;
 global using System.Numerics;
 global using System.Drawing;
+
 global using ChessLike.Shared;
+global using ChessLike.Shared.Identification;
+global using ChessLike.Shared.GenericStruct;
 
 namespace ChessLike;
 

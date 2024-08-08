@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Tracing;
 using System.Security.Cryptography.X509Certificates;
 using ChessLike.Entity;
+using ChessLike.Shared.Identification;
 
 namespace ChessLike.Entity;
 
@@ -59,13 +60,13 @@ public partial class Action
                 goto decide;
             }
 
-            if (effect_filter_params.IgnoreAlly && (owner.GetLevel(target.Identity) == Relation.Level.GOOD || owner.GetLevel(target.Identity) == Relation.Level.V_GOOD))
+            if (effect_filter_params.IgnoreAlly && (owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
             {
                 valid = false;
                 goto decide;
             }
 
-            if (effect_filter_params.IgnoreEnemy && !(owner.GetLevel(target.Identity) == Relation.Level.GOOD || owner.GetLevel(target.Identity) == Relation.Level.V_GOOD))
+            if (effect_filter_params.IgnoreEnemy && !(owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
             {
                 valid = false;
                 goto decide;

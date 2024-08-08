@@ -16,12 +16,6 @@ public class ResourceDictionary
     public const string FileExtension = ".xml";
     public string current_user = "DEFAULT";
 
-    public enum FileSource
-    {
-        USER_CONTENT,//Appdata\Local
-        GAME_CONTENT,//Game directory
-    }
-
     public enum Key
     {
         UNKNOWN,
@@ -71,7 +65,7 @@ public class ResourceDictionary
         return contents[key].TryGetValue(identifier, out tried);
     }
 
-    public void SaveObject(string identifier, Object obj, FileSource source = FileSource.USER_CONTENT)
+    public void SaveObject(string identifier, Object obj, Global.Directory.Content source = Global.Directory.Content.USER_CONTENT)
     {
         Key key = GetObjectKey(obj);
         string path = new(GetResourceDirectory(source, key) + @"\" + GetFormattedFileName(identifier));
@@ -79,7 +73,7 @@ public class ResourceDictionary
         //SaveObjectToXml(GetPath(file_name, source, true), obj);
     }
 
-    public Object? LoadObject(string identifier, Key key, FileSource source = FileSource.USER_CONTENT)
+    public Object? LoadObject(string identifier, Key key, Global.Directory.Content source = Global.Directory.Content.USER_CONTENT)
     {
         Type type = GetKeyType(key);
         string path = new(GetResourceDirectory(source, key) + @"\" + GetFormattedFileName(identifier));
@@ -87,7 +81,7 @@ public class ResourceDictionary
         return this;
     }
 
-    public static string GetResourceDirectory(FileSource source, Key key, bool ensure_exists = true)
+    public static string GetResourceDirectory(Global.Directory.Content source, Key key, bool ensure_exists = true)
     {
 
         if (key == Key.UNKNOWN)
@@ -95,20 +89,7 @@ public class ResourceDictionary
             throw new ArgumentException("Key cannot be UNKNOWN.");
         }
 
-        string dir;
-        switch (source)
-        {
-            case FileSource.USER_CONTENT: 
-                dir = Global.Directory.UserContent;
-                break;
-            
-            case FileSource.GAME_CONTENT:
-                dir = Global.Directory.GameContent;
-                break;
-
-            default:
-                throw new NullReferenceException("The hell?");
-        }
+        string dir = Global.Directory.GetContentDir(source);
 
         #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
         string key_name = Enum.GetName(typeof(Key), key);
@@ -142,7 +123,7 @@ public class ResourceDictionary
         }
     }
 
-    public static List<string> GetResourcePaths(FileSource source, Key key)
+    public static List<string> GetResourcePaths(Global.Directory.Content source, Key key)
     {
         string dir = GetResourceDirectory(source, key);
         string[] files = Directory.GetFiles(dir);

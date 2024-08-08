@@ -70,7 +70,7 @@ public partial class MobUI : Control
     public void UpdateNodes()
     {
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        (nodes[NodeType.NAME] as Label).Text = mob.Identity.displayed_name;
+        (nodes[NodeType.NAME] as Label).Text = mob.Identity.Name;
         (nodes[NodeType.DELAY] as Label).Text = mob.Stats.GetValue(StatSet.Name.DELAY).ToString();
 
         (nodes[NodeType.HEALTH] as ProgressBar).Value = mob.Stats.GetValue(StatSet.Name.HEALTH);

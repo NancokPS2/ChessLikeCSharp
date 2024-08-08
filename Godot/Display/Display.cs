@@ -75,10 +75,10 @@ public partial class Display : Godot.Node
             );
 
         //Test with a serialized Mob.
-        string test_path = Global.Directory.UserContent + @"\new.txt";
+        string test_path = Path.Combine(Global.Directory.GetContentDir(Global.Directory.Content.USER_CONTENT) + @"\new.txt");
         Serializer.SaveAsXml(mob_display.GetMobs()[0], test_path);
         Mob serialized_mob = Serializer.LoadAsXml<Mob>(test_path);
-        serialized_mob.Identity.displayed_name = "PERMANENT";
+        serialized_mob.Identity.Name = "PERMANENT";
         mob_display.AddMob(serialized_mob);
 
         mob_display.SetMobInUI(mob_display.GetMobs()[0]);

@@ -1,17 +1,10 @@
-using System.ComponentModel;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.Serialization;
-using ChessLike.Entity.Relation;
-using ChessLike.Shared;
 using ChessLike.Turn;
-using ChessLike.World;
 
 namespace ChessLike.Entity;
 
 
 
-public partial class Mob : IPosition, IRelation, IStats, ITurn
+public partial class Mob : IPosition, IRelation, IStats, ITurn, IIdentify
 {
     List<Job> jobs = new();
     List<Action> actions = new();
@@ -33,7 +26,7 @@ public partial class Mob : IPosition, IRelation, IStats, ITurn
         foreach (Job job in jobs)
         {
             //Average the stats from the job's.
-            Stats = StatSet.GetAverage(Stats, job.stats);
+            Stats = StatSet.GetAverage(Stats, job.Stats);
 
             //Add the actions.
             actions.AddRange(job.actions);

@@ -8,13 +8,47 @@ using System.Xml;
 using System.Xml.Serialization;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ContentModel.Identification;
+using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
+using Godot;
 
 namespace ChessLike.Shared;
 
 public static class Serializer
 {
+
+    public static bool IsFilePathValid(string path)
+    {
+        return path != "" //Must not be empty.
+        && path != string.Empty 
+
+        && Path.GetFileName(path) != string.Empty //Must have a file name.
+        && Path.GetExtension(path) != string.Empty //Must have an extension.
+        && !Path.EndsInDirectorySeparator(path); //If it ends as a directory, it is not a file.
+    }
+
+    public static string GetFilePath(IIdentify identify, Global.Directory.Content global_dir)
+    {
+        string file_name = identify.Identity.Identifier + ".xml";
+        string sub_folder = identify.GetType().ToString();
+        string path = Path.Combine(Global.Directory.GetContentDir(global_dir), sub_folder, file_name);
+        if (!IsFilePathValid(path))
+        {
+            throw new InvalidDataException("The result was invalid.");
+        }
+        return path;
+    }
+
+    public static void SaveAsXml(IIdentify identity, Global.Directory.Content global_dir)
+    {
+        string path = GetFilePath(identity, global_dir);        
+        SaveAsXml(identity, path);
+    }
+
     public static void SaveAsXml(object obj, string file_path)
     {
+        if(!IsFilePathValid(file_path)) {throw new ArgumentException("Invalid path.");}
+
         //Overrides if it has the appropiate interface TODO
         if (obj is ISerializeOverride serialize_override)
         {

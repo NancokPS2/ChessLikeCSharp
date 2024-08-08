@@ -1,4 +1,4 @@
-using ChessLike.Entity.Relation;
+using ChessLike.Entity;
 using ChessLike.Shared;
 using ChessLike.World;
 
@@ -36,7 +36,7 @@ public partial class Mob
 
     public Dictionary<Identity, float> RelationList { get; set; } = new();
 
-    public List<Identity> GetAllWithLevel(Level level)
+    public List<Identity> GetAllWithLevel(RelationType level)
     {
         List<Identity> output = new();
         foreach (Identity identity in RelationList.Keys)
@@ -49,34 +49,34 @@ public partial class Mob
         return output;
     }
 
-    public Level GetLevel(Identity other)
+    public RelationType GetLevel(Identity other)
     {
         int relation = (int)GetRelationWith(other);
 
         if (relation < -40)
         {
-            return Level.V_BAD;
+            return RelationType.V_BAD;
         }
         if(Enumerable.Range(-40, -10).Contains(relation))
         {
-            return Level.BAD;
+            return RelationType.BAD;
         }
         if(Enumerable.Range(-10, 30).Contains(relation))
         {
-            return Level.NEUTRAL;
+            return RelationType.NEUTRAL;
         }
         if(Enumerable.Range(30, 60).Contains(relation))
         {
-            return Level.GOOD;
+            return RelationType.GOOD;
         }
         if (relation > 60)
         {
-            return Level.V_GOOD;
+            return RelationType.V_GOOD;
         }
         throw new ArgumentNullException("Could not return, issue with range coverage.");
     }
 
-    public bool IsLevel(Identity other, Level level)
+    public bool IsLevel(Identity other, RelationType level)
     {
         int relation = (int)GetRelationWith(other);
         return GetLevel(other) == level;

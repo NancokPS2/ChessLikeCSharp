@@ -3,7 +3,7 @@ using Shared;
 
 namespace ChessLike.Dialogue;
 
-
+//TODO
 /// <summary>
 /// Displays text over time based on the flags active. If the flags fail, the fallback is used.
 /// </summary>

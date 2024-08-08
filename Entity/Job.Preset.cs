@@ -9,10 +9,10 @@ public partial class Job
         {
             Job output = new();
 
-            output.stats.SetStat(StatSet.Name.HEALTH, 100);
-            output.stats.SetStat(StatSet.Name.ENERGY, 40);
-            output.stats.SetStat(StatSet.Name.MOVEMENT, 20);
-            output.stats.SetStat(StatSet.Name.DELAY, 100);
+            output.Stats.SetStat(StatSet.Name.HEALTH, 100);
+            output.Stats.SetStat(StatSet.Name.ENERGY, 40);
+            output.Stats.SetStat(StatSet.Name.MOVEMENT, 20);
+            output.Stats.SetStat(StatSet.Name.DELAY, 100);
 
             return output;
         }
@@ -20,10 +20,10 @@ public partial class Job
         {
             Job output = new();
             
-            output.stats.SetStat(StatSet.Name.HEALTH, 90);
-            output.stats.SetStat(StatSet.Name.ENERGY, 50);
-            output.stats.SetStat(StatSet.Name.MOVEMENT, 20);
-            output.stats.SetStat(StatSet.Name.DELAY, 100);
+            output.Stats.SetStat(StatSet.Name.HEALTH, 90);
+            output.Stats.SetStat(StatSet.Name.ENERGY, 50);
+            output.Stats.SetStat(StatSet.Name.MOVEMENT, 20);
+            output.Stats.SetStat(StatSet.Name.DELAY, 100);
 
             return output;
         }
