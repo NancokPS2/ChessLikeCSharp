@@ -28,6 +28,7 @@ public partial class Display : Godot.Node
         camera.Position = new(0,1,1);
         camera.Watch();
 
+        TestVectors();
         TestMovement();
         TestGrid();
 
@@ -36,6 +37,16 @@ public partial class Display : Godot.Node
     public void TestGrid()
     {
         grid_display.LoadGrid(Grid.Generator.GenerateFlat(new(10)));
+
+    }
+
+    public void TestVectors()
+    {
+        Vector3i a = new(0);
+        Vector3i b = new(-1,-5,20);
+
+        List<Vector3i> output = a.GetStepsToReachVector(b);
+        bool A = true;
 
     }
 
@@ -101,7 +112,7 @@ public partial class Display : Godot.Node
         index = rng.RandiRange(0, mob_display.GetMobs().Count-1);
         Mob mob = mob_display.GetMobs()[index];
 
-        mob.Position += direction;
+        mob.GridPosition += direction;
 
     }
 }

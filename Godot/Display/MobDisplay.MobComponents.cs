@@ -42,8 +42,8 @@ public partial class MobDisplay : Godot.Node3D
         foreach (Mob mob in mobs)
         {
             MobComponents components = mob_components[mob];
-            components.mesh_instance.Position = mob.Position.ToGVector3();
-            components.name_tag.Position = mob.Position.ToGVector3() + Vector3.Up;
+            components.mesh_instance.Position = mob.GridPosition.ToGVector3();
+            components.name_tag.Position = mob.GridPosition.ToGVector3() + Vector3.Up;
         }
     }
 

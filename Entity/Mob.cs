@@ -4,15 +4,15 @@ namespace ChessLike.Entity;
 
 
 
-public partial class Mob : IPosition, IRelation, IStats, ITurn, IIdentify
+public partial class Mob : IGridPosition, IRelation, IStats, ITurn, IIdentify
 {
     List<Job> jobs = new();
     List<Action> actions = new();
 
     public Mob()
     {
-        Identity = new(Identity.INVALID_IDENTIFIER);
     }
+    
     public Mob(string name, List<Job> jobs)
     {
         Identity = new(name);

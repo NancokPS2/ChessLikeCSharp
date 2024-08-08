@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -102,6 +103,16 @@ public partial class Action
             {
                 this.based_on_stat = based_on_stat;
                 this.stat_modifier = stat_modifer;
+            }
+        }
+
+        public class Walk : EffectParams
+        {
+            public override void CustomUse(UsageParams usage_params)
+            {
+                IGridPosition owner = usage_params.owner;
+                Vector3i target = usage_params.locations_targeted[0];
+                usage_params.owner.GridPosition = usage_params.locations_targeted[0];
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Runtime.Intrinsics;
 
-public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
+public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 {
 	public static readonly Vector3i INVALID = new Vector3i(int.MinValue,int.MinValue,int.MinValue);
 	public static readonly Vector3i ZERO = new Vector3i(0,0,0);
@@ -12,9 +13,10 @@ public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 	public static readonly Vector3i FORWARD = new Vector3i(0,0,1);
 	public static readonly Vector3i[] DIRECTIONS = new[]{UP,DOWN,LEFT,RIGHT,BACK,FORWARD};
 
-	public int X;
-	public int Y;
-	public int Z;
+	private int[] contents = new int[3];
+	public int X {get => contents[0]; set => contents[0] = value;}
+	public int Y {get => contents[1]; set => contents[1] = value;}
+	public int Z {get => contents[2]; set => contents[2] = value;}
 
 	public Vector3i(int xArg, int yArg, int zArg)
 	{
@@ -44,15 +46,73 @@ public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 		return output;
 	}
 
+	public List<Vector3i> GetStepsToReachVector(Vector3i location)
+	{
+		List<Vector3i> output = new();
+
+		Vector3i pointing = location - this;
+
+		while (pointing != Vector3i.ZERO)
+		{
+			//Get the normalized vector reduced to a length of 1, the longest side is kept as 1.
+			Vector3i move = Normalized(pointing);
+
+			//Add the move.
+			output.Add(move);
+
+			//Reduce the pointing vector by the move.
+			pointing -= move;
+		}
+
+		return output;
+	}
+
+	public readonly int GetLongestIndex()
+	{
+		int highest_index = -1;
+		int highest_value = 0;
+		foreach (int index in new int[]{0,1,2})
+		{
+			int value = contents[index];
+
+			if (Math.Abs(value)> highest_value)
+			{
+				highest_index = index;
+				highest_value = Math.Abs(value);
+			}
+		}
+		if (highest_index == -1)
+		{
+			throw new Exception("No value was higher than the minimum value.");
+		}
+
+		return highest_index;
+	}
+
     public bool Equals(Vector3i other)
     {
         return X == other.X && Y == other.Y && Z == other.Z;
     }
 
-    public string ToString(string? format, IFormatProvider? formatProvider)
+    public override string ToString()
     {
 		return string.Format("Vector3i({0}, {1}, {2})", this.X, this.Y, this.Z);
     }
+
+	public static Vector3i Normalized(Vector3i vector)
+	{
+		int longest_index = vector.GetLongestIndex();
+		Vector3i output = new Vector3i(0);
+		output[longest_index] += Math.Sign(vector[longest_index]);
+		return output;
+		
+	}
+
+	public bool IsNormalized()
+	{
+		int total = ToInt();
+		return total == 1;
+	}
 /* 
     public int CompareTo(Vector3i other)
     {
@@ -77,6 +137,11 @@ public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 		return new Godot.Vector3(X, Y, Z);
 	}
 
+/* 	public override string ToString()
+	{
+		return string.Format("( {0} | {1} | {2} )", X.ToString(),Y.ToString(),Z.ToString());
+	} */
+
     public int Compare(Vector3i a, Vector3i b)
     {
 		int value = a.X + a.Y + a.Z;
@@ -84,7 +149,12 @@ public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 		return value - other_value;
     }
 
-
+	public int this[int index]
+	{
+		get => contents[index];
+		set => contents[index] = value;
+	}
+	
     public static Vector3i operator +(Vector3i v1, Vector3i v2)
 	{
 		return new Vector3i(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
@@ -100,9 +170,24 @@ public struct Vector3i : IEquatable<Vector3i>, IFormattable, IComparer<Vector3i>
 		return new Vector3i(v1.X + (int)(v2.X), v1.Y + (int)(v2.Y), v1.Z + (int)(v2.Z));
 	}
 
+    public static Vector3i operator -(Vector3i v1, Vector3i v2)
+	{
+		return new Vector3i(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
+	}
+
 	public static Vector3i operator *(Vector3i v1, int v2 )
 	{
 		return new Vector3i(v1.X * v2, v1.Y * v2, v1.Z * v2);
+	}
+
+	public static bool operator >(Vector3i v1, Vector3i v2 )
+	{
+		return v1.ToInt() > v2.ToInt();
+	}
+
+	public static bool operator <(Vector3i v1, Vector3i v2 )
+	{
+		return v1.ToInt() < v2.ToInt();
 	}
 
 	public static implicit operator Vector3(Vector3i v1)

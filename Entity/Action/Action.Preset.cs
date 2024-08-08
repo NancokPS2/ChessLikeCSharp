@@ -34,5 +34,12 @@ public partial class Action
 
             return output;
         }
+
+        public static Action Move()
+        {
+            Action output = new();
+
+            return output;
+        }
     }
 }

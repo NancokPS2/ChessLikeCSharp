@@ -49,7 +49,7 @@ public partial class Mob
 
         public Builder SetPosition(Vector3i position)
         {
-            mob.Position = position;
+            mob.GridPosition = position;
             return this;
         }
 

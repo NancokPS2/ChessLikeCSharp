@@ -9,9 +9,11 @@ public partial class Mob
     //IStats
     public StatSet Stats { get; set; } = new();
 
-    //IMobility
+    //IPosition
     Vector3i _position;
-    public Vector3i Position { get => _position; set => _position = value; }
+    public List<Vector3i> QueuedGridPositions { get; set; } = new();
+    public Vector3i GridPosition { get => _position; set => _position = value; }
+    public Vector3 Position { get; set; }
 
     public float Speed { get => Stats.GetValue(StatSet.Name.MOVEMENT); set => Stats.SetValue(StatSet.Name.MOVEMENT, value); }
 
