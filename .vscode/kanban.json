@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Player interface and controls",
+                    "id": "vo1jtyp5vfz5qe1duh32md0t"
+                },
+                {
                     "text": "Mob serialization:\n- Identity\n- Faction\n- Items\n- Inventory\n- Mob (Current jobs)",
                     "id": "ra6iz5l4g7chvggz6wl1h480"
                 }
@@ -24,6 +28,12 @@
             "color": "#0693e3"
         },
         {
+            "title": "For Testing",
+            "tasks": [],
+            "id": "a1y4n1leeqwynkc2n7vbad6k",
+            "color": "#f78da7"
+        },
+        {
             "title": "Done",
             "tasks": [],
             "id": "iv64sofsa6d5xpucq3jyksjg",
@@ -32,5 +42,5 @@
     ],
     "autosave": false,
     "saveToFile": true,
-    "timestamp": 1722985654352
+    "timestamp": 1723082520673
 }
