@@ -19,7 +19,7 @@ public partial class Action
             output.effect_params.Add(effect);
 
             //Targeting
-            output.target_params.RangeMax = 2;
+            output.target_params.TargetingRange = 2;
 
             
 

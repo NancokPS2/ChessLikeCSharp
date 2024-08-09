@@ -19,7 +19,7 @@ public partial class Action
     {
         public float energy_cost = 0;
         public float health_cost = 0;
-        public FloatRes.Modifier[] modifiers = Array.Empty<FloatRes.Modifier>();
+        public ClampFloat.Modifier[] modifiers = Array.Empty<ClampFloat.Modifier>();
         public void Use(UsageParams usage_params)
         {
 
@@ -112,7 +112,7 @@ public partial class Action
             {
                 IGridPosition owner = usage_params.owner;
                 Vector3i target = usage_params.locations_targeted[0];
-                usage_params.owner.GridPosition = usage_params.locations_targeted[0];
+                usage_params.owner.Position = usage_params.locations_targeted[0];
             }
         }
 

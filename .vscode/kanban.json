@@ -5,8 +5,8 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Player interface and controls",
-                    "id": "vo1jtyp5vfz5qe1duh32md0t"
+                    "text": "Misc ideas:\n- Take snapshots of random moments during gameplay.\n",
+                    "id": "yn9anloym52ke2tkxr54wo43"
                 },
                 {
                     "text": "Mob serialization:\n- Identity\n- Faction\n- Items\n- Inventory\n- Mob (Current jobs)",
@@ -20,8 +20,8 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "Entity and Action system\n",
-                    "id": "fb2if3elfumejh6rxeiujopb"
+                    "text": "Player interface and controls",
+                    "id": "vo1jtyp5vfz5qe1duh32md0t"
                 }
             ],
             "id": "ealjxebf0o4deh3ur9cbon9l",
@@ -29,7 +29,16 @@
         },
         {
             "title": "For Testing",
-            "tasks": [],
+            "tasks": [
+                {
+                    "text": "Entity and Action system\n",
+                    "id": "fb2if3elfumejh6rxeiujopb"
+                },
+                {
+                    "text": "Action.Targeter (Needs controls for testing)",
+                    "id": "wniahjucn8ea7ot2cwopwey1"
+                }
+            ],
             "id": "a1y4n1leeqwynkc2n7vbad6k",
             "color": "#f78da7"
         },
@@ -40,7 +49,7 @@
             "color": "#00d084"
         }
     ],
-    "autosave": false,
+    "autosave": true,
     "saveToFile": true,
-    "timestamp": 1723082520673
+    "timestamp": 1723246350801
 }

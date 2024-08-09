@@ -4,8 +4,10 @@ namespace ChessLike.Entity;
 
 
 
-public partial class Mob : IGridPosition, IRelation, IStats, ITurn, IIdentify
+public partial class Mob : IGridPosition, IGridReader, IRelation, IStats, ITurn, IIdentify
 {
+    static Dictionary<Vector3i, Mob> MobToLocationDict = new();
+    static Dictionary<Mob, Vector3i> LocationToMobDict = new();
     List<Job> jobs = new();
     List<Action> actions = new();
 
@@ -32,5 +34,12 @@ public partial class Mob : IGridPosition, IRelation, IStats, ITurn, IIdentify
             actions.AddRange(job.actions);
         }
 
+    }
+
+    public static Mob? GetMobAtLocation(Vector3i location)
+    {
+        Mob? mob;
+        MobToLocationDict.TryGetValue(location, out mob);
+        return mob;
     }
 }

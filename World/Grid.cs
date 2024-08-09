@@ -1,10 +1,11 @@
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using Godot;
 
 namespace ChessLike.World;
 
-public class Grid
+public partial class Grid
 {
     readonly Filter filters;
     readonly NavigationController navigation_controller;
@@ -127,7 +128,18 @@ public class Grid
         return true;
     }
 
-    public List<Vector3i> GetCellsWithinDistance(Vector3i origin, int distance)
+    /// <summary>
+    /// Gets all cells within a certain distance as another.
+    /// </summary>
+    /// <param name="origin">From where to start checking.</param>
+    /// <param name="distance">How far from origin to reach.</param>
+    /// <param name="step_filters">
+    /// Called for every position checked, it returns wheter or not it can be in the final result.
+    /// Also if it is valid to keep searching from said location.
+    /// True = allow.
+    /// </param>
+    /// <returns></returns>
+    public List<Vector3i> GetCellsWithinDistance(Vector3i origin, int distance, List<Func<Vector3i,bool>>? step_filters = null)
     {
         
         List<Vector3i> output = new();
@@ -144,6 +156,16 @@ public class Grid
             //Skip if too far from the start
             if(curr_position.DistanceManhattanTo(origin) > distance){continue;}
 
+            //Skip if the step filter returns false.
+            if(step_filters != null)
+            {
+                foreach (Func<Vector3i,bool> filter in step_filters)
+                {
+                    if(!filter(curr_position)){goto skip;}
+                }
+
+            }
+
             output.Add(curr_position);
 
             foreach (Vector3i direction in Vector3i.DIRECTIONS)
@@ -155,10 +177,14 @@ public class Grid
 
                 to_expand.Add(adj_position);
             }
+
+            skip:
+            continue;
+            
         }
         return output;
     }
-
+/* 
     public List<Vector3i> GetFloodFill(Vector3i start, int size, Func<Vector3i,bool>[]? filters = null)
     {
         filters ??= new[]{ this.filters.None};
@@ -198,34 +224,23 @@ public class Grid
         return output;
 
     }
-
-    public class Generator
+ */
+    public static class StepFilterPresets
     {
-        public static Grid GenerateFlat(Vector3i size)
+        public static bool Always(Vector3i vector)
         {
-            Grid output = new();
-            int[] X = Enumerable.Range(0, (int)size.X).ToArray();
-            int[] Y = Enumerable.Range(0, (int)size.Y).ToArray();
-            int[] Z = Enumerable.Range(0, (int)size.Z).ToArray();
-            foreach (int ind_x in X)
-            {
-                foreach (int ind_y in X)
-                {
-                    foreach (int ind_z in X)
-                    {
-                        if (ind_y < 1)
-                        {
-                            output.SetCell(new Vector3i(ind_x,ind_y,ind_z), Cell.Preset.Floor);
-                        }else
-                        {
-                            output.SetCell(new Vector3i(ind_x,ind_y,ind_z), Cell.Preset.Air);
-                        }
-                    }
-                }
+            return true;
+        }
+    }
+    public struct FloodFillParameters
+    {
+        public int VerticalTolerance;
+        public List<Cell.Flag> BlacklistedFlags;
 
-            }
-
-            return output;
+        public FloodFillParameters(List<Cell.Flag> blacklisted_flags, int vertical_tolerance = 0)
+        {
+            this.BlacklistedFlags = blacklisted_flags;
+            this.VerticalTolerance = vertical_tolerance;
         }
     }
 }

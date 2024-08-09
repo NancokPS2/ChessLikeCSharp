@@ -16,7 +16,7 @@ public class StatSet
         AGILITY,
         INTELLIGENCE,
     }
-    Dictionary<Name, FloatRes> Contents {get; set;} = new();
+    Dictionary<Name, ClampFloat> Contents {get; set;} = new();
 
 
     public StatSet()
@@ -36,7 +36,7 @@ public class StatSet
     }
 
 
-    public void ChangeValue(Name stat, float amount, FloatRes.Modifier[]? modifiers = null)
+    public void ChangeValue(Name stat, float amount, ClampFloat.Modifier[]? modifiers = null)
     {
         Contents[stat].ChangeValue(amount, modifiers);
     }
@@ -68,7 +68,7 @@ public class StatSet
 
     public float GetValue(Name stat)
     {
-        FloatRes output = new();
+        ClampFloat output = new();
         Contents.TryGetValue(stat, out output);
         return output.GetCurrent();
     }
@@ -80,14 +80,14 @@ public class StatSet
 
     public float GetMax(Name stat)
     {
-        FloatRes output = new();
+        ClampFloat output = new();
         Contents.TryGetValue(stat, out output);
         return output.GetMax();
     }
 
     public float GetMin(Name stat)
     {
-        FloatRes output = new();
+        ClampFloat output = new();
         Contents.TryGetValue(stat, out output);
         return output.GetMin();
     }

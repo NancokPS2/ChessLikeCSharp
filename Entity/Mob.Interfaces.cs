@@ -12,10 +12,16 @@ public partial class Mob
     //IPosition
     Vector3i _position;
     public List<Vector3i> QueuedGridPositions { get; set; } = new();
-    public Vector3i GridPosition { get => _position; set => _position = value; }
-    public Vector3 Position { get; set; }
+    public Vector3i Position { get => _position; set => SetPosition(value); }
+    public Vector3 FloatPosition { get; set; }
 
     public float Speed { get => Stats.GetValue(StatSet.Name.MOVEMENT); set => Stats.SetValue(StatSet.Name.MOVEMENT, value); }
+
+    void SetPosition(Vector3i value){
+        MobToLocationDict.Remove(value);
+        _position = value;
+        MobToLocationDict[value] = this;
+    }
 
     public float GetCellMovementCost(Cell cell)
     {

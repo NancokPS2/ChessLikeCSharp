@@ -1,21 +1,21 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.VisualBasic;
 
-namespace ChessLike.Shared;
+namespace ChessLike.Shared.GenericStruct;
 
-public struct FloatRes
+public struct ClampFloat
 {
 
     public List<Modifier> modifiers_innate = new();
 
-    public FloatRes(float _current_and_max)
+    public ClampFloat(float _current_and_max)
     {
         Current = _current_and_max;
         Max = _current_and_max;
         Min = 0;
     }
 
-    public FloatRes(float _current, float _max, float _min = 0)
+    public ClampFloat(float _current, float _max, float _min = 0)
     {
         Current = _current;
         Max = _max;

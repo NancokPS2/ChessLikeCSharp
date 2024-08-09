@@ -17,7 +17,7 @@ namespace ChessLike.Entity;
 /// Pass the result of GetTargetsAffected() to UsageParams.mob_targets
 /// 
 /// </summary>
-public partial class Action
+public partial class Action : IGridReader
 {
 
     public string name = "Undefined Action";

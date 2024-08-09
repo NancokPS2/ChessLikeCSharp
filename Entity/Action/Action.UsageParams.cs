@@ -17,15 +17,17 @@ public partial class Action
     {
         public Mob owner;
         public Grid grid;
+        public Action action_reference;
         public Vector3i location_selected;
         public List<Vector3i> locations_targeted = new();
         public List<Mob> mob_targets = new();
 
-        public UsageParams(Mob owner, Grid grid, Vector3i location_selected)
+        public UsageParams(Mob owner, Grid grid, Action action_reference)
         {
             this.owner = owner;
             this.grid = grid;
-            this.location_selected = location_selected;
+            this.action_reference = action_reference;
+            //this.location_selected = location_selected;
         }
     }
 }

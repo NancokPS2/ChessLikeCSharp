@@ -112,7 +112,7 @@ public partial class Display : Godot.Node
         index = rng.RandiRange(0, mob_display.GetMobs().Count-1);
         Mob mob = mob_display.GetMobs()[index];
 
-        mob.GridPosition += direction;
+        mob.Position += direction;
 
     }
 }

@@ -12,17 +12,17 @@ public interface IGridPosition
     const float DISTANCE_THRESHOLD = 0.1f;
     
     public List<Vector3i> QueuedGridPositions {get;set;}
-    public Vector3i GridPosition {get; set;}
-    public Vector3 Position {get; set;}
+    public Vector3i Position {get; set;}
+    public Vector3 FloatPosition {get; set;}
     public float Speed {get; set;}
 
     public void AdvanceToLocation(Vector3i location, float delta)
     {
         Vector3 target = location.ToVector3();
 
-        Vector3 movement = Vector3.Lerp(GridPosition, target, delta);
+        Vector3 movement = Vector3.Lerp(Position, target, delta);
 
-        Position += movement;
+        FloatPosition += movement;
     }
 
     public void AdvanceInDirection(Vector3i direction)
@@ -31,7 +31,7 @@ public interface IGridPosition
         {
             throw new ArgumentException("Must be normalized.");
         }
-        GridPosition += direction;
+        Position += direction;
     }
 
     public void AddQueuedLocation(Vector3i location)
@@ -50,7 +50,7 @@ public interface IGridPosition
 
     public int GetDistance(Vector3i point)
     {
-        return GridPosition.DistanceManhattanTo(point);
+        return Position.DistanceManhattanTo(point);
     }
 
 }
