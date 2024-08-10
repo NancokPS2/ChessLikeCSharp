@@ -1,16 +1,18 @@
 [gd_scene load_steps=3 format=3 uid="uid://d1te4g7l74ot1"]
 
-[ext_resource type="Script" path="res://Godot/Display/Display.cs" id="1_oyqpo"]
+[ext_resource type="Script" path="res://Godot/Controller/BattleController.cs" id="1_n67st"]
 
 [sub_resource type="Environment" id="Environment_wnu7r"]
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 1.84
 
 [node name="Node3D" type="Node3D"]
-script = ExtResource("1_oyqpo")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, 0, 176, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wnu7r")
+
+[node name="BattleController" type="Node" parent="."]
+script = ExtResource("1_n67st")

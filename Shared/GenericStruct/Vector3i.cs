@@ -5,6 +5,7 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 {
 	public static readonly Vector3i INVALID = new Vector3i(int.MinValue,int.MinValue,int.MinValue);
 	public static readonly Vector3i ZERO = new Vector3i(0,0,0);
+	public static readonly Vector3i ONE = new Vector3i(1, 1,1);
 	public static readonly Vector3i UP = new Vector3i(0,1,0);
 	public static readonly Vector3i DOWN = new Vector3i(0,-1,0);
 	public static readonly Vector3i LEFT = new Vector3i(-1,0,0);

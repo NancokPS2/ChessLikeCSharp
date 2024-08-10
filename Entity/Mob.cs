@@ -8,11 +8,12 @@ public partial class Mob : IGridPosition, IGridReader, IRelation, IStats, ITurn,
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
     static Dictionary<Mob, Vector3i> LocationToMobDict = new();
-    List<Job> jobs = new();
-    List<Action> actions = new();
+    public List<Job> jobs = new();
+    public List<Action> actions = new();
 
     public Mob()
     {
+        Identity = new("Unknown Mcnown");
     }
     
     public Mob(string name, List<Job> jobs)

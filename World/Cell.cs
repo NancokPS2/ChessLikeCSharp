@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.World;
 
-public struct Cell : IEquatable<Cell>
+public partial struct Cell : IEquatable<Cell>
 {
     public enum Flag
     {

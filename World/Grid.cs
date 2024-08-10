@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using Godot;
+using Vector3 = System.Numerics.Vector3;
 
 namespace ChessLike.World;
 
@@ -30,6 +31,11 @@ public partial class Grid
         Cell cell = Cell.Preset.Invalid;
         cells_dictionary.TryGetValue(position, out cell);
         return cell;
+    }
+
+    public Vector3 PositionIntToFloat(Vector3i vector)
+    {
+        return vector.ToVector3();
     }
 
     public Cell[] GetCells()

@@ -14,7 +14,7 @@ public partial class MobDisplay : Godot.Node3D
 
     public void UpdateUI()
     {
-        mob_ui.UpdateNodes();
+        mob_ui.UpdateStatNodes();
     }
 
     public void SetUIAnchors(float left, float top, float right, float bottom)

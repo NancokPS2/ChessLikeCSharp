@@ -6,7 +6,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Godot;
-using Shared;
 
 namespace ChessLike.Dialogue;
 

@@ -15,8 +15,6 @@ public partial class Display : Godot.Node
     public GridDisplay grid_display = new();
     public Camera camera = new();
 
-
-
     public override void _Ready()
     {
         base._Ready();
