@@ -46,7 +46,7 @@ public partial class MobUI : Control
         {
             string? expected_name = Enum.GetName(typeof(NodeType), type) ?? throw new Exception("This should be impossible.");
 
-            Control node = (Control)GetNode(expected_name);
+            Control node = (Control)GetNodeOrNull(expected_name);
 
             if (node is Control)
             {

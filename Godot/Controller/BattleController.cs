@@ -28,8 +28,6 @@ public partial class BattleController : Node
         
         AddChild(debug_info_label);
         LoadEncounter(EncounterData.GetDefault());
-
-        SetupDisplay();
     }
 
     public override void _Process(double delta)
