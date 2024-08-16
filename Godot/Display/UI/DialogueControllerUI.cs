@@ -23,7 +23,6 @@ public class DialogueController
 
     public void AdvanceDelta(float delta)
     {
-        controller.Advance(delta);
     }
 
     public void UpdateNode()

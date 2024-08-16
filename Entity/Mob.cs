@@ -13,6 +13,7 @@ public partial class Mob : IGridPosition, IGridReader, IRelation, IStats, ITurn,
 
     public Mob()
     {
+        Position = new();
         Identity = new("Unknown Mcnown");
     }
     

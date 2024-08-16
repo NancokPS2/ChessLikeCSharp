@@ -14,7 +14,7 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 	public static readonly Vector3i FORWARD = new Vector3i(0,0,1);
 	public static readonly Vector3i[] DIRECTIONS = new[]{UP,DOWN,LEFT,RIGHT,BACK,FORWARD};
 
-	private int[] contents = new int[3];
+	private int[] contents = new int[3]{0,0,0};
 	public int X {get => contents[0]; set => contents[0] = value;}
 	public int Y {get => contents[1]; set => contents[1] = value;}
 	public int Z {get => contents[2]; set => contents[2] = value;}
@@ -24,18 +24,13 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		this.X = xArg;
 		this.Y = yArg;
 		this.Z = zArg;
+		contents = new int[3]{X,Y,Z};
 	}
-	public Vector3i(int all_coordinates)
+	public Vector3i(int all_coordinates) : this(xArg: all_coordinates,all_coordinates,all_coordinates)
 	{
-		X = all_coordinates;
-		Y = all_coordinates;
-		Z = all_coordinates;
 	}
-	public Vector3i(Vector3 v1)
+	public Vector3i(Vector3 v1) : this((int)v1.X, (int)v1.Y, (int)v1.Z)
 	{
-		this.X = (int)(v1.X);
-		this.Y = (int)(v1.Y);
-		this.Z = (int)(v1.Z);
 	}
 
 	public int DistanceManhattanTo(Vector3i other)

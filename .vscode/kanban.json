@@ -37,6 +37,10 @@
                 {
                     "text": "Action.Targeter (Needs controls for testing)",
                     "id": "wniahjucn8ea7ot2cwopwey1"
+                },
+                {
+                    "text": "Dialogue parser",
+                    "id": "ycl543wqgo6v2b0evhf9slzf"
                 }
             ],
             "id": "a1y4n1leeqwynkc2n7vbad6k",
@@ -51,5 +55,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1723246350801
+    "timestamp": 1723669655732
 }

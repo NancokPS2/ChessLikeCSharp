@@ -31,6 +31,15 @@ public partial class MobDisplay : Godot.Node3D
         components.AddToDisplay(this);
     }
 
+    public void AddMob(List<Mob> mobs)
+    {
+        foreach (Mob mob in mobs)
+        {
+            AddMob(mob);
+        }
+
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);

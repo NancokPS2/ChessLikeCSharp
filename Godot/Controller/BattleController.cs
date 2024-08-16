@@ -26,8 +26,9 @@ public partial class BattleController : Node
     {
         base._Ready();
         
-        AddChild(debug_info_label);
         LoadEncounter(EncounterData.GetDefault());
+        AddChild(debug_info_label);
+        PrintTreePretty();
     }
 
     public override void _Process(double delta)

@@ -3,7 +3,7 @@ using Action = ChessLike.Entity.Action;
 
 namespace Godot.Display.Interface;
 
-public partial class MobUI : Control
+public partial class MobUI : Control, IGSceneAdapter
 {
     public delegate void ActionPressedEventHandler(Action action);
     public event ActionPressedEventHandler ActionPressed;
@@ -17,6 +17,9 @@ public partial class MobUI : Control
 
     private Dictionary<NodeType, Control> nodes = new();
     private Mob mob;
+
+    public List<IGSceneAdapter.NodeDeclaration> NodesRequired { get; set; }
+
 
     public MobUI(Mob mob)
     {
@@ -140,12 +143,8 @@ public partial class MobUI : Control
         {
             ActionButton button = new(action);
             nodes[NodeType.ACTION_CONTAINER].AddChild(button);
+            button.Pressed += () => ActionPressed?.Invoke(action);
         }
-    }
-
-    public void OnButtonPressed(Button button)
-    {
-
     }
 
     private partial class ActionButton : Button

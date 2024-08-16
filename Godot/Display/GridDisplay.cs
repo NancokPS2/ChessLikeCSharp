@@ -11,7 +11,6 @@ public partial class GridDisplay : Node3D
     Grid grid;
     List<CellComponents> cell_components = new();
 
-
     public void LoadGrid(Grid grid)
     {   
         this.grid = grid;
