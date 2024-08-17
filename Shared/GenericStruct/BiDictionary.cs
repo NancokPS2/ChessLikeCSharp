@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Shared.GenericStruct;
 
-public class BiHashMap<TKey, TValue> where TKey : notnull where TValue : notnull //: Dictionary<TKey, TValue> where TKey : notnull
+public class BiDictionary<TKey, TValue> where TKey : notnull where TValue : notnull //: Dictionary<TKey, TValue> where TKey : notnull
 {
     private Dictionary<TKey, TValue> _forward = new();
     private Dictionary<TValue, TKey> _reverse = new();
@@ -15,7 +15,7 @@ public class BiHashMap<TKey, TValue> where TKey : notnull where TValue : notnull
     public Indexer<TValue, TKey> Reverse { get; private set; }
 
 
-    public BiHashMap()
+    public BiDictionary()
     {
         this.Forward = new(_forward);
         this.Reverse = new(_reverse);

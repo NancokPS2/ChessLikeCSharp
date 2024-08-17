@@ -34,7 +34,7 @@ public partial class Display : Godot.Node
 
     public void TestGrid()
     {
-        grid_display.LoadGrid(Grid.Generator.GenerateFlat(new(10)));
+        grid_display.SetGrid(Grid.Generator.GenerateFlat(new(10)));
 
     }
 

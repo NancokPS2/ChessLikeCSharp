@@ -19,12 +19,20 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 	public int Y {get => contents[1]; set => contents[1] = value;}
 	public int Z {get => contents[2]; set => contents[2] = value;}
 
+	public Vector3i()
+	{
+		this.X = 0;
+		this.Y = 0;
+		this.Z = 0;
+		contents = new int[3]{X,Y,Z};
+	}
 	public Vector3i(int xArg, int yArg, int zArg)
 	{
 		this.X = xArg;
 		this.Y = yArg;
 		this.Z = zArg;
 		contents = new int[3]{X,Y,Z};
+		var a = 1;
 	}
 	public Vector3i(int all_coordinates) : this(xArg: all_coordinates,all_coordinates,all_coordinates)
 	{

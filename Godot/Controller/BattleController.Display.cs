@@ -16,12 +16,12 @@ public partial class BattleController
     public void SetupDisplay()
     {
         AddChild(display_mob);
-        display_mob.AddMob(encounter.PresetMobSpawns.Values.ToList());
+        display_mob.Add(encounter.PresetMobSpawns.Values.ToList());
         display_mob.SetMobInUI(encounter.PresetMobSpawns.Values.ToList()[0]);
         display_mob.Name = "MobDisplay";
 
         AddChild(display_grid);
-        display_grid.LoadGrid(encounter.Grid);
+        display_grid.SetGrid(encounter.Grid);
         display_grid.Name = "GridDisplay";
 
         //display_mob_ui.ActionPressed += OnActionPressed;
@@ -34,10 +34,7 @@ public partial class BattleController
 
     public void OnActionPressed(Action action)
     {
-        if (state_current == State.AWAITING_ACTION)
-        {
-            selected_action = action;
-        }
+        action_selected = action;
     }
 
 }

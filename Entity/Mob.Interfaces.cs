@@ -10,7 +10,7 @@ public partial class Mob
     public StatSet Stats { get; set; } = new();
 
     //IPosition
-    Vector3i _position;
+    Vector3i _position = new();
     public List<Vector3i> QueuedGridPositions { get; set; } = new();
     public Vector3i Position { get => _position; set => SetPosition(value); }
     public Vector3 FloatPosition { get; set; }

@@ -31,7 +31,7 @@ public partial class MobDisplay : Godot.Node3D
         components.AddToDisplay(this);
     }
 
-    public void AddMob(List<Mob> mobs)
+    public void Add(List<Mob> mobs)
     {
         foreach (Mob mob in mobs)
         {
