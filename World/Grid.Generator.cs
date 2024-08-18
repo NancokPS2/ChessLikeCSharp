@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace ChessLike.World;
 
 public partial class Grid
@@ -7,6 +9,8 @@ public partial class Grid
         public static Grid GenerateFlat(Vector3i size)
         {
             Grid output = new();
+            output.boundary = size;
+
             int[] X = Enumerable.Range(0, (int)size.X).ToArray();
             int[] Y = Enumerable.Range(0, (int)size.Y).ToArray();
             int[] Z = Enumerable.Range(0, (int)size.Z).ToArray();
@@ -27,6 +31,7 @@ public partial class Grid
                 }
 
             }
+            Debug.Assert(output.cells_dictionary.ContainsKey(size-Vector3i.ONE));
 
             return output;
         }

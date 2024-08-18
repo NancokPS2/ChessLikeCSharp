@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.Intrinsics;
 
 public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
@@ -14,31 +15,33 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 	public static readonly Vector3i FORWARD = new Vector3i(0,0,1);
 	public static readonly Vector3i[] DIRECTIONS = new[]{UP,DOWN,LEFT,RIGHT,BACK,FORWARD};
 
-	private int[] contents = new int[3]{0,0,0};
-	public int X {get => contents[0]; set => contents[0] = value;}
-	public int Y {get => contents[1]; set => contents[1] = value;}
-	public int Z {get => contents[2]; set => contents[2] = value;}
+	public int X;
+	public int Y;
+	public int Z;
 
 	public Vector3i()
 	{
 		this.X = 0;
 		this.Y = 0;
 		this.Z = 0;
-		contents = new int[3]{X,Y,Z};
+
+		//Debug.Assert(this.contents[0] == X);
+		//Debug.Assert(X != null);
 	}
 	public Vector3i(int xArg, int yArg, int zArg)
 	{
 		this.X = xArg;
 		this.Y = yArg;
 		this.Z = zArg;
-		contents = new int[3]{X,Y,Z};
 		var a = 1;
 	}
 	public Vector3i(int all_coordinates) : this(xArg: all_coordinates,all_coordinates,all_coordinates)
 	{
+
 	}
 	public Vector3i(Vector3 v1) : this((int)v1.X, (int)v1.Y, (int)v1.Z)
 	{
+
 	}
 
 	public int DistanceManhattanTo(Vector3i other)
@@ -71,13 +74,13 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return output;
 	}
 
-	public readonly int GetLongestIndex()
+	public int GetLongestIndex()
 	{
 		int highest_index = -1;
 		int highest_value = 0;
 		foreach (int index in new int[]{0,1,2})
 		{
-			int value = contents[index];
+			int value = this[index];
 
 			if (Math.Abs(value)> highest_value)
 			{
@@ -155,8 +158,26 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 
 	public int this[int index]
 	{
-		get => contents[index];
-		set => contents[index] = value;
+		get => index switch{ 0 => X, 1 => Y, 2 => Z, _ => throw new Exception()};
+		set => IndexSet(index, value);
+	}
+
+	private void IndexSet(int index, int value)
+	{
+		switch(index)
+		{
+			case 0: 
+				X = value;
+				break;
+			case 1: 
+				Y = value;
+				break;
+			case 2: 
+				Z = value;
+				break;
+			default: 
+				throw new Exception();
+		}
 	}
 	
     public static Vector3i operator +(Vector3i v1, Vector3i v2)

@@ -10,7 +10,7 @@ public interface IGSceneAdapter
     public struct NodeDeclaration
     {
         public string NodeName;
-        public Type? NodeType = null;
+        public Type NodeType = typeof(Node);
         public bool Required = true;
         public string GroupSource = "";
 
@@ -59,7 +59,7 @@ public interface IGSceneAdapter
     public List<NodeDeclaration> NodesRequired {get;set;}
     //public Dictionary<string, NodeDeclaration> NodesRequiredDict {get;set;}
 
-    public void RequiredNodeAdd(string node_name, Type? node_type = null, bool required = true, string group_source = "")
+    public void RequiredNodeAdd(string node_name, Type node_type, bool required = true, string group_source = "")
     {
         NodeDeclaration declaration = new(){NodeName = node_name, NodeType = node_type, Required = required};
         RequiredNodeAdd(declaration);
@@ -78,7 +78,7 @@ public interface IGSceneAdapter
     {
         foreach (NodeDeclaration declaration in NodesRequired)
         {
-            Node? found_node = RequiredNodeTryToGet(declaration, parent);
+            Node? found_node = RequiredNodeTryToGet<Node>(declaration, parent);
             if (found_node == null)
             {
                 return false;
@@ -88,27 +88,34 @@ public interface IGSceneAdapter
         return true;
     }
 
-    public Node? RequiredNodeTryToGet(NodeDeclaration declaration, Node parent, bool ignore_group = false)
+    public T? RequiredNodeTryToGet<T>(NodeDeclaration declaration, Node parent, bool ignore_group = false)
     {
-        Node? output;
+        T? output = default;
 
         if (declaration.GroupSource != "" && !ignore_group)
         {
             if (!parent.IsInsideTree()){throw new Exception("Node must be inside the tree");}
-            output = parent.GetTree().GetFirstNodeInGroup(declaration.GroupSource);
+            Node node_in_tree = parent.GetTree().GetFirstNodeInGroup(declaration.GroupSource);
+            if (node_in_tree is T typed)
+            {
+                output = typed;
+            }
         }else
         {
-            output = parent.GetNodeOrNull(declaration.NodeName);
-        }
-
-        if (output != null && declaration.NodeType != null)
-        {
-            if (output.GetType() != declaration.NodeType)
+            Node node_in_tree = parent.GetNodeOrNull(declaration.NodeName);
+            if (node_in_tree is T typed)
             {
-                throw new ArgumentException("Wrong node type " + output.GetType().ToString() + ". Expected " + declaration.NodeType.ToString());
+                output = typed;
             }
         }
-
+        if (output == null)
+        {
+            Node node_in_tree = parent.FindChild(declaration.NodeName, true, false);;
+            if (node_in_tree is T typed)
+            {
+                output = typed;
+            }
+        }
 
         return output;
     }

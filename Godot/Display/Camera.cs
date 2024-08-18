@@ -15,10 +15,10 @@ public partial class Camera : Camera3D
 
     }
     Dictionary<InputType, string> InputTypeDict = new(){
-        {InputType.FORWARD,"forward"},
-        {InputType.BACK,"backward"},
-        {InputType.LEFT,"left"},
-        {InputType.RIGHT,"right"},
+        {InputType.FORWARD,"move_forward"},
+        {InputType.BACK,"move_backward"},
+        {InputType.LEFT,"move_left"},
+        {InputType.RIGHT,"move_right"},
         {InputType.UP,"quick_action_a"},
         {InputType.DOWN,"quick_action_b"},
         {InputType.ENABLE_HOLD,"modifier_a"},
@@ -39,12 +39,12 @@ public partial class Camera : Camera3D
     //Pivot camera movement
     public Vector3 pivot_point = Vector3.Zero;
     public float pivot_rotation = 0;
-    public float pivot_distance = 10;
+    public float pivot_distance = 50;
     public float pivot_elevation = 8;
     public float pivot_translation_snap = 1;
     public float pivot_translation_auto_delay = 0.3f;
 
-    public Mode mode = Mode.FREE;
+    public Mode mode = Mode.PIVOT;
 
     public Camera(Mode mode = Mode.FREE)
     {

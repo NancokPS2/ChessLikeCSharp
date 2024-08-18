@@ -18,6 +18,12 @@ public partial class BattleController : Node
         Material = new StandardMaterial3D(){AlbedoColor = new(1,0,0)}
     };
 
+    private readonly Mesh MESH_CURSOR = new PrismMesh(){
+        Material = new StandardMaterial3D(){AlbedoColor = new(1,0,0)},
+        Size = new Godot.Vector3(1,2,1),
+        
+    };
+
     private readonly Mesh MESH_OTHER = new PrismMesh(){
         Material = new StandardMaterial3D(){AlbedoColor = new(1,1,0)}
     };
@@ -44,6 +50,7 @@ public partial class BattleController : Node
     {
         base._Process(delta);
         UpdateDebugInformation();
+        ProcessState(delta);
 
     }
 

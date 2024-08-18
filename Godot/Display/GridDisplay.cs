@@ -15,6 +15,7 @@ public partial class GridDisplay : Node3D
         TARGETING,
         AOE,
         DECORATION,
+        CURSOR,
     }
     private readonly Layer[] ALL_LAYERS = Enum.GetValues<Layer>();
 
@@ -41,17 +42,16 @@ public partial class GridDisplay : Node3D
         }
     }
 
-    public void MeshSet(Vector3i position, Layer layer, Mesh new_mesh)
+    public void MeshSet(Vector3i position, Layer layer, Mesh? new_mesh)
     {
-        if (new_mesh == null)
+        if (new_mesh == null && cell_components.ContainsKey(position) && cell_components[position].mesh_instances.ContainsKey(layer))
         {
             cell_components[position].mesh_instances[layer].QueueFree();
             cell_components[position].mesh_instances.Remove(layer);
         }else
         {
-            MeshInstance3D instance = new();
-            instance.Mesh = new_mesh;
-            cell_components[position].mesh_instances.Add(layer, instance);
+            MeshInstance3D instance = new(){Mesh = new_mesh};
+            cell_components[position].mesh_instances[layer] = instance;
             MeshRefresh(position);    
         }
     }
@@ -103,6 +103,7 @@ public partial class GridDisplay : Node3D
             {
                 AddChild(instance);
             }
+            instance.Position = position.ToGVector3();
         }
     }
 

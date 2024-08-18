@@ -93,12 +93,12 @@ public partial class Grid
 
     public bool IsPositionInbounds(Vector3i position)
     {
-
+        
         if(position.X < 0 || position.Y < 0 || position.Z < 0)
         {
             return false;
         }
-        if(position.X > boundary.X || position.Y > boundary.Y || position.Z > boundary.Z)
+        if(position.X >= boundary.X || position.Y >= boundary.Y || position.Z >= boundary.Z)
         {
             return false;
         }

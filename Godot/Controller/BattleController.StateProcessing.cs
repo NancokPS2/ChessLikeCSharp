@@ -7,9 +7,13 @@ using static ChessLike.Entity.Action;
 
 namespace Godot;
 
-public partial class BattleController
+public partial class BattleController : IGInput
 {
-    private Vector3i last_position_selected;
+    const float MINIMUM_MOVEMENT_DELTA = 0.15f;
+    private float delta_since_last_movement;
+    private Vector3i last_position_selected = new Vector3i(1);
+    public Control pause_menu_node = GD.Load<PackedScene>("res://assets/PackedScene/Pause.tscn").Instantiate<Control>();
+
     public enum State
     {
         PAUSED,
@@ -17,12 +21,14 @@ public partial class BattleController
         TARGETING,
     }
 
-    public State state_current = State.PAUSED;
+    public State state_current = State.AWAITING_ACTION;
+
+    public Dictionary<IGInput.Button, bool> ButtonsEnabled { get; set; } = new();
 
     public void SetState(State state)
     {
         //Exiting the state
-        switch (state)
+        switch (state_current)
         {
             case State.TARGETING:
                 display_grid.MeshRemove(GridDisplay.Layer.TARGETING);
@@ -32,17 +38,27 @@ public partial class BattleController
             case State.AWAITING_ACTION:
                 break;
 
+            case State.PAUSED:
+                GetTree().CurrentScene.RemoveChild(pause_menu_node);
+                break;
+
             default:
                 break;
         }
+
         state_current = state;
+        
         //Entering it
-        switch (state)
+        switch (state_current)
         {
             case State.TARGETING:
                 break;
 
             case State.AWAITING_ACTION:
+                break;
+
+            case State.PAUSED:
+                GetTree().CurrentScene.AddChild(pause_menu_node);
                 break;
 
             default:
@@ -51,16 +67,20 @@ public partial class BattleController
         
     }
 
-    public void ProcessState()
+    public void ProcessState(double delta)
     {
+        delta_since_last_movement += (float)delta;
+
         switch (state_current)
         {
             case State.AWAITING_ACTION:
-                ProcessAwaitingAction();
+                ProcessCursorMovement();
+                ProcessAwaitingAction(delta);
                 break;
 
             case State.TARGETING:
-                ProcessAwaitingAction();
+                ProcessCursorMovement();
+                ProcessTargeting(delta);
                 break;
 
             default:
@@ -68,66 +88,72 @@ public partial class BattleController
         }
         
     }
-    public void ProcessAwaitingAction()
+    public void ProcessAwaitingAction(double delta)
     {
         if (action_selected != null)
         {
             //TODO: Owner cannot be null
-            usage_params_in_construction = new UsageParams(null, grid, action_selected);
+            usage_params_in_construction = new UsageParams(mob_taking_turn, grid, action_selected);
             SetState(State.TARGETING);
         }
     }
 
-    public void ProcessTargeting()
+    public void ProcessTargeting(double delta)
     {
-        bool position_changed = false;
+        //Selected a new position.
         if (position_selected != last_position_selected)
         {
-            position_changed = true;
+            ProcessTargetingUpdateSelectedPositionVisuals();
+            last_position_selected = position_selected;
         }
+    }
 
-        if (position_changed)
+    public void ProcessTargetingUpdateSelectedPositionVisuals()
+    {
+        display_grid.MeshRemove(GridDisplay.Layer.TARGETING);
+        display_grid.MeshRemove(GridDisplay.Layer.AOE);
+
+        //Show targetable range.
+        foreach (Vector3i position in Targeter.GetSelectableCells(usage_params_in_construction))
         {
-            display_grid.MeshRemove(GridDisplay.Layer.TARGETING);
-            display_grid.MeshRemove(GridDisplay.Layer.AOE);
-
-            foreach (Vector3i position in ProcessTargetingUpdateActionRange())
-            {
-                display_grid.MeshSet(position, GridDisplay.Layer.TARGETING, MESH_TARGETING);
-            }
-            foreach (Vector3i position in ProcessTargetingUpdateActionAoE())
-            {
-                display_grid.MeshSet(position, GridDisplay.Layer.TARGETING, MESH_AOE);
-            }
-
+            display_grid.MeshSet(
+                position,
+                GridDisplay.Layer.TARGETING, 
+                MESH_TARGETING
+                );
         }
 
-
-
-
+        //Show AoE
+        foreach (Vector3i position in Targeter.GetTargetedAoE(position_selected, usage_params_in_construction))
+        {
+            display_grid.MeshSet(
+                position, 
+                GridDisplay.Layer.TARGETING, 
+                MESH_AOE
+                );
+        }
     }
 
-    //TODO
-    public List<Vector3i> ProcessTargetingUpdateActionRange()
+    public void ProcessCursorMovement()
     {
+        //delta must be high enough to continue
+        if (!(delta_since_last_movement > MINIMUM_MOVEMENT_DELTA)){return;}
+        
+        delta_since_last_movement = 0;
+        Vector3i move = new Vector3i(((IGInput)this).InputGetMovementVector(true));
+        //Stop if there was no movement.
+        if (move == Vector3i.ZERO){return;}
 
-        List<Func<Vector3i,bool>> filters = new();
-
-
-        List<Vector3i> output = new();
-        output = grid.GetCellsWithinDistance(
-            mob_taking_turn.Position,
-            action_selected.target_params.TargetingRange,
-            null);
-        output = Targeter.GetSelectableCells(usage_params_in_construction);
-        return output;
+        //Ensure that it is valid before attempting the move.
+        if ( grid.IsPositionInbounds( move + position_selected ))
+        {
+            display_grid.MeshRemove(GridDisplay.Layer.CURSOR);
+            position_selected += move;
+            display_grid.MeshSet(position_selected, GridDisplay.Layer.CURSOR, MESH_CURSOR);
+            GD.Print(move.ToString());
+        }else
+        {
+            GD.PushError(string.Format("Position {0} out of bounds.", (move + position_selected).ToString()));
+        }
     }
-    public List<Vector3i> ProcessTargetingUpdateActionAoE()
-    {
-        List<Vector3i> output = new();
-
-        output.Add(position_selected);
-        return output;
-    }
-
 }
