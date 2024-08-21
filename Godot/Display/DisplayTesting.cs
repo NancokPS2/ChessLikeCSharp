@@ -44,13 +44,11 @@ public partial class Display : Godot.Node
         Vector3i b = new(-1,-5,20);
 
         List<Vector3i> output = a.GetStepsToReachVector(b);
-        bool A = true;
-
     }
 
     public void TestMovement()
     {
-        mob_display.AddMob(
+        mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(1))
                 .SetIdentity("identified", "Jhonny")
@@ -58,7 +56,7 @@ public partial class Display : Godot.Node
                 .Update()
                 .Result()
             );
-        mob_display.AddMob(
+        mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(2))
                 .SetJob(Job.Preset.Grunt())
@@ -66,7 +64,7 @@ public partial class Display : Godot.Node
                 .Update()
                 .Result()
             );
-        mob_display.AddMob(
+        mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(3))
                 .SetJob(new[]{Job.Preset.Medic(), Job.Preset.Grunt()})
@@ -74,7 +72,7 @@ public partial class Display : Godot.Node
                 .Update()
                 .Result()
             );
-        mob_display.AddMob(
+        mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(3))
                 .SetJob(new[]{Job.Preset.Medic(), Job.Preset.Grunt()})
@@ -88,7 +86,7 @@ public partial class Display : Godot.Node
         Serializer.SaveAsXml(mob_display.GetMobs()[0], test_path);
         Mob serialized_mob = Serializer.LoadAsXml<Mob>(test_path);
         serialized_mob.Identity.Name = "PERMANENT";
-        mob_display.AddMob(serialized_mob);
+        mob_display.Add(serialized_mob);
 
         mob_display.SetMobInUI(mob_display.GetMobs()[0]);
 

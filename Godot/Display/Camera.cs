@@ -1,29 +1,15 @@
 using System.ComponentModel;
+using ChessLike;
 
 namespace Godot.Display;
 
-public partial class Camera : Camera3D
+public partial class Camera : Camera3D, IGInput
 {
     public enum Mode
     {
         FREE,
         PIVOT,
     }
-    public enum InputType
-    {
-        FORWARD, BACK, UP, DOWN, LEFT, RIGHT, ENABLE_HOLD, ENABLE_TOGGLE
-
-    }
-    Dictionary<InputType, string> InputTypeDict = new(){
-        {InputType.FORWARD,"move_forward"},
-        {InputType.BACK,"move_backward"},
-        {InputType.LEFT,"move_left"},
-        {InputType.RIGHT,"move_right"},
-        {InputType.UP,"quick_action_a"},
-        {InputType.DOWN,"quick_action_b"},
-        {InputType.ENABLE_HOLD,"modifier_a"},
-        {InputType.ENABLE_TOGGLE,"ui_cancel"},
-    };
 
     const float SENSITIVITY_MOD = 0.03f;    
 
@@ -34,29 +20,30 @@ public partial class Camera : Camera3D
 
     public float sensitivity_horizontal = 6.0f;
     public float sensitivity_vertical = 6.0f;
-    public float sensitivity_directional = 2.0f;
+    public float sensitivity_directional = 1.0f;
 
     //Pivot camera movement
     public Vector3 pivot_point = Vector3.Zero;
     public float pivot_rotation = 0;
-    public float pivot_distance = 50;
+    public float pivot_distance = 15;
     public float pivot_elevation = 8;
     public float pivot_translation_snap = 1;
     public float pivot_translation_auto_delay = 0.3f;
 
     public Mode mode = Mode.PIVOT;
 
-    public Camera(Mode mode = Mode.FREE)
+    public Dictionary<IGInput.Button, bool> ButtonsEnabled { get; set; } = new();
+
+    public Camera()
     {
-        this.mode = mode;
     }
 
-    public override void _UnhandledInput(InputEvent @event)
+    public override void _Input(InputEvent @event)
     {
         base._UnhandledInput(@event);
 
         //Enable or disable the camera movement (toggle).
-        if(@event.IsActionPressed(GetActionName(InputType.ENABLE_TOGGLE)))
+        if(((IGInput)this).InputIsButtonPressed(IGInput.Button.QUICK_B_RIGHT))
         {
             camera_move_toggled = !camera_move_toggled; 
             GD.Print(camera_move_toggled);
@@ -64,9 +51,9 @@ public partial class Camera : Camera3D
         }
 
         //Enable or disable the camera movement (hold).
-        if(@event.IsAction(GetActionName(InputType.ENABLE_HOLD)))
+        if(((IGInput)this).InputIsButtonPressed(IGInput.Button.QUICK_B_LEFT))
         {
-            camera_move_held = @event.IsPressed(); 
+            camera_move_held = true; 
             return;
         }
 
@@ -115,7 +102,7 @@ public partial class Camera : Camera3D
         Rotation = new(x_capped, Rotation.Y, Rotation.Z);
 
         //Directional
-        Vector3 translation = directional_input * (float)delta * sensitivity_directional;
+        Vector3 translation = directional_input * (float)delta;
         Translate(translation);
     }
     
@@ -129,15 +116,16 @@ public partial class Camera : Camera3D
         pivot_point += directional_input.Rotated(Vector3.Up, pivot_rotation * (float)delta);
 
         //Set displacement from the pivot based on parameters.
-        //Move away
-        Vector3 forward_displacement = Vector3.Forward * pivot_distance;
-        //Raise
-        Vector3 upward_displacement = Vector3.Up * pivot_elevation;
-        //Rotate
-        forward_displacement = forward_displacement.Rotated(Vector3.Up, pivot_rotation);
 
-        //Update position with the displacements.
-        GlobalPosition = pivot_point + forward_displacement + upward_displacement;
+        //Step on top of the pivot point
+        GlobalPosition = pivot_point;
+
+        //Move away.
+        GlobalPosition += (Vector3.Forward * pivot_distance).Rotated(Vector3.Up, pivot_rotation);
+
+        //Move up
+        GlobalPosition += Vector3.Up * pivot_elevation;
+
         LookAt(pivot_point);
 
     }
@@ -171,27 +159,27 @@ public partial class Camera : Camera3D
     public bool HandleDirectionalInput()
     {
         directional_input += 
-        Input.IsActionPressed(GetActionName(InputType.FORWARD)) ? 
+        ((IGInput)this).InputIsButtonPressed(IGInput.Button.FORWARD) ? 
         Vector3.Forward * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Input.IsActionPressed(GetActionName(InputType.BACK)) ? 
+        ((IGInput)this).InputIsButtonPressed(IGInput.Button.BACKWARD) ? 
         Vector3.Back * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Input.IsActionPressed(GetActionName(InputType.LEFT)) ? 
+        ((IGInput)this).InputIsButtonPressed(IGInput.Button.LEFT) ? 
         Vector3.Left * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Input.IsActionPressed(GetActionName(InputType.RIGHT)) ? 
+        ((IGInput)this).InputIsButtonPressed(IGInput.Button.RIGHT) ? 
         Vector3.Right * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Input.IsActionPressed(GetActionName(InputType.UP)) ? 
+        ((IGInput)this).InputIsButtonPressed(IGInput.Button.UP) ? 
         Vector3.Up * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Input.IsActionPressed(GetActionName(InputType.DOWN)) ? 
+        ((IGInput)this).InputIsButtonPressed(IGInput.Button.DOWN) ? 
         Vector3.Down * sensitivity_directional : Vector3.Zero;
 
         return true;
@@ -217,10 +205,5 @@ public partial class Camera : Camera3D
     {
         Current = true;
         Input.MouseMode = Input.MouseModeEnum.Captured;
-    }
-
-    public string GetActionName(InputType input)
-    {
-        return InputTypeDict[input];
     }
 }

@@ -1,5 +1,4 @@
 using ChessLike.Entity;
-using Godot.Display.Interface;
 
 namespace Godot.Display;
 
@@ -10,12 +9,12 @@ namespace Godot.Display;
 
 public partial class MobDisplay : Godot.Node3D
 {
-    Dictionary<Mob, MobComponents> mob_components = new();
+    Dictionary<Mob, MobDisplayComponent> mob_components = new();
 
-    public MobComponents AddComponents(Mob mob)
+    public MobDisplayComponent AddComponents(Mob mob)
     {
         //Components
-        MobComponents components = new();
+        MobDisplayComponent components = new();
         mob_components[mob] = components;
 
         //Set component's values
@@ -32,7 +31,7 @@ public partial class MobDisplay : Godot.Node3D
         mob_components.Remove(mob);
     }
 
-    public MobComponents GetComponents(Mob mob)
+    public MobDisplayComponent GetComponents(Mob mob)
     {
         return mob_components[mob];
     }
@@ -41,14 +40,14 @@ public partial class MobDisplay : Godot.Node3D
     {
         foreach (Mob mob in mobs)
         {
-            MobComponents components = mob_components[mob];
+            MobDisplayComponent components = mob_components[mob];
             components.mesh_instance.Position = mob.Position.ToGVector3();
             components.name_tag.Position = mob.Position.ToGVector3() + Vector3.Up;
         }
     }
 
     
-    public class MobComponents
+    public class MobDisplayComponent
     {
         public MeshInstance3D mesh_instance = new();
         public Label3D name_tag = new();

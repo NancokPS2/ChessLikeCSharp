@@ -20,7 +20,7 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it?\n- Improve cursor movement, base it on camera \n- Add references to the camera in the script\n- Implement logic for targeting since the cursor has already been implemented.",
+                    "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it?\n- Improve cursor movement, base it on camera \n- Add references to the camera in the script\n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states",
                     "id": "ps2yzq0z0scwdzsyo0fziuv5"
                 },
                 {
@@ -34,6 +34,10 @@
         {
             "title": "For Testing",
             "tasks": [
+                {
+                    "text": "BattleController",
+                    "id": "es3dq7e8chsmp2dopdl3u1w8"
+                },
                 {
                     "text": "Entity and Action system\n",
                     "id": "fb2if3elfumejh6rxeiujopb"
@@ -51,13 +55,13 @@
             "color": "#f78da7"
         },
         {
-            "title": "Done",
+            "title": "Bugs",
             "tasks": [],
             "id": "iv64sofsa6d5xpucq3jyksjg",
-            "color": "#00d084"
+            "color": "#eb144c"
         }
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1723992527778
+    "timestamp": 1724200510090
 }

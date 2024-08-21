@@ -35,7 +35,10 @@ public partial class BattleController : Node
     public Action action_selected;
     public Vector3i position_selected;
     public Action.UsageParams usage_params_in_construction;
+    public List<Mob> mobs_participating = new();
     public Mob mob_taking_turn;
+    public float delay_this_turn;
+    public float time_passed_this_state;
 
     public override void _Ready()
     {
@@ -64,7 +67,17 @@ public partial class BattleController : Node
         grid = to_load.Grid;
         encounter = to_load;
 
+        foreach (Mob mob in encounter.PresetMobSpawns.Values)
+        {
+            AddMob(mob);
+        }
         SetupDisplay();
+    }
+
+    public void AddMob(Mob mob)
+    {
+        mobs_participating.Add(mob);
+        display_mob.Add(mob);
     }
 
     public void UpdateDebugInformation()
@@ -72,11 +85,13 @@ public partial class BattleController : Node
         debug_info_label.Text = string.Format(
             "State: {0}" + "\n" +
             "Action selected: {1}" + "\n" +
-            "Grid size: {2}", 
+            "Grid size: {2}" + "\n" +
+            "Unit selected: {3}", 
             new object[]{
                 state_current, 
                 action_selected != null ? action_selected.name : "null", 
-                grid != null ? grid.boundary : "null"}
+                grid != null ? grid.boundary : "null",
+                mob_taking_turn != null ? mob_taking_turn.Identity.Name : "null"}
             
             );
     }

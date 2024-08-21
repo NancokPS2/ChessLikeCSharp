@@ -1,7 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.World;
 using Godot.Display;
-using Godot.Display.Interface;
 using Action = ChessLike.Entity.Action;
 
 namespace Godot;

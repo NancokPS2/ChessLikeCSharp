@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using ChessLike.Entity;
+using Godot.Display;
+using Godot.Menu;
 using static ChessLike.Entity.Action;
 
 namespace Godot;
@@ -12,16 +15,18 @@ public partial class BattleController : IGInput
     const float MINIMUM_MOVEMENT_DELTA = 0.15f;
     private float delta_since_last_movement;
     private Vector3i last_position_selected = new Vector3i(1);
-    public Control pause_menu_node = GD.Load<PackedScene>("res://assets/PackedScene/Pause.tscn").Instantiate<Control>();
+    public Pause pause_menu = new();
 
     public enum State
     {
         PAUSED,
+        TAKING_TURN,
+        ENDING_TURN,
         AWAITING_ACTION,
         TARGETING,
     }
 
-    public State state_current = State.AWAITING_ACTION;
+    public State state_current = State.TAKING_TURN;
 
     public Dictionary<IGInput.Button, bool> ButtonsEnabled { get; set; } = new();
 
@@ -39,7 +44,7 @@ public partial class BattleController : IGInput
                 break;
 
             case State.PAUSED:
-                GetTree().CurrentScene.RemoveChild(pause_menu_node);
+                IGSceneAdapter.RemoveScene(pause_menu);
                 break;
 
             default:
@@ -47,10 +52,21 @@ public partial class BattleController : IGInput
         }
 
         state_current = state;
+        time_passed_this_state = 0;
         
         //Entering it
         switch (state_current)
         {
+            case State.TAKING_TURN:
+                List<ITurn> turn_takers = new List<ITurn>(mobs_participating);
+                mob_taking_turn = (Mob)TurnQueue.GetNext(turn_takers);
+                break;
+
+            case State.ENDING_TURN:
+                List<ITurn> time_pass_targets = new List<ITurn>(mobs_participating);
+                TurnQueue.AdvanceDelay(time_pass_targets, delay_this_turn);
+                break;
+
             case State.TARGETING:
                 break;
 
@@ -58,7 +74,7 @@ public partial class BattleController : IGInput
                 break;
 
             case State.PAUSED:
-                GetTree().CurrentScene.AddChild(pause_menu_node);
+                IGSceneAdapter.Setup(pause_menu, this);
                 break;
 
             default:
@@ -70,6 +86,7 @@ public partial class BattleController : IGInput
     public void ProcessState(double delta)
     {
         delta_since_last_movement += (float)delta;
+        time_passed_this_state += (float)delta;
 
         switch (state_current)
         {

@@ -10,15 +10,15 @@ namespace Godot.Display;
 public partial class MobDisplay : Godot.Node3D
 {
     UniqueList<Mob> mobs = new();
+    MobUI mob_ui = new();
 
     public override void _Ready()
     {
         base._Ready();
-        AddChild(mob_ui);
-        SetUIAnchors(0, 0.7f, 0.4f, 1);
+        IGSceneAdapter.Setup(mob_ui, this);
     }
 
-    public void AddMob(Mob mob)
+    public void Add(Mob mob)
     {
         //Return if it already exists.
         if(!mobs.Add(mob))
@@ -27,7 +27,7 @@ public partial class MobDisplay : Godot.Node3D
             return;
         }
 
-        MobComponents components = AddComponents(mob);
+        MobDisplayComponent components = AddComponents(mob);
         components.AddToDisplay(this);
     }
 
@@ -35,7 +35,7 @@ public partial class MobDisplay : Godot.Node3D
     {
         foreach (Mob mob in mobs)
         {
-            AddMob(mob);
+            Add(mob);
         }
 
     }
@@ -46,7 +46,7 @@ public partial class MobDisplay : Godot.Node3D
         if (mobs.Count > 0)
         {
             UpdateComponentPositions();
-            UpdateUI();
+            mob_ui.UpdateStatNodes();
         }
     }
 
@@ -65,6 +65,11 @@ public partial class MobDisplay : Godot.Node3D
     public bool HasMob(Mob mob)
     {
         return mobs.Contains(mob);
+    }
+
+    public void SetMobInUI(Mob mob)
+    {
+        mob_ui.SetMob(mob);
     }
 
 }
