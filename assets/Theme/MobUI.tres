@@ -1,0 +1,139 @@
+[gd_resource type="Theme" load_steps=30 format=3 uid="uid://0vkdn3hdeppa"]
+
+[ext_resource type="Texture2D" uid="uid://dwy3l60rjeyka" path="res://assets/Theme/LabelBG.png" id="1_jiqpn"]
+[ext_resource type="StyleBox" uid="uid://w4fytsqtfjkk" path="res://assets/Theme/ButtonDisabled.tres" id="1_sx0lh"]
+[ext_resource type="Texture2D" uid="uid://d2uxb3ji7m4k5" path="res://assets/Theme/ButtonHovered.png" id="1_uufxn"]
+[ext_resource type="Texture2D" uid="uid://bltmpqnv7xnpn" path="res://assets/Theme/PanelBGRoundedRight.png" id="2_gshfc"]
+[ext_resource type="StyleBox" uid="uid://bv0l7bnxqq2fv" path="res://assets/Theme/ButtonFocus.tres" id="2_j3vlc"]
+[ext_resource type="Texture2D" uid="uid://vvsu4yrjpfnf" path="res://assets/Theme/ButtonPressed.png" id="2_qlh1n"]
+[ext_resource type="Texture2D" uid="uid://d2rsrkmor8kjw" path="res://assets/Theme/ProgressBarOverlay.png" id="2_y3v8j"]
+[ext_resource type="StyleBox" uid="uid://bwx14yktu8ck1" path="res://assets/Theme/ButtonHover.tres" id="3_06qcd"]
+[ext_resource type="Texture2D" uid="uid://cal1wve3eixbj" path="res://assets/Theme/ProgressBarFill.png" id="3_rqgu8"]
+[ext_resource type="StyleBox" uid="uid://bx3h1ima1etrt" path="res://assets/Theme/ButtonNormal.tres" id="4_ofec6"]
+[ext_resource type="StyleBox" uid="uid://frpurplqhjox" path="res://assets/Theme/ButtonPressed.tres" id="5_cgwfj"]
+[ext_resource type="Texture2D" uid="uid://d2c7wh2mn227d" path="res://assets/Theme/Check.png" id="6_s2gd1"]
+[ext_resource type="Texture2D" uid="uid://drb8uq0hkllsc" path="res://assets/Theme/CheckDisabled.png" id="7_gcbv0"]
+[ext_resource type="Texture2D" uid="uid://bvwocfkduykxp" path="res://assets/Theme/CheckOff.png" id="8_rermq"]
+[ext_resource type="Texture2D" uid="uid://cg2yngowumgj5" path="res://assets/Theme/ScrollBarGrabberHovered.png" id="16_opbaq"]
+[ext_resource type="Texture2D" uid="uid://coaagqfi0bvdk" path="res://assets/Theme/ScrollBarGrabberPressed.png" id="17_5d54p"]
+[ext_resource type="Texture2D" uid="uid://cd3pr60xyivic" path="res://assets/Theme/ScrollBar.png" id="18_uh6rj"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dtmux"]
+texture = ExtResource("1_uufxn")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pixep"]
+texture = ExtResource("2_qlh1n")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+
+[sub_resource type="SystemFont" id="SystemFont_as5ab"]
+font_names = PackedStringArray("Constantia", "Calibri")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qbc3q"]
+texture = ExtResource("1_jiqpn")
+texture_margin_right = 15.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_se174"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lqiaf"]
+texture = ExtResource("2_gshfc")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 24.0
+texture_margin_bottom = 4.0
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 24.0
+expand_margin_bottom = 2.0
+modulate_color = Color(0.262745, 0.462745, 0.454902, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_46p7u"]
+texture = ExtResource("2_y3v8j")
+texture_margin_left = 7.0
+texture_margin_top = 4.0
+texture_margin_right = 7.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fwote"]
+content_margin_right = 0.0
+texture = ExtResource("3_rqgu8")
+texture_margin_left = 7.0
+texture_margin_top = 4.0
+texture_margin_right = 7.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hgee0"]
+texture_margin_left = 2.0
+texture_margin_top = 4.0
+texture_margin_right = 2.0
+texture_margin_bottom = 4.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0ihlk"]
+texture = ExtResource("16_opbaq")
+texture_margin_left = 2.0
+texture_margin_top = 4.0
+texture_margin_right = 2.0
+texture_margin_bottom = 4.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fwo0p"]
+texture = ExtResource("17_5d54p")
+texture_margin_left = 2.0
+texture_margin_top = 4.0
+texture_margin_right = 2.0
+texture_margin_bottom = 4.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nx1m1"]
+content_margin_right = 10.0
+texture = ExtResource("18_uh6rj")
+texture_margin_top = 4.0
+texture_margin_bottom = 4.0
+
+[resource]
+Button/styles/disabled = ExtResource("1_sx0lh")
+Button/styles/focus = ExtResource("2_j3vlc")
+Button/styles/hover = ExtResource("3_06qcd")
+Button/styles/normal = ExtResource("4_ofec6")
+Button/styles/pressed = ExtResource("5_cgwfj")
+CheckBox/icons/checked = ExtResource("6_s2gd1")
+CheckBox/icons/checked_disabled = ExtResource("7_gcbv0")
+CheckBox/icons/unchecked = ExtResource("8_rermq")
+CheckBox/styles/disabled = ExtResource("1_sx0lh")
+CheckBox/styles/hover = SubResource("StyleBoxTexture_dtmux")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxTexture_pixep")
+CheckBox/styles/normal = ExtResource("4_ofec6")
+CheckBox/styles/pressed = ExtResource("5_cgwfj")
+Label/fonts/font = SubResource("SystemFont_as5ab")
+Label/styles/normal = SubResource("StyleBoxTexture_qbc3q")
+Panel/styles/panel = SubResource("StyleBoxFlat_se174")
+PanelMobUI/base_type = &"Panel"
+PanelMobUI/styles/panel = SubResource("StyleBoxTexture_lqiaf")
+PanelTurn/base_type = &"Panel"
+PanelTurn/styles/panel = null
+ProgressBar/styles/background = SubResource("StyleBoxTexture_46p7u")
+ProgressBar/styles/fill = SubResource("StyleBoxTexture_fwote")
+VScrollBar/styles/grabber = SubResource("StyleBoxTexture_hgee0")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_0ihlk")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_fwo0p")
+VScrollBar/styles/scroll = SubResource("StyleBoxTexture_nx1m1")

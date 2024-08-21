@@ -1,0 +1,7 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://bv0l7bnxqq2fv"]
+
+[ext_resource type="Texture2D" uid="uid://be65tmcyqv0fg" path="res://assets/Theme/ButtonFocus.png" id="1_y6usu"]
+
+[resource]
+texture = ExtResource("1_y6usu")
+axis_stretch_horizontal = 2
