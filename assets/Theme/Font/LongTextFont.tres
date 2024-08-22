@@ -1,0 +1,4 @@
+[gd_resource type="SystemFont" format=3 uid="uid://cmw2geewoehmp"]
+
+[resource]
+font_names = PackedStringArray("Candara", "Consolas", "Centaur")
