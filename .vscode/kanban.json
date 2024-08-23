@@ -11,6 +11,10 @@
                 {
                     "text": "Mob serialization:\n- Identity\n- Faction\n- Items\n- Inventory\n- Mob (Current jobs)",
                     "id": "ra6iz5l4g7chvggz6wl1h480"
+                },
+                {
+                    "text": "Camera should influence the movement of the cursor (low priority for my own sanity)",
+                    "id": "ayvl9kn2w0t7crwxcafcpx9m"
                 }
             ],
             "id": "t5b10cjn27hujjxg9rxsyrwz",
@@ -63,5 +67,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1724200510090
+    "timestamp": 1724381304517
 }

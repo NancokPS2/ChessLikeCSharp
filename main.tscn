@@ -1,10 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1te4g7l74ot1"]
+[gd_scene load_steps=4 format=3 uid="uid://d1te4g7l74ot1"]
 
 [ext_resource type="Script" path="res://Godot/Controller/BattleController.cs" id="1_n67st"]
 
 [sub_resource type="Environment" id="Environment_wnu7r"]
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 1.84
+
+[sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -13,6 +15,10 @@ transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, 
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wnu7r")
+
+[node name="Compass" type="MeshInstance3D" parent="."]
+transform = Transform3D(25, 0, 0, 0, -4.37114e-06, -1, 0, 100, -4.37114e-08, 0, -20, 0)
+mesh = SubResource("PrismMesh_1a52j")
 
 [node name="BattleController" type="Node" parent="."]
 script = ExtResource("1_n67st")

@@ -2,6 +2,7 @@
 
 using ChessLike.Entity;
 using ChessLike.World;
+using Godot.Display;
 
 using Action = ChessLike.Entity.Action;
 
@@ -47,6 +48,7 @@ public partial class BattleController : Node
         LoadEncounter(EncounterData.GetDefault());
         AddChild(debug_info_label);
         PrintTreePretty();
+        SetState(state_current);
     }
 
     public override void _Process(double delta)
@@ -86,12 +88,17 @@ public partial class BattleController : Node
             "State: {0}" + "\n" +
             "Action selected: {1}" + "\n" +
             "Grid size: {2}" + "\n" +
-            "Unit selected: {3}", 
+            "Unit selected: {3}" + "\n" +
+            "Location selected: {4}" + "\n" + 
+            "Camera rotation: {5}",
             new object[]{
                 state_current, 
                 action_selected != null ? action_selected.name : "null", 
                 grid != null ? grid.boundary : "null",
-                mob_taking_turn != null ? mob_taking_turn.Identity.Name : "null"}
+                mob_taking_turn != null ? mob_taking_turn.Identity.Name : "null",
+                position_selected,
+                display_camera != null ? display_camera.Rotation : "???"
+                }
             
             );
     }

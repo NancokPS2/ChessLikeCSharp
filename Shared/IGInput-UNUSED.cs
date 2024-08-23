@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Godot;
 using Godot.NativeInterop;
 
-namespace ChessLike.Shared;
+namespace UNUSED;
 
 public interface IGInput
 {

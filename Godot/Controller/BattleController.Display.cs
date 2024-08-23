@@ -10,7 +10,7 @@ public partial class BattleController
     //public MobUI display_mob_ui = new( new Mob() );
     public MobDisplay display_mob = new();
     public GridDisplay display_grid = new();
-    public Camera camera = new();
+    public Camera display_camera = new();
 
     public void SetupDisplay()
     {
@@ -27,8 +27,8 @@ public partial class BattleController
         //AddChild(display_mob_ui);
         //display_mob_ui.Name = "Mob_UI";
 
-        AddChild(camera);
-        camera.Name = "Camera";
+        AddChild(display_camera);
+        display_camera.Name = "Camera";
     }
 
     public void OnActionPressed(Action action)

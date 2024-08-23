@@ -1,7 +1,5 @@
 using Godot;
 
-namespace ChessLike;
-
 public static partial class Global
 {
     public static class Files

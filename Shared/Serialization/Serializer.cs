@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.Configuration;
+using ChessLike;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using Godot.Display;
 using Godot.Menu;
+using ChessLike;
 using static ChessLike.Entity.Action;
 
 namespace Godot;
 
-public partial class BattleController : IGInput
+public partial class BattleController
 {
     const float MINIMUM_MOVEMENT_DELTA = 0.15f;
     private float delta_since_last_movement;
@@ -28,7 +29,10 @@ public partial class BattleController : IGInput
 
     public State state_current = State.TAKING_TURN;
 
-    public Dictionary<IGInput.Button, bool> ButtonsEnabled { get; set; } = new();
+    public override void _Input(InputEvent @event)
+    {
+        base._Input(@event);
+    }
 
     public void SetState(State state)
     {
@@ -60,6 +64,7 @@ public partial class BattleController : IGInput
             case State.TAKING_TURN:
                 List<ITurn> turn_takers = new List<ITurn>(mobs_participating);
                 mob_taking_turn = (Mob)TurnQueue.GetNext(turn_takers);
+                SetState(State.AWAITING_ACTION);
                 break;
 
             case State.ENDING_TURN:
@@ -157,7 +162,16 @@ public partial class BattleController : IGInput
         if (!(delta_since_last_movement > MINIMUM_MOVEMENT_DELTA)){return;}
         
         delta_since_last_movement = 0;
-        Vector3i move = new Vector3i(((IGInput)this).InputGetMovementVector(true));
+        Vector3i move = new Vector3i(Global.GInput.InputGetMovementVector(true));
+
+/*         move = display_camera.GetRotationSnapped() switch{
+            Mathf.Pi => Vector3i.FORWARD,
+            Mathf.Pi / 2 => Vector3i.RIGHT,
+            -Mathf.Pi / 2 => Vector3i.LEFT,
+            0 => Vector3i.BACK,
+            _ => throw new Exception(message: "The value should be constrained to these!."),
+        }; */
+
         //Stop if there was no movement.
         if (move == Vector3i.ZERO){return;}
 
@@ -167,6 +181,7 @@ public partial class BattleController : IGInput
             display_grid.MeshRemove(GridDisplay.Layer.CURSOR);
             position_selected += move;
             display_grid.MeshSet(position_selected, GridDisplay.Layer.CURSOR, MESH_CURSOR);
+            display_camera.pivot_point = position_selected.ToGVector3();
             GD.Print(move.ToString());
         }else
         {

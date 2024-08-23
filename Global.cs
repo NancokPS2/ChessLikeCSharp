@@ -9,8 +9,6 @@ global using ChessLike.Shared;
 global using ChessLike.Shared.Identification;
 global using ChessLike.Shared.GenericStruct;
 
-namespace ChessLike;
-
 public static partial class Global
 {
     //public static Directory directory = new();

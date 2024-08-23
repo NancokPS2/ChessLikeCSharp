@@ -41,7 +41,10 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 	}
 	public Vector3i(Vector3 v1) : this((int)v1.X, (int)v1.Y, (int)v1.Z)
 	{
+	}
 
+	public Vector3i(Godot.Vector3 v1) : this((int)v1.X, (int)v1.Y, (int)v1.Z)
+	{
 	}
 
 	public int DistanceManhattanTo(Vector3i other)

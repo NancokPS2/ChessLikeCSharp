@@ -6,7 +6,6 @@ global using System.Numerics;
 global using System.Drawing;
 global using ChessLike.Shared;
 
-namespace ChessLike;
 
 public static partial class Global
 {
