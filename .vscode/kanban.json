@@ -62,7 +62,7 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Grid.Navigation is getting positions that are out of bounds",
+                    "text": "GridNavigationTests are borked",
                     "id": "csu22qj928o352d49annexxk"
                 }
             ],
@@ -72,5 +72,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1724465349699
+    "timestamp": 1724501313266
 }

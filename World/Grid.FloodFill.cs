@@ -14,7 +14,7 @@ public partial class Grid
     public void FloodStart(Vector3i origin)
     {
         //flood_output = new(){origin};
-        flood_to_expand = new(){origin};
+        FloodAddToExpand(origin);
 
         flood_current_origin = origin;
         FloodExpandToAdjacent();
@@ -29,17 +29,15 @@ public partial class Grid
         foreach (Vector3i position in new_flood_to_expand)
         {
             //Pass this position to the output.
-            flood_output.Add(position);
-            flood_to_expand.Remove(position);
+            FloodAddToOutput(position);
+            FloodRemoveToExpand(position);
 
             foreach (Vector3i direction in Vector3i.DIRECTIONS)
             {
                 Vector3i considered = position + direction;
-                //Add it if it is not in the output.
-                if(!flood_output.Contains(considered))
-                {
-                    flood_to_expand.Add(considered, false);
-                }
+                
+                FloodAddToOutput(considered);
+                
             }
         }
 
@@ -67,11 +65,22 @@ public partial class Grid
     }
     public void FloodAddToExpand(Vector3i position)
     {
-        flood_to_expand.Add(obj: position);
+        if (IsPositionInbounds(position))
+        {
+            flood_to_expand.Add(position, false);
+        }
     }
     public void FloodRemoveToExpand(Vector3i position)
     {
-        flood_to_expand.Remove(position);
+            flood_to_expand.Remove(position);
+    }
+
+    public void FloodAddToOutput(Vector3i position)
+    {
+        if (IsPositionInbounds(position) && !flood_output.Contains(position))
+        {
+            flood_output.Add(position);
+        }
     }
 
     public List<Vector3i> FloodGetResult(bool finish = true)
