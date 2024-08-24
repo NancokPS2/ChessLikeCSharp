@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bsftf5vse0yiw"]
 
-[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/MobUI.tres" id="1_ke07d"]
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ke07d"]
 
 [node name="MobUi" type="Control"]
 layout_mode = 3

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://fvvvbvxy52tj"
-path="res://.godot/imported/Bulky.dae-3f225a9b7841d7491a0bd9f2febaffc8.scn"
+path="res://.godot/imported/Bulky.dae-154fb4771691e2d8b5b39cd76897b781.scn"
 
 [deps]
 
-source_file="res://Assets/Meshes/Armor/Bulky.dae"
-dest_files=["res://.godot/imported/Bulky.dae-3f225a9b7841d7491a0bd9f2febaffc8.scn"]
+source_file="res://assets/Texture/armor/Bulky.dae"
+dest_files=["res://.godot/imported/Bulky.dae-154fb4771691e2d8b5b39cd76897b781.scn"]
 
 [params]
 
@@ -29,10 +29,6 @@ animation/import=true
 animation/fps=15
 animation/trimming=false
 animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-fbx/importer=0
-fbx/allow_geometry_helper_nodes=false
-fbx/embedded_image_handling=1
-gltf/naming_version=0
-gltf/embedded_image_handling=1

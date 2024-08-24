@@ -8,18 +8,9 @@ namespace ChessLike.World;
 
 public partial class Grid
 {
-    readonly Filter filters;
-    readonly NavigationController navigation_controller;
-
     public Vector3i boundary = new(10,10,10);
 
     public Dictionary<Vector3i, Cell> cells_dictionary = new();
-
-    public Grid()
-    {
-        this.filters = new Filter(this);
-        this.navigation_controller = new NavigationController(this);
-    }
 
     public void SetCell(Vector3i position, Cell cell)
     {
@@ -31,11 +22,6 @@ public partial class Grid
         Cell cell = Cell.Preset.Invalid;
         cells_dictionary.TryGetValue(position, out cell);
         return cell;
-    }
-
-    public Vector3 PositionIntToFloat(Vector3i vector)
-    {
-        return vector.ToVector3();
     }
 
     public Cell[] GetCells()
@@ -52,7 +38,7 @@ public partial class Grid
     /// Gets the nearest position for something to stand on. If the selected position cannot be used, find the nearest one upwards (dig upwards). Otherwise go downwards (land).
     /// </summary>
     /// <returns>A non-SOLID cell.</returns>
-    public Vector3i GetNearestSurfaceVertically(Vector3i position, Cell.Flag can_stand_on = Cell.Flag.SOLID, Cell.Flag can_exist_on = Cell.Flag.AIR)
+    public Vector3i GetNearestSurfaceVertically(Vector3i position, CellFlag can_stand_on = CellFlag.SOLID, CellFlag can_exist_on = CellFlag.AIR)
     {
         Vector3i advance_dir = !IsFlagInPosition(position, can_exist_on) ? Vector3i.UP : Vector3i.DOWN;
         Vector3i curr_pos = position;
@@ -82,7 +68,7 @@ public partial class Grid
 
     }
 
-    public bool CanStandHere(Vector3i position, Cell.Flag flag_below_required, Cell.Flag flag_exist_allowed)
+    public bool CanStandHere(Vector3i position, CellFlag flag_below_required, CellFlag flag_exist_allowed)
     {
         return 
             IsFlagInPosition(position + Vector3i.DOWN, flag_below_required) 
@@ -111,7 +97,7 @@ public partial class Grid
     /// <param name="position">The position to check.</param>
     /// <param name="flag">The flag to check, Cell.Flag.UNKNOWN it will always return true.</param>
     /// <returns>If the flag qualifies as being in the position.</returns>
-    public bool IsFlagInPosition(Vector3i position, Cell.Flag flag)
+    public bool IsFlagInPosition(Vector3i position, CellFlag flag)
     {
         Cell cell = GetCell(position);
         if(cell == Cell.Preset.Invalid)
@@ -119,11 +105,23 @@ public partial class Grid
             return false;
         }
 
-        return flag == Cell.Flag.UNKNOWN || cell.flags.Contains(flag);
+        return flag == CellFlag.UNKNOWN || cell.flags.Contains(flag);
     }
-    public bool IsFlagInPosition(Vector3i position, Cell.Flag[] flags)
+    public bool IsFlagInPosition(Vector3i position, CellFlag[] flags)
     {
-        foreach (Cell.Flag flag in flags)
+        foreach (CellFlag flag in flags)
+        {
+            if(!IsFlagInPosition(position, flag))
+            {
+                return false;
+            }
+            
+        }
+        return true;
+    }
+    public bool IsFlagInPosition(Vector3i position, List<CellFlag> flags)
+    {
+        foreach (CellFlag flag in flags)
         {
             if(!IsFlagInPosition(position, flag))
             {
@@ -145,7 +143,7 @@ public partial class Grid
     /// True = allow.
     /// </param>
     /// <returns></returns>
-    public List<Vector3i> GetCellsWithinDistance(Vector3i origin, int distance, List<Func<Vector3i,bool>>? step_filters = null)
+    public List<Vector3i> GetFloodFill(Vector3i origin, int max_steps, List<Func<Vector3i,bool>>? step_filters = null)
     {
         
         List<Vector3i> output = new();
@@ -159,11 +157,11 @@ public partial class Grid
             //Skip if already in the output
             if(output.Contains(curr_position)){continue;}
 
-            //Skip if too far from the start
-            if(curr_position.DistanceManhattanTo(origin) > distance){continue;}
+            //Skip if too far from the start (Not necessarily wanted.)
+            //if(curr_position.DistanceManhattanTo(origin) > max_steps){continue;}
 
             //Skip if the step filter returns false.
-            if(step_filters != null)
+            if(step_filters is not null)
             {
                 foreach (Func<Vector3i,bool> filter in step_filters)
                 {
@@ -241,9 +239,9 @@ public partial class Grid
     public struct FloodFillParameters
     {
         public int VerticalTolerance;
-        public List<Cell.Flag> BlacklistedFlags;
+        public List<CellFlag> BlacklistedFlags;
 
-        public FloodFillParameters(List<Cell.Flag> blacklisted_flags, int vertical_tolerance = 0)
+        public FloodFillParameters(List<CellFlag> blacklisted_flags, int vertical_tolerance = 0)
         {
             this.BlacklistedFlags = blacklisted_flags;
             this.VerticalTolerance = vertical_tolerance;

@@ -1,3 +1,5 @@
+using static ChessLike.Shared.IGridPositionExtensionMethods;
+
 namespace ChessLike.Entity;
 
 
@@ -34,7 +36,6 @@ public partial class Mob : IGridPosition, IGridReader, IRelation, IStats, ITurn,
             //Add the actions.
             actions.AddRange(job.actions);
         }
-
     }
 
     public static Mob? GetMobAtLocation(Vector3i location)

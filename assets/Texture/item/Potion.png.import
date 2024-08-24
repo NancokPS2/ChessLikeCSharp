@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4pqtbwky6c08"
-path="res://.godot/imported/artillerist.png-18ad96bfe55873582d3e41b06e9b7d28.ctex"
+uid="uid://dxcl526d4elty"
+path="res://.godot/imported/Potion.png-dd112e8efbca00ae341446c277408c81.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Texture/class/artillerist.png"
-dest_files=["res://.godot/imported/artillerist.png-18ad96bfe55873582d3e41b06e9b7d28.ctex"]
+source_file="res://assets/Texture/item/Potion.png"
+dest_files=["res://.godot/imported/Potion.png-dd112e8efbca00ae341446c277408c81.ctex"]
 
 [params]
 

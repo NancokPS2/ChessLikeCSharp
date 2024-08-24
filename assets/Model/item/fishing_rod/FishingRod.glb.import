@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bev6m3onnakyd"
-path="res://.godot/imported/FishingRod.glb-199272c6c86d586e62ab9d2202448f05.scn"
+path="res://.godot/imported/FishingRod.glb-1190a9dee4424760a94a0118836e2cb2.scn"
 
 [deps]
 
-source_file="res://assets/models/player/weapons/fishing_rod/FishingRod.glb"
-dest_files=["res://.godot/imported/FishingRod.glb-199272c6c86d586e62ab9d2202448f05.scn"]
+source_file="res://assets/Model/item/fishing_rod/FishingRod.glb"
+dest_files=["res://.godot/imported/FishingRod.glb-1190a9dee4424760a94a0118836e2cb2.scn"]
 
 [params]
 
@@ -17,6 +17,7 @@ nodes/root_type=""
 nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
@@ -28,6 +29,7 @@ animation/import=true
 animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
 gltf/naming_version=1

@@ -19,6 +19,11 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 	public int Y;
 	public int Z;
 
+	public enum Axis
+	{
+		X,Y,Z
+	}
+
 	public Vector3i()
 	{
 		this.X = 0;
@@ -53,6 +58,19 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		output += Math.Abs(X - other.X);
 		output += Math.Abs(Y - other.Y);
 		output += Math.Abs(Z - other.Z);
+		return output;
+	}
+
+	public int DistanceManhattanWithToleranceTo(Vector3i other, Vector3i tolerance)
+	{
+		int output = 0;
+		int dist_X = Math.Abs(X - other.X) - tolerance.X;
+		int dist_Y = Math.Abs(Y - other.Y) - tolerance.Y;
+		int dist_Z = Math.Abs(Z - other.Z) - tolerance.Z;
+		output += 
+			Math.Clamp(dist_X, 0, int.MaxValue) 
+			+ Math.Clamp(dist_Y, 0, int.MaxValue) 
+			+ Math.Clamp(dist_Z, 0, int.MaxValue);
 		return output;
 	}
 

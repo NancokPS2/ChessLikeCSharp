@@ -47,14 +47,14 @@ public partial class Action
             switch (action.target_params.TargetingFloodFillMode)
             {
                 case TargetingParams.FloodFillMode.AVOID_SOLIDS:
-                    filters.Add( x => !grid.IsFlagInPosition(x, Cell.Flag.SOLID));
+                    filters.Add( x => !grid.IsFlagInPosition(x, CellFlag.SOLID));
                     break;
 
                 default:
                     break;
             }
 
-            List<Vector3i> output = grid.GetCellsWithinDistance(origin, targeting_range, filters);
+            List<Vector3i> output = grid.GetFloodFill(origin, targeting_range, filters);
 
             return output;
             

@@ -13,11 +13,11 @@ public partial class GridDisplay : Node3D
         public Dictionary<Layer, MeshInstance3D> mesh_instances = new();
 
 
-        public CellComponent(Cell cell)
+        public CellComponent(Grid.Cell cell)
         {
             mesh_instances.Add(Layer.BASE, new MeshInstance3D());
 
-            if (!cell.flags.Contains(Cell.Flag.AIR))
+            if (!cell.flags.Contains(CellFlag.AIR))
             {
                 mesh_instances[Layer.BASE].Mesh = new BoxMesh();
             }

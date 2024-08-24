@@ -60,12 +60,17 @@
         },
         {
             "title": "Bugs",
-            "tasks": [],
+            "tasks": [
+                {
+                    "text": "Grid.Navigation is getting positions that are out of bounds",
+                    "id": "csu22qj928o352d49annexxk"
+                }
+            ],
             "id": "iv64sofsa6d5xpucq3jyksjg",
             "color": "#eb144c"
         }
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1724381304517
+    "timestamp": 1724465349699
 }

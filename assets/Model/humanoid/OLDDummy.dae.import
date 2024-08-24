@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://7tq2j2n30axr"
-path="res://.godot/imported/OLDDummy.dae-68d52f82f05b969149c88decf3b3d397.scn"
+path="res://.godot/imported/OLDDummy.dae-be4c06453564008fb697517bb4098498.scn"
 
 [deps]
 
-source_file="res://Assets/Meshes/Characters/Dummy/OLDDummy.dae"
-dest_files=["res://.godot/imported/OLDDummy.dae-68d52f82f05b969149c88decf3b3d397.scn"]
+source_file="res://assets/Model/humanoid/OLDDummy.dae"
+dest_files=["res://.godot/imported/OLDDummy.dae-be4c06453564008fb697517bb4098498.scn"]
 
 [params]
 
@@ -29,10 +29,6 @@ animation/import=true
 animation/fps=15
 animation/trimming=false
 animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-fbx/importer=0
-fbx/allow_geometry_helper_nodes=false
-fbx/embedded_image_handling=1
-gltf/naming_version=0
-gltf/embedded_image_handling=1

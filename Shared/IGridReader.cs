@@ -8,7 +8,7 @@ namespace ChessLike.Shared;
 
 public interface IGridReader
 {
-    public Cell? GetCell(Grid grid)
+    public Grid.Cell? GetCell(Grid grid)
     {
         if(this is IGridPosition gridPosition)
         {
@@ -19,11 +19,11 @@ public interface IGridReader
         }
     }
 
-    public Cell GetCell(Grid grid, Vector3i position)
+    public Grid.Cell GetCell(Grid grid, Vector3i position)
     {
         return grid.GetCell(position);
     }
-    public bool IsFlagAtPosition(Grid grid, Vector3i position, Cell.Flag flag)
+    public bool IsFlagAtPosition(Grid grid, Vector3i position, CellFlag flag)
     {
         return grid.IsFlagInPosition(position, flag);
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.World;
 
-public class NavigationAgent
+public class NavigationAgent_UNUSED
 {
     const int QUEUE_INVALID_INDEX = -1;
     public Vector3i position;

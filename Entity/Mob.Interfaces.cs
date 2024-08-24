@@ -23,10 +23,10 @@ public partial class Mob
         MobToLocationDict[value] = this;
     }
 
-    public float GetCellMovementCost(Cell cell)
+    public float GetCellMovementCost(Grid.Cell cell)
     {
         float output = new();
-        if(cell.flags.Contains(Cell.Flag.SOLID))
+        if(cell.flags.Contains(CellFlag.SOLID))
         {
             output += float.MaxValue;
         }

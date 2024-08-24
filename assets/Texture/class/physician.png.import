@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4pqtbwky6c08"
-path="res://.godot/imported/artillerist.png-18ad96bfe55873582d3e41b06e9b7d28.ctex"
+uid="uid://c26rn2ut8w0vs"
+path="res://.godot/imported/physician.png-3ad21708185d62ab00e29ee401a44b13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Texture/class/artillerist.png"
-dest_files=["res://.godot/imported/artillerist.png-18ad96bfe55873582d3e41b06e9b7d28.ctex"]
+source_file="res://assets/Texture/class/physician.png"
+dest_files=["res://.godot/imported/physician.png-3ad21708185d62ab00e29ee401a44b13.ctex"]
 
 [params]
 

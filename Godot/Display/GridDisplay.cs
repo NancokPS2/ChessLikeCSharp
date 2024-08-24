@@ -36,7 +36,7 @@ public partial class GridDisplay : Node3D
         cell_components.Clear();
         foreach (Vector3i position in grid.cells_dictionary.Keys)
         {
-            Cell cell = grid.cells_dictionary[position];
+            Grid.Cell cell = grid.cells_dictionary[position];
             cell_components.Add(position, new CellComponent(cell));
             MeshRefresh(position);
         }
