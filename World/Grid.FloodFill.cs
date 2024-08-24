@@ -36,7 +36,7 @@ public partial class Grid
             {
                 Vector3i considered = position + direction;
                 
-                FloodAddToOutput(considered);
+                FloodAddToExpand(considered);
                 
             }
         }

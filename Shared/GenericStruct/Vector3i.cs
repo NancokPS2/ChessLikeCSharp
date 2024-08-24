@@ -74,6 +74,36 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return output;
 	}
 
+
+	public Vector3i GetDirectionNormalizedTo(Vector3i target)
+	{
+		Vector3i pointing = target - this;
+		return pointing;
+	}
+
+	public Vector3i GetDirectionNormalizedTo(Vector3i target, Vector3i[] allowed_dirs)
+	{
+		//Must have at least 1 direction and they must be one.
+		if (allowed_dirs.Count() < 1 || allowed_dirs.Any(x => x.GetLength() != 1))
+		{
+			throw new Exception("All elements must be directions.");
+		}
+
+		Vector3i closest_pos = allowed_dirs[0] + this;
+		foreach (Vector3i direction in allowed_dirs)
+		{
+			//Change the closest position if it is closer.
+			if (
+				(this + direction).DistanceManhattanTo(target) <= closest_pos.DistanceManhattanTo(target)
+			)
+			{
+				closest_pos = this + direction;
+			}
+		}
+
+		return closest_pos;
+	}
+
 	public List<Vector3i> GetStepsToReachVector(Vector3i location)
 	{
 		List<Vector3i> output = new();
@@ -117,6 +147,11 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return highest_index;
 	}
 
+	public int GetLength()
+	{
+		return X + Y + Z;
+	}
+
     public bool Equals(Vector3i other)
     {
         return X == other.X && Y == other.Y && Z == other.Z;
@@ -126,6 +161,11 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
     {
 		return string.Format("Vector3i({0}, {1}, {2})", this.X, this.Y, this.Z);
     }
+
+	public Vector3i Normalized()
+	{
+		return Normalized(this);
+	}
 
 	public static Vector3i Normalized(Vector3i vector)
 	{
@@ -152,7 +192,7 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 
 	public int ToInt()
 	{
-		return X + Y + Z;
+		return GetLength();
 	}
 
 	public System.Numerics.Vector3 ToVector3()

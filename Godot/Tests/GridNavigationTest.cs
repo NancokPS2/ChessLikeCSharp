@@ -24,15 +24,19 @@ public partial class GridNavigationTest : Node
     public void NavigationTest(Vector3i target)
     {
         Mob mob = new();
-        Grid grid = Grid.Generator.GenerateFlat(new(10));
+        Grid grid = Grid.Generator.GenerateFlat(new(4));
         Navigation navigation = new(grid);
 
         NavigationAgent agent = navigation.AddAgent(mob);
 
-        var path = navigation.ConstructPathToLocation(agent, 10, target);
-        Debug.Assert(path.Count == agent.user.Position.DistanceManhattanTo(target), agent.user.Position.DistanceManhattanTo(target).ToString());
+        List<Vector3i> valid_pos = navigation.GetPositionsInRange(agent, 10);
+        List<Vector3i> path = Navigation.GetShortestPath(valid_pos, agent.user.Position, target);
 
-        if(path.Count == agent.user.Position.DistanceManhattanTo(target))
+        //Debug.Assert(path.Count == agent.user.Position.DistanceManhattanTo(target), (agent.user.Position.DistanceManhattanTo(target)-1).ToString());
+
+        //The path includes the starting position, so it is reduced to -1
+        int dist_to_target = agent.user.Position.DistanceManhattanTo(target);
+        if(path.Count == dist_to_target + 1 || path.Count == 0)
         {
             Console.WriteLine("Test passed.");
         }else

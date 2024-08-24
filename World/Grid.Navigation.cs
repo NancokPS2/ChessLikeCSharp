@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Drawing.Text;
 using System.Reflection.Metadata.Ecma335;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
+using Godot;
+using Vector3 = Godot.Vector3;
 
 namespace ChessLike.World;
 //public Navigation navigation = new();
@@ -48,19 +50,9 @@ public class Navigation
         return -1;
     }
 
-    public List<Vector3i> ConstructPathToLocation(NavigationAgent agent, int max_distance, Vector3i target)
+    public List<Vector3i> GetPositionsInRange(NavigationAgent agent, int max_distance)
     {
         List<Vector3i> output = new();
-
-        //Add filters
-        //List<Func<Vector3i,bool>> filters = new List<Func<Vector3i,bool>>()
-        //{
-        //};
-
-        
-        Func<Vector3i, bool> FILTER_CAN_FLY_THAT_HIGH = (position => 
-            GetDistanceFromGround(agent, position) <= agent.flight_altitude + 1 
-        );
 
         grid.FloodStart(agent.user.Position);
 
@@ -117,6 +109,95 @@ public class Navigation
         return output;
     }
 
+    public static List<Vector3i> GetShortestPath(List<Vector3i> positions, Vector3i start, Vector3i target)
+    {
+        if (!positions.Contains(start))
+        {
+            throw new Exception("start must be included in the positions.");
+        }
+        if (!positions.Contains(target))
+        {
+            Debug.WriteLine("Cannot get path since the target is not in the allowed positions.");
+            return new();
+        }
+        List<Vector3i> output = new();
+
+        //AStar initialization
+        Dictionary<Vector3, long> vector_to_point = new();
+        AStar3D astar = new();
+        astar.ReserveSpace(positions.Count());
+
+        //Add the points
+        foreach (Vector3i pos in positions)
+        {   
+            long id = astar.GetAvailablePointId();
+            astar.AddPoint(astar.GetAvailablePointId(), pos.ToGVector3());
+            vector_to_point[pos.ToGVector3()] = id;
+        }
+
+        //Connect them
+        foreach (long point_id in astar.GetPointIds())
+        {
+            Vector3 pos = astar.GetPointPosition(point_id);
+            foreach (Vector3i dir in Vector3i.DIRECTIONS)
+            {
+
+                if (vector_to_point.Keys.Contains(pos + dir.ToGVector3()))
+                {
+                    long target_point = vector_to_point[pos + dir.ToGVector3()];
+                    astar.ConnectPoints(
+                        point_id,
+                        target_point
+                    );
+                }
+            }
+
+        }
+
+        Vector3[]? path = astar.GetPointPath(
+            vector_to_point[start.ToGVector3()],
+            vector_to_point[target.ToGVector3()]
+        );
+        foreach (Vector3 pos in path)
+        {
+            output.Add(new(pos));
+        }
+        return output;
+    }
+/* 
+    public static List<Vector3i> GetShortestPath(List<Vector3i> positions, Vector3i start, Vector3i target)
+    {
+        UniqueList<Vector3i> output = new();
+        UniqueList<Vector3i> output_bl = new();
+        Vector3i pos_curr = start;
+
+        while (pos_curr.DistanceManhattanTo(target) > 0)
+        {
+            //Get the valid positions
+            List<Vector3i> valid_dirs = new();
+            foreach (Vector3i dir in Vector3i.DIRECTIONS)
+            {
+                if (positions.Contains(pos_curr + dir))
+                {
+                    valid_dirs.Add(pos_curr + dir);
+                } 
+            }
+
+            //Try to advance towards the target
+            Vector3i closer_position = pos_curr + pos_curr.GetDirectionNormalizedTo(target, valid_dirs.ToArray());
+
+            if (positions.Contains(closer_position) && !output_bl.Contains(closer_position))
+            {
+                output.Add(closer_position);
+
+            }
+            // If it cannot advance there, look for another direction route.
+        }
+
+        return output;
+
+    }
+ */
     public bool AgentCanExist(NavigationAgent agent, Vector3i position)
     {
         return grid.IsFlagInPosition(position, agent.flags_to_exist);
