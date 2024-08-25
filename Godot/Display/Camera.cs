@@ -44,7 +44,7 @@ public partial class Camera : Camera3D
         base._UnhandledInput(@event);
 
         //Enable or disable the camera movement (toggle).
-        if(Global.GInput.InputIsButtonPressed(Global.GInput.Button.QUICK_D))
+        if(Global.GInput.IsButtonPressed(Global.GInput.Button.QUICK_D))
         {
             camera_move_toggled = !camera_move_toggled; 
             GD.Print(camera_move_toggled);
@@ -52,7 +52,7 @@ public partial class Camera : Camera3D
         }
 
         //Enable or disable the camera movement (hold).
-        if(Global.GInput.InputIsButtonPressed(Global.GInput.Button.QUICK_C))
+        if(Global.GInput.IsButtonPressed(Global.GInput.Button.QUICK_C))
         {
             camera_move_held = true; 
             return;
@@ -161,27 +161,27 @@ public partial class Camera : Camera3D
     public bool HandleDirectionalInput()
     {
         directional_input += 
-        Global.GInput.InputIsButtonPressed(Global.GInput.Button.MOVE_FW) ? 
+        Global.GInput.IsButtonPressed(Global.GInput.Button.MOVE_FW) ? 
         Vector3.Forward * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Global.GInput.InputIsButtonPressed(Global.GInput.Button.MOVE_BW) ? 
+        Global.GInput.IsButtonPressed(Global.GInput.Button.MOVE_BW) ? 
         Vector3.Back * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Global.GInput.InputIsButtonPressed(Global.GInput.Button.MOVE_LT) ? 
+        Global.GInput.IsButtonPressed(Global.GInput.Button.MOVE_LT) ? 
         Vector3.Left * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Global.GInput.InputIsButtonPressed(Global.GInput.Button.MOVE_RT) ? 
+        Global.GInput.IsButtonPressed(Global.GInput.Button.MOVE_RT) ? 
         Vector3.Right * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Global.GInput.InputIsButtonPressed(Global.GInput.Button.MOVE_UP) ? 
+        Global.GInput.IsButtonPressed(Global.GInput.Button.MOVE_UP) ? 
         Vector3.Up * sensitivity_directional : Vector3.Zero;
 
         directional_input += 
-        Global.GInput.InputIsButtonPressed(Global.GInput.Button.MOVE_DN) ? 
+        Global.GInput.IsButtonPressed(Global.GInput.Button.MOVE_DN) ? 
         Vector3.Down * sensitivity_directional : Vector3.Zero;
 
         return true;

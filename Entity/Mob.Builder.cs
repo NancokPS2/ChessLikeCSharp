@@ -65,7 +65,8 @@ public partial class Mob
         }
         public Mob Result()
         {
-            return mob;
+            
+            return Update().mob;
         }
 
 

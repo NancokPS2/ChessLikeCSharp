@@ -24,7 +24,7 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it?\n- Improve cursor movement, base it on camera \n- Add references to the camera in the script\n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states",
+                    "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it? (Replace with Grid.navigation???)\n- Improve cursor movement, base it on camera \n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states\n- TARGETING state still cannot select a possible location nor does it mark allowed locations.",
                     "id": "ps2yzq0z0scwdzsyo0fziuv5"
                 },
                 {
@@ -60,17 +60,12 @@
         },
         {
             "title": "Bugs",
-            "tasks": [
-                {
-                    "text": "GridNavigationTests are borked",
-                    "id": "csu22qj928o352d49annexxk"
-                }
-            ],
+            "tasks": [],
             "id": "iv64sofsa6d5xpucq3jyksjg",
             "color": "#eb144c"
         }
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1724501313266
+    "timestamp": 1724603904612
 }

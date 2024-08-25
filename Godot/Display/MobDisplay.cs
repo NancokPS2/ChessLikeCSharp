@@ -10,7 +10,7 @@ namespace Godot.Display;
 public partial class MobDisplay : Godot.Node3D
 {
     UniqueList<Mob> mobs = new();
-    MobUI mob_ui = new();
+    public MobUI mob_ui = new();
 
     public override void _Ready()
     {

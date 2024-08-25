@@ -5,32 +5,25 @@ public partial class Job
 
     public static class Preset
     {
-        public static Job Grunt()
+        public static Job Basic()
         {
             Job output = new();
 
-            output.Stats.SetStat(StatSet.Name.HEALTH, 100);
-            output.Stats.SetStat(StatSet.Name.ENERGY, 40);
-            output.Stats.SetStat(StatSet.Name.MOVEMENT, 20);
-            output.Stats.SetStat(StatSet.Name.DELAY, 100);
+            output.ChainDefaultStats();
+            output.actions.Add(Action.Preset.BasicAttack());
 
             return output;
         }
-        public static Job Medic()
+        public static Job Wizard()
         {
-            Job output = new();
-            
-            output.Stats.SetStat(StatSet.Name.HEALTH, 90);
-            output.Stats.SetStat(StatSet.Name.ENERGY, 50);
-            output.Stats.SetStat(StatSet.Name.MOVEMENT, 20);
-            output.Stats.SetStat(StatSet.Name.DELAY, 100);
-
+            Job output = Basic().ChainWizard();
             return output;
         }
 
         public static Job Warrior()
         {
-            Job output = new();
+            Job output = Basic().ChainWarrior();
+
 
             return output;
         }

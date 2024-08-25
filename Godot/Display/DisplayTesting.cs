@@ -59,7 +59,7 @@ public partial class Display : Godot.Node
         mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(2))
-                .SetJob(Job.Preset.Grunt())
+                .SetJob(Job.Preset.Basic())
                 .SetIdentity("identified2", "Potty")
                 .Update()
                 .Result()
@@ -67,7 +67,7 @@ public partial class Display : Godot.Node
         mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(3))
-                .SetJob(new[]{Job.Preset.Medic(), Job.Preset.Grunt()})
+                .SetJob(new[]{Job.Preset.Wizard(), Job.Preset.Basic()})
                 .SetIdentity("identified", "Clone J")
                 .Update()
                 .Result()
@@ -75,7 +75,7 @@ public partial class Display : Godot.Node
         mob_display.Add(
             new ChessLike.Entity.Mob.Builder()
                 .SetPosition(new Vector3i(3))
-                .SetJob(new[]{Job.Preset.Medic(), Job.Preset.Grunt()})
+                .SetJob(new[]{Job.Preset.Wizard(), Job.Preset.Basic()})
                 .SetIdentity("identified", "Presetted")
                 .Update()
                 .Result()

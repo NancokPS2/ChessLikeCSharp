@@ -7,7 +7,6 @@ namespace Godot;
 
 public partial class BattleController
 {
-    //public MobUI display_mob_ui = new( new Mob() );
     public MobDisplay display_mob = new();
     public GridDisplay display_grid = new();
     public Camera display_camera = new();
@@ -15,17 +14,12 @@ public partial class BattleController
     public void SetupDisplay()
     {
         AddChild(display_mob);
-        display_mob.Add(encounter.PresetMobSpawns.Values.ToList());
-        display_mob.SetMobInUI(encounter.PresetMobSpawns.Values.ToList()[0]);
         display_mob.Name = "MobDisplay";
+        display_mob.mob_ui.ActionPressed += OnActionPressed;
 
         AddChild(display_grid);
         display_grid.SetGrid(encounter.Grid);
         display_grid.Name = "GridDisplay";
-
-        //display_mob_ui.ActionPressed += OnActionPressed;
-        //AddChild(display_mob_ui);
-        //display_mob_ui.Name = "Mob_UI";
 
         AddChild(display_camera);
         display_camera.Name = "Camera";

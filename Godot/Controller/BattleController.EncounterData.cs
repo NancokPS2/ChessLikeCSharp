@@ -17,8 +17,19 @@ public partial class BattleController
             encounter.Grid = Grid.Generator.GenerateFlat(new(6));
             encounter.SpawnLocations = new(){Vector3i.ONE};
             encounter.PresetMobSpawns = new(){
-              {Vector3i.ONE, new Mob.Builder().SetIdentity("CARRY", "Carry").SetJob(Job.Preset.Grunt()).Result()},  
-              {Vector3i.ONE + Vector3i.RIGHT * 2, new Mob.Builder().SetIdentity("SomeoneGuess", "Someone").SetJob(Job.Preset.Grunt()).Result()}  
+            {
+                Vector3i.ONE, 
+                new Mob.Builder()
+                .SetIdentity("CARRY", "Carry")
+                .SetJob(Job.Preset.Warrior())
+                .Result()
+            },  
+            {
+                Vector3i.ONE + Vector3i.RIGHT * 2, 
+                new Mob.Builder()
+                .SetIdentity("SomeoneGuess", "Someone")
+                .SetJob(Job.Preset.Wizard())
+                .Result()}  
             };
 
             return encounter;

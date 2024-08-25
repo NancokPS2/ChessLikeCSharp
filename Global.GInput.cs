@@ -12,8 +12,9 @@ public partial class Global
         {
             MOVE_FW, MOVE_BW, MOVE_LT, MOVE_RT, MOVE_UP, MOVE_DN,  //Main directions
             VIEW_UP, VIEW_DN, VIEW_LT, VIEW_RT,  //View directions
-            ACCEPT, CANCEL, SPECIAL_A, SPECIAL_B, //"Face buttons"
-            QUICK_A, QUICK_B, QUICK_C, QUICK_D //"Quickly accessible"
+            ACCEPT, CANCEL, SPECIAL_A, SPECIAL_B, //Face buttons
+            QUICK_A, QUICK_B, QUICK_C, QUICK_D, //Quickly accessible
+            PAUSE, MENU, //Other
         }
 
         private static Dictionary<Button, bool> ButtonsEnabled = new();
@@ -66,27 +67,43 @@ public partial class Global
                 Button.QUICK_B => "quick_right",
                 Button.QUICK_C => "other_left",
                 Button.QUICK_D => "other_right",
+
+                //Other
+                Button.PAUSE => "pause",
+                Button.MENU => "alt_pause",
                 
                 _ => throw new Exception()
             };
             return action_name;
         }
 
-        public static bool InputIsButtonPressed(Button button)
+        public static bool IsButtonPressed(Button button)
         {
 
             return Godot.Input.IsActionPressed(
                 GetActionName(button)
                 );
         }
-        public static float InputGetActionStrength(Button button)
+        public static bool IsActionJustReleased(Button button)
+        {
+            return Godot.Input.IsActionJustReleased(
+                GetActionName(button)
+            );
+        }
+        public static bool IsButtonJustPressed(Button button)
+        {
+            return Godot.Input.IsActionJustPressed(
+                GetActionName(button)
+            );
+        }
+        public static float GetActionStrength(Button button)
         {
             return Godot.Input.GetActionStrength(
                 GetActionName(button)
                 );
         }
 
-        public static System.Numerics.Vector2 InputGetViewVector(bool round_up)
+        public static System.Numerics.Vector2 GetViewVector(bool round_up)
         {
             System.Numerics.Vector2 output = new();
             if (MouseEnabled)
@@ -95,33 +112,33 @@ public partial class Global
                 output.X = round_up ? AccumulatedMouse.X : MathF.Ceiling(AccumulatedMouse.X);
             }else
             {
-                output.Y -= round_up ? InputGetActionStrength(Button.VIEW_DN) : MathF.Ceiling(InputGetActionStrength(Button.VIEW_DN));
-                output.Y += round_up ? InputGetActionStrength(Button.VIEW_UP) : MathF.Ceiling(InputGetActionStrength(Button.VIEW_UP));
-                output.X -= round_up ? InputGetActionStrength(Button.VIEW_LT) : MathF.Ceiling(InputGetActionStrength(Button.VIEW_LT));
-                output.X += round_up ? InputGetActionStrength(Button.VIEW_RT) : MathF.Ceiling(InputGetActionStrength(Button.VIEW_RT));
+                output.Y -= round_up ? GetActionStrength(Button.VIEW_DN) : MathF.Ceiling(GetActionStrength(Button.VIEW_DN));
+                output.Y += round_up ? GetActionStrength(Button.VIEW_UP) : MathF.Ceiling(GetActionStrength(Button.VIEW_UP));
+                output.X -= round_up ? GetActionStrength(Button.VIEW_LT) : MathF.Ceiling(GetActionStrength(Button.VIEW_LT));
+                output.X += round_up ? GetActionStrength(Button.VIEW_RT) : MathF.Ceiling(GetActionStrength(Button.VIEW_RT));
             }
             return output;
         }
-        public static System.Numerics.Vector3 InputGetMovementVector(bool round_up)
+        public static System.Numerics.Vector3 GetMovementVector(bool round_up)
         {
             System.Numerics.Vector3 output = new();
 
-            output.Z -= round_up ? InputGetActionStrength(Button.MOVE_BW) : MathF.Ceiling(InputGetActionStrength(Button.MOVE_BW));
-            output.Z += round_up ? InputGetActionStrength(Button.MOVE_FW) : MathF.Ceiling(InputGetActionStrength(Button.MOVE_FW));
-            output.X -= round_up ? InputGetActionStrength(Button.MOVE_LT) : MathF.Ceiling(InputGetActionStrength(Button.MOVE_LT));
-            output.X += round_up ? InputGetActionStrength(Button.MOVE_RT) : MathF.Ceiling(InputGetActionStrength(Button.MOVE_RT));
-            output.X -= round_up ? InputGetActionStrength(Button.MOVE_DN) : MathF.Ceiling(InputGetActionStrength(Button.MOVE_DN));
-            output.X += round_up ? InputGetActionStrength(Button.MOVE_UP) : MathF.Ceiling(InputGetActionStrength(Button.MOVE_UP));
+            output.Z -= round_up ? GetActionStrength(Button.MOVE_BW) : MathF.Ceiling(GetActionStrength(Button.MOVE_BW));
+            output.Z += round_up ? GetActionStrength(Button.MOVE_FW) : MathF.Ceiling(GetActionStrength(Button.MOVE_FW));
+            output.X -= round_up ? GetActionStrength(Button.MOVE_LT) : MathF.Ceiling(GetActionStrength(Button.MOVE_LT));
+            output.X += round_up ? GetActionStrength(Button.MOVE_RT) : MathF.Ceiling(GetActionStrength(Button.MOVE_RT));
+            output.X -= round_up ? GetActionStrength(Button.MOVE_DN) : MathF.Ceiling(GetActionStrength(Button.MOVE_DN));
+            output.X += round_up ? GetActionStrength(Button.MOVE_UP) : MathF.Ceiling(GetActionStrength(Button.MOVE_UP));
 
             return output;
         }
 
-        public static void InputSetEnabled(Button button, bool enabled)
+        public static void SetEnabled(Button button, bool enabled)
         {
             ButtonsEnabled[button] = enabled;
         }
 
-        public static void InputSetEnabled(Button[] buttons, bool enabled)
+        public static void SetEnabled(Button[] buttons, bool enabled)
         {
             foreach (Button button in buttons)
             {
@@ -129,12 +146,12 @@ public partial class Global
             }
         }
 
-        public static void InputSetEnabled(bool enabled)
+        public static void SetEnabled(bool enabled)
         {
-            InputSetEnabled(Enum.GetValues<Button>(), enabled);
+            SetEnabled(Enum.GetValues<Button>(), enabled);
         }
 
-        public static bool InputGetEnabled(Button button)
+        public static bool GetEnabled(Button button)
         {
             bool output;
             ButtonsEnabled.TryGetValue(button, out output);

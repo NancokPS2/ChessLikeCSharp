@@ -1,6 +1,4 @@
 using ChessLike.Entity;
-using Godot.Display.UI;
-using static ChessLike.Shared.IGSceneAdapter;
 using Action = ChessLike.Entity.Action;
 
 namespace Godot.Display;
@@ -23,10 +21,6 @@ public partial class MobDisplay : Godot.Node3D
         private Mob? mob;
 
         public MobUI()
-        {
-        }
-
-        public override void _Ready()
         {
         }
 
@@ -79,34 +73,36 @@ public partial class MobDisplay : Godot.Node3D
         public void SetMob(Mob mob)
         {
             this.mob = mob;
+            //UpdateStatNodes();
+            UpdateActionButtons();
         }
 
         public void UpdateStatNodes()
         {
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            ((IGSceneAdapter)this).RequiredNodeTryToGet<Label>(new(NODE_NAME))
+            this.RequiredNodeTryToGet<Label>(new(NODE_NAME))
                 .Text = mob.Identity.Name;
 
-            ((IGSceneAdapter)this).RequiredNodeTryToGet<Label>(new(NODE_DELAY))
+            this.RequiredNodeTryToGet<Label>(new(NODE_DELAY))
                 .Text = mob.Stats.GetValue(StatSet.Name.DELAY).ToString();
 
-            ((IGSceneAdapter)this).RequiredNodeTryToGet<ProgressBar>(new(NODE_HEALTH))
+            this.RequiredNodeTryToGet<ProgressBar>(new(NODE_HEALTH))
                 .Value = mob.Stats.GetValue(StatSet.Name.HEALTH);
 
-            ((IGSceneAdapter)this).RequiredNodeTryToGet<ProgressBar>(new(NODE_HEALTH))
+            this.RequiredNodeTryToGet<ProgressBar>(new(NODE_HEALTH))
                 .MaxValue = mob.Stats.GetMax(StatSet.Name.HEALTH);
 
-            ((IGSceneAdapter)this).RequiredNodeTryToGet<ProgressBar>(new (NODE_ENERGY))
+            this.RequiredNodeTryToGet<ProgressBar>(new (NODE_ENERGY))
                 .Value = mob.Stats.GetValue(StatSet.Name.ENERGY);
 
-            ((IGSceneAdapter)this).RequiredNodeTryToGet<ProgressBar>(new(NODE_ENERGY))
+            this.RequiredNodeTryToGet<ProgressBar>(new(NODE_ENERGY))
                 .MaxValue = mob.Stats.GetMax(StatSet.Name.ENERGY);
 
         }
 
         public void UpdateActionButtons()
         {
-            foreach (Node node in ((IGSceneAdapter)this).RequiredNodeTryToGet<VBoxContainer>(new(NODE_ACTION_CONTAINER)).GetChildren())
+            foreach (Node node in this.RequiredNodeTryToGet<VBoxContainer>(new(NODE_ACTION_CONTAINER)).GetChildren())
             {
                 node.QueueFree();
             }
@@ -114,9 +110,22 @@ public partial class MobDisplay : Godot.Node3D
             foreach (ChessLike.Entity.Action action in mob.actions)
             {
                 ActionButton button = new(action);
-                ((IGSceneAdapter)this).RequiredNodeTryToGet<VBoxContainer>(new(NODE_ACTION_CONTAINER))
+                this.RequiredNodeTryToGet<VBoxContainer>(new(NODE_ACTION_CONTAINER))
                     .AddChild(button);
+                button.Text = action.name;
+                Console.WriteLine(button.GetPath());
                 button.Pressed += () => ActionPressed?.Invoke(action);
+            }
+        }
+
+        public void EnableActionButtons(bool enable)
+        {
+            foreach (Node node in this.RequiredNodeTryToGet<VBoxContainer>(new(NODE_ACTION_CONTAINER)).GetChildren())
+            {
+                if (node is Button button)
+                {
+                    button.Disabled = !enable;
+                }
             }
         }
         #pragma warning restore CS8602 // Dereference of a possibly null reference.

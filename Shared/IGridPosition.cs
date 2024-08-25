@@ -55,7 +55,7 @@ public interface IGridPosition
     */
 
 }
-public static class IGridPositionExtensionMethods
+public static class IGridPositionExtension
 {
     public static void AdvanceToLocation(this IGridPosition @this, Vector3i location, float delta)
     {

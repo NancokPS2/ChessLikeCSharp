@@ -1,5 +1,3 @@
-using static ChessLike.Shared.IGridPositionExtensionMethods;
-
 namespace ChessLike.Entity;
 
 

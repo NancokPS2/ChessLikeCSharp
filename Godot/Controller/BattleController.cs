@@ -47,14 +47,15 @@ public partial class BattleController : Node
         
         LoadEncounter(EncounterData.GetDefault());
         AddChild(debug_info_label);
-        PrintTreePretty();
         SetState(state_current);
+        PrintTreePretty();
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
         UpdateDebugInformation();
+        ProcessStateInput();
         ProcessState(delta);
 
     }
@@ -69,17 +70,19 @@ public partial class BattleController : Node
         grid = to_load.Grid;
         encounter = to_load;
 
+        SetupDisplay();
+        
         foreach (Mob mob in encounter.PresetMobSpawns.Values)
         {
-            AddMob(mob);
+            AddParticipant(mob);
         }
-        SetupDisplay();
     }
 
-    public void AddMob(Mob mob)
+    public void AddParticipant(Mob mob)
     {
         mobs_participating.Add(mob);
         display_mob.Add(mob);
+        display_mob.SetMobInUI(mob);
     }
 
     public void UpdateDebugInformation()
