@@ -84,19 +84,19 @@ public partial class MobDisplay : Godot.Node3D
                 .Text = mob.Identity.Name;
 
             this.RequiredNodeTryToGet<Label>(new(NODE_DELAY))
-                .Text = mob.Stats.GetValue(StatSet.Name.DELAY).ToString();
+                .Text = mob.Stats.GetValue(StatName.DELAY).ToString();
 
             this.RequiredNodeTryToGet<ProgressBar>(new(NODE_HEALTH))
-                .Value = mob.Stats.GetValue(StatSet.Name.HEALTH);
+                .Value = mob.Stats.GetValue(StatName.HEALTH);
 
             this.RequiredNodeTryToGet<ProgressBar>(new(NODE_HEALTH))
-                .MaxValue = mob.Stats.GetMax(StatSet.Name.HEALTH);
+                .MaxValue = mob.Stats.GetMax(StatName.HEALTH);
 
             this.RequiredNodeTryToGet<ProgressBar>(new (NODE_ENERGY))
-                .Value = mob.Stats.GetValue(StatSet.Name.ENERGY);
+                .Value = mob.Stats.GetValue(StatName.ENERGY);
 
             this.RequiredNodeTryToGet<ProgressBar>(new(NODE_ENERGY))
-                .MaxValue = mob.Stats.GetMax(StatSet.Name.ENERGY);
+                .MaxValue = mob.Stats.GetMax(StatName.ENERGY);
 
         }
 

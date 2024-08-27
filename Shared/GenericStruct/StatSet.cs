@@ -3,50 +3,40 @@ using System.Xml;
 using ChessLike.Storage;
 using Godot;
 
-namespace ChessLike.Shared;
-public class StatSet
+namespace ChessLike.Shared.GenericStruct;
+public class StatSet<StatEnum> where StatEnum : Enum
 {
-    public enum Name
-    {
-        HEALTH,
-        ENERGY,
-        MOVEMENT,
-        DELAY,
-        STRENGTH,
-        AGILITY,
-        INTELLIGENCE,
-    }
-    Dictionary<Name, ClampFloat> Contents {get; set;} = new();
+    Dictionary<StatEnum, ClampFloat> Contents {get; set;} = new();
 
 
     public StatSet()
     {
-        foreach (StatSet.Name stat in Enum.GetValues(typeof(StatSet.Name)))
+        foreach (StatEnum stat in Enum.GetValues(typeof(StatEnum)))
         {
             Contents[stat] = new();
         }
     }
 
-    public StatSet(Dictionary<Name, float> values) : base()
+    public StatSet(Dictionary<StatEnum, float> values) : base()
     {
-        foreach (Name stat_name in values.Keys)
+        foreach (StatEnum stat_name in values.Keys)
         {
             SetStat(stat_name, values[stat_name]);
         }
     }
 
 
-    public void ChangeValue(Name stat, float amount, ClampFloat.Modifier[]? modifiers = null)
+    public void ChangeValue(StatEnum stat, float amount, ClampFloat.Modifier[]? modifiers = null)
     {
         Contents[stat].ChangeValue(amount, modifiers);
     }
 
-    public void SetValue(Name stat, float value)
+    public void SetValue(StatEnum stat, float value)
     {
         Contents[stat].SetCurrent(value);
     }
 
-    public void SetValuePercent(Name stat, float percent)
+    public void SetValuePercent(StatEnum stat, float percent)
     {
         if (percent > 1.0f || percent < 0.0f)
         {
@@ -55,37 +45,37 @@ public class StatSet
         SetValue(stat, GetMax(stat) * percent);
     }
 
-    public void SetMax(Name stat, float value)
+    public void SetMax(StatEnum stat, float value)
     {
         Contents[stat].SetMax(value);
     }
 
-    public void SetMin(Name stat, float value)
+    public void SetMin(StatEnum stat, float value)
     {
         if(value < 0){throw new ArgumentOutOfRangeException("Negative minimums are not supported yet.");}
         Contents[stat].SetMin(value);
     }
 
-    public float GetValue(Name stat)
+    public float GetValue(StatEnum stat)
     {
         ClampFloat output = new();
         Contents.TryGetValue(stat, out output);
         return output.GetCurrent();
     }
 
-    public float GetValuePrecent(Name stat)
+    public float GetValuePrecent(StatEnum stat)
     {
         return GetValue(stat) / GetMax(stat);
     }
 
-    public float GetMax(Name stat)
+    public float GetMax(StatEnum stat)
     {
         ClampFloat output = new();
         Contents.TryGetValue(stat, out output);
         return output.GetMax();
     }
 
-    public float GetMin(Name stat)
+    public float GetMin(StatEnum stat)
     {
         ClampFloat output = new();
         Contents.TryGetValue(stat, out output);
@@ -98,24 +88,24 @@ public class StatSet
     /// </summary>
     /// <param name="stat"></param>
     /// <param name="value"></param>
-    public void SetStat(Name stat, float value)
+    public void SetStat(StatEnum stat, float value)
     {
         SetMax(stat, value);
         SetValue(stat: stat, value);
     }
 
-    public void MultiplyStat(Name stat, float multiplier)
+    public void MultiplyStat(StatEnum stat, float multiplier)
     {
         float current = GetValue(stat);
         SetStat(stat, current * multiplier);
     }
 
-    public void MultiplyStat(Name stat, double multiplier)
+    public void MultiplyStat(StatEnum stat, double multiplier)
     {
         MultiplyStat(stat, (float)multiplier);
     }
 
-    public void SetTypes(Name stat_name, string[] types)
+    public void SetTypes(StatEnum stat_name, string[] types)
     {
         Contents[stat_name].ClearTypes();
         foreach (string type in types)
@@ -125,24 +115,24 @@ public class StatSet
     }
 
     //Resets the specified stats to their maximum value. If none are specified, all of them are reset.
-    public void SetToMax(Name[]? stats = null)
+    public void SetToMax(StatEnum[]? stats = null)
     {
         //Set ALL stats if null.
         stats ??= GetArrayOfNames();
 
-        foreach (Name stat in stats)
+        foreach (StatEnum stat in stats)
         {
             SetStat(stat, GetMax(stat));
         }
     }
 
-    public static Name[] GetArrayOfNames()
+    public static StatEnum[] GetArrayOfNames()
     {
-        int total_stats = Enum.GetNames(typeof(Name)).Length;
-        Name[] output = new Name[total_stats];
+        int total_stats = Enum.GetNames(typeof(StatEnum)).Length;
+        StatEnum[] output = new StatEnum[total_stats];
 
         int index = 0;
-        foreach (Name name in Enum.GetValues(typeof(Name)))
+        foreach (StatEnum name in Enum.GetValues(typeof(StatEnum)))
         {
             output[index] = name;
             index ++;
@@ -150,11 +140,11 @@ public class StatSet
         return output;
     }
 
-    public static StatSet GetAverage(StatSet a, StatSet b)
+    public static StatSet<StatEnum> GetAverage(StatSet<StatEnum> a, StatSet<StatEnum> b)
     {
-        StatSet output = new();
+        StatSet<StatEnum> output = new StatSet<StatEnum>();
 
-        foreach (Name stat in GetArrayOfNames())
+        foreach (StatEnum stat in GetArrayOfNames())
         {
             float average_max = (a.GetMax(stat) + b.GetMax(stat)) / 2;
             float average_value = (a.GetValue(stat) + b.GetValue(stat)) / 2;

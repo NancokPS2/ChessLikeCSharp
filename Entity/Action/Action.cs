@@ -72,7 +72,7 @@ public partial class Action : IGridReader
                 goto decide;
             }
 
-            if (target.Stats.GetValuePrecent(StatSet.Name.HEALTH) > effect_filter_params.MaximumHealthPercent)
+            if (target.Stats.GetValuePrecent(StatName.HEALTH) > effect_filter_params.MaximumHealthPercent)
             {
                 valid = false;
                 goto decide;

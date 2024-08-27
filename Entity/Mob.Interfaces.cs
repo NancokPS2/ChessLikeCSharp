@@ -7,7 +7,7 @@ namespace ChessLike.Entity;
 public partial class Mob
 {
     //IStats
-    public StatSet Stats { get; set; } = new();
+    public StatSet<StatName> Stats { get; set; } = new();
 
     //IPosition
     Vector3i _position = new();
@@ -15,7 +15,7 @@ public partial class Mob
     public Vector3i Position { get => _position; set => SetPosition(value); }
     public Vector3 FloatPosition { get; set; }
 
-    public float Speed { get => Stats.GetValue(StatSet.Name.MOVEMENT); set => Stats.SetValue(StatSet.Name.MOVEMENT, value); }
+    public float Speed { get => Stats.GetValue(StatName.MOVEMENT); set => Stats.SetValue(StatName.MOVEMENT, value); }
 
     void SetPosition(Vector3i value){
         MobToLocationDict.Remove(value);
@@ -109,6 +109,10 @@ public partial class Mob
     /// <param name="value"></param>
 
     //ITurn
-    public float DelayBase { get => Stats.GetMax(StatSet.Name.DELAY); set => Stats.SetMax(StatSet.Name.DELAY, value); }
-    public float Delay { get => Stats.GetValue(StatSet.Name.DELAY); set => Stats.SetValue(StatSet.Name.DELAY, value); }
+    public float DelayBase { 
+        get => Stats.GetMax(StatName.DELAY); set => Stats.SetMax(StatName.DELAY, value); 
+        }
+    public float Delay { 
+        get => Stats.GetValue(StatName.DELAY); set => Stats.SetValue(StatName.DELAY, value); 
+        }
 }

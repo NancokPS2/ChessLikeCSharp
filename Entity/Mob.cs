@@ -2,7 +2,7 @@ namespace ChessLike.Entity;
 
 
 
-public partial class Mob : IGridPosition, IGridReader, IRelation, IStats, ITurn, IIdentify
+public partial class Mob : IGridPosition, IGridReader, IRelation, IStats<StatName>, ITurn, IIdentify
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
     static Dictionary<Mob, Vector3i> LocationToMobDict = new();
@@ -29,7 +29,7 @@ public partial class Mob : IGridPosition, IGridReader, IRelation, IStats, ITurn,
         foreach (Job job in jobs)
         {
             //Average the stats from the job's.
-            Stats = StatSet.GetAverage(Stats, job.Stats);
+            Stats = StatSet<StatName>.GetAverage(Stats, job.Stats);
 
             //Add the actions.
             actions.AddRange(job.actions);

@@ -23,8 +23,8 @@ public partial class Action
         public void Use(UsageParams usage_params)
         {
 
-            usage_params.owner.Stats.ChangeValue(StatSet.Name.HEALTH, health_cost);
-            usage_params.owner.Stats.ChangeValue(StatSet.Name.ENERGY, energy_cost);
+            usage_params.owner.Stats.ChangeValue(StatName.HEALTH, health_cost);
+            usage_params.owner.Stats.ChangeValue(StatName.ENERGY, energy_cost);
 
             CustomUse(usage_params);
         }
@@ -38,16 +38,16 @@ public partial class Action
         public class StatChange : EffectParams
         {
             //Which stat of the owner to change.
-            public StatSet.Name? owner_stat_to_change = null;
+            public StatName? owner_stat_to_change = null;
 
             //Which stat of the target to change.
-            public StatSet.Name? target_stat_to_change = null;
+            public StatName? target_stat_to_change = null;
 
             //Sum this stat from the owner to the value.
-            public StatSet.Name? owner_stat_sum = null;
+            public StatName? owner_stat_sum = null;
 
             //Sum this stat from the target to the value.
-            public StatSet.Name? target_stat_sum = null;
+            public StatName? target_stat_sum = null;
 
             //How much to change it as a base.
             public float flat_amount = 0;
@@ -55,7 +55,7 @@ public partial class Action
             //Apply a final modifier to the value.
             public float final_modifier = 1.0f;
 
-            public static StatChange PresetChangeTargetBasedOnOwnerStat(StatSet.Name stat_from_owner_to_sum, StatSet.Name stat_to_affect)
+            public static StatChange PresetChangeTargetBasedOnOwnerStat(StatName stat_from_owner_to_sum, StatName stat_to_affect)
             {
                 StatChange output = new();
                 output.owner_stat_sum = stat_from_owner_to_sum;
@@ -71,7 +71,7 @@ public partial class Action
 
         public class RecoverPercentOfMax : EffectParams
         {
-            public StatSet.Name stat_to_recover = StatSet.Name.HEALTH;
+            public StatName stat_to_recover = StatName.HEALTH;
             public float percentage = 0.25f;
 
             public override void CustomUse(UsageParams usage_params)
@@ -86,7 +86,7 @@ public partial class Action
 
         public class Attack : EffectParams
         {
-            public StatSet.Name based_on_stat = StatSet.Name.STRENGTH;
+            public StatName based_on_stat = StatName.STRENGTH;
             public float stat_modifier = 0.5f;
 
             public override void CustomUse(UsageParams usage_params)
@@ -95,11 +95,11 @@ public partial class Action
 
                 foreach (Mob target in usage_params.mob_targets)
                 {
-                    target.Stats.ChangeValue(StatSet.Name.HEALTH, damage, modifiers);
+                    target.Stats.ChangeValue(StatName.HEALTH, damage, modifiers);
                 }
             }
 
-            public Attack(StatSet.Name based_on_stat = StatSet.Name.STRENGTH, float stat_modifer = 0.5f)
+            public Attack(StatName based_on_stat = StatName.STRENGTH, float stat_modifer = 0.5f)
             {
                 this.based_on_stat = based_on_stat;
                 this.stat_modifier = stat_modifer;

@@ -3,10 +3,10 @@ using System.Xml;
 using ChessLike.Storage;
 
 namespace ChessLike.Shared;
-public interface IStats
+public interface IStats<T> where T : Enum
 {
 
-    public StatSet Stats {set; get;}
+    public StatSet<T> Stats {set; get;}
 /*     public enum Stat
     {
         HEALTH,

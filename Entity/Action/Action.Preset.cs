@@ -29,7 +29,7 @@ public partial class Action
         public static Action MagicBlast()
         {
             Action output = new();
-            EffectParams.Attack effect = new(StatSet.Name.INTELLIGENCE, 0.8f);
+            EffectParams.Attack effect = new(StatName.INTELLIGENCE, 0.8f);
             output.effect_params.Add(effect);
 
             return output;
