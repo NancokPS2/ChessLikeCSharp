@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExtendedXmlSerializer.ContentModel.Identification;
 
-namespace ChessLike.Shared.Identification;
+namespace ChessLike.Shared.GenericStruct;
 
 public class Identity : IEquatable<Identity>, IFormattable, IEquatable<string>
 {

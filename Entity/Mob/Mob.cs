@@ -5,9 +5,10 @@ namespace ChessLike.Entity;
 public partial class Mob : IGridPosition, IGridReader, IRelation, IStats<StatName>, ITurn, IIdentify
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
-    static Dictionary<Mob, Vector3i> LocationToMobDict = new();
     public List<Job> jobs = new();
     public List<Action> actions = new();
+    public ERace race;
+    public EFaction faction = EFaction.NEUTRAL;
 
     public Mob()
     {

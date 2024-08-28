@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExtendedXmlSerializer.ContentModel.Identification;
 
-namespace ChessLike.Shared.Relation;
+namespace ChessLike.Shared.Serialization;
 
 //
 public interface ISerializable

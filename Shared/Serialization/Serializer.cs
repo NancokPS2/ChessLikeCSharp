@@ -13,7 +13,7 @@ using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
 
-namespace ChessLike.Shared;
+namespace ChessLike.Shared.Serialization;
 
 public static class Serializer
 {

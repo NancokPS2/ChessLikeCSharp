@@ -1,64 +1,15 @@
 using System.Data.Common;
 using System.Reflection;
+using System.Runtime.Serialization;
 using ChessLike.Entity;
 using ChessLike.Storage;
+using ExtendedXmlSerializer;
 namespace ChessLike.Entity;
 
 //Factions can store groups of Mobs, their inventories and grant allegiance between mobs.
-public struct Faction : IRelation
+public partial class Faction
 {
-    const string UNALIGNED_IDENTITY = "UNALIGNED";
-
-    UniqueList<Identity> members = new();
-
-    public Dictionary<Identity, float> RelationList { get; set; } = new();
-
-    public Inventory inventory = new(0);
-
-
-    public Faction(string name = UNALIGNED_IDENTITY)
-    {
-        Identity = new(name, name);
-        members = new();
-        RelationList = new();
-    }
-    public Faction(Identity[] members, string name) : this(name)
-    {
-        foreach (Identity member in members)
-        {
-            AddMember(member);
-        }
-    }
-
-    public List<Identity> GetMembers()
-    {
-        return members;
-    }
-
-    public void AddMember(Identity member)
-    {
-        members.Add(member);
-    }
-
-    public void RemoveMember(Identity member)
-    {
-        members.Remove(member);
-    }
-
-    public static bool operator ==(Faction a, Faction b)
-	{
-		return a.Identity.Identifier == b.Identity.Identifier;
-	}
-
-	public static bool operator !=(Faction a, Faction b)
-	{
-		return !(a == b);
-	}
-
     //IRelation
-    public Identity Identity { get; set; } = new Identity(Identity.INVALID_IDENTIFIER);
-
-
     public List<Identity> GetAllWithLevel(RelationType level)
     {
         List<Identity> output = new();
@@ -117,5 +68,5 @@ public struct Faction : IRelation
         RelationList[other] = val;
     }
 
-    
+
 }

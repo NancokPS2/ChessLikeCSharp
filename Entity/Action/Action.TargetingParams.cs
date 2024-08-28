@@ -24,10 +24,11 @@ public partial class Action
         //Targeting
         //Distance from the user at which this can be used.
         public int TargetingRange = 4;
+        public StatName? TargetingRangeStatBonus;
         //When choosing which cells are selectable for targeting, use flood fill.
         public FloodFillMode TargetingFloodFillMode = FloodFillMode.NONE;
         //Only works if there is a mob being hit that was deemed as valid.
-        public VacancyStatus NeededVacancy = VacancyStatus.HAS_NO_MOB;
+        public VacancyStatus NeededVacancy = VacancyStatus.HAS_MOB;
 
 
         //AoE
