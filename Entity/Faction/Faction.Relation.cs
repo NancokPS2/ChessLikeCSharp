@@ -2,7 +2,7 @@ using System.Data.Common;
 using System.Reflection;
 using System.Runtime.Serialization;
 using ChessLike.Entity;
-using ChessLike.Storage;
+using ChessLike.Entity;
 using ExtendedXmlSerializer;
 namespace ChessLike.Entity;
 

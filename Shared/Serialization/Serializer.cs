@@ -28,39 +28,38 @@ public static class Serializer
         && !Path.EndsInDirectorySeparator(path); //If it ends as a directory, it is not a file.
     }
 
-    public static string GetFilePath(IIdentify identify, Global.Directory.Content global_dir)
+    public static string GetFilePath(ISerializable serializable)
     {
-        string file_name = identify.Identity.Identifier + ".xml";
-        string sub_folder = identify.GetType().ToString();
-        string path = Path.Combine(Global.Directory.GetContentDir(global_dir), sub_folder, file_name);
+        string file_name = serializable.GetFileName() + ".xml";
+        string folder = serializable.GetDirectory();
+        string sub_folder = serializable.GetSubDirectory();
+        string path = Path.Combine(folder, sub_folder, file_name);
         if (!IsFilePathValid(path))
         {
-            throw new InvalidDataException("The result was invalid.");
+            throw new InvalidDataException(String.Format("The result was invalid. {0}", path));
         }
         return path;
     }
 
-    public static void SaveAsXml(IIdentify identity, Global.Directory.Content global_dir)
+    public static void SaveAsXml(ISerializable serializable, Global.Directory.Content global_dir)
     {
-        string path = GetFilePath(identity, global_dir);        
-        SaveAsXml(identity, path);
+        string path = GetFilePath(serializable);        
+        SaveAsXml(serializable, path);
     }
 
-    public static void SaveAsXml(object obj, string file_path)
+    public static void SaveAsXml(ISerializable obj, string full_file_path)
     {
-        if(!IsFilePathValid(file_path)) {throw new ArgumentException("Invalid path.");}
+        if(!IsFilePathValid(full_file_path)) {throw new ArgumentException("Invalid path.");}
 
         //Overrides if it has the appropiate interface TODO
-        if (obj is ISerializeOverride serialize_override)
+/*         string[] whitelist = obj.GetPropertyBlacklist();
+        XmlAttributeOverrides overrides = new();
+        foreach (string blacklisted in whitelist)
         {
-            XmlAttributeOverrides overrides = new();
-            foreach (string blacklisted in serialize_override.GetSerializationBlacklist())
-            {
-                XmlAttributes attributes = new XmlAttributes(){XmlIgnore = true};
-                attributes.XmlElements.Add( new(blacklisted));
-                overrides.Add(obj.GetType(), blacklisted, attributes);
-            }
-        }
+            XmlAttributes attributes = new XmlAttributes(){XmlIgnore = true};
+            attributes.XmlElements.Add( new(blacklisted));
+            overrides.Add(obj.GetType(), blacklisted, attributes);
+        } */
         
         
         //Create and use serializer.
@@ -74,13 +73,17 @@ public static class Serializer
         string xml_string = serializer.Serialize(new XmlWriterSettings {Indent = true}, obj);
 
         //Create writer.
-        TextWriter string_writer = new StreamWriter(file_path);
+        TextWriter string_writer = new StreamWriter(full_file_path);
         string_writer.Write(xml_string);
         string_writer.Close();
 
     }
 
-    public static T LoadAsXml<T>(string file_path)
+    public static T? LoadAsXml<T>(ISerializable serializable)
+    {
+        return LoadAsXml<T>(GetFilePath(serializable));
+    }
+    public static T? LoadAsXml<T>(string file_path)
     {
         //Get file contents.
         StreamReader stream_reader = new(file_path);
@@ -103,11 +106,6 @@ public static class Serializer
         }
 
         return output;
-    }
-
-    public interface ISerializeOverride
-    {
-        public string[] GetSerializationBlacklist();
     }
 
 }

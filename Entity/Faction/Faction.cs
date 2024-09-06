@@ -3,57 +3,31 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using ChessLike.Entity;
 using ChessLike.Shared.Serialization;
-using ChessLike.Storage;
+using ChessLike.Entity;
 using ExtendedXmlSerializer;
 using ISerializable = ChessLike.Shared.Serialization.ISerializable;
 namespace ChessLike.Entity;
 
 //Factions can store groups of Mobs, their inventories and grant allegiance between mobs.
-public partial class Faction : IRelation, ISerializable
+public partial class Faction : ISerializable
 {
-    const string UNALIGNED_IDENTITY = "UNALIGNED";
 
-    public EFaction identifier = EFaction.NEUTRAL;
-    UniqueList<Identity> members = new();
+    public EFaction Identifier = EFaction.NEUTRAL;
 
-    public Dictionary<Identity, float> RelationList { get; set; } = new();
+    public Dictionary<EFaction, float> RelationList { get; set; } = new();
 
-    public Inventory inventory = new(0);
-    public Identity Identity { get; set; } = new Identity(Identity.INVALID_IDENTIFIER);
+    public Inventory inventory = new(999);
 
 
-    public Faction(string name = UNALIGNED_IDENTITY)
+    public Faction(EFaction identifer = EFaction.NEUTRAL)
     {
-        Identity = new(name, name);
-        members = new();
+        this.Identifier = identifer;
         RelationList = new();
-    }
-    public Faction(Identity[] members, string name) : this(name)
-    {
-        foreach (Identity member in members)
-        {
-            AddMember(member);
-        }
-    }
-
-    public List<Identity> GetMembers()
-    {
-        return members;
-    }
-
-    public void AddMember(Identity member)
-    {
-        members.Add(member);
-    }
-
-    public void RemoveMember(Identity member)
-    {
-        members.Remove(member);
     }
 
     public static bool operator ==(Faction a, Faction b)
 	{
-		return a.Identity.Identifier == b.Identity.Identifier;
+		return a.Identifier == b.Identifier;
 	}
 
 	public static bool operator !=(Faction a, Faction b)
@@ -76,4 +50,13 @@ public partial class Faction : IRelation, ISerializable
         return base.GetHashCode();
     }
 
+    public string GetFileName()
+    {
+        return Enum.GetName(Identifier) + ".xml";
+    }
+
+    public string GetSubDirectory()
+    {
+        return "factions";
+    }
 }

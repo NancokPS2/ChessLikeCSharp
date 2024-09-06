@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Xml;
-using ChessLike.Storage;
+using ChessLike.Entity;
 using Godot;
 
 namespace ChessLike.Shared.GenericStruct;

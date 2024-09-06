@@ -14,8 +14,6 @@ public static partial class Global
     //public static Directory directory = new();
     public static ResourceDictionary resources = new();
 
-    public static Variables variables = new();
-
 }
 
 

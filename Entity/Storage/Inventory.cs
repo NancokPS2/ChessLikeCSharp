@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Storage;
+namespace ChessLike.Entity;
 
 public class Inventory
 {
@@ -25,7 +25,7 @@ public class Inventory
         INVENTORY_FALLBACK = 1 << 1,//Add the item to the linked inventory if it is not possible to add it.
     } */
 
-    private Dictionary<int, List<Item.Type>> slot_whitelist = new();
+    private Dictionary<int, List<EItem>> slot_whitelist = new();
 
     public const int INVALID_SLOT = -1;
 
@@ -111,12 +111,12 @@ public class Inventory
         return error;
     }
 
-    public void SetSlotWhitelist(int slot, List<Item.Type> type_list)
+    public void SetSlotWhitelist(int slot, List<EItem> type_list)
     {
         slot_whitelist[slot] = type_list;
     }
 
-    public List<Item.Type> GetSlotWhitelist(int slot)
+    public List<EItem> GetSlotWhitelist(int slot)
     {
         return slot_whitelist[slot];
     }
@@ -168,7 +168,7 @@ public class Inventory
         }
 
         //Check every type of the item.
-        foreach(Item.Type type in item.GetTypes())
+        foreach(EItem type in item.GetTypes())
         {
             //If any type is found, allow it.
             if(slot_whitelist[slot].Contains(type))

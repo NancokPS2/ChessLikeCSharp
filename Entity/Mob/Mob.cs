@@ -1,14 +1,14 @@
 namespace ChessLike.Entity;
 
 
-
-public partial class Mob : IGridPosition, IGridReader, IRelation, IStats<StatName>, ITurn, IIdentify
+public partial class Mob : IGridPosition, IGridReader, IRelation, IStats<StatName>, ITurn
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
-    public List<Job> jobs = new();
-    public List<Action> actions = new();
-    public ERace race;
-    public EFaction faction = EFaction.NEUTRAL;
+    public List<Job> Jobs = new();
+    public List<Action> Actions = new();
+    public ERace Race;
+    public EFaction Faction = EFaction.NEUTRAL;
+    public Inventory Inventory = new(5);
 
     public Mob()
     {
@@ -20,20 +20,20 @@ public partial class Mob : IGridPosition, IGridReader, IRelation, IStats<StatNam
     public Mob(string name, List<Job> jobs)
     {
         Identity = new(name);
-        this.jobs = jobs;
+        this.Jobs = jobs;
     }
 
-    public void UpdateJobs()
+    private void UpdateJobs()
     {
         //Reset stats and add update them.
         Stats = new();
-        foreach (Job job in jobs)
+        foreach (Job job in Jobs)
         {
             //Average the stats from the job's.
             Stats = StatSet<StatName>.GetAverage(Stats, job.Stats);
 
             //Add the actions.
-            actions.AddRange(job.actions);
+            Actions.AddRange(job.actions);
         }
     }
 

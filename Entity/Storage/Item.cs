@@ -1,23 +1,19 @@
-namespace ChessLike.Storage;
+namespace ChessLike.Entity;
 public abstract class Item : Shared.ITrade
 {
-    public enum Type
-    {
-        INVALID, UNKNOWN, CURRENCY, WEAPON, ARMOR
-    }
 
     public string name = "";
     public float price = 0;
     public int slot_size = 1;
-    private List<Type> types = new();
+    private List<EItem> types = new();
 
 
-    public void AddType(Type type)
+    public void AddType(EItem type)
     {
         types.Add(type);
     }
 
-    public bool RemoveType(Type type)
+    public bool RemoveType(EItem type)
     {
         return types.Remove(type);
     }
@@ -27,7 +23,7 @@ public abstract class Item : Shared.ITrade
         types.Clear();
     }
 
-    public List<Type> GetTypes()
+    public List<EItem> GetTypes()
     {
         return types;
     }

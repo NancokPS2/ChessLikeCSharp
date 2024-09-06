@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace ChessLike.Shared.Identification;
 
 
-public partial interface IRelation : IIdentify
+public partial interface IRelation
 {
 
     public Dictionary<Identity, float> RelationList {set; get;}

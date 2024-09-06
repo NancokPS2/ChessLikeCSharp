@@ -18,17 +18,17 @@ public partial class Action
             Action action = usage_params.action_reference;
             Grid grid = usage_params.grid;
             Vector3i origin = usage_params.owner.Position;
-            TargetingParams.AoEMode aoe_mode = action.target_params.AoeShape;
+            TargetingParams.AoEMode aoe_mode = action.TargetParams.AoeShape;
 
             //Range is forced to 1 when using anything other than SINGLE mode.
-            int targeting_range = action.target_params.AoeShape != TargetingParams.AoEMode.SINGLE ? 
-                1 : action.target_params.TargetingRange;
+            int targeting_range = action.TargetParams.AoeShape != TargetingParams.AoEMode.SINGLE ? 
+                1 : action.TargetParams.TargetingRange;
 
             //Filters.
             List<Func<Vector3i, bool>> filters = new();
 
             //Regarding vacancy of the position.
-            switch (action.target_params.NeededVacancy)
+            switch (action.TargetParams.NeededVacancy)
             {
                 case TargetingParams.VacancyStatus.HAS_MOB:
                     //filters.Add(Filter.HasMob);
@@ -44,7 +44,7 @@ public partial class Action
             }
 
             //Regarding flood fill mode
-            switch (action.target_params.TargetingFloodFillMode)
+            switch (action.TargetParams.TargetingFloodFillMode)
             {
                 case TargetingParams.FloodFillMode.AVOID_SOLIDS:
                     filters.Add( x => !grid.IsFlagInPosition(x, CellFlag.SOLID));
@@ -71,7 +71,7 @@ public partial class Action
 
             Action action = usage_params.action_reference;
 
-            switch (action.target_params.AoeShape)
+            switch (action.TargetParams.AoeShape)
             {
 
                 case TargetingParams.AoEMode.SINGLE:

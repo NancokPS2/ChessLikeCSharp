@@ -35,7 +35,7 @@ public partial class BattleController : Node
     public Grid grid;
     public Action action_selected;
     public Vector3i position_selected;
-    public Action.UsageParams usage_params_in_construction;
+    public Action.UsageParams UsageParameters;
     public List<Mob> mobs_participating = new();
     public Mob mob_taking_turn;
     public float delay_this_turn;

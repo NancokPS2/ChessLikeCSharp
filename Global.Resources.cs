@@ -2,7 +2,7 @@ using Godot;
 
 public static partial class Global
 {
-    public static class Files
+    public static class Resources
     {
         public enum MeshIdent
         {

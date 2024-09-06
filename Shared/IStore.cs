@@ -1,4 +1,4 @@
-using ChessLike.Storage;
+using ChessLike.Entity;
 
 namespace ChessLike.Shared;
 

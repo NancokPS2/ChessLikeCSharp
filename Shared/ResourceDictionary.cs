@@ -168,7 +168,7 @@ public class ResourceDictionary
             return Key.ACTION;
         }
 
-        if (obj is Storage.Item)
+        if (obj is Entity.Item)
         {
             return Key.ITEM;
         }
@@ -190,7 +190,7 @@ public class ResourceDictionary
                 return typeof(Entity.Action);
 
             case Key.ITEM:
-                return typeof(Storage.Item);
+                return typeof(Entity.Item);
 
             case Key.UNKNOWN:
                 throw new ArgumentException("No type exists for this key.");

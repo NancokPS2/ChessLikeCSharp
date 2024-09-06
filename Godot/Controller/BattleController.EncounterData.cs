@@ -16,20 +16,15 @@ public partial class BattleController
             EncounterData encounter = new();
             encounter.Grid = Grid.Generator.GenerateFlat(new(6));
             encounter.SpawnLocations = new(){Vector3i.ONE};
-            encounter.PresetMobSpawns = new(){
+            encounter.PresetMobSpawns = new()
             {
-                Vector3i.ONE, 
-                new Mob.Builder()
-                .SetIdentity("CARRY", "Carry")
-                .SetJob(Job.Preset.Warrior())
-                .Result()
-            },  
             {
                 Vector3i.ONE + Vector3i.RIGHT * 2, 
-                new Mob.Builder()
-                .SetIdentity("SomeoneGuess", "Someone")
-                .SetJob(Job.Preset.Wizard())
-                .Result()}  
+                new Mob()
+                .ChainIdentity("SomeoneGuess", "Someone")
+                .ChainJob(Prototypes.Jobs[EJob.CIVILIAN])
+                .ChainResult()
+            }  
             };
 
             return encounter;

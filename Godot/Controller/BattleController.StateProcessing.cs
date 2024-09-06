@@ -52,13 +52,13 @@ public partial class BattleController
         switch (new_state)
         {
             case State.TAKING_TURN:
-                List<ITurn> turn_takers = new List<ITurn>(mobs_participating);
+                List<ITurn> turn_takers = new List<ITurn>(Mob.Manager.GetInCombat());
                 mob_taking_turn = (Mob)TurnQueue.GetNext(turn_takers);
                 SetState(State.AWAITING_ACTION);
                 break;
 
             case State.ENDING_TURN:
-                List<ITurn> time_pass_targets = new List<ITurn>(mobs_participating);
+                List<ITurn> time_pass_targets = new List<ITurn>(Mob.Manager.GetInCombat());
                 TurnQueue.AdvanceDelay(time_pass_targets, delay_this_turn);
                 SetState(State.TAKING_TURN);
                 break;
@@ -143,7 +143,7 @@ public partial class BattleController
         if (action_selected != null)
         {
             //TODO: Owner cannot be null
-            usage_params_in_construction = new UsageParams(mob_taking_turn, grid, action_selected);
+            UsageParameters = new UsageParams(mob_taking_turn, grid, action_selected);
             SetState(State.TARGETING);
         }
     }
@@ -165,7 +165,7 @@ public partial class BattleController
         display_grid.MeshRemove(GridDisplay.Layer.AOE);
 
         //Show targetable range.
-        foreach (Vector3i position in Targeter.GetSelectableCells(usage_params_in_construction))
+        foreach (Vector3i position in Targeter.GetSelectableCells(UsageParameters))
         {
             display_grid.MeshSet(
                 position,
@@ -175,7 +175,7 @@ public partial class BattleController
         }
 
         //Show AoE
-        foreach (Vector3i position in Targeter.GetTargetedAoE(position_selected, usage_params_in_construction))
+        foreach (Vector3i position in Targeter.GetTargetedAoE(position_selected, UsageParameters))
         {
             display_grid.MeshSet(
                 position, 

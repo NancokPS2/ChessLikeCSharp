@@ -4,7 +4,7 @@ namespace ChessLike.Entity;
 
 public partial class Job : IStats<StatName>
 {
-    public Identity Identity = new("UndefinedMobJob");
+    public EJob Identifier = EJob.CIVILIAN;
     public StatSet<StatName> Stats { get; set; } = new();
     public List<Action> actions = new();
 }

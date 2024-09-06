@@ -107,7 +107,7 @@ public partial class MobDisplay : Godot.Node3D
                 node.QueueFree();
             }
             
-            foreach (ChessLike.Entity.Action action in mob.actions)
+            foreach (ChessLike.Entity.Action action in mob.Actions)
             {
                 ActionButton button = new(action);
                 this.RequiredNodeTryToGet<VBoxContainer>(new(NODE_ACTION_CONTAINER))

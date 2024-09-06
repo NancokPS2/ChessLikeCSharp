@@ -7,7 +7,20 @@ namespace ChessLike.Entity;
 
 public partial class Job
 {
-    protected Job ChainDefaultStats()
+    public static Job Create(EJob identity_enum)
+    {
+        Job output = new();
+        output = identity_enum switch
+        {
+            EJob.WARRIOR => output.ChainDefaultStats().ChainWarrior(),
+            EJob.WIZARD => output.ChainDefaultStats().ChainWizard(),
+            EJob.RANGER => output.ChainDefaultStats(),
+            _ => output.ChainDefaultStats(),
+        };
+        return output;
+    }
+
+public Job ChainDefaultStats()
     {
         Stats.SetStat(StatName.HEALTH, 100);
         Stats.SetStat(StatName.ENERGY, 40);
@@ -19,7 +32,7 @@ public partial class Job
         return this;
     }
 
-    protected Job ChainWarrior()
+    public Job ChainWarrior()
     {
         this.ChainDefaultStats();
 
@@ -28,11 +41,11 @@ public partial class Job
         Stats.MultiplyStat(StatName.STRENGTH, 1.3);
         Stats.MultiplyStat(StatName.AGILITY, 1.0);
         Stats.MultiplyStat(StatName.INTELLIGENCE, 0.8);
-        actions.Add(Action.Loader.Preset.BasicAttack());
+        actions.Add(Action.Create(EAction.PUNCH));
         return this;
     }
 
-    protected Job ChainWizard()
+    public Job ChainWizard()
     {
         this.ChainDefaultStats();
 
@@ -41,8 +54,8 @@ public partial class Job
         Stats.MultiplyStat(StatName.STRENGTH, 0.6);
         Stats.MultiplyStat(StatName.AGILITY, 0.9);
         Stats.MultiplyStat(StatName.INTELLIGENCE, 1.4);
-        actions.Add(Action.Loader.Preset.BasicAttack());
+        actions.Add(Action.Create(EAction.PUNCH));
         return this;
     }
-  
+
 }

@@ -1,4 +1,4 @@
-namespace ChessLike.Storage;
+namespace ChessLike.Entity;
 
 public abstract class Equipment : Item
 {

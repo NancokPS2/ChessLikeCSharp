@@ -22,9 +22,9 @@ public partial class Action : IGridReader
 
     public string name = "Undefined Action";
 
-    public EffectFilterParams effect_filter_params = new();
-    public TargetingParams target_params = new();
-    public List<EffectParams> effect_params = new();
+    public EffectFilterParams FilterParams = new();
+    public TargetingParams TargetParams = new();
+    public List<Effect> EffectParams = new();
 
 
     public virtual bool IsTargetingValid(UsageParams usage_params)
@@ -54,25 +54,25 @@ public partial class Action : IGridReader
                 goto decide;
             }
             */
-            if (effect_filter_params.AffectMob && !(target is Mob))
+            if (FilterParams.AffectMob && !(target is Mob))
             {
                 valid = false;
                 goto decide;
             }
 
-            if (effect_filter_params.IgnoreAlly && (owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
+            if (FilterParams.IgnoreAlly && (owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
             {
                 valid = false;
                 goto decide;
             }
 
-            if (effect_filter_params.IgnoreEnemy && !(owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
+            if (FilterParams.IgnoreEnemy && !(owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
             {
                 valid = false;
                 goto decide;
             }
 
-            if (target.Stats.GetValuePrecent(StatName.HEALTH) > effect_filter_params.MaximumHealthPercent)
+            if (target.Stats.GetValuePrecent(StatName.HEALTH) > FilterParams.MaximumHealthPercent)
             {
                 valid = false;
                 goto decide;
@@ -90,7 +90,7 @@ public partial class Action : IGridReader
 
     public virtual void Use(UsageParams usage_params)
     {
-        foreach (EffectParams effect in effect_params)
+        foreach (Effect effect in EffectParams)
         {
             effect.CustomUse(usage_params);
             

@@ -9,13 +9,23 @@ namespace ChessLike.Shared.Serialization;
 //
 public interface ISerializable
 {
-    const string UNDEFINED = "";
-    public string GetFileName()
+    public string GetFileName();
+    public string GetSubDirectory();
+    public string GetDirectory()
     {
-        if (this is IIdentify identify)
-        {
-            return identify.Identity.Identifier;
-        }
-        return UNDEFINED;
+        return Global.Directory.GetContentDir(Global.Directory.Content.GAME_CONTENT);
+    }
+
+}
+
+public static class ISerializableExtension
+{
+    public static void SaveAsXml(this ISerializable @this) 
+    {
+        Serializer.SaveAsXml(@this, @this.GetDirectory());
+    }
+    public static T? SaveAsXml<T>(this ISerializable @this) where T : ISerializable
+    {
+        return Serializer.LoadAsXml<T>(@this);
     }
 }
