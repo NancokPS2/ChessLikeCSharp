@@ -1,25 +1,29 @@
 namespace ChessLike.Entity;
 
 
-public partial class Mob : IGridPosition, IGridReader, IRelation, IStats<StatName>, ITurn
+public partial class Mob : IGridPosition, IGridReader, IStats<StatName>, ITurn, IEnumIdentifier<EMob>
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
+    public string DisplayedName = "UNNAMED";
     public List<Job> Jobs = new();
     public List<Action> Actions = new();
     public ERace Race;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory Inventory = new(5);
 
+    public EMob Identifier { get; set; }
+
+
     public Mob()
     {
         Vector3i vector = new();
         Position = vector;
-        Identity = new("Unknown Mcnown");
+        DisplayedName = new("Unknown Mcnown");
     }
     
-    public Mob(string name, List<Job> jobs)
+    public Mob(string name, List<Job> jobs) : this()
     {
-        Identity = new(name);
+        DisplayedName = new(name);
         this.Jobs = jobs;
     }
 

@@ -81,7 +81,7 @@ public partial class MobDisplay : Godot.Node3D
         {
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
             this.RequiredNodeTryToGet<Label>(new(NODE_NAME))
-                .Text = mob.Identity.Name;
+                .Text = mob.DisplayedName;
 
             this.RequiredNodeTryToGet<Label>(new(NODE_DELAY))
                 .Text = mob.Stats.GetValue(StatName.DELAY).ToString();

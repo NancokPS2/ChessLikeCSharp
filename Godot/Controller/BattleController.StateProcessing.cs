@@ -52,13 +52,13 @@ public partial class BattleController
         switch (new_state)
         {
             case State.TAKING_TURN:
-                List<ITurn> turn_takers = new List<ITurn>(Mob.Manager.GetInCombat());
+                List<ITurn> turn_takers = new List<ITurn>(Global.ManagerMob.GetInCombat());
                 mob_taking_turn = (Mob)TurnQueue.GetNext(turn_takers);
                 SetState(State.AWAITING_ACTION);
                 break;
 
             case State.ENDING_TURN:
-                List<ITurn> time_pass_targets = new List<ITurn>(Mob.Manager.GetInCombat());
+                List<ITurn> time_pass_targets = new List<ITurn>(Global.ManagerMob.GetInCombat());
                 TurnQueue.AdvanceDelay(time_pass_targets, delay_this_turn);
                 SetState(State.TAKING_TURN);
                 break;

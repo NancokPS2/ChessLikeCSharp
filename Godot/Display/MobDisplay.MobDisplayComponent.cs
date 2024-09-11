@@ -19,7 +19,7 @@ public partial class MobDisplay : Godot.Node3D
 
         //Set component's values
         components.SetMesh( (Mesh)MeshPreset.MOB.Duplicate() );
-        components.SetNameTag(mob.Identity.Name);
+        components.SetNameTag(mob.DisplayedName);
 
         return components;
     }

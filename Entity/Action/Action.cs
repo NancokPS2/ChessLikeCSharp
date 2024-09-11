@@ -21,6 +21,7 @@ public partial class Action : IGridReader
 {
 
     public string name = "Undefined Action";
+    public EAction Identifier = EAction.PUNCH;
 
     public EffectFilterParams FilterParams = new();
     public TargetingParams TargetParams = new();
@@ -59,7 +60,7 @@ public partial class Action : IGridReader
                 valid = false;
                 goto decide;
             }
-
+/* 
             if (FilterParams.IgnoreAlly && (owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
             {
                 valid = false;
@@ -71,7 +72,7 @@ public partial class Action : IGridReader
                 valid = false;
                 goto decide;
             }
-
+*/
             if (target.Stats.GetValuePrecent(StatName.HEALTH) > FilterParams.MaximumHealthPercent)
             {
                 valid = false;

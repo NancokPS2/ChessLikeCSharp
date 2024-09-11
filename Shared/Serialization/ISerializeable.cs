@@ -10,10 +10,9 @@ namespace ChessLike.Shared.Serialization;
 public interface ISerializable
 {
     public string GetFileName();
-    public string GetSubDirectory();
     public string GetDirectory()
     {
-        return Global.Directory.GetContentDir(Global.Directory.Content.GAME_CONTENT);
+        return Global.Directory.GetContentDir(EDirectory.GAME_CONTENT);
     }
 
 }

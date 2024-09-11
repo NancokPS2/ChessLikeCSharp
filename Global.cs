@@ -1,4 +1,3 @@
-global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 global using System.IO;
@@ -9,11 +8,23 @@ global using ChessLike.Shared;
 global using ChessLike.Shared.Identification;
 global using ChessLike.Shared.GenericStruct;
 
+using ChessLike.Entity;
+using Action = ChessLike.Entity.Action;
+
 public static partial class Global
 {
-    //public static Directory directory = new();
-    public static ResourceDictionary resources = new();
+    public static void Setup()
+    {
 
+    }
+
+    static Global()
+    {
+        Console.WriteLine(Directory.GetContentDir(EDirectory.GAME_CONTENT));
+        Console.WriteLine(Directory.GetContentDir(EDirectory.USER_CONTENT));
+        SetupManager();
+
+    }
 }
 
 

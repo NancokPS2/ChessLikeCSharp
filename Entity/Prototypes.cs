@@ -11,12 +11,11 @@ public static partial class Prototypes
         {EJob.CIVILIAN , Job.Create(EJob.CIVILIAN)},
         {EJob.WARRIOR , Job.Create(EJob.WARRIOR)},
         {EJob.WIZARD , Job.Create(EJob.WIZARD)},
-        {EJob.CIVILIAN , Job.Create(EJob.CIVILIAN)},
     };
 
     public static Dictionary<EAction, Action> Actions = new(){
         {EAction.PUNCH , Action.Create(EAction.PUNCH)},
-        {EAction.HEAL , Action.Create(EAction.HEAL)},
+        {EAction.HEAL , Action.Create(identity_enum: EAction.HEAL)},
     };
 
     static Prototypes()
@@ -25,6 +24,7 @@ public static partial class Prototypes
         {
             Jobs[item] = Job.Create(item);
         }
+        
         foreach (var item in Enum.GetValues<EAction>())
         {
             Actions[item] = Action.Create(item);

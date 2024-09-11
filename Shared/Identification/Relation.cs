@@ -1,15 +1,17 @@
-using System.Data.Common;
-using System.Reflection;
-using System.Runtime.Serialization;
-using ChessLike.Entity;
-using ChessLike.Entity;
-using ExtendedXmlSerializer;
-namespace ChessLike.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-//Factions can store groups of Mobs, their inventories and grant allegiance between mobs.
-public partial class Faction
+namespace ChessLike.Shared.Identification;
+
+
+public partial class Relation
 {
-    //IRelation
+
+    public string Identifier = "INVALID";
+    public Dictionary<Identity, float> RelationList  = new();
+
     public List<Identity> GetAllWithLevel(RelationType level)
     {
         List<Identity> output = new();
@@ -67,6 +69,4 @@ public partial class Faction
     {
         RelationList[other] = val;
     }
-
-
 }

@@ -16,20 +16,25 @@ public partial class Action
         output = identity_enum switch
         {
             EAction.PUNCH => output
-                .ChainEffectDamageHealth(StatName.STRENGTH, 0.5f),
+                .ChainEffectDamageHealth(StatName.STRENGTH, 0.5f)
+                .ChainIdentifier(EAction.PUNCH),
             EAction.HEAL => output
-                .ChainEffectHealPrecentage(0.25f),
+                .ChainEffectHealPrecentage(0.25f)
+                .ChainIdentifier(EAction.HEAL),
+            EAction.WALK => output
+                .ChainEffectMove()
+                .ChainIdentifier(EAction.WALK),
             _ => throw new Exception("Non existent enum value."),
         };
         return output;
         
     }
-    
-    public Action ChainSetCost(float energy_cost, float health_cost)
+    public Action ChainIdentifier(EAction identifier)
     {
-        throw new NotImplementedException();
+        Identifier = identifier;
         return this;
     }
+    
 
     public Action ChainEffectDamageHealth(StatName stat_based, float damage)
     {

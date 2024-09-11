@@ -1,6 +1,6 @@
 namespace ChessLike.Entity;
 
-public enum ENameCategory
+public enum ECategory
 {
     HUMAN,
     POXT

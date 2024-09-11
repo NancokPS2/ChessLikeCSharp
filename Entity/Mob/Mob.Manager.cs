@@ -1,41 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace ChessLike.Entity;
 
 public partial class Mob
 {
-    public static class Manager
+    public class Manager : Manager<Mob>
     {
-
-        private static UniqueList<Mob> Mobs = new();
-
-        public static void AddMob(Mob mob)
+        public override List<Mob> CreatePrototypes()
         {
-            Mobs.Add(mob);
+            return new()
+            {
+                new Mob().Create(EMob.HUMAN_COMBATANT)
+            };
         }
 
-        public static List<Mob> GetMobs()
+        public override string GetPrototypeFolder()
         {
-            return Mobs;
+            return Path.Combine(
+                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
+                "mob"
+            );
+
         }
 
-        public static List<Mob> GetInFaction(EFaction faction)
+        public Mob? GetFromIdentifier(EMob identifier)
         {
-            return Mobs.FilterFromFaction(faction);
+            return Contents.Find(x => x.Identifier == identifier);
+        }
+
+        public List<Mob> GetInFaction(EFaction faction)
+        {
+            return Contents.FilterFromFaction(faction);
         }
 
         //TODO
-        public static List<Mob> GetInCombat()
+        public List<Mob> GetInCombat()
         {
-            return Mobs.Where(x => true).ToList();
+            return Contents.Where(x => true).ToList();
         }
 
-        public static List<Mob> GetInPosition(Vector3i position)
+        public List<Mob> GetInPosition(Vector3i position)
         {
-            return Mobs.FilterFromPosition(position);
+            return Contents.FilterFromPosition(position);
         }
     }
 

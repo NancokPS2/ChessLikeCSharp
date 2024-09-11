@@ -12,9 +12,23 @@ public partial class Mob
     /// This class should only be used to create a mob, it should not be stored in a variable.
     /// </summary>
 
-    public Mob ChainIdentity(string identifier, string name, bool concealed = false)
+    public Mob Create(EMob mob_template)
     {
-        Identity = new(identifier, name, concealed);
+        Mob output = new();
+        output = mob_template switch
+        {
+            EMob.HUMAN_COMBATANT => new Mob()
+                .ChainName("Combatant")
+                .ChainJob(Global.ManagerJob.GetAll()[0])
+                .ChainResult(),
+            _ => new Mob()
+        };
+        return output;
+    }
+
+    public Mob ChainName(string name)
+    {
+        DisplayedName = new(name);
         return this;
     }
 

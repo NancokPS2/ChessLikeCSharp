@@ -8,26 +8,21 @@ global using ChessLike.Shared;
 
 public static partial class Global
 {
-    public static class Directory
+    public static partial class Directory
     {
-        public enum Content
-        {
-            USER_CONTENT,
-            GAME_CONTENT,
-        }
         const string GameName = "RPGTactics";
         static string UserContent = new(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\" + GameName + @"\content");
         static string GameContent = new(AppDomain.CurrentDomain.BaseDirectory + @"\" + GameName);    
         static string User = new(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\" + GameName);
 
-        public static string GetContentDir(Content dir)
+        public static string GetContentDir(EDirectory dir)
         {
             switch(dir)
             {
-                case Content.USER_CONTENT:
+                case EDirectory.USER_CONTENT:
                     return UserContent;
                 
-                case Content.GAME_CONTENT:
+                case EDirectory.GAME_CONTENT:
                     return GameContent;
 
                 default:

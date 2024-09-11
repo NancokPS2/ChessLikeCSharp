@@ -13,17 +13,22 @@ public partial class BattleController
 
         public static EncounterData GetDefault()
         {
+            Global.Setup();
+
             EncounterData encounter = new();
             encounter.Grid = Grid.Generator.GenerateFlat(new(6));
             encounter.SpawnLocations = new(){Vector3i.ONE};
+
+            Mob def_mob = new Mob()
+                .ChainName("SomeoneGuess")
+                .ChainJob(Global.ManagerJob.GetAll()[0])
+                .ChainResult();
+
             encounter.PresetMobSpawns = new()
             {
             {
                 Vector3i.ONE + Vector3i.RIGHT * 2, 
-                new Mob()
-                .ChainIdentity("SomeoneGuess", "Someone")
-                .ChainJob(Prototypes.Jobs[EJob.CIVILIAN])
-                .ChainResult()
+                def_mob
             }  
             };
 

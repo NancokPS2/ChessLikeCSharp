@@ -58,4 +58,10 @@ public Job ChainDefaultStats()
         return this;
     }
 
+    public Job ChainIdentifier(EJob identifier)
+    {
+        Identifier = identifier;
+        return this;
+    }
+
 }

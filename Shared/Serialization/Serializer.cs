@@ -32,8 +32,7 @@ public static class Serializer
     {
         string file_name = serializable.GetFileName() + ".xml";
         string folder = serializable.GetDirectory();
-        string sub_folder = serializable.GetSubDirectory();
-        string path = Path.Combine(folder, sub_folder, file_name);
+        string path = Path.Combine(folder, file_name);
         if (!IsFilePathValid(path))
         {
             throw new InvalidDataException(String.Format("The result was invalid. {0}", path));
@@ -41,13 +40,13 @@ public static class Serializer
         return path;
     }
 
-    public static void SaveAsXml(ISerializable serializable, Global.Directory.Content global_dir)
+    public static void SaveAsXml(ISerializable serializable, EDirectory global_dir)
     {
         string path = GetFilePath(serializable);        
         SaveAsXml(serializable, path);
     }
 
-    public static void SaveAsXml(ISerializable obj, string full_file_path)
+    public static void SaveAsXml(object obj, string full_file_path)
     {
         if(!IsFilePathValid(full_file_path)) {throw new ArgumentException("Invalid path.");}
 
@@ -72,10 +71,30 @@ public static class Serializer
         //XmlSerializer serializer = new XmlSerializer(obj.GetType());
         string xml_string = serializer.Serialize(new XmlWriterSettings {Indent = true}, obj);
 
+        //Ensure the directory exists.
+        string dir = Path.GetDirectoryName(full_file_path);
+        Directory.CreateDirectory(Path.GetDirectoryName(dir));
+
         //Create writer.
         TextWriter string_writer = new StreamWriter(full_file_path);
         string_writer.Write(xml_string);
         string_writer.Close();
+
+    }
+
+    public static List<T> LoadFolderAsXml<T>(string folder_path)
+    {
+        string path_used = Path.Combine(folder_path);
+        if (!Directory.Exists(folder_path)){throw new Exception("Not a directory.");}
+
+        List<T> output = new();
+
+        foreach (string item in Directory.EnumerateFiles(folder_path))
+        {
+            output.Add(LoadAsXml<T>(Path.Combine(folder_path, item)));
+        }
+
+        return output;
 
     }
 
