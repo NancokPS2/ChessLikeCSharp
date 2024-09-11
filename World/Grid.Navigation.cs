@@ -10,6 +10,7 @@ namespace ChessLike.World;
 public class Navigation
 {
     public Grid grid;
+    public AStar3D pathing;
     public Navigation(Grid grid)
     {
         this.grid = grid;
