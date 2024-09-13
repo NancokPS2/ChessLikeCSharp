@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cee0a0g86l0oh"]
-
-[ext_resource type="Script" path="res://Godot/Tests/GridNavigationTest.cs" id="1_vohqe"]
-
-[node name="GridNavigationTest" type="Node"]
-script = ExtResource("1_vohqe")

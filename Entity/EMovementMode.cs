@@ -1,4 +1,4 @@
-namespace ChessLike.World;
+namespace ChessLike.Entity;
 
 public enum EMovementMode
 {

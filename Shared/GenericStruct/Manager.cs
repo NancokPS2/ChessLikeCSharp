@@ -24,6 +24,13 @@ public class Manager<TManaged> where TManaged : ISerializable
             Add(item);
         }
     }
+
+    public virtual TManaged? LoadPrototype(TManaged managed)
+    {
+        TManaged? loaded = Serializer.LoadAsXml<TManaged>(Path.Combine(GetPrototypeFolder(), managed.GetFileName() + ".xml"));
+        return loaded;
+
+    }
     public virtual string GetPrototypeFolder()
     {
         return Global.Directory.GetContentDir(EDirectory.USER_CONTENT);
@@ -31,7 +38,7 @@ public class Manager<TManaged> where TManaged : ISerializable
 
     public virtual List<TManaged> CreatePrototypes()
     {
-        return new();
+        throw new NotImplementedException();
     }
 
     public virtual void SavePrototypes(List<TManaged> prototypes)
@@ -43,7 +50,7 @@ public class Manager<TManaged> where TManaged : ISerializable
         }
     }
 
-    public List<TManaged> GetAll()
+    public virtual List<TManaged> GetAll()
     {
         return Contents;
     }

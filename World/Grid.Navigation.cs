@@ -7,111 +7,95 @@ using Vector3 = Godot.Vector3;
 
 namespace ChessLike.World;
 //public Navigation navigation = new();
-public class Navigation
-{
-    public Grid grid;
-    public AStar3D pathing;
-    public Navigation(Grid grid)
-    {
-        this.grid = grid;
-    }
 
-    private Dictionary<IGridPosition, NavigationAgent> participants = new();
+public partial class Grid
+{
+    public Dictionary<IGridObject, AStar3D> ObjectToAStarDict = new();
+
+    private Dictionary<IGridPosition, IGridObject> participants = new();
     //private UniqueList<IGridPosition> participants = new();
 
-    public NavigationAgent AddAgent(IGridPosition participant)
+    public void NavAddObject(IGridObject grid_object)
     {
-        participants[participant] = new(participant);
-        return GetAgent(participant);
+        ObjectToAStarDict[grid_object] = new();
     }
-    public void RemoveAgent(IGridPosition participant)
+    public void NavRemoveObject(IGridObject grid_object)
     {
-        participants.Remove(participant);
-    }
-    public NavigationAgent GetAgent(IGridPosition participant)
-    {
-        return participants[participant];
-    }
-    /// <summary>
-    /// The ground is considered as any cell that the agent can stand on. This measures the distance from the agent to the ground.
-    /// </summary>
-    /// <param name="agent"></param>
-    /// <returns>The distance from the ground. -1 if there is no ground.</returns>
-    public int GetDistanceFromGround(NavigationAgent agent, Vector3i position)
-    {
-        Vector3i position_going_down = position;
-        while(grid.IsPositionInbounds(position_going_down))
-        {
-            if (grid.IsFlagInPosition(position_going_down, agent.flags_to_stand))
-            {
-                return position.DistanceManhattanTo(position_going_down);
-            }
-            position_going_down += Vector3i.DOWN;
-        }
-        return -1;
+        ObjectToAStarDict.Remove(grid_object);
     }
 
-    public List<Vector3i> GetPositionsInRange(NavigationAgent agent, int max_distance)
+    public bool NavIsGridObjectValid(IGridObject gridObject)
     {
+        bool in_bounds = IsPositionInbounds(gridObject.GetPosition());
+        bool exists_in_allowed_position = gridObject.IsValidPositionToExist(this, gridObject.GetPosition());
+
+        return in_bounds && exists_in_allowed_position;
+    }
+
+    public List<Vector3i> NavGetPositionsInRange(IGridObject grid_object)
+    {
+        if (!NavIsGridObjectValid(grid_object)){throw new Exception("Not valid object.");}
+
         List<Vector3i> output = new();
+        int horizontal = grid_object.PathingGetHorizontalRange();
+        int vertical = grid_object.PathingGetVerticalRange();
 
-        grid.FloodStart(agent.user.Position);
-
-        //Perform the expansion.
-        for (int step = 0; step < max_distance; step++)
+        foreach (var x in Enumerable.Range(-horizontal, horizontal))
         {
-            grid.FloodExpandToAdjacent();
-
-            List<Vector3i> aux_expand = new(grid.FloodGetToExpand());
-            //Apply logic to each position
-            foreach (Vector3i expand_pos in aux_expand)
+            foreach (var z in Enumerable.Range(-horizontal, horizontal))
             {
-                if (!grid.IsPositionInbounds(expand_pos))
+                foreach (var y in Enumerable.Range(-vertical, vertical))
                 {
-                    grid.FloodRemoveToExpand(expand_pos);
-                    continue;
-                }
-
-                //If the agent cannot exist in the given spot... 
-                if ( !grid.IsFlagInPosition(expand_pos, agent.flags_to_exist) )
-                {
-                    //Remove it.
-                    grid.FloodRemoveToExpand(expand_pos);
-
-                    //Then try to find a place to jump to that is above this one.
-                    Vector3i pos_curr = expand_pos;
-                    Vector3i? pos_valid = null;
-
-                    //Start checking every position upwards.
-                    for (int i = 0; i < agent.jump_altitude; i++)
+                    Vector3i vector = new Vector3i(x,y,z);
+                    if (IsPositionInbounds(vector))
                     {
-                        pos_curr += Vector3i.UP;
-                        if ( AgentCanExist(agent, expand_pos) )
-                        {
-                            pos_valid = pos_curr;
-                        }
+                        output.Add(vector);
                     }
-                    //If a pos_valid was defined, add it to the ones to expand.
-                    if(pos_valid is Vector3i valid) {grid.FloodAddToExpand(valid);};
-                }
-
-                //If it has flight, the height may not surpass its capacity. In the ground, the distance is at least 1.
-                bool can_fly_here = GetDistanceFromGround(agent, expand_pos) <= agent.flight_altitude + 1;
-                
-                //If it can't fly nor stand here, remove it.
-                if(!AgentCanStand(agent, expand_pos) && !can_fly_here) 
-                {
-                    grid.FloodRemoveToExpand(expand_pos);
                 }
             }
         }
-
-        output = grid.FloodGetResult();
         return output;
     }
 
-    public static List<Vector3i> GetShortestPath(List<Vector3i> positions, Vector3i start, Vector3i target)
+    public List<Vector3i> NavGetPathablePositions(IGridObject grid_object)
     {
+        if (!NavIsGridObjectValid(grid_object)){throw new Exception("Not valid object.");}
+
+        List<Vector3i> output = new();
+        List<Vector3i> all_valid_to_exist = NavGetPositionsInRange(grid_object)
+            .Where(x => grid_object.IsValidPositionToExist(this, x))
+            .ToList();
+
+
+        List<Vector3i> expand_candidates = new(){grid_object.GetPosition()};
+
+        //Filter those that are valid to path from their origin.
+        while (expand_candidates.Count != 0)
+        {
+            Vector3i curr_pos = expand_candidates.Last();
+            expand_candidates.Remove(curr_pos);
+
+            Debug.Assert(all_valid_to_exist.Contains(curr_pos));
+
+            if (output.Contains(curr_pos)){continue;}
+            else {output.Add(curr_pos);}
+
+            expand_candidates = all_valid_to_exist
+                .Where(x => 
+                    grid_object.IsValidMove(this, curr_pos, x) 
+                    && grid_object.IsValidPositionToExist(this, x)
+                    && !output.Contains(x))
+                .ToList();
+
+        }
+
+        return output;
+
+    }
+
+    public static List<Vector3i> NavGetShortestPath(List<Vector3i> positions, Vector3i start, Vector3i target)
+    {
+        throw new NotImplementedException("Rework needed.");
         if (!positions.Contains(start))
         {
             throw new Exception("start must be included in the positions.");
@@ -199,50 +183,6 @@ public class Navigation
 
     }
  */
-    public bool AgentCanExist(NavigationAgent agent, Vector3i position)
-    {
-        return grid.IsFlagInPosition(position, agent.flags_to_exist);
-    }
-    public bool AgentCanStand(NavigationAgent agent, Vector3i position)
-    {
-        if(grid.IsPositionInbounds(position))
-        {
-            return false;
-        } else
-        {
-            return grid.IsFlagInPosition(position + Vector3i.DOWN, agent.flags_to_exist);
-        }
-    }
 
-}
-public class NavigationAgent
-{
-    public IGridPosition user;
-    public int jump_altitude = 2;
-    public int flight_altitude = 0;
-    public List<CellFlag> flags_to_stand = new(){CellFlag.SOLID};
-    public List<CellFlag> flags_to_exist = new(){CellFlag.AIR};
-
-    public NavigationAgent(IGridPosition user)
-    {
-        this.user = user;
-    }
-
-    public NavigationAgent SetFlightHeight(int height)
-    {
-        flight_altitude = height;
-        return this;
-    }
-
-    public NavigationAgent SetFlagsToStand(List<CellFlag> flags)
-    {
-        flags_to_stand = flags;
-        return this;
-    }    
-    public NavigationAgent SetFlagsToExist(List<CellFlag> flags)
-    {
-        flags_to_exist = flags;
-        return this;
-    }
 }
 

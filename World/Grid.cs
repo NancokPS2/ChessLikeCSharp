@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
@@ -8,74 +9,65 @@ namespace ChessLike.World;
 
 public partial class Grid
 {
-    public Vector3i boundary = new(10,10,10);
+    public Vector3i Boundary = new(10,10,10);
+    private AStarGridPathing AStarPathing;
 
-    public Dictionary<Vector3i, Cell> cells_dictionary = new();
+    public Dictionary<Vector3i, Cell> CellDictionary = new();
+
+    public Grid()
+    {
+        AStarPathing = new(this);
+    }
 
     public void SetCell(Vector3i position, Cell cell)
     {
-        cells_dictionary[position] = cell;
+        CellDictionary[position] = cell;
     }
 
     public Cell GetCell(Vector3i position)
     {
         Cell cell = Cell.Preset.Invalid;
-        cells_dictionary.TryGetValue(position, out cell);
+        if (!CellDictionary.TryGetValue(position, out cell)){throw new Exception("Not found!");}
         return cell;
     }
 
     public Cell[] GetCells()
     {
-        return cells_dictionary.Values.ToArray();
+        return CellDictionary.Values.ToArray();
     }
+
 
     public Vector3i[] GetUsedPositions()
     {
-        return cells_dictionary.Keys.ToArray();
+        return CellDictionary.Keys.ToArray();
     }
 
-    /// <summary>
-    /// Gets the nearest position for something to stand on. If the selected position cannot be used, find the nearest one upwards (dig upwards). Otherwise go downwards (land).
-    /// </summary>
-    /// <returns>A non-SOLID cell.</returns>
-    public Vector3i GetNearestSurfaceVertically(Vector3i position, CellFlag can_stand_on = CellFlag.SOLID, CellFlag can_exist_on = CellFlag.AIR)
+/*     public Vector3i[] GetUsedPositionsInThisColumn(Vector3i pos_in_column)
     {
-        Vector3i advance_dir = !IsFlagInPosition(position, can_exist_on) ? Vector3i.UP : Vector3i.DOWN;
-        Vector3i curr_pos = position;
-        bool turned = false;
-        
-        move:
-        while(IsPositionInbounds(curr_pos))
+        List<Vector3i> output = new();
+        Vector3i[] used_positions = GetUsedPositions();
+        Vector3i position_curr = new(pos_in_column.X, 0, pos_in_column.Z);
+
+        if (!IsPositionInbounds(position_curr)){throw new Exception("The bottom should exist!");}
+
+        foreach (Vector3i item in cells_dictionary.Keys)
         {
-            if(CanStandHere(curr_pos, can_stand_on, can_exist_on))
+            bool inbounds = IsPositionInbounds(position_curr);
+            bool used = used_positions.Contains(position_curr);
+            if (inbounds && used)
             {
-                return curr_pos;
+                output.Add(position_curr);
             }
-
-            curr_pos = curr_pos + advance_dir;
+            else
+            {
+                Debug.Print("Cut off column at " + position_curr.ToString() + inbounds.ToString() + used.ToString());
+                break;
+            }
+            position_curr += Vector3i.UP;
         }
-
-        //Turn around if nothing was found in that direction.
-        if (!turned)
-        {
-            turned = true;
-            advance_dir *= -1;
-            goto move;
-        }
-
-        //If it already turned, there is a full column here. Return the invalid Vector3i.
-        return Vector3i.INVALID;
-
-    }
-
-    public bool CanStandHere(Vector3i position, CellFlag flag_below_required, CellFlag flag_exist_allowed)
-    {
-        return 
-            IsFlagInPosition(position + Vector3i.DOWN, flag_below_required) 
-            && IsFlagInPosition(position, flag_exist_allowed)
-        ;
-
-    }
+        
+        return output.ToArray();
+    } */
 
     public bool IsPositionInbounds(Vector3i position)
     {
@@ -84,7 +76,7 @@ public partial class Grid
         {
             return false;
         }
-        if(position.X >= boundary.X || position.Y >= boundary.Y || position.Z >= boundary.Z)
+        if(position.X >= Boundary.X || position.Y >= Boundary.Y || position.Z >= Boundary.Z)
         {
             return false;
         }

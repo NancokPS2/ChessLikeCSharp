@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch0k4n1g8fgjv"]
+
+[ext_resource type="Script" path="res://Godot/Tests/TestGridDisplay.cs" id="1_n8eek"]
+[ext_resource type="Script" path="res://Godot/Display/Camera.cs" id="2_iogb2"]
+
+[node name="TestGridDisplay" type="Node"]
+script = ExtResource("1_n8eek")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.687164, 0.726503, 0, -0.726503, 0.687164, 0, 2.14196, 2.62714)
+script = ExtResource("2_iogb2")
+mode = 0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.571874, 0.820342, 0, -0.820342, 0.571874, 0, 0, 0)

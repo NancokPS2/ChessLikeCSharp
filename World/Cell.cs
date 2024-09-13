@@ -12,13 +12,13 @@ public partial class Grid
     {
 
         public string name = "UNNAMED";
-        public List<CellFlag> flags = new();
+        public List<CellFlag> flags = new List<CellFlag>();
         public bool selectable = false;
 
         public Cell()
         {
             name = "";
-            flags = new();
+            flags = new List<CellFlag>();
 
         }
 

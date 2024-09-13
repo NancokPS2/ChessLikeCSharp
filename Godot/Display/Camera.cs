@@ -4,6 +4,7 @@ using ChessLike;
 
 namespace Godot.Display;
 
+[GlobalClass]
 public partial class Camera : Camera3D
 {
     public enum Mode
@@ -19,20 +20,34 @@ public partial class Camera : Camera3D
     Vector3 directional_input = new();
     Vector2 relative_input = new();
 
-    public bool rotation_only = true;
 
+    [ExportCategory("Sensitivity")]
+    [Export]
     public float sensitivity_horizontal = 6.0f;
+    [Export]
     public float sensitivity_vertical = 6.0f;
+    [Export]
     public float sensitivity_directional = 1.0f;
 
+    [ExportCategory("Pivot")]
     //Pivot camera movement
+    [Export]
     public Vector3 pivot_point = Vector3.Zero;
+    [Export]
     public float pivot_rotation = 0;
+    [Export]
     public float pivot_distance = 15;
+    [Export]
     public float pivot_elevation = 8;
+    [Export]
     public float pivot_translation_snap = 1;
+    [Export]
     public float pivot_translation_auto_delay = 0.3f;
+    [Export]
+    public bool pirvot_rotation_only = true;
 
+    [ExportCategory("Mode")]
+    [Export]
     public Mode mode = Mode.PIVOT;
 
     public Camera()
@@ -111,7 +126,7 @@ public partial class Camera : Camera3D
         pivot_rotation += relative_input.X * (float)delta;
         pivot_distance += relative_input.Y * (float)delta;
 
-        if (!rotation_only)
+        if (!pirvot_rotation_only)
         {
             //Directional
             pivot_point += directional_input.Rotated(Vector3.Up, pivot_rotation * (float)delta);

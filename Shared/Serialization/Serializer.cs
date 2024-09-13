@@ -73,7 +73,7 @@ public static class Serializer
 
         //Ensure the directory exists.
         string dir = Path.GetDirectoryName(full_file_path);
-        Directory.CreateDirectory(Path.GetDirectoryName(dir));
+        DirectoryInfo? info = Directory.CreateDirectory(dir);
 
         //Create writer.
         TextWriter string_writer = new StreamWriter(full_file_path);

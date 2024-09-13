@@ -33,6 +33,10 @@ public class Inventory
 
     public int capacity = 10;
 
+    public Inventory()
+    {
+    }
+
     public Inventory(int size)
     {
         if (size < 0)

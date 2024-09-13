@@ -60,12 +60,17 @@
         },
         {
             "title": "Bugs",
-            "tasks": [],
+            "tasks": [
+                {
+                    "text": "GridDisplay test is showing that the pathfinding is only returning the spot the character is standing on\n",
+                    "id": "himvl8o5ac5qr45vscou6qsd"
+                }
+            ],
             "id": "iv64sofsa6d5xpucq3jyksjg",
             "color": "#eb144c"
         }
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1724603904612
+    "timestamp": 1726264842974
 }

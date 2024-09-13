@@ -16,6 +16,7 @@ public partial class GridDisplay : Node3D
         AOE,
         DECORATION,
         CURSOR,
+        DEBUG,
     }
     private readonly Layer[] ALL_LAYERS = Enum.GetValues<Layer>();
 
@@ -34,9 +35,9 @@ public partial class GridDisplay : Node3D
 
         //Refill the list of cell components.
         cell_components.Clear();
-        foreach (Vector3i position in grid.cells_dictionary.Keys)
+        foreach (Vector3i position in grid.CellDictionary.Keys)
         {
-            Grid.Cell cell = grid.cells_dictionary[position];
+            Grid.Cell cell = grid.CellDictionary[position];
             cell_components.Add(position, new CellComponent(cell));
             MeshRefresh(position);
         }

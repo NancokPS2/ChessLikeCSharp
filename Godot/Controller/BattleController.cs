@@ -97,7 +97,7 @@ public partial class BattleController : Node
             new object[]{
                 state_current, 
                 action_selected != null ? action_selected.name : "null", 
-                grid != null ? grid.boundary : "null",
+                grid != null ? grid.Boundary : "null",
                 mob_taking_turn != null ? mob_taking_turn.DisplayedName : "null",
                 position_selected,
                 display_camera != null ? display_camera.Rotation : "???"
