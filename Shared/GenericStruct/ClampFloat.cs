@@ -3,27 +3,28 @@ using Microsoft.VisualBasic;
 
 namespace ChessLike.Shared.GenericStruct;
 
-public struct ClampFloat
+public class ClampFloat
 {
 
     public List<Modifier> modifiers_innate = new();
 
+    public ClampFloat()
+    {
+    }
+
     public ClampFloat(float _current_and_max)
     {
-        Current = _current_and_max;
         Max = _current_and_max;
         Min = 0;
+        Current = _current_and_max;
     }
 
     public ClampFloat(float _current, float _max, float _min = 0)
     {
-        Current = _current;
         Max = _max;
         Min = _min;
+        Current = _current;
     }
-
-    //private float _Current = 0;
-    private float current = 0; //{set => _Current = Math.Clamp(value, Min, Max); get => _Current;}
 
     /// <summary>
     /// Determines which kinds of modifiers affect this value.
@@ -31,11 +32,10 @@ public struct ClampFloat
     /// <returns></returns>
     private List<string> types = new();
 
-    public float Max = 100;
-    public float Min = 0;
-    public float Current { get => current; set => Math.Clamp(value, Min, Max); }
+    private float Max = 100;
+    private float Min = 0;
+    private float Current;
     
-            //
         // Summary:
         //     Changes Current by the amount and apply modifiers.
         //
@@ -67,7 +67,7 @@ public struct ClampFloat
     }
     public void SetCurrent(float value)
     {
-        Current = value;
+        Current = Math.Clamp(value, Min, Max);
     }
     public float GetCurrent()
     {

@@ -37,16 +37,21 @@ public partial class Grid
         if (!NavIsGridObjectValid(grid_object)){throw new Exception("Not valid object.");}
 
         List<Vector3i> output = new();
+        Vector3i obj_position = grid_object.GetPosition();
         int horizontal = grid_object.PathingGetHorizontalRange();
         int vertical = grid_object.PathingGetVerticalRange();
 
-        foreach (var x in Enumerable.Range(-horizontal, horizontal))
+        int[] x_range = Enumerable.Range(-horizontal, horizontal*2+1).ToArray();
+        int[] z_range = Enumerable.Range(-horizontal, horizontal*2+1).ToArray();
+        int[] y_range = Enumerable.Range(-vertical, vertical*2+1).ToArray();
+
+        foreach (var x in x_range)
         {
-            foreach (var z in Enumerable.Range(-horizontal, horizontal))
+            foreach (var z in z_range)
             {
-                foreach (var y in Enumerable.Range(-vertical, vertical))
+                foreach (var y in y_range)
                 {
-                    Vector3i vector = new Vector3i(x,y,z);
+                    Vector3i vector = new Vector3i(x,y,z) + obj_position;
                     if (IsPositionInbounds(vector))
                     {
                         output.Add(vector);
@@ -69,25 +74,36 @@ public partial class Grid
 
         List<Vector3i> expand_candidates = new(){grid_object.GetPosition()};
 
+        int iterations = 0;
+        float starting_time = Time.GetTicksMsec();
+        
         //Filter those that are valid to path from their origin.
         while (expand_candidates.Count != 0)
         {
             Vector3i curr_pos = expand_candidates.Last();
             expand_candidates.Remove(curr_pos);
 
-            Debug.Assert(all_valid_to_exist.Contains(curr_pos));
+            //Debug.Assert(all_valid_to_exist.Contains(curr_pos));
 
             if (output.Contains(curr_pos)){continue;}
             else {output.Add(curr_pos);}
 
-            expand_candidates = all_valid_to_exist
-                .Where(x => 
-                    grid_object.IsValidMove(this, curr_pos, x) 
-                    && grid_object.IsValidPositionToExist(this, x)
-                    && !output.Contains(x))
-                .ToList();
+            foreach (var candidate in all_valid_to_exist)
+            {
+                bool can_move_there = grid_object.IsValidMove(this, curr_pos, candidate);
+                bool is_valid_pos = grid_object.IsValidPositionToExist(this, candidate);
+                bool not_already_in_output = !output.Contains(candidate);
+                if (can_move_there && is_valid_pos && not_already_in_output)
+                {
+                    expand_candidates.Add(item: candidate);         
+                }
+
+            }
+            iterations ++;
 
         }
+        Debug.WriteLine("Iterations for this pathable: " + iterations.ToString() + "\n" 
+        + "Time spent (s): " + ((Time.GetTicksMsec() - starting_time)/1000).ToString());
 
         return output;
 

@@ -42,7 +42,7 @@ public partial class TestGridDisplay : Node
             x => Display.MeshSet(
                 x,
                 GridDisplay.Layer.TARGETING,
-                new BoxMesh()
+                new SphereMesh()
             )
         );
 
