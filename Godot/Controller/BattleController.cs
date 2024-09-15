@@ -34,7 +34,8 @@ public partial class BattleController : Node
     public EncounterData encounter;
     public Grid grid;
     public Action action_selected;
-    public Vector3i position_selected;
+    public Vector3i PositionHovered;
+    public Vector3i PositionSelected;
     public Action.UsageParams UsageParameters;
     public List<Mob> mobs_participating = new();
     public Mob mob_taking_turn;
@@ -99,7 +100,7 @@ public partial class BattleController : Node
                 action_selected != null ? action_selected.name : "null", 
                 grid != null ? grid.Boundary : "null",
                 mob_taking_turn != null ? mob_taking_turn.DisplayedName : "null",
-                position_selected,
+                PositionHovered,
                 display_camera != null ? display_camera.Rotation : "???"
                 }
             

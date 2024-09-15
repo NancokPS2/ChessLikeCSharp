@@ -91,9 +91,11 @@ public partial class BattleController
         {
             case State.AWAITING_ACTION:
                 ProcessAwaitingActionState(delta);
+                UpdateCameraPosition(delta);
                 break;
 
             case State.TARGETING:
+                UpdateCameraPosition(delta);
                 ProcessTargetingState(delta);
                 break;
 
@@ -123,7 +125,6 @@ public partial class BattleController
                     SetState(State.PAUSED);
                 }
                 ProcessCursorMovement();
-                
                 break;
 
             case State.PAUSED:
@@ -152,10 +153,10 @@ public partial class BattleController
     public void ProcessTargetingState(double delta)
     {
         //Selected a new position.
-        if (position_selected != last_position_selected)
+        if (PositionHovered != last_position_selected)
         {
             ProcessTargetingUpdateSelectedPositionVisuals();
-            last_position_selected = position_selected;
+            last_position_selected = PositionHovered;
         }
     }
 
@@ -175,7 +176,7 @@ public partial class BattleController
         }
 
         //Show AoE
-        foreach (Vector3i position in Targeter.GetTargetedAoE(position_selected, UsageParameters))
+        foreach (Vector3i position in Targeter.GetTargetedAoE(PositionHovered, UsageParameters))
         {
             display_grid.MeshSet(
                 position, 
@@ -189,26 +190,48 @@ public partial class BattleController
     private float delta_since_last_movement;
     public void ProcessCursorMovement()
     {
-        //delta must be high enough to continue
-        if (!(delta_since_last_movement > MINIMUM_MOVEMENT_DELTA)){return;}
-        
-        delta_since_last_movement = 0;
-        Vector3i move = new Vector3i(Global.GInput.GetMovementVector(true));
-
-        //Stop if there was no movement.
-        if (move == Vector3i.ZERO){return;}
-
-        //Ensure that it is valid before attempting the move.
-        if ( grid.IsPositionInbounds( move + position_selected ))
+        //Decide between mouse based input and key input.
+        if (display_grid.InputEnable)
         {
+            if (!grid.IsPositionInbounds(display_grid.PositionHovered)){return;}
+
+            PositionHovered = display_grid.PositionHovered;
             display_grid.MeshRemove(GridNode.Layer.CURSOR);
-            position_selected += move;
-            display_grid.MeshSet(position_selected, GridNode.Layer.CURSOR, MESH_CURSOR);
-            display_camera.pivot_point = position_selected.ToGVector3();
-            GD.Print(move.ToString());
-        }else
+            display_grid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
+        }
+        else
         {
-            GD.PushError(string.Format("Position {0} out of bounds.", (move + position_selected).ToString()));
+            //delta must be high enough to continue
+            if (!(delta_since_last_movement > MINIMUM_MOVEMENT_DELTA)){return;}
+
+            delta_since_last_movement = 0;
+            Vector3i move = new Vector3i(Global.GInput.GetMovementVector(true));
+
+            //Stop if there was no movement.
+            if (move == Vector3i.ZERO){return;}
+
+            //Ensure that it is valid before attempting the move.
+            if ( grid.IsPositionInbounds( move + PositionHovered ))
+            {
+                display_grid.MeshRemove(GridNode.Layer.CURSOR);
+                PositionHovered += move;
+                display_grid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
+                GD.Print(move.ToString());
+            }else
+            {
+                GD.PushError(string.Format("Position {0} out of bounds.", (move + PositionHovered).ToString()));
+            }
+        }
+
+    }
+
+    public void UpdateCameraPosition(double delta)
+    {
+        Vector3 camera_pivot = display_camera.pivot_point;
+
+        if (camera_pivot.DistanceTo(PositionHovered.ToGVector3()) > 3)
+        {
+            camera_pivot = camera_pivot.Lerp(PositionHovered.ToGVector3(), (float)delta);
         }
     }
 }

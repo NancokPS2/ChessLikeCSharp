@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Godot/Tests/TestGridDisplay.cs" id="1_n8eek"]
 [ext_resource type="Script" path="res://Godot/Display/Camera.cs" id="2_iogb2"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_8t4rb"]
-size = Vector3(20, 1, 20)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_p0u2d"]
+points = PackedVector3Array(0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0)
 
 [node name="TestGridDisplay" type="Node"]
 script = ExtResource("1_n8eek")
@@ -22,4 +22,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2668, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.33369, 0)
-shape = SubResource("BoxShape3D_8t4rb")
+shape = SubResource("ConvexPolygonShape3D_p0u2d")

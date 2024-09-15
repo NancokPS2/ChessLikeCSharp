@@ -62,7 +62,7 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "GridDisplay test is showing that the pathfinding is only returning the spot the character is standing on\n",
+                    "text": "UI elements are blocking inputs to the GridNode",
                     "id": "himvl8o5ac5qr45vscou6qsd"
                 }
             ],
@@ -72,5 +72,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726264937847
+    "timestamp": 1726368180417
 }

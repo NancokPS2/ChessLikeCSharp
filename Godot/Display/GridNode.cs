@@ -24,13 +24,14 @@ public partial class GridNode : Node3D
     private Grid grid;
     private Dictionary<Vector3i, CellComponent> CellComponents = new();
     private Node2D DrawNode = new();
-    private MeshInstance3D SelectedCursorInstance = new() { Mesh = new PrismMesh(){Size = new(1,-1,1)}};
-    private MeshInstance3D HoveredCursorInstance = new() { Mesh = new SphereMesh(){Radius = 0.4f}};
+    //private MeshInstance3D SelectedCursorInstance = new() { Mesh = new PrismMesh(){Size = new(1,-1,1)}};
 
     public Vector3i PositionCollidedSelected;
     public Vector3i PositionSelected {get => PositionCollidedSelected + Vector3i.UP;}
     public Vector3i PositionCollidedHovered;
     public Vector3i PositionHovered {get => PositionCollidedHovered + Vector3i.UP;}
+
+    public bool InputEnable = true;
 
 
     public override void _Ready()
@@ -38,7 +39,6 @@ public partial class GridNode : Node3D
         base._Ready();
 
         AddChild(DrawNode);
-        AddChild(SelectedCursorInstance);
         DrawNode.Draw += () => DrawToNode(DrawNode);
     }
 
@@ -46,7 +46,7 @@ public partial class GridNode : Node3D
     {
         base._Process(delta);
         DrawNode.QueueRedraw();
-        SelectedCursorInstance.Position = PositionSelected.ToGVector3();
+        //SelectedCursorInstance.Position = PositionSelected.ToGVector3();
 
     }
 
@@ -197,6 +197,8 @@ public partial class GridNode : Node3D
 
     public void OnCellInput(InputEvent input, Vector3i comp_position)
     {
+        if (!InputEnable){return;}
+
         if (input.IsPressed())
         {
             PositionCollidedSelected = comp_position;
