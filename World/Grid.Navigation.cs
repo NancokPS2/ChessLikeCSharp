@@ -52,7 +52,8 @@ public partial class Grid
                 foreach (var y in y_range)
                 {
                     Vector3i vector = new Vector3i(x,y,z) + obj_position;
-                    if (IsPositionInbounds(vector))
+                    if (IsPositionInbounds(vector) 
+                    && grid_object.PathingIsInRange(this, vector))
                     {
                         output.Add(vector);
                     }

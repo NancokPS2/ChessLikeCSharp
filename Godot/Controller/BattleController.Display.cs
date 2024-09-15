@@ -8,7 +8,7 @@ namespace Godot;
 public partial class BattleController
 {
     public MobDisplay display_mob = new();
-    public GridDisplay display_grid = new();
+    public GridNode display_grid = new();
     public Camera display_camera = new();
 
     public void SetupDisplay()

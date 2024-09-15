@@ -6,12 +6,13 @@ using ChessLike.World;
 
 namespace Godot;
 
-public partial class GridDisplay : Node3D
+public partial class GridNode : Node3D
 {
     public class CellComponent
     {
         public Dictionary<Layer, MeshInstance3D> mesh_instances = new();
-
+        public StaticBody3D collision_body = new(){InputRayPickable = true};
+        public CollisionShape3D collision_shape = new(){Shape = new BoxShape3D()};
 
         public CellComponent(Grid.Cell cell)
         {
@@ -21,6 +22,8 @@ public partial class GridDisplay : Node3D
             {
                 mesh_instances[Layer.BASE].Mesh = new BoxMesh();
             }
+
+            collision_body.AddChild(collision_shape);
         }
     }
 }

@@ -10,6 +10,7 @@ public interface IGridObject
     public Vector3i GetPosition();
     public bool IsValidMove(Grid grid, Vector3i from, Vector3i to);
     public bool IsValidPositionToExist(Grid grid, Vector3i position);
+    public bool PathingIsInRange(Grid grid, Vector3i position);
     public int PathingGetHorizontalRange();
     public int PathingGetVerticalRange();
 }

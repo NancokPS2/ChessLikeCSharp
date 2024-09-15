@@ -28,8 +28,8 @@ public partial class BattleController
         switch (state_current)
         {
             case State.TARGETING:
-                display_grid.MeshRemove(GridDisplay.Layer.TARGETING);
-                display_grid.MeshRemove(GridDisplay.Layer.AOE);
+                display_grid.MeshRemove(GridNode.Layer.TARGETING);
+                display_grid.MeshRemove(GridNode.Layer.AOE);
                 break;
 
             case State.AWAITING_ACTION:
@@ -161,15 +161,15 @@ public partial class BattleController
 
     public void ProcessTargetingUpdateSelectedPositionVisuals()
     {
-        display_grid.MeshRemove(GridDisplay.Layer.TARGETING);
-        display_grid.MeshRemove(GridDisplay.Layer.AOE);
+        display_grid.MeshRemove(GridNode.Layer.TARGETING);
+        display_grid.MeshRemove(GridNode.Layer.AOE);
 
         //Show targetable range.
         foreach (Vector3i position in Targeter.GetSelectableCells(UsageParameters))
         {
             display_grid.MeshSet(
                 position,
-                GridDisplay.Layer.TARGETING, 
+                GridNode.Layer.TARGETING, 
                 MESH_TARGETING
                 );
         }
@@ -179,7 +179,7 @@ public partial class BattleController
         {
             display_grid.MeshSet(
                 position, 
-                GridDisplay.Layer.TARGETING, 
+                GridNode.Layer.TARGETING, 
                 MESH_AOE
                 );
         }
@@ -201,9 +201,9 @@ public partial class BattleController
         //Ensure that it is valid before attempting the move.
         if ( grid.IsPositionInbounds( move + position_selected ))
         {
-            display_grid.MeshRemove(GridDisplay.Layer.CURSOR);
+            display_grid.MeshRemove(GridNode.Layer.CURSOR);
             position_selected += move;
-            display_grid.MeshSet(position_selected, GridDisplay.Layer.CURSOR, MESH_CURSOR);
+            display_grid.MeshSet(position_selected, GridNode.Layer.CURSOR, MESH_CURSOR);
             display_camera.pivot_point = position_selected.ToGVector3();
             GD.Print(move.ToString());
         }else

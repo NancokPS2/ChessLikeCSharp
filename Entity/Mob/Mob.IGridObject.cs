@@ -65,4 +65,12 @@ public partial class Mob : IGridObject
     {
         return (int)Stats.GetValue(StatName.JUMP);
     }
+
+    public bool PathingIsInRange(Grid grid, Vector3i position)
+    {
+       return GetPosition()
+       .DistanceManhattanWithToleranceTo(
+        position, 
+        new(0, PathingGetVerticalRange(), 0)) <= PathingGetHorizontalRange();
+    }
 }
