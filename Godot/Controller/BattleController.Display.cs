@@ -9,7 +9,7 @@ public partial class BattleController
 {
     public MobDisplay display_mob = new();
     public GridNode display_grid = new();
-    public Camera display_camera = new();
+    public Camera display_camera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
 
     public void SetupDisplay()
     {

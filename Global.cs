@@ -10,6 +10,7 @@ global using ChessLike.Shared.GenericStruct;
 
 using ChessLike.Entity;
 using Action = ChessLike.Entity.Action;
+using Godot;
 
 public static partial class Global
 {

@@ -11,6 +11,7 @@ public partial class Camera : Camera3D
     {
         FREE,
         PIVOT,
+        DELEGATED_PIVOT,//Similar to pivot, but the controls from the camera are limited as it relies on other systems to move it.
     }
 
     const float SENSITIVITY_MOD = 0.03f;    
@@ -19,6 +20,7 @@ public partial class Camera : Camera3D
     bool camera_move_toggled = true;
     Vector3 directional_input = new();
     Vector2 relative_input = new();
+    float misc_input;
 
 
     [ExportCategory("Sensitivity")]
@@ -44,11 +46,11 @@ public partial class Camera : Camera3D
     [Export]
     public float pivot_translation_auto_delay = 0.3f;
     [Export]
-    public bool pirvot_rotation_only = true;
+    public bool pivot_rotation_only = true;
 
     [ExportCategory("Mode")]
     [Export]
-    public Mode mode = Mode.PIVOT;
+    public Mode mode = Mode.DELEGATED_PIVOT;
 
     public Camera()
     {
@@ -59,7 +61,7 @@ public partial class Camera : Camera3D
         base._UnhandledInput(@event);
 
         //Enable or disable the camera movement (toggle).
-        if(Global.GInput.IsButtonPressed(Global.GInput.Button.QUICK_D))
+        if(Global.GInput.IsButtonPressed(Global.GInput.Button.SHOULDER_SUB_RT))
         {
             camera_move_toggled = !camera_move_toggled; 
             GD.Print(camera_move_toggled);
@@ -67,7 +69,7 @@ public partial class Camera : Camera3D
         }
 
         //Enable or disable the camera movement (hold).
-        if(Global.GInput.IsButtonPressed(Global.GInput.Button.QUICK_C))
+        if(Global.GInput.IsButtonPressed(Global.GInput.Button.SHOULDER_SUB_LT))
         {
             camera_move_held = true; 
             return;
@@ -98,6 +100,11 @@ public partial class Camera : Camera3D
                 PivotCameraUpdate(delta);
                 break;
             
+            case Mode.DELEGATED_PIVOT:
+                HandleMiscInput();  
+                DelegatedPivotCameraUpdate(delta);
+                break;
+            
             default:
                 throw new ArgumentException("Unknown Mode");
         }
@@ -126,13 +133,36 @@ public partial class Camera : Camera3D
         pivot_rotation += relative_input.X * (float)delta;
         pivot_distance += relative_input.Y * (float)delta;
 
-        if (!pirvot_rotation_only)
+        if (!pivot_rotation_only)
         {
             //Directional
             pivot_point += directional_input.Rotated(Vector3.Up, pivot_rotation * (float)delta);
         }
 
         //Set displacement from the pivot based on parameters.
+
+        //Step on top of the pivot point
+        GlobalPosition = pivot_point;
+
+        //Move away.
+        GlobalPosition += (Vector3.Forward * pivot_distance).Rotated(Vector3.Up, pivot_rotation);
+
+        //Move up
+        GlobalPosition += Vector3.Up * pivot_elevation;
+
+        LookAt(pivot_point);
+
+    }
+
+    float rotation_target;
+    public void DelegatedPivotCameraUpdate(double delta)
+    {
+        rotation_target += (MathF.PI / 4.0f) * misc_input;
+
+        //Relative
+        pivot_rotation = (float)Mathf.MoveToward(pivot_rotation, rotation_target, sensitivity_horizontal * delta);
+        //pivot_rotation = (float)Mathf.Lerp(pivot_rotation, rotation_target, delta);
+
 
         //Step on top of the pivot point
         GlobalPosition = pivot_point;
@@ -200,14 +230,25 @@ public partial class Camera : Camera3D
         Vector3.Down * sensitivity_directional : Vector3.Zero;
 
         return true;
+    }
 
-
+    public void HandleMiscInput()
+    {
+        if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.SHOULDER_LT))
+        {
+            misc_input += Global.GInput.GetActionStrength(Global.GInput.Button.SHOULDER_LT);
+        }
+        if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.SHOULDER_RT))
+        {
+            misc_input -= Global.GInput.GetActionStrength(Global.GInput.Button.SHOULDER_RT);
+        }
     }
 
     public void ResetInputs()
     {
         relative_input = new();
         directional_input = new();
+        misc_input = 0;
     }
 
     public float GetRotationSnapped(float snap = Mathf.Pi / 2)

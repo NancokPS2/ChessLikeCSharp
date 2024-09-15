@@ -45,7 +45,8 @@ public partial class BattleController : Node
     public override void _Ready()
     {
         base._Ready();
-        
+        Global.GInput.ConnectToWindow(GetWindow());
+
         LoadEncounter(EncounterData.GetDefault());
         AddChild(debug_info_label);
         SetState(state_current);

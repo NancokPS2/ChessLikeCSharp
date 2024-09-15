@@ -101,15 +101,16 @@ public partial class GridNode : Node3D
             if (IsInstanceValid(body) && !body.IsInsideTree())
             {
                 AddChild(body);
+                body.AddChild(component.collision_shape);
             }
             else
             {
                 throw new Exception("The collision is not valid?");
             }
         }
-        else
+        else if(body.GetParent() == this)
         {
-            RemoveChild(CellComponents[position].collision_body);
+            RemoveChild(body);
         }
     }
 

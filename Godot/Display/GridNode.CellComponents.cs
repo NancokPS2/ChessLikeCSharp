@@ -22,8 +22,6 @@ public partial class GridNode : Node3D
             {
                 mesh_instances[Layer.BASE].Mesh = new BoxMesh();
             }
-
-            collision_body.AddChild(collision_shape);
         }
     }
 }

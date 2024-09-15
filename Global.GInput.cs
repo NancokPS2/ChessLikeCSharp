@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
 using Godot;
 
 public partial class Global
@@ -12,32 +14,122 @@ public partial class Global
         {
             MOVE_FW, MOVE_BW, MOVE_LT, MOVE_RT, MOVE_UP, MOVE_DN,  //Main directions
             VIEW_UP, VIEW_DN, VIEW_LT, VIEW_RT,  //View directions
-            ACCEPT, CANCEL, SPECIAL_A, SPECIAL_B, //Face buttons
-            QUICK_A, QUICK_B, QUICK_C, QUICK_D, //Quickly accessible
+            ACCEPT, CANCEL, MAIN_A, MAIN_B, //Face buttons
+            SHOULDER_LT, SHOULDER_RT, SHOULDER_SUB_LT, SHOULDER_SUB_RT, //Quickly accessible
             PAUSE, MENU, //Other
         }
 
         private static Dictionary<Button, bool> ButtonsEnabled = new();
-        public static Window RootNode = new Node().GetWindow();
-        public static bool MouseEnabled = true;
-
         private static System.Numerics.Vector2 AccumulatedMouse = new();
+        private static Window RootNode = new Node().GetWindow();
 
-        public static void ConnectToWindow()
+        public static bool MouseEnabled = true;
+        public static System.Numerics.Vector2 ViewDeadZone = new(0.0f, 0.0f);
+
+        public static void ConnectToWindow(Window window)
         {
-            RootNode = new Node().GetWindow();
-            RootNode.WindowInput += HandleInput;    
+            //Ignore if already done.
+            if (window == RootNode)
+            {
+                return;
+            }
+            //Disconnect existing ones.
+            if (RootNode is not null)
+            {
+                RootNode.WindowInput -= ParseMouseInputAsActionEvent;
+            }
+
+            RootNode = window;
+            RootNode.WindowInput += ParseMouseInputAsActionEvent;
+            if (RootNode == null){throw new Exception("No window found.");}
+ 
         }
 
-        public static void HandleInput(InputEvent input)
+        public static void ParseMouseInputAsActionEvent(InputEvent input)
         {
             if (input is InputEventMouseMotion motion)
             {
-                AccumulatedMouse = new System.Numerics.Vector2(motion.Relative.X, motion.Relative.Y);
+                //X Axis
+                if (motion.Relative.X > ViewDeadZone.X)
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_RT);
+                    @event.Strength = Mathf.Abs(motion.Relative.X);
+                    @event.EventIndex = 1;
+                    @event.Pressed = true;
+                    Input.ParseInputEvent(@event);
+                }
+                else
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_RT);
+                    @event.Strength = 0;
+                    @event.EventIndex = 1;
+                    @event.Pressed = false;
+                    Input.ParseInputEvent(@event);
+                }
+
+                if (motion.Relative.X < ViewDeadZone.X)
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_LT);
+                    @event.Strength = Mathf.Abs(motion.Relative.X);
+                    @event.EventIndex = 1;
+                    @event.Pressed = true;
+                    Input.ParseInputEvent(@event);
+                }
+                else
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_LT);
+                    @event.Strength = 0;
+                    @event.EventIndex = 1;
+                    @event.Pressed = false;
+                    Input.ParseInputEvent(@event);
+                }
+
+                //Y Axis
+                if (motion.Relative.Y > ViewDeadZone.Y)
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_UP);
+                    @event.Strength = Mathf.Abs(motion.Relative.Y);
+                    @event.EventIndex = 1;
+                    @event.Pressed = true;
+                    Input.ParseInputEvent(@event);
+                }
+                else
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_UP);
+                    @event.Strength = 0;
+                    @event.EventIndex = 1;
+                    @event.Pressed = false;
+                    Input.ParseInputEvent(@event);
+                }
+
+                if (motion.Relative.Y < ViewDeadZone.Y)
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_LT);
+                    @event.Strength = Mathf.Abs(motion.Relative.Y);
+                    @event.EventIndex = 1;
+                    @event.Pressed = true;
+                    Input.ParseInputEvent(@event);
+                }
+                else
+                {
+                    InputEventAction @event = new();
+                    @event.Action = GetActionName(Button.VIEW_DN);
+                    @event.Strength = 0;
+                    @event.EventIndex = 1;
+                    @event.Pressed = false;
+                    Input.ParseInputEvent(@event);
+                }
             }
         }
 
-        private static string GetActionName(Button button)
+        public static string GetActionName(Button button)
         {
             string action_name = button switch
             {
@@ -58,15 +150,15 @@ public partial class Global
                 //Main buttons
                 Button.ACCEPT => "accept",
                 Button.CANCEL => "cancel",
-                Button.SPECIAL_A => "special_a",
-                Button.SPECIAL_B => "special_b",
+                Button.MAIN_A => "main_a",
+                Button.MAIN_B => "main_b",
 
 
                 //Pairs
-                Button.QUICK_A => "quick_left",
-                Button.QUICK_B => "quick_right",
-                Button.QUICK_C => "other_left",
-                Button.QUICK_D => "other_right",
+                Button.SHOULDER_LT => "shoulder_left",
+                Button.SHOULDER_RT => "shoulder_right",
+                Button.SHOULDER_SUB_LT => "shoulder_sub_left",
+                Button.SHOULDER_SUB_RT => "shoulder_sub_right",
 
                 //Other
                 Button.PAUSE => "pause",
@@ -98,9 +190,10 @@ public partial class Global
         }
         public static float GetActionStrength(Button button)
         {
-            return Godot.Input.GetActionStrength(
+            float strength = Godot.Input.GetActionStrength(
                 GetActionName(button)
                 );
+            return strength;
         }
 
         public static System.Numerics.Vector2 GetViewVector(bool round_up)
