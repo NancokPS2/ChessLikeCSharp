@@ -6,11 +6,11 @@ using ChessLike.Shared.Serialization;
 
 namespace ChessLike.Shared.GenericStruct;
 
-public class Manager<TManaged> where TManaged : ISerializable
+public class SerializableManager<TManaged> where TManaged : ISerializable
 {
     protected static UniqueList<TManaged> Contents = new();
 
-    public Manager()
+    public SerializableManager()
     {
         SavePrototypes(CreatePrototypes());
         Preload();

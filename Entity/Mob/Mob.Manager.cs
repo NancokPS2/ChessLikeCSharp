@@ -8,7 +8,7 @@ namespace ChessLike.Entity;
 
 public partial class Mob
 {
-    public class Manager : Manager<Mob>
+    public class Manager : SerializableManager<Mob>
     {
         public override List<Mob> CreatePrototypes()
         {

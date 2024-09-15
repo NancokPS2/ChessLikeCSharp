@@ -15,7 +15,7 @@ public partial class BattleController
     {
         AddChild(display_mob);
         display_mob.Name = "MobDisplay";
-        display_mob.mob_ui.ActionPressed += OnActionPressed;
+        display_mob.MobUINode.ActionPressed += OnActionPressed;
 
         AddChild(display_grid);
         display_grid.SetGrid(encounter.Grid);

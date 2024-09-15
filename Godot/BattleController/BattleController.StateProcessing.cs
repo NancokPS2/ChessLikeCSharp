@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using ChessLike.Extension;
 using Godot.Menu;
 using static ChessLike.Entity.Action;
 
@@ -6,9 +7,9 @@ namespace Godot;
 
 public partial class BattleController
 {
-    private State pre_pause_state;
+    private State? StatePrePause;
 
-    public Pause pause_menu = new();
+    public Pause NodePauseMenu = new();
 
     public enum State
     {
@@ -19,13 +20,13 @@ public partial class BattleController
         TARGETING,
     }
 
-    public State state_current = State.TAKING_TURN;
+    public State StateCurrent = State.TAKING_TURN;
 
     public void SetState(State new_state)
     {
-        State state_exited = state_current;
+        State state_exited = StateCurrent;
         //Exiting the state
-        switch (state_current)
+        switch (StateCurrent)
         {
             case State.TARGETING:
                 display_grid.MeshRemove(GridNode.Layer.TARGETING);
@@ -33,11 +34,11 @@ public partial class BattleController
                 break;
 
             case State.AWAITING_ACTION:
-                display_mob.mob_ui.EnableActionButtons(false);
+                display_mob.MobUINode.EnableActionButtons(false);
                 break;
 
             case State.PAUSED:
-                IGSceneAdapter.RemoveScene(pause_menu);
+                NodePauseMenu.RemoveSelf();
                 display_camera.SetControl(true);
                 break;
 
@@ -45,8 +46,8 @@ public partial class BattleController
                 break;
         }
 
-        state_current = new_state;
-        time_passed_this_state = 0;
+        StateCurrent = new_state;
+        StateTimeWithoutChange = 0;
 
         //Entering it
         switch (new_state)
@@ -67,13 +68,13 @@ public partial class BattleController
                 break;
 
             case State.AWAITING_ACTION:
-                display_mob.mob_ui.EnableActionButtons(true); 
+                display_mob.MobUINode.EnableActionButtons(true); 
                 break;
 
             case State.PAUSED:
-                pre_pause_state = state_exited;
+                StatePrePause = state_exited;
                 display_camera.SetControl(false);
-                IGSceneAdapter.Setup(pause_menu, this);
+                NodePauseMenu.AddSceneWithDeclarations(Pause.SCENE_PATH, Pause.NodesRequired);
                 break;
 
             default:
@@ -84,10 +85,9 @@ public partial class BattleController
 
     public void ProcessState(double delta)
     {
-        delta_since_last_movement += (float)delta;
-        time_passed_this_state += (float)delta;
+        StateTimeWithoutChange += (float)delta;
 
-        switch (state_current)
+        switch (StateCurrent)
         {
             case State.AWAITING_ACTION:
                 ProcessAwaitingActionState(delta);
@@ -109,14 +109,14 @@ public partial class BattleController
     }
     public void ProcessStateInput()
     {
-        switch (state_current)
+        switch (StateCurrent)
         {
             case State.AWAITING_ACTION:
                 if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
                 {
                     SetState(State.PAUSED);
                 }
-                ProcessCursorMovement();
+                UpdateCursorMovement();
                 break;
 
             case State.TARGETING:
@@ -124,13 +124,20 @@ public partial class BattleController
                 {
                     SetState(State.PAUSED);
                 }
-                ProcessCursorMovement();
+                UpdateCursorMovement();
                 break;
 
             case State.PAUSED:
                 if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
                 {
-                    SetState(pre_pause_state);
+                    if (StatePrePause is State not_null)
+                    {
+                        SetState(not_null);
+                    }
+                    else
+                    {
+                        throw new Exception("Entered pause without setting a previous state to return to!");
+                    }
                 }
                 break;
 
@@ -186,9 +193,9 @@ public partial class BattleController
         }
     }
 
-    const float MINIMUM_MOVEMENT_DELTA = 0.15f;
-    private float delta_since_last_movement;
-    public void ProcessCursorMovement()
+    const float MINIMUM_MOVEMENT_DELTA = 0.12f;
+    private float _last_movement_time;
+    public void UpdateCursorMovement()
     {
         //Decide between mouse based input and key input.
         if (display_grid.InputEnable)
@@ -202,9 +209,9 @@ public partial class BattleController
         else
         {
             //delta must be high enough to continue
-            if (!(delta_since_last_movement > MINIMUM_MOVEMENT_DELTA)){return;}
+            if (Time.GetTicksMsec() - _last_movement_time < MINIMUM_MOVEMENT_DELTA){return;}
 
-            delta_since_last_movement = 0;
+            _last_movement_time = Time.GetTicksMsec();
             Vector3i move = new Vector3i(Global.GInput.GetMovementVector(true));
 
             //Stop if there was no movement.
@@ -233,5 +240,12 @@ public partial class BattleController
         {
             camera_pivot = camera_pivot.Lerp(PositionHovered.ToGVector3(), (float)delta);
         }
+    }
+
+    public void UpdateMobUI()
+    {
+        //TODO
+        Global.ManagerMob.GetInPosition(PositionHovered);
+        //display_mob.MobUINode.UpdateStatNodes();
     }
 }

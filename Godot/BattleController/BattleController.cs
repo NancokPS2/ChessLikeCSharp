@@ -40,7 +40,7 @@ public partial class BattleController : Node
     public List<Mob> mobs_participating = new();
     public Mob mob_taking_turn;
     public float delay_this_turn;
-    public float time_passed_this_state;
+    public float StateTimeWithoutChange;
 
     public override void _Ready()
     {
@@ -49,7 +49,7 @@ public partial class BattleController : Node
 
         LoadEncounter(EncounterData.GetDefault());
         AddChild(debug_info_label);
-        SetState(state_current);
+        SetState(StateCurrent);
         PrintTreePretty();
     }
 
@@ -74,9 +74,11 @@ public partial class BattleController : Node
 
         SetupDisplay();
         
-        foreach (Mob mob in encounter.PresetMobSpawns.Values)
+        //Add the mobs after setting their position.
+        foreach (var item in encounter.PresetMobSpawns)
         {
-            AddParticipant(mob);
+            item.Value.Position = item.Key;
+            AddParticipant(item.Value);
         }
     }
 
@@ -84,7 +86,6 @@ public partial class BattleController : Node
     {
         mobs_participating.Add(mob);
         display_mob.Add(mob);
-        display_mob.SetMobInUI(mob);
     }
 
     public void UpdateDebugInformation()
@@ -97,7 +98,7 @@ public partial class BattleController : Node
             "Location selected: {4}" + "\n" + 
             "Camera rotation: {5}",
             new object[]{
-                state_current, 
+                StateCurrent, 
                 action_selected != null ? action_selected.name : "null", 
                 grid != null ? grid.Boundary : "null",
                 mob_taking_turn != null ? mob_taking_turn.DisplayedName : "null",

@@ -7,6 +7,7 @@ global using System.Drawing;
 global using ChessLike.Shared;
 global using ChessLike.Shared.Identification;
 global using ChessLike.Shared.GenericStruct;
+global using ChessLike;
 
 using ChessLike.Entity;
 using Action = ChessLike.Entity.Action;

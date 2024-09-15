@@ -10,12 +10,12 @@ namespace Godot.Display;
 public partial class MobDisplay : Godot.Node3D
 {
     UniqueList<Mob> mobs = new();
-    public MobUI mob_ui = new();
+    public MobUI MobUINode = new();
 
     public override void _Ready()
     {
         base._Ready();
-        IGSceneAdapter.Setup(mob_ui, this);
+        this.AddSceneWithDeclarations(MobUI.SCENE_PATH, MobUI.NodesRequired);
     }
 
     public void Add(Mob mob)
@@ -46,7 +46,6 @@ public partial class MobDisplay : Godot.Node3D
         if (mobs.Count > 0)
         {
             UpdateComponentPositions();
-            mob_ui.UpdateStatNodes();
         }
     }
 
@@ -65,11 +64,6 @@ public partial class MobDisplay : Godot.Node3D
     public bool HasMob(Mob mob)
     {
         return mobs.Contains(mob);
-    }
-
-    public void SetMobInUI(Mob mob)
-    {
-        mob_ui.SetMob(mob);
     }
 
 }

@@ -161,7 +161,11 @@ public partial class Camera : Camera3D
 
         //Relative
         pivot_rotation = (float)Mathf.MoveToward(pivot_rotation, rotation_target, sensitivity_horizontal * delta);
-        //pivot_rotation = (float)Mathf.Lerp(pivot_rotation, rotation_target, delta);
+
+        //Distance
+        pivot_distance += directional_input.Z * sensitivity_vertical * SENSITIVITY_MOD;
+
+        pivot_elevation = pivot_distance / 2;
 
 
         //Step on top of the pivot point
