@@ -17,7 +17,7 @@ public static class NodeExtension
     }
 
 
-    public static void AddSceneWithDeclarations(this Node @this, string scene_path, List<NodeRequirement> required, bool strict = true)
+    public static Node AddSceneWithDeclarations(this Node @this, string scene_path, List<NodeRequirement> required, bool strict = true)
     {
         PackedScene scene = GD.Load<PackedScene>(scene_path);
         Node instantiated = scene.Instantiate();
@@ -26,6 +26,7 @@ public static class NodeExtension
         {
             throw new Exception("Could not find some required nodes. >" + @this.GetChildren().ToString());
         } 
+        return instantiated;
     }
 
     public static T? GetNodeFromRequirement<T>(this Node @this, NodeRequirement declaration, bool ignore_group = false)

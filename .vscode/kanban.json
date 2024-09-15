@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Time manager and interface for mobs to implement.",
+                    "id": "mvy4j5t419rnjilxrobsur9c"
+                },
+                {
                     "text": "Misc ideas:\n- Take snapshots of random moments during gameplay.\n",
                     "id": "yn9anloym52ke2tkxr54wo43"
                 },
@@ -72,5 +76,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726368180417
+    "timestamp": 1726426330488
 }

@@ -7,15 +7,15 @@ namespace Godot;
 
 public partial class BattleController
 {
-    public MobDisplay display_mob = new();
+    public MobDisplay DisplayMob = new();
     public GridNode display_grid = new();
     public Camera display_camera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
 
     public void SetupDisplay()
     {
-        AddChild(display_mob);
-        display_mob.Name = "MobDisplay";
-        display_mob.MobUINode.ActionPressed += OnActionPressed;
+        AddChild(DisplayMob);
+        DisplayMob.Name = "MobDisplay";
+        DisplayMob.MobUINode.ActionPressed += OnActionPressed;
 
         AddChild(display_grid);
         display_grid.SetGrid(encounter.Grid);

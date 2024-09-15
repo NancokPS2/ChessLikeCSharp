@@ -15,7 +15,8 @@ public partial class MobDisplay : Godot.Node3D
     public override void _Ready()
     {
         base._Ready();
-        this.AddSceneWithDeclarations(MobUI.SCENE_PATH, MobUI.NodesRequired);
+        AddChild(MobUINode);
+        MobUINode.AddSceneWithDeclarations(MobUI.SCENE_PATH, MobUI.NodesRequired);
     }
 
     public void Add(Mob mob)

@@ -3,7 +3,7 @@ using Action = ChessLike.Entity.Action;
 
 namespace Godot.Display;
 
-public partial class MobUI : Control
+public partial class MobUI : CanvasLayer
 {
     public delegate void ActionPressedEventHandler(Action action);
     public event ActionPressedEventHandler? ActionPressed;
@@ -26,7 +26,7 @@ public partial class MobUI : Control
         );
 
     static readonly NodeRequirement NAME_LABEL = new(
-        "NAME",
+        "NAME_LABEL",
         typeof(Label)
         );
     static readonly NodeRequirement DELAY_LABEL = new(
@@ -54,6 +54,11 @@ public partial class MobUI : Control
 
     public MobUI()
     {
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
     }
 
     private Mob? _owner_of_stats;

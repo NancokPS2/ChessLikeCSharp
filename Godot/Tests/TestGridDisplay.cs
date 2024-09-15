@@ -25,7 +25,7 @@ public partial class TestGridDisplay : Node
     {
         grid = Grid.Generator.GenerateFlat(new(6));
         Display.SetGrid(grid);
-        MobTest = Global.ManagerMob.LoadPrototype(Global.ManagerMob.GetAll()[0]);
+        MobTest = Mob.CreatePrototype(EMob.HUMAN_COMBATANT);
         MobTest.Position = new(2,1,2);
         MobTest.Stats.SetStat(StatName.MOVEMENT, 2);
         MobTest.Stats.SetStat(StatName.JUMP, 2);

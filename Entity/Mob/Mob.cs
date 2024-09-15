@@ -17,9 +17,9 @@ public partial class Mob : IGridPosition, IStats<StatName>, ITurn, IEnumIdentifi
 
     public Mob()
     {
-        Vector3i vector = new();
-        Position = vector;
         DisplayedName = new("Unknown Mcnown");
+        //TODO: Move this somewhere else
+        Global.ManagerMob.Add(this);
     }
 
     private void UpdateJobs()
@@ -34,12 +34,5 @@ public partial class Mob : IGridPosition, IStats<StatName>, ITurn, IEnumIdentifi
             //Add the actions.
             Actions.AddRange(job.actions);
         }
-    }
-
-    public static Mob? GetMobAtLocation(Vector3i location)
-    {
-        Mob? mob;
-        MobToLocationDict.TryGetValue(location, out mob);
-        return mob;
     }
 }

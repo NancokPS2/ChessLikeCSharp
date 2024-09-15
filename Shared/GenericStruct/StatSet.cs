@@ -58,9 +58,7 @@ public class StatSet<StatEnum> where StatEnum : Enum
 
     public float GetValue(StatEnum stat)
     {
-        ClampFloat output = new();
-        Contents.TryGetValue(stat, out output);
-        return output.GetCurrent();
+        return Contents[stat].GetCurrent();
     }
 
     public float GetValuePrecent(StatEnum stat)
@@ -70,16 +68,12 @@ public class StatSet<StatEnum> where StatEnum : Enum
 
     public float GetMax(StatEnum stat)
     {
-        ClampFloat output = new();
-        Contents.TryGetValue(stat, out output);
-        return output.GetMax();
+        return Contents[stat].GetMax();
     }
 
     public float GetMin(StatEnum stat)
     {
-        ClampFloat output = new();
-        Contents.TryGetValue(stat, out output);
-        return output.GetMin();
+        return Contents[stat].GetMin();
     }
 
 

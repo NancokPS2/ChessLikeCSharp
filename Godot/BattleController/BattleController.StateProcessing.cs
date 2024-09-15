@@ -34,7 +34,7 @@ public partial class BattleController
                 break;
 
             case State.AWAITING_ACTION:
-                display_mob.MobUINode.EnableActionButtons(false);
+                DisplayMob.MobUINode.EnableActionButtons(false);
                 break;
 
             case State.PAUSED:
@@ -54,7 +54,7 @@ public partial class BattleController
         {
             case State.TAKING_TURN:
                 List<ITurn> turn_takers = new List<ITurn>(Global.ManagerMob.GetInCombat());
-                mob_taking_turn = (Mob)TurnQueue.GetNext(turn_takers);
+                MobTakingTurn = (Mob)TurnQueue.GetNext(turn_takers);
                 SetState(State.AWAITING_ACTION);
                 break;
 
@@ -68,7 +68,9 @@ public partial class BattleController
                 break;
 
             case State.AWAITING_ACTION:
-                display_mob.MobUINode.EnableActionButtons(true); 
+                DisplayMob.MobUINode.EnableActionButtons(true); 
+                DisplayMob.MobUINode.UpdateStatNodes(MobTakingTurn);
+                DisplayMob.MobUINode.UpdateActionButtons(MobTakingTurn);
                 break;
 
             case State.PAUSED:
@@ -92,11 +94,13 @@ public partial class BattleController
             case State.AWAITING_ACTION:
                 ProcessAwaitingActionState(delta);
                 UpdateCameraPosition(delta);
+                UpdateMobUI();
                 break;
 
             case State.TARGETING:
                 UpdateCameraPosition(delta);
                 ProcessTargetingState(delta);
+                UpdateMobUI();
                 break;
 
             case State.PAUSED:
@@ -151,7 +155,7 @@ public partial class BattleController
         if (action_selected != null)
         {
             //TODO: Owner cannot be null
-            UsageParameters = new UsageParams(mob_taking_turn, grid, action_selected);
+            UsageParameters = new UsageParams(MobTakingTurn, grid, action_selected);
             SetState(State.TARGETING);
         }
     }
@@ -245,7 +249,15 @@ public partial class BattleController
     public void UpdateMobUI()
     {
         //TODO
-        Global.ManagerMob.GetInPosition(PositionHovered);
+        List<Mob>? mob_list = Global.ManagerMob.GetInPosition(PositionHovered);
+        if (mob_list.Count == 0) {return;}
+        
+        Mob mob = mob_list.First();
+
+        if (mob is not null && DisplayMob.MobUINode.GetOwnerOfStats() != mob)
+        {
+            DisplayMob.MobUINode.UpdateStatNodes(mob);
+        }
         //display_mob.MobUINode.UpdateStatNodes();
     }
 }

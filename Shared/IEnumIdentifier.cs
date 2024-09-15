@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Shared.GenericStruct;
+namespace ChessLike.Shared;
 
 public interface IEnumIdentifier<TEnum>
 {

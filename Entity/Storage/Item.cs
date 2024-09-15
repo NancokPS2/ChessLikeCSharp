@@ -1,5 +1,5 @@
 namespace ChessLike.Entity;
-public abstract class Item : Shared.ITrade
+public abstract class Item : IValuable
 {
 
     public string name = "";
@@ -7,6 +7,7 @@ public abstract class Item : Shared.ITrade
     public int slot_size = 1;
     private List<EItem> types = new();
 
+    public float Value { get; set; } = 0;
 
     public void AddType(EItem type)
     {
@@ -28,15 +29,6 @@ public abstract class Item : Shared.ITrade
         return types;
     }
 
-    public float GetValue()
-    {
-        return price;
-    }
-
-    public void SetValue(float val)
-    {
-        price = val;
-    }
 }
 
 

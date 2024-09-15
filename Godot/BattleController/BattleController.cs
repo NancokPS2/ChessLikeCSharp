@@ -38,7 +38,7 @@ public partial class BattleController : Node
     public Vector3i PositionSelected;
     public Action.UsageParams UsageParameters;
     public List<Mob> mobs_participating = new();
-    public Mob mob_taking_turn;
+    public Mob MobTakingTurn;
     public float delay_this_turn;
     public float StateTimeWithoutChange;
 
@@ -85,7 +85,7 @@ public partial class BattleController : Node
     public void AddParticipant(Mob mob)
     {
         mobs_participating.Add(mob);
-        display_mob.Add(mob);
+        DisplayMob.Add(mob);
     }
 
     public void UpdateDebugInformation()
@@ -101,7 +101,7 @@ public partial class BattleController : Node
                 StateCurrent, 
                 action_selected != null ? action_selected.name : "null", 
                 grid != null ? grid.Boundary : "null",
-                mob_taking_turn != null ? mob_taking_turn.DisplayedName : "null",
+                MobTakingTurn != null ? MobTakingTurn.DisplayedName : "null",
                 PositionHovered,
                 display_camera != null ? display_camera.Rotation : "???"
                 }

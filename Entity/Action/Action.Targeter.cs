@@ -32,11 +32,11 @@ public partial class Action
             {
                 case TargetingParams.VacancyStatus.HAS_MOB:
                     //filters.Add(Filter.HasMob);
-                    filters.Add(x => Mob.GetMobAtLocation(x) != null);
+                    filters.Add(x => Global.ManagerMob.GetInPosition(x) != null);
                     break;
 
                 case TargetingParams.VacancyStatus.HAS_NO_MOB:
-                    filters.Add(x => Mob.GetMobAtLocation(x) == null);
+                    filters.Add(x => Global.ManagerMob.GetInPosition(x) == null);
                     break;
 
                 default:

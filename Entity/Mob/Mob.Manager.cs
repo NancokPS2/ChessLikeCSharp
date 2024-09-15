@@ -1,36 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace ChessLike.Entity;
 
 public partial class Mob
 {
-    public class Manager : SerializableManager<Mob>
+    public class Manager : Manager<Mob>
     {
-        public override List<Mob> CreatePrototypes()
-        {
-            return new()
-            {
-                new Mob().Create(EMob.HUMAN_COMBATANT)
-            };
-        }
-
-        public override string GetPrototypeFolder()
-        {
-            return Path.Combine(
-                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "mob"
-            );
-
-        }
-
-        public Mob? GetFromIdentifier(EMob identifier)
-        {
-            return Contents.Find(x => x.Identifier == identifier);
-        }
+        public Dictionary<EMob, Mob> PrototypeDict = new();
 
         public List<Mob> GetInFaction(EFaction faction)
         {
@@ -48,7 +28,6 @@ public partial class Mob
             return Contents.FilterFromPosition(position);
         }
     }
-
 }
 public static class MobListExtension
 {

@@ -1,8 +1,7 @@
 namespace ChessLike.Shared;
 
-public interface ITrade
+public interface IValuable
 {
-    public float GetValue();
-    public void SetValue(float val);
+    public float Value {get;set;}
 }
 
