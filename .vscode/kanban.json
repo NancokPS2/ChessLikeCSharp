@@ -32,6 +32,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "BattleController: implement the TurnManager",
+                    "id": "u983r06z6d1zzarl6e4amg4y"
+                },
+                {
                     "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it? (Replace with Grid.navigation???)\n- Improve cursor movement, base it on camera \n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states\n- TARGETING state still cannot select a possible location nor does it mark allowed locations.",
                     "id": "ps2yzq0z0scwdzsyo0fziuv5"
                 },
@@ -75,5 +79,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726428384493
+    "timestamp": 1726630620461
 }

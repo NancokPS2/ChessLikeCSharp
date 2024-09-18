@@ -21,29 +21,9 @@ public partial class Global
 
         private static Dictionary<Button, bool> ButtonsEnabled = new();
         private static System.Numerics.Vector2 AccumulatedMouse = new();
-        private static Window RootNode = new Node().GetWindow();
 
         public static bool MouseEnabled = true;
         public static System.Numerics.Vector2 ViewDeadZone = new(0.0f, 0.0f);
-
-        public static void ConnectToWindow(Window window)
-        {
-            //Ignore if already done.
-            if (window == RootNode)
-            {
-                return;
-            }
-            //Disconnect existing ones.
-            if (RootNode is not null)
-            {
-                RootNode.WindowInput -= ParseMouseInputAsActionEvent;
-            }
-
-            RootNode = window;
-            RootNode.WindowInput += ParseMouseInputAsActionEvent;
-            if (RootNode == null){throw new Exception("No window found.");}
- 
-        }
 
         public static void ParseMouseInputAsActionEvent(InputEvent input)
         {

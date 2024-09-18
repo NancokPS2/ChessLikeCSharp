@@ -15,6 +15,32 @@ using Godot;
 
 public static partial class Global
 {
+    private static Window RootNode = new Node().GetWindow();
+    private static Node2D DrawNode = new();
+    public static void ConnectToWindow(Window window)
+    {
+        //Ignore if already done.
+        if (window == RootNode)
+        {
+            return;
+        }
+        //Disconnect existing ones.
+        if (RootNode is not null)
+        {
+            RootNode.WindowInput -= GInput.ParseMouseInputAsActionEvent;
+        }
+        if (!DrawNode.IsInsideTree())
+        {
+            RootNode.AddChild(DrawNode);
+            DrawNode.Draw += WriteDebug;
+        }
+
+        RootNode = window;
+        RootNode.WindowInput += GInput.ParseMouseInputAsActionEvent;
+        if (RootNode == null){throw new Exception("No window found.");}
+
+    }
+
     public static void Setup()
     {
 

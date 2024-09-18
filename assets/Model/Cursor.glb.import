@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bev6m3onnakyd"
-path="res://.godot/imported/FishingRod.glb-1b195bc7b8de03076a5d0cde237eff0a.scn"
+uid="uid://cmwdhr24j8kfl"
+path="res://.godot/imported/Cursor.glb-5973df1df3e6f81ea185582aaa35991c.scn"
 
 [deps]
 
-source_file="res://assets/Model/fishing_rod/FishingRod.glb"
-dest_files=["res://.godot/imported/FishingRod.glb-1b195bc7b8de03076a5d0cde237eff0a.scn"]
+source_file="res://assets/Model/Cursor.glb"
+dest_files=["res://.godot/imported/Cursor.glb-5973df1df3e6f81ea185582aaa35991c.scn"]
 
 [params]
 
