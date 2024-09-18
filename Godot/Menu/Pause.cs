@@ -3,7 +3,7 @@ using ChessLike.Shared;
 using Godot;
 using System;
 
-namespace Godot.Menu;
+namespace Godot;
 
 public partial class Pause : Control
 {

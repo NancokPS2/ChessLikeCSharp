@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://diqnpc5njmtxc"
-path="res://.godot/imported/Bow.glb-1895d072b1cd203493ba15ca201b17b4.scn"
+path="res://.godot/imported/Bow.glb-a70123739ef0a3c044ed9ad183e6b68a.scn"
 
 [deps]
 
-source_file="res://assets/Model/bow/Bow.glb"
-dest_files=["res://.godot/imported/Bow.glb-1895d072b1cd203493ba15ca201b17b4.scn"]
+source_file="res://assets/Model/item/bow/Bow.glb"
+dest_files=["res://.godot/imported/Bow.glb-a70123739ef0a3c044ed9ad183e6b68a.scn"]
 
 [params]
 

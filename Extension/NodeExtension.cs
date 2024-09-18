@@ -16,6 +16,14 @@ public static class NodeExtension
         @this.GetParent().RemoveChild(@this);
     }
 
+    public static void FreeChildren(this Node @this)
+    {
+        foreach (var item in @this.GetChildren())
+        {
+            item.QueueFree();
+        }
+    }
+
 
     public static Node AddSceneWithDeclarations(this Node @this, string scene_path, List<NodeRequirement> required, bool strict = true)
     {
@@ -26,6 +34,7 @@ public static class NodeExtension
         {
             throw new Exception("Could not find some required nodes. >" + @this.GetChildren().ToString());
         } 
+        GD.Print(instantiated.GetChildren());
         return instantiated;
     }
 

@@ -31,12 +31,12 @@ public partial class BattleController
 
             Mob def_mob3 = new Mob()
                 .ChainName("SomeoneGuess3")
-                .ChainJob(Global.ManagerJob.GetAll()[0])
+                .ChainJob(Global.ManagerJob.GetAll()[1])
                 .ChainResult();
 
             Mob def_mob4 = new Mob()
                 .ChainName("SomeoneGuess4")
-                .ChainJob(Global.ManagerJob.GetAll()[0])
+                .ChainJob(Global.ManagerJob.GetAll()[1])
                 .ChainResult();
 
             encounter.PresetMobSpawns = new()

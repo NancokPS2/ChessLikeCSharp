@@ -1,15 +1,12 @@
 using ChessLike.Entity;
 using ChessLike.Extension;
-using Godot.Menu;
+using ChessLike.Turn;
 using static ChessLike.Entity.Action;
 
 namespace Godot;
 
 public partial class BattleController
 {
-    private State? StatePrePause;
-
-    public Pause NodePauseMenu = new();
 
     public enum State
     {
@@ -20,7 +17,6 @@ public partial class BattleController
         TARGETING,
     }
 
-    public State StateCurrent = State.TAKING_TURN;
 
     public void SetState(State new_state)
     {
@@ -29,17 +25,17 @@ public partial class BattleController
         switch (StateCurrent)
         {
             case State.TARGETING:
-                display_grid.MeshRemove(GridNode.Layer.TARGETING);
-                display_grid.MeshRemove(GridNode.Layer.AOE);
+                CompDisplayGrid.MeshRemove(GridNode.Layer.TARGETING);
+                CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
                 break;
 
             case State.AWAITING_ACTION:
-                DisplayMob.MobUINode.EnableActionButtons(false);
+                CompDisplayMob.MobUINode.EnableActionButtons(false);
                 break;
 
             case State.PAUSED:
                 NodePauseMenu.RemoveSelf();
-                display_camera.SetControl(true);
+                CompCamera.SetControl(true);
                 break;
 
             default:
@@ -53,14 +49,14 @@ public partial class BattleController
         switch (new_state)
         {
             case State.TAKING_TURN:
-                List<ITurn> turn_takers = new List<ITurn>(Global.ManagerMob.GetInCombat());
-                MobTakingTurn = (Mob)TurnQueue.GetNext(turn_takers);
+                CompDelayManager.StartTurn();
+                CompDisplayMob.MobUINode.UpdateDelayList(CompDelayManager);
                 SetState(State.AWAITING_ACTION);
                 break;
 
             case State.ENDING_TURN:
-                List<ITurn> time_pass_targets = new List<ITurn>(Global.ManagerMob.GetInCombat());
-                TurnQueue.AdvanceDelay(time_pass_targets, delay_this_turn);
+                CompDelayManager.EndTurn();
+                CompDisplayMob.MobUINode.UpdateDelayList(CompDelayManager);
                 SetState(State.TAKING_TURN);
                 break;
 
@@ -68,14 +64,14 @@ public partial class BattleController
                 break;
 
             case State.AWAITING_ACTION:
-                DisplayMob.MobUINode.EnableActionButtons(true); 
-                DisplayMob.MobUINode.UpdateStatNodes(MobTakingTurn);
-                DisplayMob.MobUINode.UpdateActionButtons(MobTakingTurn);
+                CompDisplayMob.MobUINode.EnableActionButtons(true); 
+                CompDisplayMob.MobUINode.UpdateStatNodes(CompDelayManager.GetCurrentTurnTaker() as Mob);
+                CompDisplayMob.MobUINode.UpdateActionButtons(CompDelayManager.GetCurrentTurnTaker() as Mob);
                 break;
 
             case State.PAUSED:
                 StatePrePause = state_exited;
-                display_camera.SetControl(false);
+                CompCamera.SetControl(false);
                 NodePauseMenu.AddSceneWithDeclarations(Pause.SCENE_PATH, Pause.NodesRequired);
                 break;
 
@@ -152,34 +148,34 @@ public partial class BattleController
     }
     public void ProcessAwaitingActionState(double delta)
     {
-        if (action_selected != null)
+        if (TurnActionSelected != null)
         {
             //TODO: Owner cannot be null
-            UsageParameters = new UsageParams(MobTakingTurn, grid, action_selected);
+            TurnUsageParameters = new UsageParams(CompDelayManager.GetCurrentTurnTaker() as Mob, CompGrid, TurnActionSelected);
             SetState(State.TARGETING);
         }
     }
 
-    private Vector3i last_position_selected = new Vector3i(1);
+    private Vector3i _last_position_selected = new Vector3i(1);
     public void ProcessTargetingState(double delta)
     {
         //Selected a new position.
-        if (PositionHovered != last_position_selected)
+        if (PositionHovered != _last_position_selected)
         {
             ProcessTargetingUpdateSelectedPositionVisuals();
-            last_position_selected = PositionHovered;
+            _last_position_selected = PositionHovered;
         }
     }
 
     public void ProcessTargetingUpdateSelectedPositionVisuals()
     {
-        display_grid.MeshRemove(GridNode.Layer.TARGETING);
-        display_grid.MeshRemove(GridNode.Layer.AOE);
+        CompDisplayGrid.MeshRemove(GridNode.Layer.TARGETING);
+        CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
 
         //Show targetable range.
-        foreach (Vector3i position in Targeter.GetSelectableCells(UsageParameters))
+        foreach (Vector3i position in Targeter.GetSelectableCells(TurnUsageParameters))
         {
-            display_grid.MeshSet(
+            CompDisplayGrid.MeshSet(
                 position,
                 GridNode.Layer.TARGETING, 
                 MESH_TARGETING
@@ -187,9 +183,9 @@ public partial class BattleController
         }
 
         //Show AoE
-        foreach (Vector3i position in Targeter.GetTargetedAoE(PositionHovered, UsageParameters))
+        foreach (Vector3i position in Targeter.GetTargetedAoE(PositionHovered, TurnUsageParameters))
         {
-            display_grid.MeshSet(
+            CompDisplayGrid.MeshSet(
                 position, 
                 GridNode.Layer.TARGETING, 
                 MESH_AOE
@@ -202,13 +198,13 @@ public partial class BattleController
     public void UpdateCursorMovement()
     {
         //Decide between mouse based input and key input.
-        if (display_grid.InputEnable)
+        if (CompDisplayGrid.InputEnable)
         {
-            if (!grid.IsPositionInbounds(display_grid.PositionHovered)){return;}
+            if (!CompGrid.IsPositionInbounds(CompDisplayGrid.PositionHovered)){return;}
 
-            PositionHovered = display_grid.PositionHovered;
-            display_grid.MeshRemove(GridNode.Layer.CURSOR);
-            display_grid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
+            PositionHovered = CompDisplayGrid.PositionHovered;
+            CompDisplayGrid.MeshRemove(GridNode.Layer.CURSOR);
+            CompDisplayGrid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
         }
         else
         {
@@ -222,11 +218,11 @@ public partial class BattleController
             if (move == Vector3i.ZERO){return;}
 
             //Ensure that it is valid before attempting the move.
-            if ( grid.IsPositionInbounds( move + PositionHovered ))
+            if ( CompGrid.IsPositionInbounds( move + PositionHovered ))
             {
-                display_grid.MeshRemove(GridNode.Layer.CURSOR);
+                CompDisplayGrid.MeshRemove(GridNode.Layer.CURSOR);
                 PositionHovered += move;
-                display_grid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
+                CompDisplayGrid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
                 GD.Print(move.ToString());
             }else
             {
@@ -238,7 +234,7 @@ public partial class BattleController
 
     public void UpdateCameraPosition(double delta)
     {
-        Vector3 camera_pivot = display_camera.pivot_point;
+        Vector3 camera_pivot = CompCamera.pivot_point;
 
         if (camera_pivot.DistanceTo(PositionHovered.ToGVector3()) > 3)
         {
@@ -254,9 +250,9 @@ public partial class BattleController
         
         Mob mob = mob_list.First();
 
-        if (mob is not null && DisplayMob.MobUINode.GetOwnerOfStats() != mob)
+        if (mob is not null && CompDisplayMob.MobUINode.GetOwnerOfStats() != mob)
         {
-            DisplayMob.MobUINode.UpdateStatNodes(mob);
+            CompDisplayMob.MobUINode.UpdateStatNodes(mob);
         }
         //display_mob.MobUINode.UpdateStatNodes();
     }

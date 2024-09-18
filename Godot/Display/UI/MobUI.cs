@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using ChessLike.Turn;
 using Action = ChessLike.Entity.Action;
 
 namespace Godot.Display;
@@ -56,14 +57,11 @@ public partial class MobUI : CanvasLayer
     {
     }
 
-    public override void _Ready()
-    {
-        base._Ready();
-    }
-
     private Mob? _owner_of_stats;
     public void UpdateStatNodes(Mob mob)
     {
+        string path = GetPath();
+
         _owner_of_stats = mob;
         #pragma warning disable CS8602 // Dereference of a possibly null reference.
         this.GetNodeFromRequirement<Label>(NAME_LABEL)
@@ -89,18 +87,25 @@ public partial class MobUI : CanvasLayer
         return _owner_of_stats;
     }
 
+    public void UpdateDelayList(DelayManager manager)
+    {
+        HBoxContainer container = this.GetNodeFromRequirement<HBoxContainer>(TURN_CONTAINER);
+        container.FreeChildren();
+
+        foreach (var item in manager.GetParticipants())
+        {
+            container.AddChild(node: new DelayContainer(item));
+        }
+    }
+
     public void UpdateActionButtons(Mob mob)
     {
-        foreach (Node node in this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER).GetChildren())
-        {
-            node.QueueFree();
-        }
+        VBoxContainer container = this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER);
         
         foreach (ChessLike.Entity.Action action in mob.Actions)
         {
             ActionButton button = new(action);
-            this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER)
-                .AddChild(button);
+            container.AddChild(button);
 
             button.Text = action.name;
             Console.WriteLine(button.GetPath());
@@ -120,6 +125,41 @@ public partial class MobUI : CanvasLayer
     }
     #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
+    private partial class DelayContainer : TextureRect
+    {
+        private readonly ITurn User;
+        public DelayContainer(ITurn turn)
+        {
+            User = turn;
+        }
+
+        public override void _Ready()
+        {
+            base._Ready();
+            SetAnchorsPreset(LayoutPreset.FullRect);
+            SizeFlagsHorizontal = SizeFlags.ExpandFill;
+
+            //Label and name
+            string name = "";
+            string delay = "0?";
+            if (User is Mob mob)
+            {
+                name = mob.DisplayedName;
+                delay = mob.DelayCurrent.ToString();
+            }
+
+            Label label_name = new();
+            label_name.Text = name;
+            AddChild(label_name);
+            label_name.SetAnchorsPreset(LayoutPreset.TopWide);
+
+            Label label_delay = new();
+            label_delay.Text = delay;
+            AddChild(label_delay);
+            label_delay.SetAnchorsPreset(LayoutPreset.BottomWide);
+        }
+
+    }
 
     private partial class ActionButton : Button
     {

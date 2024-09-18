@@ -19,6 +19,8 @@ public static partial class Global
     private static Node2D DrawNode = new();
     public static void ConnectToWindow(Window window)
     {
+        RootNode = window;
+        
         //Ignore if already done.
         if (window == RootNode)
         {
@@ -35,7 +37,6 @@ public static partial class Global
             DrawNode.Draw += WriteDebug;
         }
 
-        RootNode = window;
         RootNode.WindowInput += GInput.ParseMouseInputAsActionEvent;
         if (RootNode == null){throw new Exception("No window found.");}
 

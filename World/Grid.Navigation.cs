@@ -76,7 +76,7 @@ public partial class Grid
         List<Vector3i> expand_candidates = new(){grid_object.GetPosition()};
 
         int iterations = 0;
-        float starting_time = Time.GetTicksMsec();
+        float starting_time = Godot.Time.GetTicksMsec();
         
         //Filter those that are valid to path from their origin.
         while (expand_candidates.Count != 0)
@@ -104,7 +104,7 @@ public partial class Grid
 
         }
         Debug.WriteLine("Iterations for this pathable: " + iterations.ToString() + "\n" 
-        + "Time spent (s): " + ((Time.GetTicksMsec() - starting_time)/1000).ToString());
+        + "Time spent (s): " + ((Godot.Time.GetTicksMsec() - starting_time)/1000).ToString());
 
         return output;
 

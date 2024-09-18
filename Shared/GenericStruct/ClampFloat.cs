@@ -10,6 +10,7 @@ public class ClampFloat
 
     public ClampFloat()
     {
+        Current = Max;
     }
 
     public ClampFloat(float _current_and_max)

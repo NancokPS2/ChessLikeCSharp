@@ -10,22 +10,22 @@ public partial class Mob
 {
     public class Manager : Manager<Mob>
     {
-        public Dictionary<EMob, Mob> PrototypeDict = new();
+        public Dictionary<EMobPrototype, Mob> PrototypeDict = new();
 
         public List<Mob> GetInFaction(EFaction faction)
         {
-            return Contents.FilterFromFaction(faction);
+            return GetAll().FilterFromFaction(faction);
         }
 
         //TODO
         public List<Mob> GetInCombat()
         {
-            return Contents.Where(x => true).ToList();
+            return GetAll().FilterFromState(EMobState.COMBAT);
         }
 
         public List<Mob> GetInPosition(Vector3i position)
         {
-            return Contents.FilterFromPosition(position);
+            return GetAll().FilterFromPosition(position);
         }
     }
 }
@@ -38,5 +38,9 @@ public static class MobListExtension
     public static List<Mob> FilterFromPosition(this List<Mob> @this, Vector3i position)
     {
         return @this.Where(x => x.Position == position).ToList();
+    }
+    public static List<Mob> FilterFromState(this List<Mob> @this, EMobState state)
+    {
+        return @this.Where(x => x.MobState == state).ToList();
     }
 }

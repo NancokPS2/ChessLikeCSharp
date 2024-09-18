@@ -12,12 +12,12 @@ public partial class Mob
     /// This class should only be used to create a mob, it should not be stored in a variable.
     /// </summary>
 
-    public static Mob CreatePrototype(EMob mob_template)
+    public static Mob CreatePrototype(EMobPrototype mob_template)
     {
         Mob output = new();
         output = mob_template switch
         {
-            EMob.HUMAN_COMBATANT => new Mob()
+            EMobPrototype.HUMAN_COMBATANT => new Mob()
                 .ChainName("Combatant")
                 .ChainJob(Global.ManagerJob.GetAll()[0])
                 .ChainResult(),

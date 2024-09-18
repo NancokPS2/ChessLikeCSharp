@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using System.Xml;
 using ChessLike.Entity;
@@ -86,6 +87,7 @@ public class StatSet<StatEnum> where StatEnum : Enum
     {
         SetMax(stat, value);
         SetValue(stat: stat, value);
+        Debug.Assert(GetValue(stat) == value);
     }
 
     public void MultiplyStat(StatEnum stat, float multiplier)

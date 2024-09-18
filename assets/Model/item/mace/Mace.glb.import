@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ciujx6ignr7vw"
-path="res://.godot/imported/Mace.glb-5e05bba5d0f1b1abbd44b9ecff98a402.scn"
+path="res://.godot/imported/Mace.glb-ce7ce34dcdc2d203b12c7443b0c1b7e0.scn"
 
 [deps]
 
-source_file="res://assets/Model/mace/Mace.glb"
-dest_files=["res://.godot/imported/Mace.glb-5e05bba5d0f1b1abbd44b9ecff98a402.scn"]
+source_file="res://assets/Model/item/mace/Mace.glb"
+dest_files=["res://.godot/imported/Mace.glb-ce7ce34dcdc2d203b12c7443b0c1b7e0.scn"]
 
 [params]
 

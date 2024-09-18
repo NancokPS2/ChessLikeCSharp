@@ -1,6 +1,6 @@
 namespace ChessLike.Entity;
 
-public enum EMob
+public enum EMobPrototype
 {
     HUMAN_COMBATANT
 }

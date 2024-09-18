@@ -39,6 +39,7 @@ public partial class GridNode : Node3D
         base._Ready();
 
         AddChild(DrawNode);
+        
         DrawNode.Draw += () => DrawToNode(DrawNode);
     }
 

@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "System for constructing and gluing models togheter. For formign characters.\nSystem for randomizing terrain and its decorations.",
+                    "id": "tdf1y9p7jsjr4jcfrkdc61fg"
+                },
+                {
                     "text": "Something that handles which mobs enter combat.\nAnd let the BattleController add the ones from the encounter as well.\nThen remove the hack on \"public Mob()\"",
                     "id": "c9gposjpxqly8a7rz8j68m2u"
                 },
@@ -72,12 +76,17 @@
         },
         {
             "title": "Bugs",
-            "tasks": [],
+            "tasks": [
+                {
+                    "text": "Base turn delay is not properly calculated. There is no variation on delays despite Jobs being supposed to cause it.",
+                    "id": "h6qes4uwenfdhaipek6hdvei"
+                }
+            ],
             "id": "iv64sofsa6d5xpucq3jyksjg",
             "color": "#eb144c"
         }
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726630620461
+    "timestamp": 1726650576533
 }

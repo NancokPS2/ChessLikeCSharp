@@ -1,7 +1,9 @@
+using ChessLike.Turn;
+
 namespace ChessLike.Entity;
 
 
-public partial class Mob : IGridPosition, IStats<StatName>, ITurn, IEnumIdentifier<EMob>
+public partial class Mob : IStats<StatName>
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
     public string DisplayedName = "UNNAMED";
@@ -11,9 +13,9 @@ public partial class Mob : IGridPosition, IStats<StatName>, ITurn, IEnumIdentifi
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory Inventory = new(5);
     public EMovementMode MovementMode = EMovementMode.WALK;
+    public EMobState MobState = EMobState.BENCHED;
 
-    public EMob Identifier { get; set; }
-
+    public Vector3i Position;
 
     public Mob()
     {
@@ -35,4 +37,6 @@ public partial class Mob : IGridPosition, IStats<StatName>, ITurn, IEnumIdentifi
             Actions.AddRange(job.actions);
         }
     }
+
+
 }
