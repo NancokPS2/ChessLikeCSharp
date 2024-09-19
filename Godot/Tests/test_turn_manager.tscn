@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dx2cigl7iitjq"]
+
+[ext_resource type="Script" path="res://Godot/Tests/TestTurnManager.cs" id="1_04vty"]
+
+[node name="TestTurnManager" type="Node"]
+script = ExtResource("1_04vty")

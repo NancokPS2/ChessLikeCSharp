@@ -87,7 +87,7 @@ public partial class MobUI : CanvasLayer
         return _owner_of_stats;
     }
 
-    public void UpdateDelayList(DelayManager manager)
+    public void UpdateDelayList(TurnManager manager)
     {
         HBoxContainer container = this.GetNodeFromRequirement<HBoxContainer>(TURN_CONTAINER);
         container.FreeChildren();

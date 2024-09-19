@@ -7,8 +7,13 @@ using ChessLike.Entity;
 
 namespace ChessLike.Turn;
 
-public class DelayManager
+public class TurnManager
 {
+    public delegate void TurnChangeHandler(ITurn who);
+    public event TurnChangeHandler? TurnEnded;
+    public event TurnChangeHandler? TurnStarted;
+
+
     UniqueList<ITurn> Participants = new();
 
     ITurn? CurrentTaker;
@@ -60,21 +65,32 @@ public class DelayManager
 
     public void StartTurn()
     {
+        //Whoever has the lowest delay takes it.
         CurrentTaker = GetWithLowestDelay();
 
-        AdvanceDelay(CurrentTaker.DelayCurrent);
+        float initial_delay = CurrentTaker.DelayCurrent;
+        //Reduce everyone's delay by until the taker's 0.
+        foreach (var item in Participants)
+        {
+            item.DelayCurrent -= initial_delay;
+        }
 
-        if (CurrentTaker.DelayCurrent == 0)
+        //Make sure the taker is at 0.
+        if (CurrentTaker.DelayCurrent != 0)
         {
             throw new Exception("Unexpected result.");
         }
+        TurnStarted?.Invoke(CurrentTaker);
     }
 
     public void EndTurn()
     {
         if (CurrentTaker is null) {throw new Exception("No one is taking a turn at this moment.");}
 
+        //Reset the delay, the CurrentTaker should end up with a high delay.
         ResetDelay(CurrentTaker);
+
+        TurnEnded?.Invoke(CurrentTaker);
     }
 
     private void ResetDelay(ITurn turn)
@@ -94,7 +110,7 @@ public class DelayManager
         }
     }
 
-    private void AdvanceDelay(float time)
+    public void AdvanceDelay(float time)
     {
         foreach (var item in Participants)
         {
