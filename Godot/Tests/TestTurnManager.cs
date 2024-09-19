@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Shared.DebugDisplay;
 using ChessLike.Turn;
 
 namespace Godot;
@@ -28,6 +29,8 @@ public partial class TestTurnManager : Node
         AddChild(timer);
         timer.OneShot = false;
         timer.Start(1f);
+
+        DebugDisplay.Instance.Add(manager);
 
 
     }

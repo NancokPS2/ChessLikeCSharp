@@ -40,7 +40,7 @@ public partial class BattleController
     public MobDisplay CompDisplayMob = new();
     public GridNode CompDisplayGrid = new();
     public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
-    public TurnManager CompDelayManager = new();
+    public TurnManager CompTurnManager = new();
     public Grid CompGrid;
 
     //Combat data

@@ -49,14 +49,14 @@ public partial class BattleController
         switch (new_state)
         {
             case State.TAKING_TURN:
-                CompDelayManager.StartTurn();
-                CompDisplayMob.MobUINode.UpdateDelayList(CompDelayManager);
+                CompTurnManager.StartTurn();
+                CompDisplayMob.MobUINode.UpdateDelayList(CompTurnManager);
                 SetState(State.AWAITING_ACTION);
                 break;
 
             case State.ENDING_TURN:
-                CompDelayManager.EndTurn();
-                CompDisplayMob.MobUINode.UpdateDelayList(CompDelayManager);
+                CompTurnManager.EndTurn();
+                CompDisplayMob.MobUINode.UpdateDelayList(CompTurnManager);
                 SetState(State.TAKING_TURN);
                 break;
 
@@ -65,8 +65,8 @@ public partial class BattleController
 
             case State.AWAITING_ACTION:
                 CompDisplayMob.MobUINode.EnableActionButtons(true); 
-                CompDisplayMob.MobUINode.UpdateStatNodes(CompDelayManager.GetCurrentTurnTaker() as Mob);
-                CompDisplayMob.MobUINode.UpdateActionButtons(CompDelayManager.GetCurrentTurnTaker() as Mob);
+                CompDisplayMob.MobUINode.UpdateStatNodes(CompTurnManager.GetCurrentTurnTaker() as Mob);
+                CompDisplayMob.MobUINode.UpdateActionButtons(CompTurnManager.GetCurrentTurnTaker() as Mob);
                 break;
 
             case State.PAUSED:
@@ -151,7 +151,7 @@ public partial class BattleController
         if (TurnActionSelected != null)
         {
             //TODO: Owner cannot be null
-            TurnUsageParameters = new UsageParams(CompDelayManager.GetCurrentTurnTaker() as Mob, CompGrid, TurnActionSelected);
+            TurnUsageParameters = new UsageParams(CompTurnManager.GetCurrentTurnTaker() as Mob, CompGrid, TurnActionSelected);
             SetState(State.TARGETING);
         }
     }

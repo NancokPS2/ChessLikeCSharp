@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Shared.DebugDisplay;
 
 namespace ChessLike.Turn;
 
-public class TurnManager
+public partial class TurnManager
 {
     public delegate void TurnChangeHandler(ITurn who);
     public event TurnChangeHandler? TurnEnded;

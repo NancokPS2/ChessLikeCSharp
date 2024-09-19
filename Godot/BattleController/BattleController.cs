@@ -47,7 +47,7 @@ public partial class BattleController : Node
                 StateCurrent, 
                 TurnActionSelected != null ? TurnActionSelected.name : "null", 
                 CompGrid != null ? CompGrid.Boundary : "null",
-                (CompDelayManager.GetCurrentTurnTaker() as Mob) != null ? (CompDelayManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
+                (CompTurnManager.GetCurrentTurnTaker() as Mob) != null ? (CompTurnManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
                 PositionHovered,
                 CompCamera != null ? CompCamera.Rotation : "???"
                 }
