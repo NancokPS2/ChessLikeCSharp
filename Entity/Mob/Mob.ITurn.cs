@@ -8,8 +8,11 @@ namespace ChessLike.Entity;
 
 public partial class Mob : ITurn
 {
+    public event TurnManager.TurnChangeHandler TurnStarted;
+    
     public float DelayCurrent { get; set; }
     public float DelayToAddOnTurnEnd { get; set; }
+
 
     public float GetDelayBase()
     {

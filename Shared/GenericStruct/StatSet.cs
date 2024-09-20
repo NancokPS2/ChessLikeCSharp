@@ -7,6 +7,9 @@ using Godot;
 namespace ChessLike.Shared.GenericStruct;
 public class StatSet<StatEnum> where StatEnum : Enum
 {
+    public delegate void StatChange(StatEnum name, float amount);
+    public event StatChange StatValueChanged;
+
     Dictionary<StatEnum, ClampFloat> Contents {get; set;} = new();
 
 
@@ -34,7 +37,10 @@ public class StatSet<StatEnum> where StatEnum : Enum
 
     public void SetValue(StatEnum stat, float value)
     {
+        float original_val = Contents[stat].GetCurrent();
         Contents[stat].SetCurrent(value);
+
+        StatValueChanged?.Invoke(stat, value - original_val);
     }
 
     public void SetValuePercent(StatEnum stat, float percent)

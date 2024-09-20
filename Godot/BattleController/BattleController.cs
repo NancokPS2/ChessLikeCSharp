@@ -30,9 +30,20 @@ public partial class BattleController : Node
         ProcessStateInput();
         ProcessState(delta);
 
+        Testing();
+
     }
 
 
+    public void Testing()
+    {
+        if (Input.IsActionJustPressed("debug_draw"))
+        {
+            Mob mob = Global.ManagerMob.GetAll()[0];
+
+            mob.Stats.SetValue(StatName.HEALTH, mob.Stats.GetValue(StatName.HEALTH) + 5);
+        }
+    }
 
     public void UpdateDebugInformation()
     {

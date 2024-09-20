@@ -64,6 +64,7 @@ public partial class TestTurnManager : Node
 
 public class TurnTakerTest : ITurn
 {
+    public event TurnManager.TurnChangeHandler TurnStarted;
     public float DelayCurrent { get; set; }
     public float DelayToAddOnTurnEnd { get; set; }
 
@@ -75,6 +76,7 @@ public class TurnTakerTest : ITurn
         this.DelayDefault = def;
         this.Name = name;
     }
+
 
     public float GetDelayBase()
     {

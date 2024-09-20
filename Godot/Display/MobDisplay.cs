@@ -28,8 +28,9 @@ public partial class MobDisplay : Godot.Node3D
             return;
         }
 
-        MobDisplayComponent components = AddComponents(mob);
-        components.AddToDisplay(this);
+        MobDisplayComponent component = AddComponents(mob);
+        component.AddToDisplay(this);
+        SetupEvents(mob);
     }
 
     public void Add(List<Mob> mobs)

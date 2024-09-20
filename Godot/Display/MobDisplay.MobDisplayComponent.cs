@@ -9,13 +9,13 @@ namespace Godot.Display;
 
 public partial class MobDisplay : Godot.Node3D
 {
-    Dictionary<Mob, MobDisplayComponent> mob_components = new();
+    Dictionary<Mob, MobDisplayComponent> MobComponents = new();
 
     public MobDisplayComponent AddComponents(Mob mob)
     {
         //Components
         MobDisplayComponent components = new();
-        mob_components[mob] = components;
+        MobComponents[mob] = components;
 
         //Set component's values
         components.SetMesh( (Mesh)MeshPreset.MOB.Duplicate() );
@@ -26,21 +26,21 @@ public partial class MobDisplay : Godot.Node3D
 
     public void RemoveComponents(Mob mob)
     {
-        RemoveChild(mob_components[mob].mesh_instance);
-        RemoveChild(mob_components[mob].name_tag);
-        mob_components.Remove(mob);
+        RemoveChild(MobComponents[mob].mesh_instance);
+        RemoveChild(MobComponents[mob].name_tag);
+        MobComponents.Remove(mob);
     }
 
     public MobDisplayComponent GetComponents(Mob mob)
     {
-        return mob_components[mob];
+        return MobComponents[mob];
     }
 
     public void UpdateComponentPositions()
     {
         foreach (Mob mob in mobs)
         {
-            MobDisplayComponent components = mob_components[mob];
+            MobDisplayComponent components = MobComponents[mob];
             components.mesh_instance.Position = mob.Position.ToGVector3();
             components.name_tag.Position = mob.Position.ToGVector3() + Vector3.Up;
         }
@@ -66,6 +66,11 @@ public partial class MobDisplay : Godot.Node3D
         {
             mob_display.AddChild(name_tag);
             mob_display.AddChild(mesh_instance);
+        }
+
+        public Vector3 GetPositionGlobal()
+        {
+            return mesh_instance.GlobalPosition;
         }
 
     }
