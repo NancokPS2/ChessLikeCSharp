@@ -16,12 +16,13 @@ public partial class Job
 
         public override List<Job> CreatePrototypes()
         {
-            return new()
+            List<Job> output = new()
                 {
                     Job.Create(EJob.CIVILIAN),
                     Job.Create(EJob.WARRIOR),
                     Job.Create(EJob.WIZARD),
                 };
+            return output;
         }
         public override string GetPrototypeFolder()
         {
@@ -30,6 +31,11 @@ public partial class Job
                 "job"
             );
 
+        }
+
+        public Job GetFromEnum(EJob job)
+        {
+            return GetAll().First(x => x.Identifier == job);
         }
     }
 }

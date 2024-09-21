@@ -15,18 +15,25 @@ public partial class Action
     /// </summary>
     public class UsageParams
     {
-        public Mob owner;
-        public Grid grid;
-        public Action action_reference;
-        public Vector3i location_selected;
-        public List<Vector3i> locations_targeted = new();
-        public List<Mob> mob_targets = new();
+        public Mob OwnerRef;
+        public Grid GridRef;
+        public Action ActionRef;
+        /// <summary>
+        /// Positions that where selected during the targeting of this action
+        /// </summary>
+        /// <returns></returns>
+        public List<Vector3i> PositionsTargeted = new();
+        /// <summary>
+        /// Mobs found in the targeted locations or caught in the AoE and filtered afterwards to be deemed as valid to affect.
+        /// </summary>
+        /// <returns></returns>
+        public List<Mob> MobsTargeted = new();
 
         public UsageParams(Mob owner, Grid grid, Action action_reference)
         {
-            this.owner = owner;
-            this.grid = grid;
-            this.action_reference = action_reference;
+            this.OwnerRef = owner;
+            this.GridRef = grid;
+            this.ActionRef = action_reference;
             //this.location_selected = location_selected;
         }
     }

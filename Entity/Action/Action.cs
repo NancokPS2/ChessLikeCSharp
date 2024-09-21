@@ -3,6 +3,7 @@ using System.Diagnostics.Tracing;
 using System.Security.Cryptography.X509Certificates;
 using ChessLike.Entity;
 using ChessLike.Shared.Identification;
+using ChessLike.World;
 
 namespace ChessLike.Entity;
 
@@ -20,32 +21,25 @@ namespace ChessLike.Entity;
 public partial class Action : IGridReader
 {
 
+    //References
+    public Mob Owner;
+
     public string name = "Undefined Action";
     public EAction Identifier = EAction.PUNCH;
 
-    public EffectFilterParams FilterParams = new();
-    public TargetingParams TargetParams = new();
+    public FilterParameters FilterParams = new();
+    public TargetingParameters TargetParams = new();
     public List<Effect> EffectParams = new();
-
-
-    public virtual bool IsTargetingValid(UsageParams usage_params)
-    {
-        return true;
-    }
-
-    public List<Vector3i> GetLocationsTargeted(UsageParams usage_params)
-    {
-        return new List<Vector3i>();
-    }
 
     //TODO
     public virtual List<Mob> GetTargetsAffected(UsageParams usage_params)
     {
+        if (usage_params.PositionsTargeted.Count == 0){throw new Exception("Nothing has been targeted yet in these parameters.");}
+
         List<Mob> output = new();
-        Mob owner = usage_params.owner;
+        Mob owner = usage_params.OwnerRef;
 
-
-        foreach (Mob target in usage_params.mob_targets)
+        foreach (Mob target in usage_params.MobsTargeted)
         {
             bool valid = false;
             /* 
@@ -55,7 +49,7 @@ public partial class Action : IGridReader
                 goto decide;
             }
             */
-            if (FilterParams.AffectMob && !(target is Mob))
+            if (FilterParams.CanAffectMob && !(target is Mob))
             {
                 valid = false;
                 goto decide;

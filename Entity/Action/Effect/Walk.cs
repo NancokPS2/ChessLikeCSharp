@@ -2,17 +2,14 @@ namespace ChessLike.Entity;
 
 public partial class Action 
 {
-public partial class Effect
+    public class WalkEffect : Effect
     {
-        public class Walk : Effect
+        public override void CustomUse(UsageParams usage_params)
         {
-            public override void CustomUse(UsageParams usage_params)
-            {
-                Mob owner = usage_params.owner;
-                Vector3i target = usage_params.locations_targeted[0];
-                usage_params.owner.Position = usage_params.locations_targeted[0];
-            }
+            Mob owner = usage_params.OwnerRef;
+            Vector3i target = usage_params.PositionsTargeted[0];
+            usage_params.OwnerRef.Position = usage_params.PositionsTargeted[0];
         }
-
     }
+
 }

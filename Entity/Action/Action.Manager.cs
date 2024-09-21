@@ -13,12 +13,13 @@ public partial class Action
 
         public override List<Action> CreatePrototypes()
         {
-            return new()
+            List<Action> output = new()
             {
                 Action.Create(EAction.HEAL),
                 Action.Create(EAction.PUNCH),
-                Action.Create(EAction.WALK),
+                Action.Create(EAction.MOVE),
             };
+            return output;
         }
 
         public override string GetPrototypeFolder()
@@ -28,6 +29,11 @@ public partial class Action
                 "action"
             );
 
+        }
+
+        public Action GetFromEnum(EAction action)
+        {
+            return GetAll().First(x => x.Identifier == action);
         }
     }
 }

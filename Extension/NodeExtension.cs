@@ -11,9 +11,10 @@ public static class NodeExtension
 {
     public static void RemoveSelf(this Node @this)
     {
-        if (@this.GetParent() is not Node){GD.PushWarning("Cannot remove self, it is an orphan.");}
+        Node parent = @this.GetParent();
+        if (@parent is null){GD.PushWarning("Cannot remove self, it is an orphan."); return;}
 
-        @this.GetParent().RemoveChild(@this);
+        parent.RemoveChild(@this);
     }
 
     public static void FreeChildren(this Node @this)

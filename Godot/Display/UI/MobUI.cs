@@ -10,6 +10,7 @@ public partial class MobUI : CanvasLayer
     public delegate void ButtonPressed();
     public event ActionPressedEventHandler? ActionPressed;
     public event ButtonPressed? EndTurnPressed;
+    public event ButtonPressed? MovePressed;
 
     public const string SCENE_PATH = "res://assets/PackedScene/MobUI.tscn";
 
@@ -106,7 +107,7 @@ public partial class MobUI : CanvasLayer
         VBoxContainer container = this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER);
         container.FreeChildren();
         
-        foreach (ChessLike.Entity.Action action in mob.Actions)
+        foreach (ChessLike.Entity.Action action in mob.GetActions())
         {
             ActionButton button = new(action);
             container.AddChild(button);

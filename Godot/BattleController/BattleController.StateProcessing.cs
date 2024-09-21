@@ -1,6 +1,7 @@
 using ChessLike.Entity;
 using ChessLike.Extension;
 using ChessLike.Turn;
+using ChessLike.World;
 using static ChessLike.Entity.Action;
 
 namespace Godot;
@@ -61,6 +62,8 @@ public partial class BattleController
                 break;
 
             case State.TARGETING:
+                List<Vector3i> range_to_mark = InputActionSelected.TargetingGetPositionsInRange(TurnUsageParameters);
+                CompDisplayGrid.MeshSet(range_to_mark, GridNode.Layer.TARGETING, Global.Resources.GetMesh(Global.Resources.MeshIdent.PLANE));
                 break;
 
             case State.AWAITING_ACTION:
@@ -88,15 +91,28 @@ public partial class BattleController
         switch (StateCurrent)
         {
             case State.AWAITING_ACTION:
-                ProcessAwaitingActionState(delta);
+                //If an action was selected, pass to the TARGETING state.
+                if (InputActionSelected is not null)
+                {
+                    //TODO: Owner cannot be null
+                    TurnUsageParameters = new UsageParams(CompTurnManager.GetCurrentTurnTaker() as Mob, CompGrid, InputActionSelected);
+                    SetState(State.TARGETING);
+                }
                 UpdateCameraPosition(delta);
                 UpdateMobUI();
 
+                //If the button to end turn was pressed, swap to ENDING_TURN
                 if (InputEndTurnPressed > 0){SetState(State.ENDING_TURN); InputEndTurnPressed = 0;}
 
                 break;
 
             case State.TARGETING:
+                //If cancelled, return to awaiting action.
+                if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.CANCEL))
+                {
+                    InputActionSelected = null;
+                    SetState(State.AWAITING_ACTION);
+                }
                 UpdateCameraPosition(delta);
                 ProcessTargetingState(delta);
                 UpdateMobUI();
@@ -149,15 +165,6 @@ public partial class BattleController
         }
         
     }
-    public void ProcessAwaitingActionState(double delta)
-    {
-        if (TurnActionSelected != null)
-        {
-            //TODO: Owner cannot be null
-            TurnUsageParameters = new UsageParams(CompTurnManager.GetCurrentTurnTaker() as Mob, CompGrid, TurnActionSelected);
-            SetState(State.TARGETING);
-        }
-    }
 
     private Vector3i _last_position_selected = new Vector3i(1);
     public void ProcessTargetingState(double delta)
@@ -165,35 +172,14 @@ public partial class BattleController
         //Selected a new position.
         if (PositionHovered != _last_position_selected)
         {
-            ProcessTargetingUpdateSelectedPositionVisuals();
+            UpdateAoEVisuals();
             _last_position_selected = PositionHovered;
         }
     }
 
-    public void ProcessTargetingUpdateSelectedPositionVisuals()
+    public void UpdateAoEVisuals()
     {
-        CompDisplayGrid.MeshRemove(GridNode.Layer.TARGETING);
         CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
-
-        //Show targetable range.
-        foreach (Vector3i position in Targeter.GetSelectableCells(TurnUsageParameters))
-        {
-            CompDisplayGrid.MeshSet(
-                position,
-                GridNode.Layer.TARGETING, 
-                MESH_TARGETING
-                );
-        }
-
-        //Show AoE
-        foreach (Vector3i position in Targeter.GetTargetedAoE(PositionHovered, TurnUsageParameters))
-        {
-            CompDisplayGrid.MeshSet(
-                position, 
-                GridNode.Layer.TARGETING, 
-                MESH_AOE
-                );
-        }
     }
 
     const float MINIMUM_MOVEMENT_DELTA = 0.12f;

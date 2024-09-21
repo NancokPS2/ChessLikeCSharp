@@ -17,7 +17,7 @@ public partial class Job
             EJob.RANGER => output.ChainDefaultStats(),
             _ => output.ChainDefaultStats(),
         };
-        return output;
+        return output.ChainIdentifier(identity_enum);
     }
 
 public Job ChainDefaultStats()

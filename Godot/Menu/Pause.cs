@@ -5,7 +5,7 @@ using System;
 
 namespace Godot;
 
-public partial class Pause : Control
+public partial class Pause : CanvasLayer
 {
     public static List<NodeRequirement> NodesRequired { get; set; } = new()
 	{

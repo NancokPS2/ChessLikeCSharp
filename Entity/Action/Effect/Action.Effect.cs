@@ -23,8 +23,8 @@ public partial class Action
         public void Use(UsageParams usage_params)
         {
 
-            usage_params.owner.Stats.ChangeValue(StatName.HEALTH, health_cost);
-            usage_params.owner.Stats.ChangeValue(StatName.ENERGY, energy_cost);
+            usage_params.OwnerRef.Stats.ChangeValue(StatName.HEALTH, health_cost);
+            usage_params.OwnerRef.Stats.ChangeValue(StatName.ENERGY, energy_cost);
 
             CustomUse(usage_params);
         }

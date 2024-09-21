@@ -4,6 +4,6 @@ public enum EAction
 {
     PUNCH,
     HEAL,
-    WALK,
+    MOVE,
 
 }

@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "use the IFSM interface for the BattleController",
+                    "id": "py5vzmsp7iq8g7tdf6uzn20c"
+                },
+                {
                     "text": "System for constructing and gluing models togheter. For formign characters.\nSystem for randomizing terrain and its decorations.",
                     "id": "tdf1y9p7jsjr4jcfrkdc61fg"
                 },
@@ -36,8 +40,8 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "BattleController: implement the TurnManager",
-                    "id": "u983r06z6d1zzarl6e4amg4y"
+                    "text": "The functionality of the TARGETING state (seems to not be marking any cells when it should)",
+                    "id": "wlahq1er4zkzg3xe0om1ezw1"
                 },
                 {
                     "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it? (Replace with Grid.navigation???)\n- Improve cursor movement, base it on camera \n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states\n- TARGETING state still cannot select a possible location nor does it mark allowed locations.",
@@ -52,31 +56,12 @@
             "color": "#0693e3"
         },
         {
-            "title": "For Testing",
-            "tasks": [
-                {
-                    "text": "BattleController",
-                    "id": "es3dq7e8chsmp2dopdl3u1w8"
-                },
-                {
-                    "text": "Entity and Action system\n",
-                    "id": "fb2if3elfumejh6rxeiujopb"
-                },
-                {
-                    "text": "Action.Targeter (Needs controls for testing)",
-                    "id": "wniahjucn8ea7ot2cwopwey1"
-                },
-                {
-                    "text": "Dialogue parser",
-                    "id": "ycl543wqgo6v2b0evhf9slzf"
-                }
-            ],
-            "id": "a1y4n1leeqwynkc2n7vbad6k",
-            "color": "#f78da7"
-        },
-        {
             "title": "Bugs",
             "tasks": [
+                {
+                    "text": "Pause menu doesn't show up.",
+                    "id": "cfv3yhw4ivn1wbnfmr7emnhm"
+                },
                 {
                     "text": "Turn \"READY!\" popup does not come from the position of the owner.",
                     "id": "jkiy6t2nko5dqs0hhtkwax1v"
@@ -96,5 +81,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726885764529
+    "timestamp": 1726949268823
 }

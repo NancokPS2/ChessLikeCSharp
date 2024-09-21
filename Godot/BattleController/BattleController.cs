@@ -55,7 +55,7 @@ public partial class BattleController : Node, IDebugDisplay
             "Camera rotation: {5}",
             new object[]{
                 StateCurrent, 
-                TurnActionSelected != null ? TurnActionSelected.name : "null", 
+                InputActionSelected != null ? InputActionSelected.name : "null", 
                 CompGrid != null ? CompGrid.Boundary : "null",
                 (CompTurnManager.GetCurrentTurnTaker() as Mob) != null ? (CompTurnManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
                 PositionHovered,

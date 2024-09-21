@@ -31,10 +31,13 @@ public partial class BattleController
 
     public void SetupComponents()
     {
+        //Setup the mob display
         AddChild(CompDisplayMob);
         CompDisplayMob.Name = "MobDisplay";
+        //Connect it to the turn manager to handle turn-related display
         CompDisplayMob.ConnectToManager(CompTurnManager);
-        CompDisplayMob.MobUINode.ActionPressed += (act) => TurnActionSelected = act;
+        //Connect inputs from the action menu.
+        CompDisplayMob.MobUINode.ActionPressed += (act) => InputActionSelected = act;
         CompDisplayMob.MobUINode.EndTurnPressed += () => InputEndTurnPressed++;
 
         AddChild(CompDisplayGrid);

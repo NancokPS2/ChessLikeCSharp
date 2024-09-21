@@ -42,6 +42,26 @@ public partial class Grid
         return CellDictionary.Keys.ToArray();
     }
 
+    public List<Vector3i> GetShapeCube(Vector3i origin, int max_distance)
+    {
+        List<Vector3i> output = new();
+
+        int[] range = Enumerable.Range(-max_distance, max_distance*2+1).ToArray();
+
+        foreach (var x in range)
+        {
+            foreach (var z in range)
+            {
+                foreach (var y in range)
+                {
+                    Vector3i vector = new Vector3i(x,y,z) + origin;
+                    output.Add(vector);
+                }
+            }
+        }
+        return output;   
+    }
+
 /*     public Vector3i[] GetUsedPositionsInThisColumn(Vector3i pos_in_column)
     {
         List<Vector3i> output = new();
@@ -124,103 +144,6 @@ public partial class Grid
         return true;
     }
 
-    /// <summary>
-    /// Gets all cells within a certain distance as another.
-    /// </summary>
-    /// <param name="origin">From where to start checking.</param>
-    /// <param name="distance">How far from origin to reach.</param>
-    /// <param name="step_filters">
-    /// Called for every position checked, it returns wheter or not it can be in the final result.
-    /// Also if it is valid to keep searching from said location.
-    /// True = allow.
-    /// </param>
-    /// <returns></returns>
-    public List<Vector3i> GetFloodFill(Vector3i origin, int max_steps, List<Func<Vector3i,bool>>? step_filters = null)
-    {
-        
-        List<Vector3i> output = new();
-        List<Vector3i> to_expand = new(new Vector3i[]{origin});
-
-        while (!(to_expand.Count > 0))
-        {
-            Vector3i curr_position = to_expand.Last();
-            to_expand.Remove(curr_position);
-
-            //Skip if already in the output
-            if(output.Contains(curr_position)){continue;}
-
-            //Skip if too far from the start (Not necessarily wanted.)
-            //if(curr_position.DistanceManhattanTo(origin) > max_steps){continue;}
-
-            //Skip if the step filter returns false.
-            if(step_filters is not null)
-            {
-                foreach (Func<Vector3i,bool> filter in step_filters)
-                {
-                    if(!filter(curr_position)){goto skip;}
-                }
-
-            }
-
-            output.Add(curr_position);
-
-            foreach (Vector3i direction in Vector3i.DIRECTIONS)
-            {
-                Vector3i adj_position = direction + curr_position;
-
-                //Skip if already in the output
-                if(output.Contains(adj_position)){continue;}
-
-                to_expand.Add(adj_position);
-            }
-
-            skip:
-            continue;
-            
-        }
-        return output;
-    }
-/* 
-    public List<Vector3i> GetFloodFill(Vector3i start, int size, Func<Vector3i,bool>[]? filters = null)
-    {
-        filters ??= new[]{ this.filters.None};
-        
-        List<Vector3i> output = new();
-        List<Vector3i> to_expand = new(new Vector3i[]{start});
-
-        while (!(to_expand.Count > 0))
-        {
-            Vector3i curr_position = to_expand.Last();
-            to_expand.Remove(curr_position);
-
-            //Skip if already in the output
-            if(output.Contains(curr_position)){continue;}
-
-            //Skip if any of the filters returns false
-            if (filters.Any(x => !x(curr_position)))
-            {
-                continue;
-            }
-
-            //Skip if too far from the start
-            if(curr_position.DistanceManhattanTo(start) > size){continue;}
-
-            output.Add(curr_position);
-
-            foreach (Vector3i direction in Vector3i.DIRECTIONS)
-            {
-                Vector3i adj_position = direction + curr_position;
-
-                //Skip if already in the output
-                if(output.Contains(adj_position)){continue;}
-
-                to_expand.Add(adj_position);
-            }
-        }
-        return output;
-
-    }
- */
     public static class StepFilterPresets
     {
         public static bool Always(Vector3i vector)

@@ -38,6 +38,7 @@ public partial class BattleController
 
     //Misc inputs
     public int InputEndTurnPressed;
+    public Action? InputActionSelected;
 
     //Components
     public MobDisplay CompDisplayMob = new();
@@ -52,7 +53,6 @@ public partial class BattleController
     public Vector3i PositionSelected;
 
     //Current turn
-    public Action? TurnActionSelected;
     public Action.UsageParams? TurnUsageParameters;
 
     //Misc

@@ -33,38 +33,6 @@ public partial class GridNode : Node3D
 
     public bool InputEnable = true;
 
-
-    public override void _Ready()
-    {
-        base._Ready();
-
-        AddChild(DrawNode);
-        
-        DrawNode.Draw += () => DrawToNode(DrawNode);
-    }
-
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        DrawNode.QueueRedraw();
-        //SelectedCursorInstance.Position = PositionSelected.ToGVector3();
-
-    }
-
-    public void DrawToNode(CanvasItem item)
-    {
-        string text = "Collided selected pos: " + PositionCollidedSelected.ToString() + "\n" +
-        "Collided hovered pos: " + PositionCollidedHovered.ToString() + "\n" +
-        "Actual selected pos: " + PositionSelected.ToString() + "\n" +
-        "Actual hovered pos: " + PositionHovered.ToString();
-        item.DrawMultilineString(
-            new SystemFont(),
-            new(0,20),
-            text, 
-            HorizontalAlignment.Left,
-            300);
-    }
-
     public void SetGrid(Grid grid)
     {   
         this.grid = grid;
@@ -140,6 +108,14 @@ public partial class GridNode : Node3D
         }
     }
 
+    public void MeshSet(List<Vector3i> positions, Layer layer, Mesh? new_mesh)
+    {
+        foreach (var item in positions)
+        {
+            MeshSet(item, layer, new_mesh);
+        }
+    }
+
     public void MeshRemove(Vector3i position, Layer layer)
     {
         MeshSet(position, layer, null);
@@ -166,7 +142,7 @@ public partial class GridNode : Node3D
         }
     }
 
-    public void MeshClearExtra(Vector3i position)
+    public void MeshClearNonBase(Vector3i position)
     {
         foreach (Layer layer in ALL_LAYERS)
         {
@@ -189,12 +165,6 @@ public partial class GridNode : Node3D
             }
             instance.Position = position.ToGVector3();
         }
-    }
-
-
-    public void OnBodyInputEvent(Node camera, InputEvent input, Vector3 input_pos, Vector3 normal, long shape_idx)
-    {
-
     }
 
     public void OnCellInput(InputEvent input, Vector3i comp_position)

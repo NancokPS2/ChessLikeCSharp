@@ -8,10 +8,12 @@ public static partial class Global
         {
             DEFAULT,
             CELL,
+            PLANE,
         }
         static Dictionary<MeshIdent, string> MeshDict = new(){
             {MeshIdent.DEFAULT,"res://assets/test.tres"},
             {MeshIdent.CELL,"res://assets/test.tres"},
+            {MeshIdent.PLANE,"res://assets/Model/terrain/LowPlane.tres"},
         };
 
         public static Mesh GetMesh(MeshIdent identifier)

@@ -8,7 +8,7 @@ public partial class Mob : IStats<StatName>
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
     public string DisplayedName = "UNNAMED";
     public List<Job> Jobs = new();
-    public List<Action> Actions = new();
+    private List<Action> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory Inventory = new(5);
@@ -22,6 +22,25 @@ public partial class Mob : IStats<StatName>
         DisplayedName = new("Unknown Mcnown");
         //TODO: Move this somewhere else
         Global.ManagerMob.Add(this);
+    }
+
+    //TODO
+    private Action _movement;
+    public void SetMovementMode(EMovementMode mode)
+    {
+        Actions.Remove(_movement);
+
+        Global.ManagerAction.GetFromEnum(EAction.MOVE);
+    }
+
+    public void AddAction(Action action)
+    {
+        Actions.Add(action);
+        action.Owner = this;
+    }
+    public List<Action> GetActions()
+    {
+        return Actions;
     }
 
     private void UpdateJobs()
