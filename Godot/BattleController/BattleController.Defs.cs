@@ -36,6 +36,9 @@ public partial class BattleController
     public State StateCurrent = State.TAKING_TURN;
     public float StateTimeWithoutChange;
 
+    //Misc inputs
+    public int InputEndTurnPressed;
+
     //Components
     public MobDisplay CompDisplayMob = new();
     public GridNode CompDisplayGrid = new();
@@ -54,5 +57,4 @@ public partial class BattleController
 
     //Misc
     public Pause NodePauseMenu = new();
-    private Label debug_info_label = new();
 }

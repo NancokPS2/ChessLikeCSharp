@@ -1,6 +1,7 @@
 
 
 using ChessLike.Entity;
+using ChessLike.Shared.DebugDisplay;
 using ChessLike.World;
 using Godot.Display;
 
@@ -9,24 +10,22 @@ using Action = ChessLike.Entity.Action;
 namespace Godot;
 
 [GlobalClass]
-public partial class BattleController : Node
+public partial class BattleController : Node, IDebugDisplay
 {
     public override void _Ready()
     {
         base._Ready();
         Global.ConnectToWindow(GetWindow());
+        DebugDisplay.Instance.Add(this);
 
         SetupEncounter(EncounterData.GetDefault());
 
-        AddChild(debug_info_label);
         SetState(StateCurrent);
-        PrintTreePretty();
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        UpdateDebugInformation();
         ProcessStateInput();
         ProcessState(delta);
 
@@ -45,9 +44,9 @@ public partial class BattleController : Node
         }
     }
 
-    public void UpdateDebugInformation()
+    public string GetText()
     {
-        debug_info_label.Text = string.Format(
+        string output = string.Format(
             "State: {0}" + "\n" +
             "Action selected: {1}" + "\n" +
             "Grid size: {2}" + "\n" +
@@ -63,7 +62,8 @@ public partial class BattleController : Node
                 CompCamera != null ? CompCamera.Rotation : "???"
                 }
             
-            );
+        );
+        return output;
     }
 
 }

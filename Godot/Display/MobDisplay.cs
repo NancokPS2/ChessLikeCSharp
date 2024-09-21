@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using ChessLike.Turn;
 
 namespace Godot.Display;
 
@@ -30,7 +31,7 @@ public partial class MobDisplay : Godot.Node3D
 
         MobDisplayComponent component = AddComponents(mob);
         component.AddToDisplay(this);
-        SetupEvents(mob);
+        SetupEventsForMob(mob);
     }
 
     public void Add(List<Mob> mobs)
@@ -51,7 +52,7 @@ public partial class MobDisplay : Godot.Node3D
         }
     }
 
-    public void RemoveMob(Mob mob)
+    public void Remove(Mob mob)
     {
         RemoveComponents(mob);
         mobs.Remove(mob);

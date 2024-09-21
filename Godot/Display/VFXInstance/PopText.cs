@@ -92,7 +92,6 @@ public partial class PopText : Label3D
                     item += new Vector3(
                         rng.RandfRange(-DistanceVariation,DistanceVariation), rng.RandfRange(-DistanceVariation,DistanceVariation), rng.RandfRange(-DistanceVariation,DistanceVariation)
                         );   
-                    GD.Print(item);
                 }
                 tween.Chain();
                 Vector3 target_pos = GlobalPosition + GetTargetPosition();

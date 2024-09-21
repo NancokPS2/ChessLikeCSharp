@@ -78,6 +78,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Animation SHAKE_AT_END is not shaking :(",
+                    "id": "ukkuhb3u7rmv1btijf3pkei5"
+                },
+                {
                     "text": "Base turn delay is not properly calculated. There is no variation on delays despite Jobs being supposed to cause it.",
                     "id": "h6qes4uwenfdhaipek6hdvei"
                 }
@@ -88,5 +92,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726650576533
+    "timestamp": 1726794663216
 }

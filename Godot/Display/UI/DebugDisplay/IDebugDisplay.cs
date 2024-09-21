@@ -7,10 +7,10 @@ namespace ChessLike.Shared.DebugDisplay;
 
 public interface IDebugDisplay
 {
-    public string GetText()
+    public string GetText();
+
+    public string GetName()
     {
         return GetType().ToString();
     }
-
-    public string GetName();
 }

@@ -33,7 +33,9 @@ public partial class BattleController
     {
         AddChild(CompDisplayMob);
         CompDisplayMob.Name = "MobDisplay";
-        CompDisplayMob.MobUINode.ActionPressed += OnActionPressed;
+        CompDisplayMob.ConnectToManager(CompTurnManager);
+        CompDisplayMob.MobUINode.ActionPressed += (act) => TurnActionSelected = act;
+        CompDisplayMob.MobUINode.EndTurnPressed += () => InputEndTurnPressed++;
 
         AddChild(CompDisplayGrid);
         CompDisplayGrid.SetGrid(CompGrid);

@@ -9,14 +9,17 @@ namespace Godot.Display;
 
 public partial class MobDisplay
 {
-    public void SetupEvents(Mob mob)
+    public void SetupEventsForMob(Mob mob)
     {
         mob.Stats.StatValueChanged += (StatName stat, float amount) => 
             OnMobStatValueChanged(
                 MobComponents[mob], stat, amount
             );
-        
-        mob.TurnStarted += (ITurn who) => OnTurnStarted(MobComponents[mob]);
+       
+    }
+    public void ConnectToManager(TurnManager manager)
+    {
+        manager.TurnStarted += OnTurnStarted;
     }
 
     public void OnMobStatValueChanged(MobDisplayComponent comp, StatName stat, float amount)
@@ -36,9 +39,14 @@ public partial class MobDisplay
         GetTree().Root.AddChild(new PopText(amount.ToString(), Vector3.Up, color).SetAnimation(PopText.Animation.SHAKE_AT_END));
     }
 
-    public void OnTurnStarted(MobDisplayComponent comp)
+    public void OnTurnStarted(ITurn who)
     {
-        Vector3 global_pos = comp.GetPositionGlobal();
-        GetTree().Root.AddChild( new PopText("READY!").SetAnimation(PopText.Animation.SHAKE_AT_END));
+        if (who is Mob mob)
+        {
+            MobDisplayComponent component = MobComponents[mob];
+            Vector3 global_pos = component.GetPositionGlobal();
+            GetTree().Root.AddChild( new PopText("READY!").SetAnimation(PopText.Animation.SHAKE_AT_END));
+            
+        }
     }
 }

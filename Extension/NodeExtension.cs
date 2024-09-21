@@ -34,7 +34,6 @@ public static class NodeExtension
         {
             throw new Exception("Could not find some required nodes. >" + @this.GetChildren().ToString());
         } 
-        GD.Print(instantiated.GetChildren());
         return instantiated;
     }
 

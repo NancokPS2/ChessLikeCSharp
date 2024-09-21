@@ -91,6 +91,9 @@ public partial class BattleController
                 ProcessAwaitingActionState(delta);
                 UpdateCameraPosition(delta);
                 UpdateMobUI();
+
+                if (InputEndTurnPressed > 0){SetState(State.ENDING_TURN); InputEndTurnPressed = 0;}
+
                 break;
 
             case State.TARGETING:
@@ -223,7 +226,6 @@ public partial class BattleController
                 CompDisplayGrid.MeshRemove(GridNode.Layer.CURSOR);
                 PositionHovered += move;
                 CompDisplayGrid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
-                GD.Print(move.ToString());
             }else
             {
                 GD.PushError(string.Format("Position {0} out of bounds.", (move + PositionHovered).ToString()));

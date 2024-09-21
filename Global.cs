@@ -16,26 +16,22 @@ using Godot;
 public static partial class Global
 {
     private static Window RootNode = new Node().GetWindow();
-    private static Node2D DrawNode = new();
+    private static Node2D DrawNode = new(){TopLevel = true, ZIndex = 32};
     public static void ConnectToWindow(Window window)
     {
-        RootNode = window;
-        
         //Ignore if already done.
         if (window == RootNode)
         {
             return;
         }
-        //Disconnect existing ones.
-        if (RootNode is not null)
-        {
-            RootNode.WindowInput -= GInput.ParseMouseInputAsActionEvent;
-        }
+        RootNode = window;
+        
         if (!DrawNode.IsInsideTree())
         {
-            RootNode.AddChild(DrawNode);
-            DrawNode.Draw += WriteDebug;
+            RootNode.GetTree().CurrentScene.CallDeferred("add_child", DrawNode);
+            DrawNode.Name = "DEBUG_DRAWER";
         }
+        GD.Print(DrawNode.GetPath());
 
         RootNode.WindowInput += GInput.ParseMouseInputAsActionEvent;
         if (RootNode == null){throw new Exception("No window found.");}

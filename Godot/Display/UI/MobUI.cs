@@ -7,7 +7,9 @@ namespace Godot.Display;
 public partial class MobUI : CanvasLayer
 {
     public delegate void ActionPressedEventHandler(Action action);
+    public delegate void ButtonPressed();
     public event ActionPressedEventHandler? ActionPressed;
+    public event ButtonPressed? EndTurnPressed;
 
     public const string SCENE_PATH = "res://assets/PackedScene/MobUI.tscn";
 
@@ -55,6 +57,7 @@ public partial class MobUI : CanvasLayer
 
     public MobUI()
     {
+        Layer = -1;
     }
 
     private Mob? _owner_of_stats;
@@ -101,6 +104,7 @@ public partial class MobUI : CanvasLayer
     public void UpdateActionButtons(Mob mob)
     {
         VBoxContainer container = this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER);
+        container.FreeChildren();
         
         foreach (ChessLike.Entity.Action action in mob.Actions)
         {
@@ -111,6 +115,12 @@ public partial class MobUI : CanvasLayer
             Console.WriteLine(button.GetPath());
             button.Pressed += () => ActionPressed?.Invoke(action);
         }
+
+        //Button for ending turn.
+        Button end_turn = new();
+        end_turn.Pressed += () => EndTurnPressed.Invoke();
+        end_turn.Text = "End Turn";
+        container.AddChild(end_turn);
     }
 
     public void EnableActionButtons(bool enable)

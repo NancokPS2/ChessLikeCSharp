@@ -28,6 +28,9 @@ public partial class DebugDisplay : Node2D
         Menu.IdPressed += OnIdPressed;
         Instance = this;
         AddChild(Menu);
+
+        ZIndex = (int)RenderingServer.CanvasItemZMax;
+        TopLevel = true;
     }
 
     public void Add(IDebugDisplay source)
@@ -54,7 +57,6 @@ public partial class DebugDisplay : Node2D
     {
         base._Draw();
         if (SourceSelected is null) {return;}
-
         DrawMultilineString(FontDraw, Offset, SourceSelected.GetText());
     }
 
