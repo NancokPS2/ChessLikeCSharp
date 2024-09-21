@@ -50,7 +50,7 @@ public partial class MobDisplay : Godot.Node3D
     public class MobDisplayComponent
     {
         public MeshInstance3D mesh_instance = new();
-        public Label3D name_tag = new();
+        public Label3D name_tag = new(){Billboard = BaseMaterial3D.BillboardModeEnum.Enabled};
 
         public void SetMesh(Mesh mesh)
         {

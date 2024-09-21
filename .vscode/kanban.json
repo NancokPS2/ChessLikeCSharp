@@ -78,6 +78,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Turn \"READY!\" popup does not come from the position of the owner.",
+                    "id": "jkiy6t2nko5dqs0hhtkwax1v"
+                },
+                {
                     "text": "Animation SHAKE_AT_END is not shaking :(",
                     "id": "ukkuhb3u7rmv1btijf3pkei5"
                 },
@@ -92,5 +96,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726794663216
+    "timestamp": 1726885764529
 }

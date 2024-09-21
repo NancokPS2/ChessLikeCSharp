@@ -165,7 +165,7 @@ public partial class Camera : Camera3D
         //Distance
         pivot_distance += directional_input.Z * sensitivity_vertical * SENSITIVITY_MOD;
 
-        pivot_elevation = pivot_distance / 2;
+        pivot_elevation = pivot_distance;
 
 
         //Step on top of the pivot point
@@ -177,7 +177,7 @@ public partial class Camera : Camera3D
         //Move up
         GlobalPosition += Vector3.Up * pivot_elevation;
 
-        LookAt(pivot_point);
+        LookAt(pivot_point + Vector3.Up * 2);
 
     }
     
