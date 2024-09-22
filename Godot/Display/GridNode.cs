@@ -31,7 +31,7 @@ public partial class GridNode : Node3D
     public Vector3i PositionCollidedHovered;
     public Vector3i PositionHovered {get => PositionCollidedHovered + Vector3i.UP;}
 
-    public bool InputEnable = true;
+    public bool InputEnabled = true;
 
     public void SetGrid(Grid grid)
     {   
@@ -169,7 +169,7 @@ public partial class GridNode : Node3D
 
     public void OnCellInput(InputEvent input, Vector3i comp_position)
     {
-        if (!InputEnable){return;}
+        if (!InputEnabled){return;}
 
         if (input.IsPressed())
         {

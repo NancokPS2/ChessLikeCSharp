@@ -8,9 +8,9 @@ namespace ChessLike.Entity;
 public static partial class Prototypes
 {
     public static Dictionary<EJob, Job> Jobs = new(){
-        {EJob.CIVILIAN , Job.Create(EJob.CIVILIAN)},
-        {EJob.WARRIOR , Job.Create(EJob.WARRIOR)},
-        {EJob.WIZARD , Job.Create(EJob.WIZARD)},
+        {EJob.CIVILIAN , Job.CreatePrototype(EJob.CIVILIAN)},
+        {EJob.WARRIOR , Job.CreatePrototype(EJob.WARRIOR)},
+        {EJob.WIZARD , Job.CreatePrototype(EJob.WIZARD)},
     };
 
     public static Dictionary<EAction, Action> Actions = new(){
@@ -22,7 +22,7 @@ public static partial class Prototypes
     {
         foreach (var item in Enum.GetValues<EJob>())
         {
-            Jobs[item] = Job.Create(item);
+            Jobs[item] = Job.CreatePrototype(item);
         }
         
         foreach (var item in Enum.GetValues<EAction>())

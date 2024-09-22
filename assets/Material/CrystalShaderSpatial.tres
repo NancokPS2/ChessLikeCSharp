@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cbdklvuwn31q2"]
+
+[ext_resource type="Shader" path="res://assets/Shader/Crystal.gdshader" id="1_5ymki"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5ymki")
+shader_parameter/fresnel_intensity = 1.5
+shader_parameter/base_color = Vector3(1, 0, 0)

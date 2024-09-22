@@ -19,25 +19,17 @@ public partial class BattleController
             encounter.Grid = Grid.Generator.GenerateFlat(new(6));
             encounter.SpawnLocations = new(){Vector3i.ONE};
 
-            Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN_COMBATANT)
-                .ChainName("SomeoneGuess1")
-                .ChainJob(Global.ManagerJob.GetAll()[0])
-                .ChainResult();
+            Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN)
+                .ChainName("SomeoneGuess1");
                 
-            Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN_COMBATANT)
-                .ChainName("SomeoneGuess2")
-                .ChainJob(Global.ManagerJob.GetAll()[0])
-                .ChainResult();
+            Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
+                .ChainName("SomeoneGuess2");
 
-            Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN_COMBATANT)
-                .ChainName("SomeoneGuess3")
-                .ChainJob(Global.ManagerJob.GetAll()[1])
-                .ChainResult();
+            Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
+                .ChainName("SomeoneGuess3");
 
-            Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN_COMBATANT)
-                .ChainName("SomeoneGuess4")
-                .ChainJob(Global.ManagerJob.GetAll()[1])
-                .ChainResult();
+            Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
+                .ChainName("SomeoneGuess4");
 
             encounter.PresetMobSpawns = new()
             {

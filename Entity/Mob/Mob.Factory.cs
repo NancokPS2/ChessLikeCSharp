@@ -17,13 +17,30 @@ public partial class Mob
         Mob output = new();
         output = mob_template switch
         {
-            EMobPrototype.HUMAN_COMBATANT => new Mob()
-                .ChainName("Combatant")
-                .ChainJob(Global.ManagerJob.GetAll()[0])
-                .ChainResult(),
+            EMobPrototype.HUMAN => output
+                .ChainName("Human")
+                .ChainJob(Global.ManagerJob.GetFromEnum(EJob.DEFAULT))
+                .ChainAction(Global.ManagerAction.GetFromEnum(EAction.MOVE))
+                .ChainRace(ERace.HUMAN),
             _ => new Mob()
         };
         return output;
+    }
+
+    public Mob ChainBaseStats()
+    {
+        Stats.SetStat(StatName.HEALTH, 100);
+        Stats.SetStat(StatName.ENERGY, 30);
+        Stats.SetStat(StatName.AGILITY, 100);
+        Stats.SetStat(StatName.STRENGTH, 100);
+        Stats.SetStat(StatName.INTELLIGENCE, 100);
+        Stats.SetStat(StatName.MOVEMENT, 3);
+        if (Stats.GetValue(StatName.MOVEMENT) != 3)
+        {
+            throw new Exception("What!?");
+        }
+        Stats.SetStat(StatName.JUMP, 2);
+        return this;
     }
 
     public Mob ChainName(string name)
@@ -32,6 +49,23 @@ public partial class Mob
         return this;
     }
 
+    public Mob ChainMovementMode(EMovementMode mode)
+    {
+        MovementMode = mode;
+        return this;
+    }
+
+    public Mob ChainFaction(EFaction faction)
+    {
+        Faction = faction;
+        return this;
+    }
+
+    public Mob ChainState(EMobState state)
+    {
+        MobState = state;
+        return this;
+    }
 
     public Mob ChainJob(List<Job> jobs)
     {
@@ -41,6 +75,7 @@ public partial class Mob
         {
             Jobs.Add(job);
         }
+        UpdateJobs();
         return this;
     }
 
@@ -48,6 +83,13 @@ public partial class Mob
     {
         Jobs.Clear();
         Jobs.Add(job);
+        UpdateJobs();
+        return this;
+    }
+
+    public Mob ChainAction(Action action)
+    {
+        AddAction(action);
         return this;
     }
 
@@ -57,18 +99,9 @@ public partial class Mob
         return this;
     }
 
-    /// <summary>
-    /// Should be ran after the rest of the methods.
-    /// </summary>
-    /// <returns></returns>
-    public Mob ChainUpdate()
+    public Mob ChainRace(ERace race)
     {
-        UpdateJobs();
-        
+        Race = race;
         return this;
-    }
-    public Mob ChainResult()
-    {
-        return ChainUpdate();
     }
 }

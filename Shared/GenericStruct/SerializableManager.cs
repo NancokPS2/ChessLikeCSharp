@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
 using ChessLike.Shared.Serialization;
 
 namespace ChessLike.Shared.GenericStruct;
@@ -47,6 +48,13 @@ public class SerializableManager<TManaged> where TManaged : ISerializable
         foreach (TManaged item in prototypes)
         {
             Serializer.SaveAsXml(item, Path.Combine(GetPrototypeFolder(), item.GetFileName() + ".xml"));
+            if (item is Job job)
+            {
+                if (job.Stats.GetValue(StatName.MOVEMENT) != 5)
+                {
+                    throw new Exception("GOT IT");
+                }
+            }
         }
     }
 

@@ -33,9 +33,10 @@ public class ClampFloat
     /// <returns></returns>
     private List<string> types = new();
 
-    private float Max = 100;
-    private float Min = 0;
-    private float Current;
+    //These MUST be public to be serialized!
+    public float Max = 100;
+    public float Min = 0;
+    public float Current;
     
         // Summary:
         //     Changes Current by the amount and apply modifiers.

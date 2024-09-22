@@ -46,6 +46,7 @@ public partial class BattleController
     public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
     public TurnManager CompTurnManager = new();
     public Grid CompGrid;
+    public Pause CompPauseMenu = new();
 
     //Combat data
     public EncounterData Encounter;
@@ -56,5 +57,4 @@ public partial class BattleController
     public Action.UsageParams? TurnUsageParameters;
 
     //Misc
-    public Pause NodePauseMenu = new();
 }

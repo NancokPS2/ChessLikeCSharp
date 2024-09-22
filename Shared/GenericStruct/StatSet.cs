@@ -10,7 +10,7 @@ public class StatSet<StatEnum> where StatEnum : Enum
     public delegate void StatChange(StatEnum name, float amount);
     public event StatChange StatValueChanged;
 
-    Dictionary<StatEnum, ClampFloat> Contents {get; set;} = new();
+    public Dictionary<StatEnum, ClampFloat> Contents {get; set;} = new();
 
 
     public StatSet()

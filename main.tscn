@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1te4g7l74ot1"]
+[gd_scene load_steps=5 format=3 uid="uid://d1te4g7l74ot1"]
 
 [ext_resource type="Script" path="res://Godot/BattleController/BattleController.cs" id="1_n67st"]
+[ext_resource type="PackedScene" uid="uid://cmwdhr24j8kfl" path="res://assets/Model/Cursor.glb" id="2_2iswf"]
 
 [sub_resource type="Environment" id="Environment_wnu7r"]
+background_energy_multiplier = 0.5
+ambient_light_source = 3
 ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 1.84
+ambient_light_sky_contribution = 0.1
+ambient_light_energy = 0.2
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
@@ -22,3 +26,5 @@ mesh = SubResource("PrismMesh_1a52j")
 
 [node name="BattleController" type="Node" parent="."]
 script = ExtResource("1_n67st")
+
+[node name="Cursor" parent="." instance=ExtResource("2_2iswf")]

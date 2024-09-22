@@ -20,7 +20,7 @@ public partial class GridNode : Node3D
 
             if (!cell.flags.Contains(CellFlag.AIR))
             {
-                mesh_instances[Layer.BASE].Mesh = new BoxMesh();
+                mesh_instances[Layer.BASE].Mesh = Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL);
             }
         }
     }

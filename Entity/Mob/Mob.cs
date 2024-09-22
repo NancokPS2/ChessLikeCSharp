@@ -1,4 +1,5 @@
 using ChessLike.Turn;
+using ExtendedXmlSerializer.ExtensionModel.Content;
 
 namespace ChessLike.Entity;
 
@@ -7,13 +8,15 @@ public partial class Mob : IStats<StatName>
 {
     static Dictionary<Vector3i, Mob> MobToLocationDict = new();
     public string DisplayedName = "UNNAMED";
-    public List<Job> Jobs = new();
+    public List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
     private List<Action> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory Inventory = new(5);
     public EMovementMode MovementMode = EMovementMode.WALK;
     public EMobState MobState = EMobState.BENCHED;
+    public StatSet<StatName> Stats { get; set; } = new(){
+    };
 
     public Vector3i Position;
 
@@ -38,6 +41,20 @@ public partial class Mob : IStats<StatName>
         Actions.Add(action);
         action.Owner = this;
     }
+
+    public void RemoveAction(EAction action_enum, bool all = true)
+    {
+        if (all)
+        {
+            Actions.RemoveAll(x => x.Identifier == action_enum);
+        }
+        else
+        {
+            Actions.Remove( Actions.First(x => x.Identifier == action_enum) );
+        }
+
+    }
+
     public List<Action> GetActions()
     {
         return Actions;
@@ -45,8 +62,14 @@ public partial class Mob : IStats<StatName>
 
     private void UpdateJobs()
     {
-        //Reset stats and add update them.
-        Stats = new();
+        if (Jobs.Count == 0)
+        {
+            throw new Exception("No jobs defined.");
+        }
+
+        //Reset stats and update them.
+        Stats = Jobs.First().Stats;
+
         foreach (Job job in Jobs)
         {
             //Average the stats from the job's.

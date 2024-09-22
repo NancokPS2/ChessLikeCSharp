@@ -7,11 +7,12 @@ namespace ChessLike.Entity;
 
 public partial class Job
 {
-    public static Job Create(EJob identity_enum)
+    public static Job CreatePrototype(EJob identity_enum)
     {
         Job output = new();
         output = identity_enum switch
         {
+            EJob.DEFAULT => output.ChainDefaultStats(),
             EJob.WARRIOR => output.ChainDefaultStats().ChainWarrior(),
             EJob.WIZARD => output.ChainDefaultStats().ChainWizard(),
             EJob.RANGER => output.ChainDefaultStats(),

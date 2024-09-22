@@ -35,7 +35,7 @@ public partial class BattleController
                 break;
 
             case State.PAUSED:
-                NodePauseMenu.RemoveSelf();
+                CompPauseMenu.RemoveSelf();
                 CompCamera.SetControl(true);
                 break;
 
@@ -63,7 +63,11 @@ public partial class BattleController
 
             case State.TARGETING:
                 List<Vector3i> range_to_mark = InputActionSelected.TargetingGetPositionsInRange(TurnUsageParameters);
+
+                GD.Print(range_to_mark.ToArray());
+
                 CompDisplayGrid.MeshSet(range_to_mark, GridNode.Layer.TARGETING, Global.Resources.GetMesh(Global.Resources.MeshIdent.PLANE));
+
                 break;
 
             case State.AWAITING_ACTION:
@@ -75,7 +79,10 @@ public partial class BattleController
             case State.PAUSED:
                 StatePrePause = state_exited;
                 CompCamera.SetControl(false);
-                NodePauseMenu.AddSceneWithDeclarations(Pause.SCENE_PATH, Pause.NodesRequired);
+                CompPauseMenu.AddSceneWithDeclarations(
+                    Pause.SCENE_PATH,
+                    Pause.NodesRequired
+                    );
                 break;
 
             default:
@@ -107,7 +114,7 @@ public partial class BattleController
                 break;
 
             case State.TARGETING:
-                //If cancelled, return to awaiting action.
+                //If cancelled, return to AWAITING_ACTION.
                 if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.CANCEL))
                 {
                     InputActionSelected = null;
@@ -187,13 +194,17 @@ public partial class BattleController
     public void UpdateCursorMovement()
     {
         //Decide between mouse based input and key input.
-        if (CompDisplayGrid.InputEnable)
+        if (CompDisplayGrid.InputEnabled)
         {
             if (!CompGrid.IsPositionInbounds(CompDisplayGrid.PositionHovered)){return;}
 
             PositionHovered = CompDisplayGrid.PositionHovered;
             CompDisplayGrid.MeshRemove(GridNode.Layer.CURSOR);
-            CompDisplayGrid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
+            CompDisplayGrid.MeshSet(
+                PositionHovered, 
+                GridNode.Layer.CURSOR, 
+                Global.Resources.GetMesh(Global.Resources.MeshIdent.CURSOR)
+                );
         }
         else
         {

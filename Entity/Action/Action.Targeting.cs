@@ -22,6 +22,7 @@ public partial class Action
 
         //Validate positions
         output = output.Where( x => TargetingIsValidTargetPosition(usage_params, x)).ToList();
+        output = output.Where( x => grid.IsPositionInbounds(x)).ToList();
 
         return output;
     }

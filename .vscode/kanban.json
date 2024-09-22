@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Improve on mob creation with better ways to make presets. in Mob.Factory.cs",
+                    "id": "i6657oywjnplc9y71k1kcllh"
+                },
+                {
                     "text": "use the IFSM interface for the BattleController",
                     "id": "py5vzmsp7iq8g7tdf6uzn20c"
                 },
@@ -81,5 +85,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1726949268823
+    "timestamp": 1727027723707
 }

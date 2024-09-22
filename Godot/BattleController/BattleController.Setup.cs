@@ -47,6 +47,9 @@ public partial class BattleController
         AddChild(CompCamera);
         CompCamera.Name = "Camera";
 
+        AddChild(CompPauseMenu);
+        
+
         DebugDisplay.Instance.Add(CompTurnManager);
     }
 
