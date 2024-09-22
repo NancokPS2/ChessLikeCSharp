@@ -15,6 +15,14 @@ public partial class Action
         Vector3i origin = usage_params.OwnerRef.GetPosition();
         Grid grid = usage_params.GridRef;
         List<Vector3i> output = new();
+
+        //If it uses pathing, just query that directly and move on.
+        if (TargetParams.RespectsOwnerPathing)
+        {
+            output = grid.NavGetPathablePositions(Owner);
+            return output;
+        }
+
         int max_range = TargetParams.GetTotalRange(Owner);
 
         //Get general area for performance reasons.
@@ -22,7 +30,7 @@ public partial class Action
 
         //Validate positions
         output = output.Where( x => TargetingIsValidTargetPosition(usage_params, x)).ToList();
-        output = output.Where( x => grid.IsPositionInbounds(x)).ToList();
+        output = output.Where(grid.IsPositionInbounds).ToList();
 
         return output;
     }

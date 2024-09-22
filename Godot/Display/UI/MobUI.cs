@@ -112,7 +112,7 @@ public partial class MobUI : CanvasLayer
             ActionButton button = new(action);
             container.AddChild(button);
 
-            button.Text = action.name;
+            button.Text = action.Name;
             Console.WriteLine(button.GetPath());
             button.Pressed += () => ActionPressed?.Invoke(action);
         }
@@ -179,7 +179,7 @@ public partial class MobUI : CanvasLayer
         public ActionButton(Action action)
         {
             this.action = action;
-            Text = action.name;
+            Text = action.Name;
         }
     }
 

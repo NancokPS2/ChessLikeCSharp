@@ -16,22 +16,30 @@ public partial class Action
         output = identity_enum switch
         {
             EAction.PUNCH => output
-                .ChainEffectDamageHealth(StatName.STRENGTH, 0.5f)
-                .ChainIdentifier(EAction.PUNCH),
+                .ChainName("Punch")
+                .ChainEffectDamageHealth(StatName.STRENGTH, 0.5f),
             EAction.HEAL => output
-                .ChainEffectHealPrecentage(0.25f)
-                .ChainIdentifier(EAction.HEAL),
+                .ChainName("Heal")
+                .ChainEffectHealPrecentage(0.25f),
             EAction.MOVE => output
-                .ChainEffectMove()
-                .ChainIdentifier(EAction.MOVE),
+                .ChainName("Move")
+                .ChainEffectMove(),
             _ => throw new Exception("Non existent enum value."),
         };
+
+        output.ChainIdentifier(identity_enum);
         return output;
         
     }
     public Action ChainIdentifier(EAction identifier)
     {
         Identifier = identifier;
+        return this;
+    }
+
+    public Action ChainName(string name)
+    {
+        Name = name;
         return this;
     }
     
@@ -66,6 +74,7 @@ public partial class Action
         TargetParams.TargetingRangeStatBonus = StatName.MOVEMENT;
         TargetParams.TargetingRange = 0;
         TargetParams.NeededVacancy = TargetingParameters.VacancyStatus.HAS_NO_MOB;
+        TargetParams.RespectsOwnerPathing = true;
 
         FilterParams.CanAffectMob = false;
 

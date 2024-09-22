@@ -22,6 +22,7 @@ public partial class Action
         public StatName? TargetingRangeStatBonus;
         //Only works if there is a mob being hit that was deemed as valid.
         public VacancyStatus NeededVacancy = VacancyStatus.HAS_MOB;
+        public bool RespectsOwnerPathing = false;
 
 
         //AoE

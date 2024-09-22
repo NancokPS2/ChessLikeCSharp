@@ -24,7 +24,7 @@ public partial class Action : IGridReader
     //References
     public Mob Owner;
 
-    public string name = "Undefined Action";
+    public string Name = "Undefined Action";
     public EAction Identifier = EAction.PUNCH;
 
     public FilterParameters FilterParams = new();

@@ -5,12 +5,8 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Improve on mob creation with better ways to make presets. in Mob.Factory.cs",
-                    "id": "i6657oywjnplc9y71k1kcllh"
-                },
-                {
-                    "text": "use the IFSM interface for the BattleController",
-                    "id": "py5vzmsp7iq8g7tdf6uzn20c"
+                    "text": "Improve models for showing the currently targeted cell and cells affected by AoE. Probably touch the lighting too.",
+                    "id": "iap2u1isrdufbcr4nb3hczp6"
                 },
                 {
                     "text": "System for constructing and gluing models togheter. For formign characters.\nSystem for randomizing terrain and its decorations.",
@@ -44,8 +40,8 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "The functionality of the TARGETING state (seems to not be marking any cells when it should)",
-                    "id": "wlahq1er4zkzg3xe0om1ezw1"
+                    "text": "TARGETING state mostly complete. Needs a way to confirm the use of an Action and call its Use() method.",
+                    "id": "hgvs6kr90qwyiwu5nvbrdz84"
                 },
                 {
                     "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it? (Replace with Grid.navigation???)\n- Improve cursor movement, base it on camera \n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states\n- TARGETING state still cannot select a possible location nor does it mark allowed locations.",
@@ -85,5 +81,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1727027723707
+    "timestamp": 1727031822112
 }
