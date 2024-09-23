@@ -9,11 +9,13 @@ using Action = ChessLike.Entity.Action;
 
 namespace Godot;
 
-public class BattleControllerState : IFSMState<BattleController>
+public class BattleControllerStateAwaitingAction : BattleControllerState
 {
-    public BattleController User { get; set; }
+    public BattleControllerStateAwaitingAction(BattleController.State identifier) : base(identifier)
+    {
+    }
 
-    public void StateOnEnter()
+    public override void StateOnEnter()
     {
         MobDisplay display_mob = User.CompDisplayMob;
         TurnManager turn_manager = User.CompTurnManager;
@@ -23,14 +25,21 @@ public class BattleControllerState : IFSMState<BattleController>
         display_mob.MobUINode.UpdateActionButtons(turn_manager.GetCurrentTurnTaker() as Mob);
     }
 
-    public void StateOnExit()
+    public override void StateOnExit()
     {
         User.CompDisplayMob.MobUINode.EnableActionButtons(false);
     }
 
-    public void StateProcess(double delta)
+    public override void StateProcess(double delta)
     {
-                        //If an action was selected, pass to the TARGETING state.
+
+        if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
+        {
+            User.FSMSetState(BattleController.State.PAUSED);
+        }
+        User.UpdateCursorMovement();
+
+        //If an action was selected, pass to the TARGETING state.
         if (User.InputActionSelected is not null)
         {
             //TODO: Owner cannot be null
@@ -39,7 +48,7 @@ public class BattleControllerState : IFSMState<BattleController>
                 User.CompGrid, 
                 User.InputActionSelected
                 );
-            User.SetState(BattleController.State.TARGETING);
+            User.FSMSetState(BattleController.State.TARGETING);
         }
         User.UpdateCameraPosition(delta);
         User.UpdateMobUI();
@@ -47,7 +56,7 @@ public class BattleControllerState : IFSMState<BattleController>
         //If the button to end turn was pressed, swap to ENDING_TURN
         if (User.InputEndTurnPressed > 0)
         {
-            User.SetState(BattleController.State.ENDING_TURN); 
+            User.FSMSetState(BattleController.State.ENDING_TURN); 
             User.InputEndTurnPressed = 0;
         }
     }

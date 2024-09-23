@@ -33,7 +33,6 @@ public partial class BattleController
 
     //State-machine-related
     private State? StatePrePause;
-    public State StateCurrent = State.TAKING_TURN;
     public float StateTimeWithoutChange;
 
     //Misc inputs

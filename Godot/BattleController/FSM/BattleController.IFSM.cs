@@ -5,26 +5,68 @@ using System.Threading.Tasks;
 
 namespace Godot;
 
-public partial class BattleController// : IFSM<BattleController>
+public partial class BattleController
 {
-    public List<IFSMState<BattleController>> StateList { get; set; } = new()
+    public enum State
     {
+        INVALID,
+        PAUSED,
+        TAKING_TURN,
+        ENDING_TURN,
+        AWAITING_ACTION,
+        TARGETING,
+    }
 
+    public List<BattleControllerState> StateList { get; set; } = new()
+    {
+        new BattleControllerStatePaused(State.PAUSED),
+        new BattleControllerStateTakingTurn(State.TAKING_TURN),
+        new BattleControllerStateEndingTurn(State.ENDING_TURN),
+        new BattleControllerStateTargeting(State.TARGETING),
+        new BattleControllerStateAwaitingAction(State.AWAITING_ACTION),
     };
+
+    private BattleControllerState _queued_state;
     public float ProcessDelta { get; set; }
-    public IFSMState<BattleController> StateCurrentUNUSED { get; set; }
+    public BattleControllerState StateCurrent { get; set; }
 
     public void FSMSetup()
     {
-        StateCurrentUNUSED = StateList[0];
         foreach (var item in StateList)
         {
             item.User = this;
         }
+        FSMSetState(State.TAKING_TURN);
     }
 
+    public void FSMSetState(BattleControllerState state)
+    {
+        _queued_state = state;
+    }
+    public void FSMSetState(State state)
+    {
+        FSMSetState(StateList.First(x => x.StateIdentifier == state));
+    }
+
+    public BattleControllerState StatePrevious;
     public void FSMProcess(double delta)
     {
-        StateCurrentUNUSED.StateProcess(delta);
+        if (StateCurrent != _queued_state)
+        {
+            StatePrevious = StateCurrent;
+            StateCurrent = _queued_state;
+            if (!StateList.Contains(StateCurrent)) {throw new Exception("This state is not in the list.");}
+
+            if (StatePrevious is BattleControllerState not_null)
+            {
+                not_null.StateOnExit();
+            }
+            StateCurrent.StateOnEnter();
+            StateTimeWithoutChange = 0;
+        }
+
+        StateTimeWithoutChange += (float)delta;
+
+        StateCurrent.StateProcess(delta);
     }
 }
