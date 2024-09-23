@@ -25,7 +25,8 @@ public Job ChainDefaultStats()
     {
         Stats.SetStat(StatName.HEALTH, 100);
         Stats.SetStat(StatName.ENERGY, 40);
-        Stats.SetStat(StatName.MOVEMENT, 5);
+        Stats.SetStat(StatName.MOVEMENT, 3);
+        Stats.SetStat(StatName.JUMP, 2);
         Stats.SetStat(StatName.DELAY, 100);
         Stats.SetStat(StatName.STRENGTH, 100);
         Stats.SetStat(StatName.AGILITY, 100);
