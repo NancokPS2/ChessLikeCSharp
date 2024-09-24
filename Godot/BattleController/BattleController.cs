@@ -25,7 +25,7 @@ public partial class BattleController : Node, IDebugDisplay
         SetupEncounter(EncounterData.GetDefault());
         //FSMSetState(State.TAKING_TURN);
 
-        _ready_for_debug = true;
+        SetDeferred("_ready_for_debug", true);
 
     }
 
@@ -58,19 +58,18 @@ public partial class BattleController : Node, IDebugDisplay
             "State: {0}" + "\n" +
             "Action selected: {1}" + "\n" +
             "Grid size: {2}" + "\n" +
-            "Unit selected: {3}" + "\n" +
+            "Mob taking turn: {3}" + "\n" +
             "Location selected: {4}" + "\n" + 
             "Camera rotation: {5}" + "\n" +
-            "Unit taking turn: {6}"
+            "space for rent"
             ,
             new object[]{
                 StateCurrent is not null ? StateCurrent.StateIdentifier : "null", 
                 InputActionSelected is not null ? InputActionSelected.Name : "null", 
                 CompGrid != null ? CompGrid.Boundary : "null",
-                (CompTurnManager.GetCurrentTurnTaker() as Mob) != null ? (CompTurnManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
+                CompTurnManager.GetCurrentTurnTaker() as Mob is Mob ? (CompTurnManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
                 PositionHovered,
                 CompCamera != null ? CompCamera.Rotation : "???",
-                CompTurnManager is not null ? CompTurnManager.GetCurrentTurnTaker() : "null",
                 }
             
         );
