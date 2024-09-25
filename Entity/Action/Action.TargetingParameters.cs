@@ -18,8 +18,9 @@ public partial class Action
 
         //Targeting
         //Distance from the user at which this can be used.
-        public int TargetingRange = 4;
+        public uint TargetingRange = 4;
         public StatName? TargetingRangeStatBonus;
+        public int MaxTargetedPositions = 1;
         //Only works if there is a mob being hit that was deemed as valid.
         public VacancyStatus NeededVacancy = VacancyStatus.HAS_MOB;
         public bool RespectsOwnerPathing = false;
@@ -36,14 +37,14 @@ public partial class Action
         }
         public AoEMode AoeShape = AoEMode.SINGLE;
         //Area when in SINGLE mode.
-        public int AoERange = 0;
+        public uint AoERange = 0;
 
-        public int GetTotalRange(Mob owner)
+        public uint GetTotalRange(Mob owner)
         {
-            int output = TargetingRange;
+            uint output = TargetingRange;
             if (TargetingRangeStatBonus is StatName stat)
             {
-                output += (int)owner.Stats.GetValue(stat);
+                output += (uint)owner.Stats.GetValue(stat);
             }
             return output;
         }

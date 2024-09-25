@@ -11,10 +11,12 @@ namespace Godot;
 
 public class BattleControllerStateTargeting : BattleControllerState
 {
+    private List<Vector3i> _last_param_positions = new();
+
     public BattleControllerStateTargeting(BattleController.State identifier) : base(identifier)
     {
     }
-
+    
     public override void StateOnEnter()
     {
         List<Vector3i> range_to_mark = User.InputActionSelected.TargetingGetPositionsInRange(User.TurnUsageParameters);
@@ -32,6 +34,11 @@ public class BattleControllerStateTargeting : BattleControllerState
     {
         User.CompDisplayGrid.MeshRemove(GridNode.Layer.TARGETING);
         User.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
+        
+        User.PositionSelected = Vector3i.INVALID;
+        User.TurnUsageParameters.PositionsTargeted = new();
+        User.InputActionSelected = null;
+        _last_param_positions = new();
     }
 
     public override void StateProcess(double delta)
@@ -40,16 +47,57 @@ public class BattleControllerStateTargeting : BattleControllerState
         {
             User.FSMSetState(BattleController.State.PAUSED);
         }
-        User.UpdateCursorMovement();
 
-        //If cancelled, return to AWAITING_ACTION.
+        //Handle AoE displaying when changing the targeted positions.
+        if (User.TurnUsageParameters.PositionsTargeted.Count != 0 && User.TurnUsageParameters.PositionsTargeted != _last_param_positions)
+        {
+            UpdateAoEVisuals();
+            _last_param_positions = User.TurnUsageParameters.PositionsTargeted;
+        }
+
+        User.UpdateCursorMovement();
         User.UpdateCameraPosition(delta);
-        User.ProcessTargetingState(delta);
         User.UpdateMobUI();
+
+        //If CANCEL pressed, return to AWAITING_ACTION.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.CANCEL))
         {
-            User.InputActionSelected = null;
             User.FSMSetState(BattleController.State.AWAITING_ACTION);
+        }
+        //If ACCEPT pressed, select the position.
+        if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.ACCEPT))
+        {
+            //If can still select positions, do so.
+            if (User.TurnUsageParameters.PositionsTargeted.Count < User.InputActionSelected.TargetParams.MaxTargetedPositions)
+            {
+                User.TurnUsageParameters.PositionsTargeted.Add(User.PositionHovered);
+            }
+            //If all positions where selected, use the action when pressed again on a selected position.
+            else if (User.TurnUsageParameters.PositionsTargeted.Contains(User.PositionHovered))
+            {
+                User.InputActionSelected.Use(User.TurnUsageParameters);
+                User.FSMSetState(BattleController.State.AWAITING_ACTION);
+            }
+
+        }
+    }
+
+
+    private void UpdateAoEVisuals()
+    {
+        if (User.TurnUsageParameters.PositionsTargeted.Count != 0)
+        {
+            List<Vector3i> aoe_marks = User.InputActionSelected.TargetingGetPositionsInAoE(User.TurnUsageParameters);
+
+            User.CompDisplayGrid.MeshSet(
+                aoe_marks, 
+                GridNode.Layer.AOE, 
+                Global.Resources.GetMesh(Global.Resources.MeshIdent.TARGETING_AOE)
+                );
+        }
+        else
+        {
+            User.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
         }
     }
 }

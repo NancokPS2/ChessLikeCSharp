@@ -40,10 +40,10 @@ public partial class Action : IGridObject
         }
         
         //Targeting range check
-        int max_range = TargetParams.TargetingRange;
+        uint max_range = TargetParams.TargetingRange;
         if (TargetParams.TargetingRangeStatBonus is StatName stat)
         {
-            max_range += (int)Owner.Stats.GetValue(stat);
+            max_range += (uint)Owner.Stats.GetValue(stat);
         }
         if(position.DistanceManhattanTo(GetPosition()) > max_range){return false;}
 

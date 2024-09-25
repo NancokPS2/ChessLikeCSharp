@@ -8,21 +8,6 @@ namespace Godot;
 
 public partial class BattleController
 {
-    private Vector3i _last_position_selected = new Vector3i(1);
-    public void ProcessTargetingState(double delta)
-    {
-        //Selected a new position.
-        if (PositionHovered != _last_position_selected)
-        {
-            UpdateAoEVisuals();
-            _last_position_selected = PositionHovered;
-        }
-    }
-
-    public void UpdateAoEVisuals()
-    {
-        CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
-    }
 
     const float MINIMUM_MOVEMENT_DELTA = 0.12f;
     private float _last_movement_time;
@@ -57,7 +42,7 @@ public partial class BattleController
             {
                 CompDisplayGrid.MeshRemove(GridNode.Layer.CURSOR);
                 PositionHovered += move;
-                CompDisplayGrid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, MESH_CURSOR);
+                CompDisplayGrid.MeshSet(PositionHovered, GridNode.Layer.CURSOR, Global.Resources.GetMesh(Global.Resources.MeshIdent.CURSOR));
             }else
             {
                 GD.PushError(string.Format("Position {0} out of bounds.", (move + PositionHovered).ToString()));

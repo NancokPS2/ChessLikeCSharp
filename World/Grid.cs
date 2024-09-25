@@ -42,11 +42,11 @@ public partial class Grid
         return CellDictionary.Keys.ToArray();
     }
 
-    public List<Vector3i> GetShapeCube(Vector3i origin, int max_distance)
+    public List<Vector3i> GetShapeCube(Vector3i origin, uint max_distance)
     {
         List<Vector3i> output = new();
 
-        int[] range = Enumerable.Range(-max_distance, max_distance*2+1).ToArray();
+        int[] range = Enumerable.Range((int)-max_distance, (int)max_distance*2+1).ToArray();
 
         foreach (var x in range)
         {
@@ -59,6 +59,7 @@ public partial class Grid
                 }
             }
         }
+        output = output.Where(x => IsPositionInbounds(x)).ToList();
         return output;   
     }
 

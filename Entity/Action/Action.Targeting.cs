@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.World;
+using Godot;
 
 namespace ChessLike.Entity;
 
@@ -23,33 +24,41 @@ public partial class Action
             return output;
         }
 
-        int max_range = TargetParams.GetTotalRange(Owner);
+        uint max_range = TargetParams.GetTotalRange(Owner);
 
         //Get general area for performance reasons.
         output = grid.GetShapeCube(origin, max_range);
 
         //Validate positions
-        output = output.Where( x => TargetingIsValidTargetPosition(usage_params, x)).ToList();
-        output = output.Where(grid.IsPositionInbounds).ToList();
+        output = output.Where( x => TargetingIsValidTargetPosition(usage_params, x, false)).ToList();
 
         return output;
     }
 
-    public List<Vector3i> TargetingGetPositionsInAoE(UsageParams usage_params, Vector3i position)
+    public List<Vector3i> TargetingGetPositionsInAoE(UsageParams usage_params)
     {
-        Vector3i origin = position;
-        Grid grid = usage_params.GridRef;
+        if (usage_params.PositionsTargeted.Count == 0) {throw new Exception("No position to use AoE in.");}
+
         List<Vector3i> output = new();
-        int max_range = TargetParams.GetTotalRange(Owner);
 
-        output = grid.GetShapeCube(origin, max_range);
+        foreach (var item in usage_params.PositionsTargeted)
+        {    
+            Vector3i origin = item;
+            Grid grid = usage_params.GridRef;
 
-        output = output.Where( x => TargetingIsValidTargetPosition(usage_params, x)).ToList();
+            //Range is dictated by AoERange
+            uint max_range = TargetParams.AoERange;
+
+            output = grid.GetShapeCube(origin, max_range);
+        }
+
+        output = output.Where( x => TargetingIsValidTargetPosition(usage_params, x, true)).ToList();
+        if (output.Count == 0) {GD.PushWarning("Action's AoE is empty. Could not target here. Maybe tweak its TargetingParams.");}//throw new Exception("Nothing to select?");}
 
         return output;
     }
 
-    public bool TargetingIsValidTargetPosition(UsageParams usage_params, Vector3i position)
+    public bool TargetingIsValidTargetPosition(UsageParams usage_params, Vector3i position, bool AoE)
     {
         List<Mob>? mobs_found = Global.ManagerMob.GetInPosition(position);
         bool mob_at_position = mobs_found.Count > 0 && mobs_found is Mob;
@@ -58,11 +67,17 @@ public partial class Action
         switch (TargetParams.NeededVacancy)
         {
             case TargetingParameters.VacancyStatus.HAS_MOB:
-                if(!mob_at_position){return false;}
+                if(!mob_at_position)
+                {
+                    return false;
+                }
                 break;
 
             case TargetingParameters.VacancyStatus.HAS_NO_MOB:
-                if(mob_at_position){return false;}
+                if(mob_at_position)
+                {
+                    return false;
+                }
                 break;
 
             default:
@@ -70,8 +85,26 @@ public partial class Action
         }
         
         //Targeting range check
-        int max_range = TargetParams.GetTotalRange(Owner);
-        if(position.DistanceManhattanTo(usage_params.OwnerRef.GetPosition()) > max_range){return false;}
+        if (AoE)
+        {
+            foreach (var item in usage_params.PositionsTargeted)
+            {
+                uint max_range = TargetParams.AoERange;
+                if(position.DistanceManhattanTo(item) > max_range)
+                {
+                    return false;
+                }    
+                
+            }
+        }
+        else
+        {
+            uint max_range = TargetParams.GetTotalRange(Owner);
+            if(position.DistanceManhattanTo(usage_params.OwnerRef.GetPosition()) > max_range)
+            {
+                return false;
+            }    
+        }
 
         return true;
     }
