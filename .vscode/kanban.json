@@ -21,7 +21,7 @@
                     "id": "mvy4j5t419rnjilxrobsur9c"
                 },
                 {
-                    "text": "Misc ideas:\n- Take snapshots of random moments during gameplay.\n",
+                    "text": "Misc ideas:\n- Take snapshots of random moments during gameplay.\n- Remember fallen enemies/characters\n- \n",
                     "id": "yn9anloym52ke2tkxr54wo43"
                 },
                 {
@@ -31,6 +31,10 @@
                 {
                     "text": "Camera should influence the movement of the cursor (low priority for my own sanity)",
                     "id": "ayvl9kn2w0t7crwxcafcpx9m"
+                },
+                {
+                    "text": "Event system that can save its own data and be ran at all times. Must be serializable.\n\nThe events may be ran from a list and may be weighted by chance. Their processing happens over frames to keep scalable.",
+                    "id": "wvbz08l5p7gvhd6kkq7ta5wa"
                 }
             ],
             "id": "t5b10cjn27hujjxg9rxsyrwz",
@@ -40,11 +44,11 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "TARGETING state mostly complete. Needs a way to confirm the use of an Action and call its Use() method.",
+                    "text": "TARGETING state mostly complete. Properly implement returning to AWAITING_ACTION and prompting to end the turn in said state if there's nothing else to do.",
                     "id": "hgvs6kr90qwyiwu5nvbrdz84"
                 },
                 {
-                    "text": "BattleController.StateProcessing \n- Include Action.Targeter usage in it? (Replace with Grid.navigation???)\n- Improve cursor movement, base it on camera \n- Implement logic for targeting since the cursor has already been implemented.\n- Flesh out the states\n- TARGETING state still cannot select a possible location nor does it mark allowed locations.",
+                    "text": "BattleController.StateProcessing \n- Improve cursor movement, base it on camera \n- Flesh out the states\n",
                     "id": "ps2yzq0z0scwdzsyo0fziuv5"
                 },
                 {
@@ -58,10 +62,6 @@
         {
             "title": "Bugs",
             "tasks": [
-                {
-                    "text": "Pause menu doesn't show up.",
-                    "id": "cfv3yhw4ivn1wbnfmr7emnhm"
-                },
                 {
                     "text": "Turn \"READY!\" popup does not come from the position of the owner.",
                     "id": "jkiy6t2nko5dqs0hhtkwax1v"
@@ -81,5 +81,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1727086617656
+    "timestamp": 1727265379163
 }
