@@ -26,6 +26,7 @@ public partial class BattleController
     public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
     public TurnManager CompTurnManager = new();
     public Grid CompGrid;
+    public ActionRunner CompActionRunner = new();
     public Pause CompPauseMenu = new();
 
     //Combat data

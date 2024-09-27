@@ -14,34 +14,34 @@ public partial class MobUI : CanvasLayer
 
     public const string SCENE_PATH = "res://assets/PackedScene/MobUI.tscn";
 
-    static readonly NodeRequirement STAT_CONTAINER = new(
+    public static readonly NodeRequirement STAT_CONTAINER = new(
         "STAT_CONTAINER",
         typeof(VBoxContainer)
         );
 
-    static readonly NodeRequirement ACTION_CONTAINER = new(
+    public static readonly NodeRequirement ACTION_CONTAINER = new(
         "ACTION_CONTAINER",
         typeof(VBoxContainer)
         );
 
-    static readonly NodeRequirement TURN_CONTAINER = new(
+    public static readonly NodeRequirement TURN_CONTAINER = new(
         "TURN_CONTAINER",
         typeof(HBoxContainer)
         );
 
-    static readonly NodeRequirement NAME_LABEL = new(
+    public static readonly NodeRequirement NAME_LABEL = new(
         "NAME_LABEL",
         typeof(Label)
         );
-    static readonly NodeRequirement DELAY_LABEL = new(
+    public static readonly NodeRequirement DELAY_LABEL = new(
         "DELAY_LABEL",
         typeof(Label)
         );
-    static readonly NodeRequirement HEALTH_BAR = new(
+    public static readonly NodeRequirement HEALTH_BAR = new(
         "HEALTH_BAR",
         typeof(ProgressBar)
         );
-    static readonly NodeRequirement ENERGY_BAR = new(
+    public static readonly NodeRequirement ENERGY_BAR = new(
         "ENERGY_BAR",
         typeof(ProgressBar)
         );

@@ -15,6 +15,7 @@ public partial class BattleController
         ENDING_TURN,
         AWAITING_ACTION,
         TARGETING,
+        ACTION_RUNNING,
     }
 
     public List<BattleControllerState> StateList { get; set; } = new()
@@ -24,6 +25,7 @@ public partial class BattleController
         new BattleControllerStateEndingTurn(State.ENDING_TURN),
         new BattleControllerStateTargeting(State.TARGETING),
         new BattleControllerStateAwaitingAction(State.AWAITING_ACTION),
+        new BattleControllerStateActionRunning(State.ACTION_RUNNING),
     };
 
     private BattleControllerState _queued_state;

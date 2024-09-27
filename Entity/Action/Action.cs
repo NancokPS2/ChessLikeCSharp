@@ -26,10 +26,13 @@ public partial class Action : IGridReader
 
     public string Name = "Undefined Action";
     public EAction Identifier = EAction.PUNCH;
+    public int Priority = 0;
 
     public FilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
+    public AnimationParameters AnimationParams = new();
     public List<Effect> EffectParams = new();
+
 
     //TODO
     public virtual List<Mob> GetTargetsAffected(UsageParams usage_params)

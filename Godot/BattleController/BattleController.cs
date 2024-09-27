@@ -1,7 +1,6 @@
 
 
 using ChessLike.Entity;
-using ChessLike.Shared.DebugDisplay;
 using ChessLike.Turn;
 using ChessLike.World;
 using Godot.Display;
@@ -61,7 +60,7 @@ public partial class BattleController : Node, IDebugDisplay
             "Mob taking turn: {3}" + "\n" +
             "Location selected: {4}" + "\n" + 
             "Camera rotation: {5}" + "\n" +
-            "space for rent"
+            "Usage parameters: {6}" + "\n" 
             ,
             new object[]{
                 StateCurrent is not null ? StateCurrent.StateIdentifier : "null", 
@@ -70,6 +69,7 @@ public partial class BattleController : Node, IDebugDisplay
                 CompTurnManager.GetCurrentTurnTaker() as Mob is Mob ? (CompTurnManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
                 PositionHovered,
                 CompCamera != null ? CompCamera.Rotation : "???",
+                TurnUsageParameters is not null ? TurnUsageParameters.PositionsTargeted.ToArray().ToString() : "???",
                 }
             
         );

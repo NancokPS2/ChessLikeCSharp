@@ -5,9 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Shared.DebugDisplay;
-
-[GlobalClass]
 public partial class DebugDisplay : Node2D
 {
     public static DebugDisplay Instance;
@@ -25,8 +22,8 @@ public partial class DebugDisplay : Node2D
     public override void _Ready()
     {
         base._Ready();
-        Menu.IdPressed += OnIdPressed;
         Instance = this;
+        Menu.IdPressed += OnIdPressed;
         AddChild(Menu);
 
         ZIndex = (int)RenderingServer.CanvasItemZMax;

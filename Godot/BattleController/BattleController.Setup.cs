@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
-using ChessLike.Shared.DebugDisplay;
 using ChessLike.Turn;
 
 namespace Godot;
@@ -47,10 +46,12 @@ public partial class BattleController
         AddChild(CompCamera);
         CompCamera.Name = "Camera";
 
-        AddChild(CompPauseMenu);
-        
+        AddChild(CompPauseMenu);    
+
+        GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());
 
         DebugDisplay.Instance.Add(CompTurnManager);
+        DebugDisplay.Instance.Add(CompActionRunner);
     }
 
     public void SetupParticipant(Mob mob, Vector3i where)

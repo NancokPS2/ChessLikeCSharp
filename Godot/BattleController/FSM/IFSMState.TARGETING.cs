@@ -36,9 +36,13 @@ public class BattleControllerStateTargeting : BattleControllerState
         User.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
         
         User.PositionSelected = Vector3i.INVALID;
-        User.TurnUsageParameters.PositionsTargeted = new();
-        User.InputActionSelected = null;
         _last_param_positions = new();
+
+        if (User.StateCurrent is not BattleControllerStateActionRunning)
+        {
+            User.InputActionSelected = null;
+            User.TurnUsageParameters.PositionsTargeted = new();
+        }
     }
 
     public override void StateProcess(double delta)
@@ -72,11 +76,11 @@ public class BattleControllerStateTargeting : BattleControllerState
             {
                 User.TurnUsageParameters.PositionsTargeted.Add(User.PositionHovered);
             }
-            //If all positions where selected, use the action when pressed again on a selected position.
+            //If all positions where selected, pressing again on a selected spot will make the actions run.
             else if (User.TurnUsageParameters.PositionsTargeted.Contains(User.PositionHovered))
             {
-                User.InputActionSelected.Use(User.TurnUsageParameters);
-                User.FSMSetState(BattleController.State.AWAITING_ACTION);
+                User.CompActionRunner.Add(User.InputActionSelected, User.TurnUsageParameters);
+                User.FSMSetState(BattleController.State.ACTION_RUNNING);
             }
 
         }

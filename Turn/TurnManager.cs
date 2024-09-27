@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
-using ChessLike.Shared.DebugDisplay;
-
 namespace ChessLike.Turn;
 
 public partial class TurnManager
@@ -59,9 +57,9 @@ public partial class TurnManager
 
         return output;
     }
-    public ITurn? GetCurrentTurnTaker()
+    public ITurn GetCurrentTurnTaker()
     {
-        return CurrentTaker;
+        return CurrentTaker is not null ? CurrentTaker : throw new Exception("There is not taker at this time, calm down.");
     }
 
     public void StartTurn()
