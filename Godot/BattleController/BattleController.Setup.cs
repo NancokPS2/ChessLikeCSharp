@@ -46,6 +46,10 @@ public partial class BattleController
         AddChild(CompCamera);
         CompCamera.Name = "Camera";
 
+        AddChild(CompMobUI);
+
+        AddChild(CompMobInventory);
+
         AddChild(CompPauseMenu);    
 
         GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());

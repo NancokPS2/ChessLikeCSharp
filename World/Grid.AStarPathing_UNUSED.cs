@@ -2,7 +2,7 @@ using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using ChessLike.Entity;
-using ChessLike.Extension;
+
 using Godot;
 using Vector3 = System.Numerics.Vector3;
 

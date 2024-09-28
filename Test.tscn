@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c0wvb2iaodbck"]
+[gd_scene load_steps=6 format=3 uid="uid://c0wvb2iaodbck"]
 
 [ext_resource type="Texture2D" uid="uid://bmg5aorvrb6ki" path="res://icon.svg" id="1_17y0d"]
+[ext_resource type="Texture2D" uid="uid://74qvqao60sya" path="res://assets/Texture/class/leader.png" id="2_8yqgt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5d5oh"]
 texture = ExtResource("1_17y0d")
@@ -72,7 +73,44 @@ texture = ExtResource("1_17y0d")
 [sub_resource type="TileSet" id="TileSet_wmyt2"]
 sources/0 = SubResource("TileSetAtlasSource_5d5oh")
 
+[sub_resource type="BoxMesh" id="BoxMesh_1oni5"]
+
 [node name="Test" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_set = SubResource("TileSet_wmyt2")
+
+[node name="Central" type="RigidBody2D" parent="."]
+
+[node name="Blade1" type="RigidBody2D" parent="."]
+
+[node name="Blade2" type="RigidBody2D" parent="."]
+
+[node name="CentralToBlade1" type="PinJoint2D" parent="."]
+node_a = NodePath("../Central")
+node_b = NodePath("../Blade1")
+
+[node name="CentralToBlade2" type="PinJoint2D" parent="."]
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+shadow_enabled = true
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+mesh = SubResource("BoxMesh_1oni5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="CollisionShape2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureButton" type="TextureButton" parent="TextureRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+toggle_mode = true
+button_pressed = true
+texture_normal = ExtResource("1_17y0d")
+texture_pressed = ExtResource("2_8yqgt")

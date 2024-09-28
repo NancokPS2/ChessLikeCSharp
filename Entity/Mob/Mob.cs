@@ -12,7 +12,7 @@ public partial class Mob : IStats<StatName>
     private List<Action> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
-    public Inventory Inventory = new(5);
+    public MobInventory Inventory = new();
     public EMovementMode MovementMode = EMovementMode.WALK;
     public EMobState MobState = EMobState.BENCHED;
     public StatSet<StatName> Stats { get; set; } = new(){

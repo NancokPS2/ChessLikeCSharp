@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike;
-
 public static class NodeExtension
 {
     public static void RemoveSelf(this Node @this)
@@ -25,6 +23,14 @@ public static class NodeExtension
         }
     }
 
+    public static void RemoveChildren(this Node @this)
+    {
+        foreach (var item in @this.GetChildren())
+        {
+            @this.RemoveChild(item);
+        }
+    }
+
 
     public static Node AddSceneWithDeclarations(this Node @this, string scene_path, List<NodeRequirement> required, bool strict = true)
     {
@@ -36,6 +42,19 @@ public static class NodeExtension
             throw new Exception("Could not find some required nodes. >" + @this.GetChildren().ToString());
         } 
         return instantiated;
+    }
+
+    public static NodeType AddSceneWithDeclarations<NodeType>(this Node @this, string scene_path, List<NodeRequirement> required, bool strict = true) where NodeType : Node
+    {
+        Node output = AddSceneWithDeclarations(@this, scene_path, required, strict);
+        if (output is NodeType correct)
+        {
+            return correct;
+        }
+        else
+        {
+            throw new Exception("Wrong node type.");
+        }
     }
 
     public static T? GetNodeFromRequirement<T>(this Node @this, NodeRequirement declaration, bool ignore_group = false)

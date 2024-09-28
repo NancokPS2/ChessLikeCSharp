@@ -1,5 +1,5 @@
 using ChessLike.Entity;
-using ChessLike.Extension;
+
 using ChessLike.Turn;
 using ChessLike.World;
 using static ChessLike.Entity.Action;

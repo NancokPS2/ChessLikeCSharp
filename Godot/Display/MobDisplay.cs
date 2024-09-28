@@ -11,13 +11,13 @@ namespace Godot.Display;
 public partial class MobDisplay : Godot.Node3D
 {
     UniqueList<Mob> mobs = new();
-    public MobUI MobUINode = new();
+    public MobCombatUI MobUINode = new();
 
     public override void _Ready()
     {
         base._Ready();
         AddChild(MobUINode);
-        MobUINode.AddSceneWithDeclarations(MobUI.SCENE_PATH, MobUI.NodesRequired);
+        MobUINode.AddSceneWithDeclarations(MobCombatUI.SCENE_PATH, MobCombatUI.NodesRequired);
     }
 
     public void Add(Mob mob)

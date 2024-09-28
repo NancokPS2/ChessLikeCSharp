@@ -4,7 +4,7 @@ using Action = ChessLike.Entity.Action;
 
 namespace Godot.Display;
 
-public partial class MobUI : CanvasLayer
+public partial class MobCombatUI : CanvasLayer
 {
     public delegate void ActionPressedEventHandler(Action action);
     public delegate void ButtonPressed();
@@ -56,9 +56,15 @@ public partial class MobUI : CanvasLayer
         HEALTH_BAR, ENERGY_BAR,
     };
 
-    public MobUI()
+    public MobCombatUI()
     {
         Layer = -1;
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        this.AddSceneWithDeclarations(SCENE_PATH, NodesRequired);
     }
 
     private Mob? _owner_of_stats;

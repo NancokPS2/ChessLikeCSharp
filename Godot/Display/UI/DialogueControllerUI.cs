@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Resolvers;
 using ChessLike.Dialogue;
 
-namespace Godot.Display.UI;
+namespace Godot.Display;
 
 public class DialogueController
 {

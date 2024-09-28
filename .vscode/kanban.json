@@ -17,10 +17,6 @@
                     "id": "c9gposjpxqly8a7rz8j68m2u"
                 },
                 {
-                    "text": "Time manager and interface for mobs to implement.",
-                    "id": "mvy4j5t419rnjilxrobsur9c"
-                },
-                {
                     "text": "Misc ideas:\n- Take snapshots of random moments during gameplay.\n- Remember fallen enemies/characters\n- \n",
                     "id": "yn9anloym52ke2tkxr54wo43"
                 },
@@ -81,5 +77,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1727265379163
+    "timestamp": 1727471926514
 }

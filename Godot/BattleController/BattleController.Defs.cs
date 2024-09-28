@@ -22,6 +22,8 @@ public partial class BattleController
 
     //Components
     public MobDisplay CompDisplayMob = new();
+    public MobCombatUI CompMobUI = new();
+    public MobMenuUI CompMobInventory = new();
     public GridNode CompDisplayGrid = new();
     public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
     public TurnManager CompTurnManager = new();

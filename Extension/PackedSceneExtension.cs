@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
 
-namespace ChessLike.Extension;
-
 public static class PackedSceneExtension
 {
     public static Mesh GetMeshFromModel(this PackedScene @this)

@@ -6,7 +6,7 @@ using Godot;
 using Vector2 = Godot.Vector2;
 using Vector3 = Godot.Vector3;
 
-namespace ChessLike.Extension;
+namespace ChessLike;
 
 public static class ImmediateMeshExtension
 {
