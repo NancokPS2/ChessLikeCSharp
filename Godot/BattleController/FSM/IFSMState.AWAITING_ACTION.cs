@@ -17,17 +17,17 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
     public override void StateOnEnter()
     {
-        MobDisplay display_mob = User.CompDisplayMob;
+        MobCombatUI mob_ui = User.CompMobCombatUI;
         TurnManager turn_manager = User.CompTurnManager;
 
-        display_mob.MobUINode.EnableActionButtons(true); 
-        display_mob.MobUINode.UpdateStatNodes(turn_manager.GetCurrentTurnTaker() as Mob);
-        display_mob.MobUINode.UpdateActionButtons(turn_manager.GetCurrentTurnTaker() as Mob);
+        mob_ui.CompActionMenu.EnableActionButtons(true); 
+        mob_ui.CompActionMenu.UpdateActionButtons(turn_manager.GetCurrentTurnTaker() as Mob);
+        mob_ui.CompUnitStatus.UpdateStatNodes(turn_manager.GetCurrentTurnTaker() as Mob);
     }
 
     public override void StateOnExit()
     {
-        User.CompDisplayMob.MobUINode.EnableActionButtons(false);
+        User.CompMobCombatUI.CompActionMenu.EnableActionButtons(false);
     }
 
     public override void StateProcess(double delta)

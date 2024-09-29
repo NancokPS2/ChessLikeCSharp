@@ -6,7 +6,7 @@ using ExtendedXmlSerializer.Core.Sources;
 
 namespace Godot;
 
-public partial class ItemMenu<TItemContained> where TItemContained : class
+public partial class ItemList<TItemContained> where TItemContained : class
 {
     public delegate void ContainedPress(TItemContained contained);
     public event ContainedPress? ContainerPressed;
@@ -15,7 +15,7 @@ public partial class ItemMenu<TItemContained> where TItemContained : class
 
     public Control ControlReference;
 
-    public ItemMenu(Control reference)
+    public ItemList(Control reference)
     {
         ControlReference = reference;
     }

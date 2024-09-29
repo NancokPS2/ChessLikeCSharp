@@ -9,15 +9,13 @@ namespace Godot;
 [GlobalClass]
 public partial class MobMenuUI : Control
 {
-
-    const string INVENTORY_SCENE_PATH = "res://assets/PackedScene/Inventory/Equipment.tscn";
     public static readonly List<NodeRequirement> INVENTORY_REQUIREMENTS = new()
     {
         new("EQUIP_LIST", typeof(Container)),
     };
     private bool shown = true;
 
-    public ItemMenu<Item> EquipList;
+    public ItemList<Item> EquipList;
 
     public MobMenuUI()
     {
@@ -30,8 +28,6 @@ public partial class MobMenuUI : Control
     public override void _Ready()
     {
         base._Ready();
-        //this.AddSceneWithDeclarations(INVENTORY_SCENE_PATH, INVENTORY_REQUIREMENTS);
-
         Control equip_list_container = this.GetNodeFromRequirement<Control>(INVENTORY_REQUIREMENTS[0]);
         EquipList.ControlReference = equip_list_container;
 
@@ -52,9 +48,9 @@ public partial class MobMenuUI : Control
         foreach (var slot in mob.Inventory.GetSlots())
         {
             if (slot.Item is null){continue;}
-            
+
             EquipList.AddItem(
-                new ItemMenu<Item>.MenuItem()
+                new ItemList<Item>.MenuItem()
                     .ChainSetContained(slot.Item)
                     .ChainSetText(slot.Item.Name)
                 );

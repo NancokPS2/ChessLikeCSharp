@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://36r534c46ylx"]
+[gd_scene load_steps=2 format=3 uid="uid://36r534c46ylx"]
 
 [ext_resource type="Script" path="res://Godot/Display/UI/MobMenuUI.cs" id="1_5c1bo"]
-[ext_resource type="PackedScene" uid="uid://b44eub52dnbco" path="res://assets/PackedScene/MobMenu/MobMenu.EquipmentList.tscn" id="2_hvfvh"]
 
 [node name="MobMenu" type="Control"]
 layout_mode = 3
@@ -12,5 +11,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5c1bo")
 
-[node name="Control" parent="." instance=ExtResource("2_hvfvh")]
+[node name="EQUIP_LIST" type="Panel" parent="."]
 layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 1

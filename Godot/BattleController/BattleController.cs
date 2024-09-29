@@ -17,6 +17,8 @@ public partial class BattleController : Node, IDebugDisplay
     public override void _Ready()
     {
         base._Ready();
+        GetTree().NodeAdded += OnNodeEntered;
+
         Global.ConnectToWindow(GetWindow());
         DebugDisplay.Instance.Add(this);
 
@@ -38,6 +40,14 @@ public partial class BattleController : Node, IDebugDisplay
 
     }
 
+
+    public void OnNodeEntered(Node node)
+    {
+        if (node is CanvasLayer)
+        {
+            var a = 1;
+        }
+    }
 
     public void Testing()
     {

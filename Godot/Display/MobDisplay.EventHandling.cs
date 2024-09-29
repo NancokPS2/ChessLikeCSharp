@@ -7,7 +7,7 @@ using ChessLike.Turn;
 
 namespace Godot.Display;
 
-public partial class MobDisplay
+public partial class MobMeshDisplay
 {
     public void SetupEventsForMob(Mob mob)
     {

@@ -31,13 +31,10 @@ public partial class BattleController
     public void SetupComponents()
     {
         //Setup the mob display
-        AddChild(CompDisplayMob);
-        CompDisplayMob.Name = "MobDisplay";
+        AddChild(CompMobMeshDisplay);
+        CompMobMeshDisplay.Name = "MobDisplay";
         //Connect it to the turn manager to handle turn-related display
-        CompDisplayMob.ConnectToManager(CompTurnManager);
-        //Connect inputs from the action menu.
-        CompDisplayMob.MobUINode.ActionPressed += (act) => InputActionSelected = act;
-        CompDisplayMob.MobUINode.EndTurnPressed += () => InputEndTurnPressed++;
+        CompMobMeshDisplay.ConnectToManager(CompTurnManager);
 
         AddChild(CompDisplayGrid);
         CompDisplayGrid.SetGrid(CompGrid);
@@ -46,9 +43,9 @@ public partial class BattleController
         AddChild(CompCamera);
         CompCamera.Name = "Camera";
 
-        AddChild(CompMobUI);
-
-        AddChild(CompMobInventory);
+        AddChild(CompMobCombatUI);
+        CompMobCombatUI.CompActionMenu.ActionPressed += (act) => InputActionSelected = act;
+        CompMobCombatUI.CompActionMenu.EndTurnPressed += () => InputEndTurnPressed++;
 
         AddChild(CompPauseMenu);    
 
@@ -61,7 +58,7 @@ public partial class BattleController
     public void SetupParticipant(Mob mob, Vector3i where)
     {
         mob.Position = where;
-        CompDisplayMob.Add(mob);
+        CompMobMeshDisplay.Add(mob);
         CompTurnManager.Add(mob);
     }
     

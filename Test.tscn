@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0wvb2iaodbck"]
+[gd_scene load_steps=11 format=3 uid="uid://c0wvb2iaodbck"]
 
 [ext_resource type="Texture2D" uid="uid://bmg5aorvrb6ki" path="res://icon.svg" id="1_17y0d"]
 [ext_resource type="Texture2D" uid="uid://74qvqao60sya" path="res://assets/Texture/class/leader.png" id="2_8yqgt"]
+[ext_resource type="PackedScene" uid="uid://ch0k4n1g8fgjv" path="res://Godot/Tests/TestGridDisplay.tscn" id="2_id446"]
+[ext_resource type="PackedScene" uid="uid://ytpmt00lc622" path="res://assets/Model/cell_object/SpawnPoint.glb" id="4_efsi0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5d5oh"]
 texture = ExtResource("1_17y0d")
@@ -71,9 +73,22 @@ texture = ExtResource("1_17y0d")
 7:7/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_wmyt2"]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_5d5oh")
 
 [sub_resource type="BoxMesh" id="BoxMesh_1oni5"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_axqkh"]
+
+[sub_resource type="Shader" id="Shader_ycclt"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.3.rc1.mono's CanvasItemMaterial.
+
+shader_type canvas_item;
+render_mode blend_mix;
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3e3op"]
+shader = SubResource("Shader_ycclt")
 
 [node name="Test" type="Node2D"]
 
@@ -99,8 +114,14 @@ shadow_enabled = true
 mesh = SubResource("BoxMesh_1oni5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("ConvexPolygonShape2D_axqkh")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="CollisionShape2D"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CollisionShape2D"]
+polygon = PackedVector2Array(137, 43, -23, 266, -227, 263, -260, 115, -266, -140, -118, 83)
+
+[node name="TestGridDisplay" parent="CollisionShape2D" instance=ExtResource("2_id446")]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 40.0
@@ -114,3 +135,11 @@ toggle_mode = true
 button_pressed = true
 texture_normal = ExtResource("1_17y0d")
 texture_pressed = ExtResource("2_8yqgt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_3e3op")
+texture = ExtResource("1_17y0d")
+
+[node name="SpawnPoint" parent="Sprite2D" instance=ExtResource("4_efsi0")]
+
+[editable path="CollisionShape2D/TestGridDisplay"]

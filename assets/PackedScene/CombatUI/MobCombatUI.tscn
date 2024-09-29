@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsftf5vse0yiw"]
+
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_thn53"]
+[ext_resource type="PackedScene" uid="uid://c57x33fblqssh" path="res://assets/PackedScene/CombatUI/UnitStatusPanel.tscn" id="2_xm8kd"]
+
+[node name="MobUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_thn53")
+
+[node name="COMPACT_PANEL" parent="." instance=ExtResource("2_xm8kd")]
+layout_mode = 1
+anchor_top = 0.765432
+anchor_right = 0.444444
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="ActionPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_right = 1.0
+anchor_bottom = 0.75
+grow_horizontal = 0
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="ACTION_CONTAINER" type="VBoxContainer" parent="ActionPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TurnPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.75
+anchor_bottom = 0.25
+offset_left = 40.0
+offset_right = -40.0
+grow_horizontal = 2
+theme_type_variation = &"PanelMobUI"
+
+[node name="TURN_CONTAINER" type="HBoxContainer" parent="TurnPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

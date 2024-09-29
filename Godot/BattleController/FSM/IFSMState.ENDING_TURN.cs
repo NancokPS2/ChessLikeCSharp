@@ -18,7 +18,7 @@ public class BattleControllerStateEndingTurn : BattleControllerState
     public override void StateOnEnter()
     {
         User.CompTurnManager.EndTurn();
-        User.CompDisplayMob.MobUINode.UpdateDelayList(User.CompTurnManager);
+        User.CompMobCombatUI.CompDelayList.UpdateDelayList(User.CompTurnManager);
         User.FSMSetState(BattleController.State.TAKING_TURN);
     }
 

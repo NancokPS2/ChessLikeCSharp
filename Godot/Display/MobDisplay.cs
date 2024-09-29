@@ -8,16 +8,13 @@ namespace Godot.Display;
 /// Add Mobs with AddMob() to make them appear in the scene.
 /// </summary>
 [GlobalClass]
-public partial class MobDisplay : Godot.Node3D
+public partial class MobMeshDisplay : Godot.Node3D
 {
     UniqueList<Mob> mobs = new();
-    public MobCombatUI MobUINode = new();
 
     public override void _Ready()
     {
         base._Ready();
-        AddChild(MobUINode);
-        MobUINode.AddSceneWithDeclarations(MobCombatUI.SCENE_PATH, MobCombatUI.NodesRequired);
     }
 
     public void Add(Mob mob)

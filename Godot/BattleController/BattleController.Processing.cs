@@ -69,9 +69,9 @@ public partial class BattleController
         
         Mob mob = mob_list.First();
 
-        if (mob is not null && CompDisplayMob.MobUINode.GetOwnerOfStats() != mob)
+        if (mob is not null && CompMobCombatUI.CompUnitStatus.GetOwnerOfStats() != mob)
         {
-            CompDisplayMob.MobUINode.UpdateStatNodes(mob);
+            CompMobCombatUI.CompUnitStatus.UpdateStatNodes(mob);
         }
         //display_mob.MobUINode.UpdateStatNodes();
     }

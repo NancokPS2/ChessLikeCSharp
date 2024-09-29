@@ -7,7 +7,7 @@ namespace Godot.Display;
 /// Add Mobs with AddMob() to make them appear in the scene.
 /// </summary>
 
-public partial class MobDisplay : Godot.Node3D
+public partial class MobMeshDisplay : Godot.Node3D
 {
     Dictionary<Mob, MobDisplayComponent> MobComponents = new();
 
@@ -62,7 +62,7 @@ public partial class MobDisplay : Godot.Node3D
             this.name_tag.Text = name;
         }
 
-        public void AddToDisplay(MobDisplay mob_display)
+        public void AddToDisplay(MobMeshDisplay mob_display)
         {
             mob_display.AddChild(name_tag);
             mob_display.AddChild(mesh_instance);
