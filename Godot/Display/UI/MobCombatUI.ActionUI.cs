@@ -7,7 +7,7 @@ using Action = ChessLike.Entity.Action;
 
 namespace Godot.Display;
 
-public partial class ActionMenu
+public partial class ActionUI
 {
     public delegate void ActionPressedEventHandler(Action action);
     public delegate void ButtonPressed();
@@ -16,7 +16,7 @@ public partial class ActionMenu
 
     public VBoxContainer ControlReference;
 
-    public ActionMenu(VBoxContainer control_ref)
+    public ActionUI(VBoxContainer control_ref)
     {
         ControlReference = control_ref;
     }

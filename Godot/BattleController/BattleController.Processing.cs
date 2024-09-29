@@ -72,6 +72,7 @@ public partial class BattleController
         if (mob is not null && CompMobCombatUI.CompUnitStatus.GetOwnerOfStats() != mob)
         {
             CompMobCombatUI.CompUnitStatus.UpdateStatNodes(mob);
+            CompMobCombatUI.CompEquipMenu.UpdateEquipment(mob);
         }
         //display_mob.MobUINode.UpdateStatNodes();
     }

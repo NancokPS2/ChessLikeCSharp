@@ -20,9 +20,14 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         MobCombatUI mob_ui = User.CompMobCombatUI;
         TurnManager turn_manager = User.CompTurnManager;
 
+        Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
+
+        mob_ui.CompActionMenu.UpdateActionButtons(taking_turn);
         mob_ui.CompActionMenu.EnableActionButtons(true); 
-        mob_ui.CompActionMenu.UpdateActionButtons(turn_manager.GetCurrentTurnTaker() as Mob);
-        mob_ui.CompUnitStatus.UpdateStatNodes(turn_manager.GetCurrentTurnTaker() as Mob);
+
+        mob_ui.CompUnitStatus.UpdateStatNodes(taking_turn);
+        mob_ui.CompEquipMenu.UpdateEquipment(taking_turn);
+
     }
 
     public override void StateOnExit()

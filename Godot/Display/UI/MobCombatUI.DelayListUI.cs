@@ -7,12 +7,12 @@ using ChessLike.Turn;
 
 namespace Godot.Display;
 
-public partial class DelayList
+public partial class DelayListUI
 {
 
     public HBoxContainer ControlReference;
 
-    public DelayList(HBoxContainer control_ref)
+    public DelayListUI(HBoxContainer control_ref)
     {
         ControlReference = control_ref;
     }

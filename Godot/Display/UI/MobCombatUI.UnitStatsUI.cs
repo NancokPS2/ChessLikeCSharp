@@ -6,7 +6,7 @@ using ChessLike.Entity;
 
 namespace Godot.Display;
 
-public partial class CompactUnitStatus
+public partial class UnitStatsUI
 {
     public static readonly NodeRequirement NAME_LABEL = new(
         "NAME_LABEL",
@@ -27,7 +27,7 @@ public partial class CompactUnitStatus
 
     public ItemList<object> StatList;
 
-    public CompactUnitStatus(Control stat_list_ref)
+    public UnitStatsUI(Control stat_list_ref)
     {
         StatList = new(stat_list_ref);
     }
@@ -35,7 +35,6 @@ public partial class CompactUnitStatus
     private Mob? _owner_of_stats;
     public void UpdateStatNodes(Mob mob)
     {
-
         _owner_of_stats = mob;
 
         StatList.ControlReference.GetNodeFromRequirement<Label>(NAME_LABEL)
@@ -60,4 +59,5 @@ public partial class CompactUnitStatus
     {
         return _owner_of_stats;
     }
+
 }

@@ -25,18 +25,24 @@ public partial class MobCombatUI : CanvasLayer
         typeof(Control)
         );        
 
+    public static readonly NodeRequirement EQUIPMENT_CONTAINER = new(
+        "EQUIP_LIST", typeof(VBoxContainer)
+        );
+
 
 
     public static readonly List<NodeRequirement> NodesRequired = new()
     {
         //Container
-        ACTION_CONTAINER, TURN_CONTAINER, COMPACT_PANEL
+        ACTION_CONTAINER, TURN_CONTAINER, COMPACT_PANEL, EQUIPMENT_CONTAINER
 
     };
 
-    public CompactUnitStatus CompUnitStatus;
-    public DelayList CompDelayList;
-    public ActionMenu CompActionMenu;
+    public UnitStatsUI CompUnitStatus;
+    public DelayListUI CompDelayList;
+    public ActionUI CompActionMenu;
+    public EquipmentUI CompEquipMenu;
+
 
     public MobCombatUI()
     {
@@ -51,6 +57,7 @@ public partial class MobCombatUI : CanvasLayer
         CompUnitStatus = new(this.GetNodeFromRequirement<Control>(COMPACT_PANEL));
         CompDelayList = new(this.GetNodeFromRequirement<HBoxContainer>(TURN_CONTAINER));
         CompActionMenu = new(this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER));
+        CompEquipMenu = new(this.GetNodeFromRequirement<VBoxContainer>(EQUIPMENT_CONTAINER));
     }
 
     #pragma warning restore CS8602 // Dereference of a possibly null reference.

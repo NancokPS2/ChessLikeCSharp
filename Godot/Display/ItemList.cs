@@ -21,7 +21,15 @@ public partial class ItemList<TItemContained> where TItemContained : class
     }
     private float GetItemHeight()
     {
-        return ControlReference.Size.Y / ItemsPerScreen;
+        var parent = ControlReference.GetParent();
+        if (parent is ScrollContainer scroll)
+        {
+            return scroll.Size.Y / ItemsPerScreen;
+        }
+        else
+        {
+            return ControlReference.Size.Y / ItemsPerScreen;
+        }
     }
 
     public void RemoveItem(TItemContained contained)
@@ -38,10 +46,12 @@ public partial class ItemList<TItemContained> where TItemContained : class
 
     public void AddItem(MenuItem item)
     {
-        if (MenuItems.Any(x => x.Contained == item.Contained))
+
+        if (item is not null && MenuItems.Any(x => x.Contained == item.Contained))
         {
             throw new Exception("A MenuItem with this same contained object is already inside.");
         }
+
         MenuItems.Add(item);
         UpdateMenuItems();
     }
@@ -55,41 +65,66 @@ public partial class ItemList<TItemContained> where TItemContained : class
     public void UpdateMenuItems()
     {
         ControlReference.FreeChildren();
+        ControlReference.Size = ControlReference.GetParent<Control>().Size;
 
         foreach (var item in MenuItems)
         {
-            Panel panel = new()
-            {
-                AnchorRight = 1.0f,
-                CustomMinimumSize = new(0, GetItemHeight()),
-            };
-            if (item.PanelBackground is StyleBox styleBox){panel.AddThemeStyleboxOverride("Panel", styleBox);}
-            ControlReference.AddChild(panel);
+            CreateItem(item);
+        }
+        if (MenuItems.Count < ItemsPerScreen)
+        {
+            CreateItem(null);
+        }
+    }
 
-            Label label = new()
-            {
-                AnchorRight = 1,
-                AnchorBottom = 1,
-                OffsetLeft = GetItemHeight() + 4,
-                Text = item.Text,
-                LabelSettings = new(),
-            };
-            label.LabelSettings.FontSize = (int)GetItemHeight() / 2;
+    private void CreateItem(MenuItem? item)
+    {
+        Panel panel = new()
+        {
+            AnchorRight = 1.0f,
+            CustomMinimumSize = new(0, GetItemHeight()),
+        };
+        Label label = new()
+        {
+            AnchorRight = 1,
+            AnchorBottom = 1,
+            OffsetLeft = GetItemHeight() + 4,
+            LabelSettings = new(),
+        };
+
+        TextureRect textureRect = new()
+        {
+            AnchorBottom = 1,
+            CustomMinimumSize = new(GetItemHeight(), GetItemHeight()),
+        };
+        
+        if (item is not null)
+        {
+            if (item.PanelBackground is StyleBox styleBox){panel.AddThemeStyleboxOverride("Panel", styleBox);}
+            panel.Modulate = item.Disabled ? new Color(0.5f,0.5f,0.5f) : new Color(1,1,1);
+            ControlReference.AddChild(panel);
+        
+            label.Text = item.Text;
+            //TODO: Find a good algorithm to replace this.
+            label.LabelSettings.FontSize = 16;
             panel.AddChild(label);
 
-            TextureRect textureRect = new()
-            {
-                AnchorBottom = 1,
-                CustomMinimumSize = new(GetItemHeight(), GetItemHeight()),
-                Texture = item.Texture,
-            };
+            textureRect.Texture = item.Texture;
             panel.AddChild(textureRect);
 
             panel.GuiInput += (InputEvent input) => OnItemInput( (label, textureRect, panel), item, input);
             panel.MouseEntered += () => OnNodeHovered(panel, true);
             panel.MouseExited += () => OnNodeHovered(panel, false);
-
         }
+        else
+        {
+            panel.Modulate = new Color(0.5f,0.5f,0.5f);
+            ControlReference.AddChild(panel);
+            panel.AddChild(label);
+            panel.AddChild(textureRect);
+        }
+
+
 
     }
 
