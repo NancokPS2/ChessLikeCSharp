@@ -14,6 +14,8 @@ public partial class ActionUI
     public event ActionPressedEventHandler? ActionPressed;
     public event ButtonPressed? EndTurnPressed;
 
+
+
     public VBoxContainer ControlReference;
 
     public ActionUI(VBoxContainer control_ref)
@@ -53,6 +55,7 @@ public partial class ActionUI
             }
         }
     }
+
 
     private partial class ActionButton : Button
     {

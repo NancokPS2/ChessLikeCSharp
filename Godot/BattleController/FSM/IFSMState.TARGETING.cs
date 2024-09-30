@@ -13,6 +13,9 @@ public class BattleControllerStateTargeting : BattleControllerState
 {
     private List<Vector3i> _last_param_positions = new();
 
+    private bool _confirmed;
+    private bool _canceled;
+
     public BattleControllerStateTargeting(BattleController.State identifier) : base(identifier)
     {
     }
@@ -28,6 +31,9 @@ public class BattleControllerStateTargeting : BattleControllerState
             GridNode.Layer.TARGETING, 
             Global.Resources.GetMesh(Global.Resources.MeshIdent.TARGETING_TARGETABLE)
             );
+
+        User.CompMobCombatUI.ConfirmPressed += OnConfirmed;
+        User.CompMobCombatUI.CancelPressed += OnCanceled;
     }
 
     public override void StateOnExit()
@@ -43,10 +49,15 @@ public class BattleControllerStateTargeting : BattleControllerState
             User.InputActionSelected = null;
             User.TurnUsageParameters.PositionsTargeted = new();
         }
+
+        User.CompMobCombatUI.ConfirmPressed -= OnConfirmed;
+        User.CompMobCombatUI.CancelPressed -= OnCanceled;
+        User.CompMobCombatUI.ShowConfirmationButton(false);
     }
 
     public override void StateProcess(double delta)
     {
+
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
             User.FSMSetState(BattleController.State.PAUSED);
@@ -72,19 +83,44 @@ public class BattleControllerStateTargeting : BattleControllerState
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.ACCEPT))
         {
             //If can still select positions, do so.
-            if (User.TurnUsageParameters.PositionsTargeted.Count < User.InputActionSelected.TargetParams.MaxTargetedPositions)
+            if (HasTargetPositionsRemaining())
             {
                 User.TurnUsageParameters.PositionsTargeted.Add(User.PositionHovered);
             }
-            //If all positions where selected, pressing again on a selected spot will make the actions run.
-            else if (User.TurnUsageParameters.PositionsTargeted.Contains(User.PositionHovered))
+        }
+
+        if (!HasTargetPositionsRemaining())
+        {
+            User.CompMobCombatUI.ShowConfirmationButton(true);
+
+            if (_confirmed)
             {
                 User.CompActionRunner.Add(User.InputActionSelected, User.TurnUsageParameters);
                 User.FSMSetState(BattleController.State.ACTION_RUNNING);
+                _confirmed = false;
             }
-
+            else if (_canceled)
+            {
+                User.TurnUsageParameters.PositionsTargeted.Clear();
+                User.CompMobCombatUI.ShowConfirmationButton(false);
+                UpdateAoEVisuals();
+                _canceled = false;
+            }
         }
     }
+
+    public void OnConfirmed()
+    {
+        _confirmed = true;
+        _canceled = false;
+    }
+    public void OnCanceled()
+    {
+        _canceled = true;
+        _confirmed = false;
+    }
+
+    private bool HasTargetPositionsRemaining() => User.TurnUsageParameters.PositionsTargeted.Count < User.InputActionSelected.TargetParams.MaxTargetedPositions;
 
 
     private void UpdateAoEVisuals()

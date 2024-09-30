@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bsftf5vse0yiw"]
+[gd_scene load_steps=5 format=3 uid="uid://bsftf5vse0yiw"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_thn53"]
 [ext_resource type="PackedScene" uid="uid://c57x33fblqssh" path="res://assets/PackedScene/CombatUI/UnitStatusPanel.tscn" id="2_xm8kd"]
+
+[sub_resource type="Gradient" id="Gradient_xkqts"]
+colors = PackedColorArray(0, 0, 0, 0, 0.34902, 0.34902, 0.34902, 0.580392)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qv00i"]
+gradient = SubResource("Gradient_xkqts")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.684466, 0)
 
 [node name="MobUi" type="Control"]
 layout_mode = 3
@@ -56,3 +65,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CANCEL_BUTTON" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("GradientTexture2D_qv00i")
+stretch_mode = 0
+flip_h = true
+
+[node name="EXECUTE_BUTTON" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.388889
+anchor_top = 0.444444
+anchor_right = 0.513889
+anchor_bottom = 0.567901
+grow_horizontal = 2
+grow_vertical = 2
+text = "EXECUTE"

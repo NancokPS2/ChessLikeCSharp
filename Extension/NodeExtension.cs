@@ -61,6 +61,8 @@ public static class NodeExtension
     {
         T? output = default;
 
+        if(declaration.NodeType is T){throw new Exception("The node in this declaration is of a different type.");}
+
         if (declaration.GroupSource != "" && !ignore_group)
         {
             if (!@this.IsInsideTree()){throw new Exception("Node must be inside the tree");}

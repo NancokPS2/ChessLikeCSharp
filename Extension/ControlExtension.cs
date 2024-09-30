@@ -23,7 +23,7 @@ public static class ControlExtension
             int focus = (int)@this.GetMeta("og_focus");
 
             if (filter == (int)Control.MouseFilterEnum.Ignore){filter = (int)Control.MouseFilterEnum.Pass;}
-            if (focus == (int)Control.FocusModeEnum.None){filter = (int)Control.FocusModeEnum.All;}
+            if (focus == (int)Control.FocusModeEnum.None){focus = (int)Control.FocusModeEnum.All;}
 
             @this.MouseFilter = (Control.MouseFilterEnum)filter;
             @this.FocusMode = (Control.FocusModeEnum)focus;
