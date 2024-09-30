@@ -6,6 +6,7 @@ using ChessLike.Shared.Serialization;
 using ChessLike.Entity;
 using ExtendedXmlSerializer;
 using ISerializable = ChessLike.Shared.Serialization.ISerializable;
+using ChessLike.Shared.Storage;
 namespace ChessLike.Entity;
 
 //Factions can store groups of Mobs, their inventories and grant allegiance between mobs.

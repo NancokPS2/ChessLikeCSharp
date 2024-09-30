@@ -44,6 +44,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "StatBoosts usage. Add equipment boosts to the stats when equipping.",
+                    "id": "hemvui6jdj1zid1il3vnp5o2"
+                },
+                {
                     "text": "TARGETING state mostly complete. Properly implement returning to AWAITING_ACTION and prompting to end the turn in said state if there's nothing else to do.",
                     "id": "hgvs6kr90qwyiwu5nvbrdz84"
                 },
@@ -63,6 +67,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Equipment labels dissapeared.",
+                    "id": "cvg1fcfa3yh15f0be123w03i"
+                },
+                {
                     "text": "Turn \"READY!\" popup does not come from the position of the owner.",
                     "id": "jkiy6t2nko5dqs0hhtkwax1v"
                 },
@@ -81,5 +89,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1727580577727
+    "timestamp": 1727695193378
 }

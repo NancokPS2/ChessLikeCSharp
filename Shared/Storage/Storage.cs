@@ -1,4 +1,4 @@
-namespace ChessLike.Shared;
+namespace ChessLike.Shared.Storage;
 
 public partial class Inventory
 {

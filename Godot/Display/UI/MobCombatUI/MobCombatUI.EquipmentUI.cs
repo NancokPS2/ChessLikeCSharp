@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Shared.Storage;
 
 namespace Godot.Display;
 
@@ -19,7 +20,7 @@ public partial class EquipmentUI
     private void DisplayDummy()
     {
         Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
-        mob.Inventory.AddItem(new Coin());
+        mob.Inventory.AddItem(new Trinket());
         UpdateEquipment(mob);
     }
 

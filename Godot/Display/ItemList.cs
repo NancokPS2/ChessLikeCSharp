@@ -83,6 +83,7 @@ public partial class ItemList<TItemContained> where TItemContained : class
         {
             AnchorRight = 1.0f,
             CustomMinimumSize = new(0, GetItemHeight()),
+            FocusMode = Control.FocusModeEnum.All,
         };
         Label label = new()
         {
