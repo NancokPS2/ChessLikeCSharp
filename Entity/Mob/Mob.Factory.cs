@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
+using ChessLike.Shared.Storage;
 
 namespace ChessLike.Entity;
 
@@ -64,6 +65,12 @@ public partial class Mob
     public Mob ChainState(EMobState state)
     {
         MobState = state;
+        return this;
+    }
+
+    public Mob ChainEquipment(Equipment item)
+    {
+        EquipmentAdd(item);
         return this;
     }
 

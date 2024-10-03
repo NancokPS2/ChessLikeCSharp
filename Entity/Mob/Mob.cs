@@ -1,5 +1,7 @@
+using ChessLike.Shared.Storage;
 using ChessLike.Turn;
 using ExtendedXmlSerializer.ExtensionModel.Content;
+using Godot;
 
 namespace ChessLike.Entity;
 
@@ -58,6 +60,28 @@ public partial class Mob : IStats<StatName>
     public List<Action> GetActions()
     {
         return Actions;
+    }
+
+    public void EquipmentAdd(Equipment equip)
+    {
+        var err = Inventory.AddItem(equip);
+        if (err != Shared.Storage.Inventory.Error.NONE)
+        {
+            GD.PushWarning(string.Format("Failed to equip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
+        }
+        
+        Stats.BoostAdd(Inventory);
+    }
+
+    public void EquipmentRemove(Equipment equip)
+    {
+        var err = Inventory.RemoveItem(equip);
+        if (err != Shared.Storage.Inventory.Error.NONE)
+        {
+            GD.PushWarning(string.Format("Failed to unequip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
+        }
+
+        Stats.BoostAdd(Inventory);
     }
 
     private void UpdateJobs()

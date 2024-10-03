@@ -11,6 +11,8 @@ namespace Godot;
 
 public class BattleControllerStateAwaitingAction : BattleControllerState
 {
+    private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
+
     public BattleControllerStateAwaitingAction(BattleController.State identifier) : base(identifier)
     {
     }
@@ -42,7 +44,9 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         {
             User.FSMSetState(BattleController.State.PAUSED);
         }
+
         User.UpdateCursorMovement();
+        User.UpdateCameraPosition(delta);
 
         //If an action was selected, pass to the TARGETING state.
         if (User.InputActionSelected is not null)
@@ -55,14 +59,31 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
                 );
             User.FSMSetState(BattleController.State.TARGETING);
         }
-        User.UpdateCameraPosition(delta);
+
         User.UpdateMobUI();
 
-        //If the button to end turn was pressed, swap to ENDING_TURN
+        //If the button to end turn was pressed, bring up the popup.
         if (User.InputEndTurnPressed > 0)
         {
-            User.FSMSetState(BattleController.State.ENDING_TURN); 
+            _popup
+                .SetMessage("Do you want to end the turn?")
+                .Setup<PopupButtonDialogUI.EConfirmCancel>(User);
             User.InputEndTurnPressed = 0;
         }
+        
+        //If the popup's last index was a valid one.
+        if (_popup.IndexLastPressed != PopupButtonDialogUI.NO_INDEX)
+        {
+            if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
+            {
+                //Swap to ENDING_TURN
+                User.FSMSetState(BattleController.State.ENDING_TURN); 
+            }
+            //else if (_popup.IndexLastPressed == (int)PopupUI.OPTION_CONFIRM_CANCEL.CANCEL)
+
+            _popup.Reload();
+        }
+
     }
+
 }

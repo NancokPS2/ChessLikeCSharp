@@ -12,9 +12,7 @@ namespace Godot;
 public class BattleControllerStateTargeting : BattleControllerState
 {
     private List<Vector3i> _last_param_positions = new();
-
-    private bool _confirmed;
-    private bool _canceled;
+private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
 
     public BattleControllerStateTargeting(BattleController.State identifier) : base(identifier)
     {
@@ -31,9 +29,6 @@ public class BattleControllerStateTargeting : BattleControllerState
             GridNode.Layer.TARGETING, 
             Global.Resources.GetMesh(Global.Resources.MeshIdent.TARGETING_TARGETABLE)
             );
-
-        User.CompMobCombatUI.ConfirmPressed += OnConfirmed;
-        User.CompMobCombatUI.CancelPressed += OnCanceled;
     }
 
     public override void StateOnExit()
@@ -49,9 +44,6 @@ public class BattleControllerStateTargeting : BattleControllerState
             User.InputActionSelected = null;
             User.TurnUsageParameters.PositionsTargeted = new();
         }
-
-        User.CompMobCombatUI.ConfirmPressed -= OnConfirmed;
-        User.CompMobCombatUI.CancelPressed -= OnCanceled;
         User.CompMobCombatUI.ShowConfirmationButton(false);
     }
 
@@ -91,33 +83,26 @@ public class BattleControllerStateTargeting : BattleControllerState
 
         if (!HasTargetPositionsRemaining())
         {
-            User.CompMobCombatUI.ShowConfirmationButton(true);
+            if (_popup.GetParent() is null && _popup.IndexLastPressed == PopupButtonDialogUI.NO_INDEX)
+            {
+                _popup
+                    .SetMessage("Confirm action?")
+                    .Setup<PopupButtonDialogUI.EConfirmCancel>(User);
+            }
 
-            if (_confirmed)
+            if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
             {
                 User.CompActionRunner.Add(User.InputActionSelected, User.TurnUsageParameters);
                 User.FSMSetState(BattleController.State.ACTION_RUNNING);
-                _confirmed = false;
+                _popup.Reload();
             }
-            else if (_canceled)
+            else if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CANCEL)
             {
                 User.TurnUsageParameters.PositionsTargeted.Clear();
-                User.CompMobCombatUI.ShowConfirmationButton(false);
                 UpdateAoEVisuals();
-                _canceled = false;
+                _popup.Reload();
             }
         }
-    }
-
-    public void OnConfirmed()
-    {
-        _confirmed = true;
-        _canceled = false;
-    }
-    public void OnCanceled()
-    {
-        _canceled = true;
-        _confirmed = false;
     }
 
     private bool HasTargetPositionsRemaining() => User.TurnUsageParameters.PositionsTargeted.Count < User.InputActionSelected.TargetParams.MaxTargetedPositions;

@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvodt6m7pasfv"]
+
+[ext_resource type="Script" path="res://Godot/Display/PackedScene/PopupButtonDialogUI.cs" id="1_jdqlf"]
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="2_8jep6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_86543"]
+font_size = 24
+
+[node name="CanvasLayer" type="CanvasLayer" node_paths=PackedStringArray("ButtonContainer", "MessageLabel")]
+script = ExtResource("1_jdqlf")
+ButtonContainer = NodePath("PopupUi/ButtonContainer")
+MessageLabel = NodePath("PopupUi/MessageLabel")
+
+[node name="PopupUi" type="Panel" parent="."]
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme = ExtResource("2_8jep6")
+
+[node name="ButtonContainer" type="HBoxContainer" parent="PopupUi"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="MessageLabel" type="Label" parent="PopupUi"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TES TEST TEST TEST"
+label_settings = SubResource("LabelSettings_86543")
+horizontal_alignment = 1
+vertical_alignment = 1

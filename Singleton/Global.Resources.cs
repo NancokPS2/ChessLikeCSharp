@@ -26,6 +26,22 @@ public static partial class Global
             {MeshIdent.SPAWNPOINT,"res://assets/Model/cell_object/SpawnPoint_default.res"},
         };
 
+        public enum PackedIdent
+        {
+            POPUP,
+        }
+        static Dictionary<PackedIdent, string> PackedDict = new(){
+            {PackedIdent.POPUP,"res://assets/test.tres"},
+
+        };
+
+        public static TNodeType GetInstantiatedScene<TNodeType>(PackedIdent identifier) where TNodeType : Node
+        {
+            PackedScene? packed = GD.Load<PackedScene>(PackedDict[identifier]);
+            TNodeType? instantiated = packed.Instantiate<TNodeType>();
+            return instantiated;
+        }
+
         public static Mesh GetMesh(MeshIdent identifier)
         {
             string path = MeshDict[identifier];
@@ -44,7 +60,10 @@ public static partial class Global
             }
 
         }
+
+
     }
+
     //public static Directory directory = new();
 
 }

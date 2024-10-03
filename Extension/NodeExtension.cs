@@ -31,6 +31,13 @@ public static class NodeExtension
         }
     }
 
+    public static void ParentToRoot(this Node @this, Node node_in_tree)
+    {
+        if (!node_in_tree.IsInsideTree()){throw new ArgumentException("Node must be inside the tree to be useful.");}
+        if (@this.IsInsideTree()){@this.RemoveSelf();}
+
+        node_in_tree.GetTree().Root.AddChild(@this);
+    }
 
     public static Node AddSceneWithDeclarations(this Node @this, string scene_path, List<NodeRequirement> required, bool strict = true)
     {
@@ -56,6 +63,7 @@ public static class NodeExtension
             throw new Exception("Wrong node type.");
         }
     }
+
 
     public static T? GetNodeFromRequirement<T>(this Node @this, NodeRequirement declaration, bool ignore_group = false)
     {
@@ -130,6 +138,15 @@ public static class NodeExtension
         }
         return output;
     }
+
+    public static bool IsOnlyInGroup(this Node node, string group)
+    {
+        var group_arr = node.GetTree().GetNodesInGroup(group);
+        bool has_one = group_arr.Count == 1;
+        bool includes_this = group_arr.Contains(node);
+
+        return has_one && includes_this;
+    }    
 }
 
 public struct NodeRequirement

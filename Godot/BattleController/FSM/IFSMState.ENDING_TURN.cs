@@ -11,6 +11,8 @@ namespace Godot;
 
 public class BattleControllerStateEndingTurn : BattleControllerState
 {
+    private bool _confirmed;
+
     public BattleControllerStateEndingTurn(BattleController.State identifier) : base(identifier)
     {
     }
