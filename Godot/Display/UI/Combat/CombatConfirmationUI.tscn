@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://d3406ij1go4n0"]
+
+[ext_resource type="Script" path="res://Godot/Display/UI/Combat/CombatConfirmationUI.cs" id="1_b5n3d"]
+
+[sub_resource type="Gradient" id="Gradient_xkqts"]
+colors = PackedColorArray(0, 0, 0, 0, 0.34902, 0.34902, 0.34902, 0.580392)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_57svl"]
+gradient = SubResource("Gradient_xkqts")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.684466, 0)
+
+[node name="CombatConfirmationUI" type="Control" node_paths=PackedStringArray("NodeConfirmButton", "NodeCancelButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_b5n3d")
+NodeConfirmButton = NodePath("Confirm")
+NodeCancelButton = NodePath("Cancel")
+
+[node name="Cancel" type="TextureButton" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("GradientTexture2D_57svl")
+stretch_mode = 0
+flip_h = true
+
+[node name="Confirm" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.388889
+anchor_top = 0.444444
+anchor_right = 0.513889
+anchor_bottom = 0.567901
+offset_left = 432.445
+offset_top = 270.222
+offset_right = 521.445
+offset_bottom = 314.284
+grow_horizontal = 2
+grow_vertical = 2
+text = "EXECUTE"

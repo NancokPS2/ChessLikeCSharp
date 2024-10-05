@@ -43,9 +43,9 @@ public partial class BattleController
         AddChild(CompCamera);
         CompCamera.Name = "Camera";
 
-        AddChild(CompMobCombatUI);
-        CompMobCombatUI.CompActionMenu.ActionPressed += (act) => InputActionSelected = act;
-        CompMobCombatUI.CompActionMenu.EndTurnPressed += () => InputEndTurnPressed++;
+        AddChild(CompCombatUI);
+        CompCombatUI.NodeActionUI.ActionPressed += (act) => InputActionSelected = act;
+        CompCombatUI.NodeActionUI.EndTurnPressed += () => InputEndTurnPressed++;
 
         AddChild(CompPauseMenu);    
 

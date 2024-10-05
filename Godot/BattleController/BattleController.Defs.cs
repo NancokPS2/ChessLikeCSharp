@@ -22,7 +22,7 @@ public partial class BattleController
 
     //Components
     public MobMeshDisplay CompMobMeshDisplay = new();
-    public MobCombatUI CompMobCombatUI = new();
+    public CombatGeneralUI CompCombatUI = new CombatGeneralUI().GetInstantiatedScene<CombatGeneralUI>();
     public GridNode CompDisplayGrid = new();
     public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
     public TurnManager CompTurnManager = new();

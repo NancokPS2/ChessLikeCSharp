@@ -31,6 +31,32 @@ public static class NodeExtension
         }
     }
 
+    public static List<TNodeType> GetChildren<TNodeType>(this Node @this) where TNodeType : Node
+    {
+        List<TNodeType> output = new();
+        foreach (var item in @this.GetChildren())
+        {
+            if (item is TNodeType typed)
+            {
+                output.Add(typed);
+            }
+        }
+        return output;
+    }
+
+    public static TNodeType? GetChild<TNodeType>(this Node @this) where TNodeType : Node
+    {
+        List<TNodeType> output = new();
+        foreach (var item in @this.GetChildren())
+        {
+            if (item is TNodeType typed)
+            {
+                return typed;
+            }
+        }
+        return null;
+    }
+
     public static void ParentToRoot(this Node @this, Node node_in_tree)
     {
         if (!node_in_tree.IsInsideTree()){throw new ArgumentException("Node must be inside the tree to be useful.");}
@@ -102,6 +128,24 @@ public static class NodeExtension
         }
 
         return output;
+    }
+
+    public static string GetPathOfNeighbourScene(this Node @this)
+    {
+        if (@this is Node node)
+        {
+            Script script = (Script)node.GetScript();
+            string scene_path = script.ResourcePath;
+            scene_path = scene_path.Replace(".gd", ".tscn");
+            return scene_path;
+        }
+
+        return "";
+    }
+
+    public static PackedScene GetPackedFromScriptPath(this Node @this)
+    {
+        return GD.Load<PackedScene>(@this.GetPathOfNeighbourScene());
     }
 
     public static bool HasAllRequired(this Node @this, List<NodeRequirement> nodes_required)

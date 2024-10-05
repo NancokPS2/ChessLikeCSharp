@@ -203,6 +203,10 @@ public class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         }
         return output;
     }
+    public Dictionary<TStatEnum, ClampFloat> GetStatDictionary()
+    {
+        return Contents;
+    }
 
     public static StatSet<TStatEnum> GetAverage(StatSet<TStatEnum> a, StatSet<TStatEnum> b)
     {

@@ -7,24 +7,28 @@ using ChessLike.Turn;
 
 namespace Godot.Display;
 
-public partial class DelayListUI
+public partial class CombatTurnUI : Control, ISceneDependency
 {
+    public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatTurnUI.tscn";
 
-    public HBoxContainer ControlReference;
+    [Export]
+    public Control? NodeTurnContainer;
 
-    public DelayListUI(HBoxContainer control_ref)
+    public override void _Ready()
     {
-        ControlReference = control_ref;
+        base._Ready();
+        NodeTurnContainer ??= (Control)FindChild("TurnContainer");
     }
 
-    public void UpdateDelayList(TurnManager manager)
+    public void Update(TurnManager manager)
     {
-        HBoxContainer container = ControlReference;
-        container.FreeChildren();
+        if(NodeTurnContainer is null) {throw new Exception("Null NodeTurnContainer");}
+
+        NodeTurnContainer.FreeChildren();
 
         foreach (var item in manager.GetParticipants())
         {
-            container.AddChild(node: new DelayContainer(item));
+            NodeTurnContainer.AddChild(new DelayContainer(item));
         }
     }
 

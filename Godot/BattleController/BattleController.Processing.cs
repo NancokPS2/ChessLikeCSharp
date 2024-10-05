@@ -61,7 +61,8 @@ public partial class BattleController
         }
     }
 
-    public void UpdateMobUI()
+    private Mob? _last_hovered_mob;
+    public void UpdateHoveredMobUI()
     {
         //TODO
         List<Mob>? mob_list = Global.ManagerMob.GetInPosition(PositionHovered);
@@ -69,11 +70,12 @@ public partial class BattleController
         
         Mob mob = mob_list.First();
 
-        if (mob is not null && CompMobCombatUI.CompUnitStatus.GetOwnerOfStats() != mob)
+        if (mob is not null && _last_hovered_mob != mob)
         {
-            CompMobCombatUI.CompUnitStatus.UpdateStatNodes(mob);
-            CompMobCombatUI.CompEquipMenu.UpdateEquipment(mob);
+            CompCombatUI.NodeMobUI.Update(mob);
         }
+
+        _last_hovered_mob = mob;
         //display_mob.MobUINode.UpdateStatNodes();
     }
 }

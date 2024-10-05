@@ -44,7 +44,7 @@ private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedSc
             User.InputActionSelected = null;
             User.TurnUsageParameters.PositionsTargeted = new();
         }
-        User.CompMobCombatUI.ShowConfirmationButton(false);
+        //User.CompCombatUI.NodeConfirmationUI.Update(false);
     }
 
     public override void StateProcess(double delta)
@@ -64,7 +64,7 @@ private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedSc
 
         User.UpdateCursorMovement();
         User.UpdateCameraPosition(delta);
-        User.UpdateMobUI();
+        User.UpdateHoveredMobUI();
 
         //If CANCEL pressed, return to AWAITING_ACTION.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.CANCEL))

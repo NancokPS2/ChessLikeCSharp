@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://b3msvq7mc7i1q"]
+
+[ext_resource type="Script" path="res://Godot/Display/UI/Mob/MobGeneralUI.cs" id="1_6t8gc"]
+[ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://Godot/Display/UI/Mob/MobEquipmentUI.tscn" id="2_7qjr4"]
+[ext_resource type="PackedScene" uid="uid://b1e6jdci5byww" path="res://Godot/Display/UI/Mob/MobStatsUI.tscn" id="3_lmckx"]
+[ext_resource type="PackedScene" uid="uid://ctsopt37vmsh1" path="res://Godot/Display/UI/Mob/MobActionUI.tscn" id="4_m8yx4"]
+
+[node name="MobGeneralUI" type="Control" node_paths=PackedStringArray("NodeTabContainer", "NodeEquipmentUI", "NodeActionUI", "NodeStatsUI")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6t8gc")
+NodeTabContainer = NodePath("TabContainer")
+NodeEquipmentUI = NodePath("TabContainer/Equipment")
+NodeActionUI = NodePath("TabContainer/Action")
+NodeStatsUI = NodePath("TabContainer/Stats")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+
+[node name="Equipment" parent="TabContainer" instance=ExtResource("2_7qjr4")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Stats" parent="TabContainer" instance=ExtResource("3_lmckx")]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Action" parent="TabContainer" instance=ExtResource("4_m8yx4")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2

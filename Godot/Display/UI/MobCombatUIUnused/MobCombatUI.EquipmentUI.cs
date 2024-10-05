@@ -17,13 +17,6 @@ public partial class EquipmentUI
         EquipList = new(control_reference);
     }
 
-    private void DisplayDummy()
-    {
-        Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
-        mob.Inventory.AddItem(new Trinket());
-        UpdateEquipment(mob);
-    }
-
     public void UpdateEquipment(Mob mob)
     {
         EquipList.ClearItems();

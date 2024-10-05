@@ -19,13 +19,13 @@ public class BattleControllerStateActionRunning : BattleControllerState
     {
         if (User.CompActionRunner.IsQueueEmpty()){throw new Exception("Entered state without queued actions.");}
 
-        User.CompMobCombatUI.Hide();
+        User.CompCombatUI.Hide();
         User.CompActionRunner.RunStart();
     }
 
     public override void StateOnExit()
     {
-        User.CompMobCombatUI.Show();
+        User.CompCombatUI.Show();
         User.InputActionSelected = null;
         User.TurnUsageParameters.PositionsTargeted = new();
     }

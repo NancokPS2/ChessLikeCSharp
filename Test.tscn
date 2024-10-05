@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c0wvb2iaodbck"]
+[gd_scene load_steps=12 format=3 uid="uid://c0wvb2iaodbck"]
 
 [ext_resource type="Texture2D" uid="uid://bmg5aorvrb6ki" path="res://icon.svg" id="1_17y0d"]
 [ext_resource type="Script" path="res://test.gd" id="1_f8wa5"]
@@ -87,6 +87,8 @@ _data = {
 }
 point_count = 4
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqomv"]
+
 [node name="Test" type="Node2D"]
 script = ExtResource("1_f8wa5")
 
@@ -135,13 +137,18 @@ texture_normal = ExtResource("1_17y0d")
 texture_pressed = ExtResource("2_8yqgt")
 
 [node name="Sprite2D2" parent="." instance=ExtResource("4_mjnjg")]
-position = Vector2(814, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 814, -8, 0)
 
 [node name="Path2D" type="Path2D" parent="Sprite2D2"]
 scale = Vector2(20, 20)
 curve = SubResource("Curve2D_f8ukf")
 
 [node name="Sprite2D" parent="." instance=ExtResource("4_mjnjg")]
+
+[node name="MeshInstance2D" type="MeshInstance3D" parent="Sprite2D"]
+material_override = SubResource("StandardMaterial3D_kqomv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Sprite2D/MeshInstance2D"]
 
 [editable path="CollisionShape2D/TestGridDisplay"]
 [editable path="Sprite2D2"]

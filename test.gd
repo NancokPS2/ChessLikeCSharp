@@ -4,8 +4,12 @@ class_name ASS
 const scene: PackedScene = preload("res://Test.tscn")
 const scrip: Script = ASS
 
-var player: Node
+@export var player: Node
 
+
+func _ready():
+	var light := DirectionalLight3D.new()
+	light.light_specular
 
 func load_file(path: String):
 	var config := ConfigFile.new()

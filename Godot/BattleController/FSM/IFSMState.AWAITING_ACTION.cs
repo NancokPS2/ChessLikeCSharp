@@ -19,22 +19,19 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
     public override void StateOnEnter()
     {
-        MobCombatUI mob_ui = User.CompMobCombatUI;
+        CombatGeneralUI mob_ui = User.CompCombatUI;
         TurnManager turn_manager = User.CompTurnManager;
 
         Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
 
-        mob_ui.CompActionMenu.UpdateActionButtons(taking_turn);
-        mob_ui.CompActionMenu.EnableActionButtons(true); 
-
-        mob_ui.CompUnitStatus.UpdateStatNodes(taking_turn);
-        mob_ui.CompEquipMenu.UpdateEquipment(taking_turn);
+        mob_ui.Update(User);
+        User.CompCombatUI.NodeActionUI.EnableActionButtons(false);
 
     }
 
     public override void StateOnExit()
     {
-        User.CompMobCombatUI.CompActionMenu.EnableActionButtons(false);
+        User.CompCombatUI.NodeActionUI.EnableActionButtons(false);
     }
 
     public override void StateProcess(double delta)
@@ -60,7 +57,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
             User.FSMSetState(BattleController.State.TARGETING);
         }
 
-        User.UpdateMobUI();
+        User.UpdateHoveredMobUI();
 
         //If the button to end turn was pressed, bring up the popup.
         if (User.InputEndTurnPressed > 0)

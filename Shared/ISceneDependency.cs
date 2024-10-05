@@ -22,6 +22,6 @@ public static class ISceneDependencyExtension
         TNodeType? instance = packed.Instantiate<TNodeType>();
 
         return instance;
-
     }
+
 }

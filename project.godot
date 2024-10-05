@@ -23,6 +23,14 @@ DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 
 project/assembly_name="ChessLike"
 
+[file_customization]
+
+folder_colors={
+"res://Godot/": "blue",
+"res://Godot/Display/UI/": "green",
+"res://assets/": "yellow"
+}
+
 [filesystem]
 
 import/blender/enabled=false

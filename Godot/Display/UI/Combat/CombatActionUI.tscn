@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8akfo35olah2"]
+
+[ext_resource type="Script" path="res://Godot/Display/UI/Combat/CombatActionUI.cs" id="1_uuyc0"]
+
+[node name="CombatActionUI" type="Control" node_paths=PackedStringArray("NodeActionContainer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uuyc0")
+NodeActionContainer = NodePath("ActionPanel/ActionContainer")
+
+[node name="ActionPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ActionContainer" type="VBoxContainer" parent="ActionPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

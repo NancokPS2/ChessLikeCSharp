@@ -10,15 +10,30 @@ public partial class ItemList<TItemContained> where TItemContained : class
 {
     public delegate void ContainedPress(TItemContained contained);
     public event ContainedPress? ContainerPressed;
-    private List<MenuItem> MenuItems = new();
-    public uint ItemsPerScreen = 6;
 
-    public Control ControlReference;
+    private List<MenuItem> MenuItems = new();
+    private string TextToDisplay = "";
+    private Font DefaultFont = new SystemFont();
+
+    public uint ItemsPerScreen = 6;
+    public readonly Control ControlReference;
 
     public ItemList(Control reference)
     {
         ControlReference = reference;
+        ControlReference.Draw += DrawToContainer;
     }
+
+    private void DrawToContainer()
+    {
+        if(TextToDisplay == ""){return;}
+        ControlReference.DrawMultilineString(
+            DefaultFont, 
+            ControlReference.GetLocalMousePosition(), 
+            TextToDisplay
+            );
+    }
+
     private float GetItemHeight()
     {
         var parent = ControlReference.GetParent();
@@ -114,8 +129,8 @@ public partial class ItemList<TItemContained> where TItemContained : class
             panel.AddChild(textureRect);
 
             panel.GuiInput += (InputEvent input) => OnItemInput( (label, textureRect, panel), item, input);
-            panel.MouseEntered += () => OnNodeHovered(panel, true);
-            panel.MouseExited += () => OnNodeHovered(panel, false);
+            panel.MouseEntered += () => OnNodeHovered(item, panel, true);
+            panel.MouseExited += () => OnNodeHovered(item, panel, false);
         }
         else
         {
@@ -124,14 +139,12 @@ public partial class ItemList<TItemContained> where TItemContained : class
             panel.AddChild(label);
             panel.AddChild(textureRect);
         }
-
-
-
     }
-
-    public void OnNodeHovered(Control node, bool hovered)
+    
+    public void OnNodeHovered(MenuItem item, Control node, bool hovered)
     {
         node.Modulate = hovered ? new(0.5f,0.5f,0.5f) : new(1,1,1);
+        TextToDisplay = hovered ? item.Tooltip : "";
     }
 
     public void OnItemInput((Label,TextureRect,Panel) node_refs, MenuItem menu_item, InputEvent action)
@@ -150,6 +163,7 @@ public partial class ItemList<TItemContained> where TItemContained : class
         public TItemContained? Contained;
         public Texture2D? Texture;
         public string Text = "";
+        public string Tooltip = "";
         public bool Disabled = false;
 
         public MenuItem ChainSetContained(TItemContained contained)
@@ -170,6 +184,11 @@ public partial class ItemList<TItemContained> where TItemContained : class
         public MenuItem ChainSetText(string text)
         {
             Text = text;
+            return this;
+        }
+        public MenuItem ChainSetTooltip(string tooltip)
+        {
+            Tooltip = tooltip;
             return this;
         }
     }

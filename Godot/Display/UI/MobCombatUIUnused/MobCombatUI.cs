@@ -22,14 +22,10 @@ public partial class MobCombatUI : CanvasLayer
         typeof(HBoxContainer)
         );
 
-    public static readonly NodeRequirement COMPACT_PANEL = new(
-        "COMPACT_PANEL",
-        typeof(Control)
+    public static readonly NodeRequirement GENERAL_PANEL = new(
+        "MobGeneralUI",
+        typeof(MobGeneralUI)
         );        
-
-    public static readonly NodeRequirement EQUIPMENT_CONTAINER = new(
-        "EQUIP_LIST", typeof(VBoxContainer)
-        );
 
     public static readonly NodeRequirement CONFIRM_BUTTON = new(
         "EXECUTE_BUTTON", typeof(Button)
@@ -42,14 +38,13 @@ public partial class MobCombatUI : CanvasLayer
     public static readonly List<NodeRequirement> NodesRequired = new()
     {
         //Container
-        ACTION_CONTAINER, TURN_CONTAINER, COMPACT_PANEL, EQUIPMENT_CONTAINER, CONFIRM_BUTTON, CANCEL_BUTTON
+        ACTION_CONTAINER, TURN_CONTAINER, GENERAL_PANEL, CONFIRM_BUTTON, CANCEL_BUTTON
 
     };
 
-    public UnitStatsUI CompUnitStatus;
-    public DelayListUI CompDelayList;
+    public MobGeneralUI CompUnitStatus;
+    public CombatTurnUI CompDelayList;
     public ActionUI CompActionMenu;
-    public EquipmentUI CompEquipMenu;
 
 
     public MobCombatUI()
@@ -62,10 +57,9 @@ public partial class MobCombatUI : CanvasLayer
         base._Ready();
         this.AddSceneWithDeclarations(SCENE_PATH, NodesRequired);
 
-        CompUnitStatus = new(this.GetNodeFromRequirement<Control>(COMPACT_PANEL));
-        CompDelayList = new(this.GetNodeFromRequirement<HBoxContainer>(TURN_CONTAINER));
+        CompUnitStatus = new MobGeneralUI().GetInstantiatedScene<MobGeneralUI>();
+        CompDelayList = new CombatTurnUI().GetInstantiatedScene<CombatTurnUI>();
         CompActionMenu = new(this.GetNodeFromRequirement<VBoxContainer>(ACTION_CONTAINER));
-        CompEquipMenu = new(this.GetNodeFromRequirement<VBoxContainer>(EQUIPMENT_CONTAINER));
 
         var confirm_btn = this.GetNodeFromRequirement<Button>(CONFIRM_BUTTON);
         var cancel_btn = this.GetNodeFromRequirement<TextureButton>(CANCEL_BUTTON);
@@ -73,22 +67,7 @@ public partial class MobCombatUI : CanvasLayer
         confirm_btn.Pressed += () => ConfirmPressed.Invoke();
         cancel_btn.Pressed += () => CancelPressed.Invoke();
 
-        ShowConfirmationButton(false);
-    }
-
-    public void OnCancel()
-    {
-        
-    }
-
-
-    public void ShowConfirmationButton(bool activate)
-    {
-        var accept = this.GetNodeFromRequirement<Button>(CONFIRM_BUTTON);
-        var cancel = this.GetNodeFromRequirement<TextureButton>(CANCEL_BUTTON);
-
-        accept.Activate(activate);
-        cancel.Activate(activate);
+        //ShowConfirmationButton(false);
     }
 
     #pragma warning restore CS8602 // Dereference of a possibly null reference.
