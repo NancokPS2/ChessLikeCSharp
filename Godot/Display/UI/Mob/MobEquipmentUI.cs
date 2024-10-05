@@ -8,50 +8,47 @@ public partial class MobEquipmentUI : Control, ISceneDependency
 {
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobEquipmentUI.tscn";
 
-    public ItemList<Inventory.Slot>? EquipList;
-
     [Export]
-	public Control? NodeList;
+	public Control? NodeEquipContainer;
 
     public override void _Ready()
     {
         base._Ready();
-		NodeList ??= (Control)FindChild("EQUIPMENT");
+		NodeEquipContainer ??= (Control)FindChild("EQUIPMENT");
 
-        EquipList = new(NodeList);
     }
 
     public void Update(Mob mob)
     {
-        if(EquipList is null) {throw new Exception("Null ActionList");}
+        NodeEquipContainer.FreeChildren();
 
-        EquipList.ClearItems();
-        GD.Print(mob.Inventory.GetSlots().ToArray());
         foreach (var slot in mob.Inventory.GetSlots())
         {
-            Button panel = new()
+            Button button = new()
             {
                 AnchorRight = 1.0f,
+                SizeFlagsHorizontal = SizeFlags.ExpandFill,
                 FocusMode = Control.FocusModeEnum.All,
             };
-            Label label = new()
-            {
-                AnchorRight = 1,
-                AnchorBottom = 1,
-                OffsetLeft = panel.Scale.Y + 4,
-                LabelSettings = new(),
-            };
-            TextureRect textureRect = new()
-            {
-                AnchorBottom = 1,
-                CustomMinimumSize = new(panel.Scale.Y, panel.Scale.Y),
-            };
-            var menu_item = new ItemList<Inventory.Slot>.MenuItem().ChainSetContained(slot);
+            if(slot.Item is not null) {button.Text = slot.Item.Name;}
+            else if (slot.FlagWhitelist.Count != 0) {button.Text = slot.FlagWhitelist[0].ToString();}
+            else {button.Text = "EMPTY";}
 
-            if(slot.Item is not null) {menu_item.ChainSetText(slot.Item.Name);}
-            else if (slot.FlagWhitelist.Count != 0) {menu_item.ChainSetText(slot.FlagWhitelist[0].ToString());}
-
-            EquipList.AddItem( menu_item );
+            button.Pressed += () => OnButtonPressed(button, slot);
+            button.MouseEntered += () => OnButtonHovered(button, slot, true);
+            button.MouseExited += () => OnButtonHovered(button, slot, false);
+            NodeEquipContainer.AddChild(button);
         }
+    
+    }
+
+    public void OnButtonPressed(Button button, Inventory.Slot slot)
+    {
+
+    }
+
+    public void OnButtonHovered(Button button, Inventory.Slot slot, bool hovered)
+    {
+        button.Modulate = hovered ? new Godot.Color(0.5f, 0.5f, 0.5f) : new Godot.Color(1, 1, 1);
     }
 }

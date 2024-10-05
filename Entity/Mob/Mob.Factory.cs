@@ -36,6 +36,7 @@ public partial class Mob
         Stats.SetStat(StatName.STRENGTH, 100);
         Stats.SetStat(StatName.INTELLIGENCE, 100);
         Stats.SetStat(StatName.MOVEMENT, 3);
+        Stats.SetStat(StatName.JUMP, 2);
         if (Stats.GetValue(StatName.MOVEMENT) != 3)
         {
             throw new Exception("What!?");

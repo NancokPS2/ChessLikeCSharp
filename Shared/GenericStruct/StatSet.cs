@@ -13,8 +13,8 @@ public class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     public delegate void StatChange(TStatEnum name, float amount);
     public event StatChange StatValueChanged;
 
-    private Dictionary<TStatEnum, ClampFloat> Contents {get; set;} = new();
-    private Dictionary<string, StatBoost> Boosts = new();
+    public Dictionary<TStatEnum, ClampFloat> Contents {get; set;} = new();
+    public Dictionary<string, StatBoost> Boosts = new();
 
     public StatSet()
     {
@@ -115,7 +115,7 @@ public class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     {
         SetMax(stat, value);
         SetValue(stat: stat, value);
-        Debug.Assert(GetValue(stat) == value);
+        Debug.Assert(GetValue(stat: stat) == value, "The value does not match.");
     }
 
     public void MultiplyStat(TStatEnum stat, float multiplier)

@@ -34,7 +34,7 @@ public partial class MobStatsUI : Control, ISceneDependency
 			else {text += current.ToString() + "/" + max.ToString();}
 
 			Label label = new(){Text = text, SizeFlagsHorizontal = SizeFlags.ExpandFill};
-			AddChild(label);
+			NodeStatContainer.AddChild(label);
 
 		}
 
