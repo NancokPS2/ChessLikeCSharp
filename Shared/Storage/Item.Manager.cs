@@ -11,19 +11,20 @@ public partial class Item
     {
         public override List<Item> CreatePrototypes()
         {
-            List<Item> output = new()
-            {
-
-            };
-            
-
+            List<Item> output = new();        
             return output;
         }
+
+        public override Item ConvertFromResource(ItemResource resource)
+        {
+            return FromResource(resource);
+        }
+
         public override string GetPrototypeFolder()
         {
             return Path.Combine(
                 Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "faction"
+                "item"
             );
 
         }

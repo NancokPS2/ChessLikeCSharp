@@ -6,6 +6,7 @@ using Godot;
 
 namespace ChessLike.Shared.Storage;
 
+[GlobalClass]
 public partial class InventorySlotResource : Godot.Resource
 {
     [Export]

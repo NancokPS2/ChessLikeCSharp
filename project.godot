@@ -28,6 +28,7 @@ project/assembly_name="ChessLike"
 folder_colors={
 "res://Godot/": "blue",
 "res://Godot/Display/UI/": "green",
+"res://Resources/": "yellow",
 "res://assets/": "yellow"
 }
 

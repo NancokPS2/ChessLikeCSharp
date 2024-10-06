@@ -3,6 +3,7 @@ using Godot;
 
 namespace ChessLike.Entity;
 
+[GlobalClass]
 public partial class FactionResource : Resource
 {
     [Export]

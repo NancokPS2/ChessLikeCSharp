@@ -22,6 +22,11 @@ public partial class Action
             return output;
         }
 
+        public override Action ConvertFromResource(ActionResource resource)
+        {
+            return FromResource(resource);
+        }
+
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

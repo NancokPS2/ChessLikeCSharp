@@ -12,6 +12,7 @@ using ChessLike;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
+using System.Diagnostics;
 
 namespace ChessLike.Shared.Serialization;
 
@@ -76,22 +77,29 @@ public static class Serializer
         DirectoryInfo? info = Directory.CreateDirectory(dir);
 
         //Create writer.
-        TextWriter string_writer = new StreamWriter(full_file_path);
-        string_writer.Write(xml_string);
-        string_writer.Close();
+        try
+        {
+            TextWriter string_writer = new StreamWriter(full_file_path);
+            string_writer.Write(xml_string);
+            string_writer.Close();
+        }
+        catch (IOException ex)
+        {
+            GD.PushError("File " + full_file_path + " is currently in use.");
+        }
+        
 
     }
 
     public static List<T> LoadFolderAsXml<T>(string folder_path)
     {
-        string path_used = Path.Combine(folder_path);
         if (!Directory.Exists(folder_path)){throw new Exception("Not a directory.");}
 
         List<T> output = new();
 
         foreach (string item in Directory.EnumerateFiles(folder_path))
         {
-            output.Add(LoadAsXml<T>(Path.Combine(folder_path, item)));
+            output.Add(LoadAsXml<T>(Path.Combine(item)));
         }
 
         return output;
@@ -123,6 +131,8 @@ public static class Serializer
         {
             throw new NullReferenceException("The object is null.");
         }
+
+        stream_reader.Close();
 
         return output;
     }

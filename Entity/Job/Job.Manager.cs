@@ -24,7 +24,12 @@ public partial class Job
 
             return output;
         }
-        
+
+        public override Job ConvertFromResource(JobResource resource)
+        {
+            return FromResource(resource);
+        }
+
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

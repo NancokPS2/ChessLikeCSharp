@@ -52,8 +52,6 @@ public partial class BattleController : Node, IDebugDisplay
 
     public void Testing()
     {
-        ItemResource res = new Item().ToResource();
-        ResourceSaver.Save(res, "res://SAVED_ITEM_RES.tres");
 
         if (Input.IsActionJustPressed("debug_draw"))
         {

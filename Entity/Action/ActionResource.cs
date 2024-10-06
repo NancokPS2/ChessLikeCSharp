@@ -6,10 +6,11 @@ using Godot;
 
 namespace ChessLike.Entity;
 
+[GlobalClass]
 public partial class ActionResource : Godot.Resource
 {
     [Export]
-    public string Name;
+    public string Name = "";
 
     [Export]
     public int PriorityDefault;

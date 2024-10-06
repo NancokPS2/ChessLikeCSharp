@@ -6,7 +6,7 @@ namespace ChessLike.Shared.Storage;
 public partial class ItemResource : Resource
 {
     [Export]
-    public string Name;
+    public string Name = "";
     [Export]
     public Godot.Collections.Array<EItemFlag> Flags = new();
     [Export]
