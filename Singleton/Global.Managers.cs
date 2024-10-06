@@ -10,6 +10,7 @@ public partial class Global
     public static Job.Manager ManagerJob = new();
     public static Action.Manager ManagerAction = new();
     public static Mob.Manager ManagerMob = new();
+    public static Faction.Manager ManagerFaction = new();
 
 
 
@@ -18,5 +19,6 @@ public partial class Global
         ManagerJob = new();
         ManagerAction = new();
         ManagerMob = new();
+        ManagerFaction = new();
     }
 }

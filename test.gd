@@ -6,11 +6,6 @@ const scrip: Script = ASS
 
 @export var player: Node
 
-
-func _ready():
-	var light := DirectionalLight3D.new()
-	light.light_specular
-
 func load_file(path: String):
 	var config := ConfigFile.new()
 	if FileAccess.file_exists(path):
@@ -18,4 +13,10 @@ func load_file(path: String):
 		breakpoint
 	else:
 		config.load(path)
+	
+signal pressed
+	
+func _ready():
+	var node: Node = get_parent()
+	pressed.connect(node.draw)
 	

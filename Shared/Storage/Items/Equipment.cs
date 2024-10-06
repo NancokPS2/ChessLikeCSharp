@@ -8,14 +8,10 @@ namespace ChessLike.Shared.Storage;
 
 public class Equipment : Item, StatSet<StatName>.IStatBooster
 {
-    public StatSet<StatName>.StatBoost? StatBoost;
     
     public Equipment() : base()
     {
         Flags = new(){EItemFlag.EQUIPMENT};
     }
 
-    public string GetBoostSource() => StatSet<StatName>.INVALID_BOOST_SOURCE;
-
-    public StatSet<StatName>.StatBoost? GetStatBoost() => StatBoost;
 }

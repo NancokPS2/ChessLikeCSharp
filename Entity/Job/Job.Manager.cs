@@ -24,6 +24,7 @@ public partial class Job
 
             return output;
         }
+        
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

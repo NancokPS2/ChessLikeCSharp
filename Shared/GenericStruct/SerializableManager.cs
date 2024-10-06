@@ -17,6 +17,11 @@ public class SerializableManager<TManaged> where TManaged : ISerializable
         Preload();
     }
 
+    public virtual List<TManaged> CreatePrototypes()
+    {
+        throw new NotImplementedException();
+    }
+    
     public void Preload()
     {
         List<TManaged>? loaded = Serializer.LoadFolderAsXml<TManaged>(GetPrototypeFolder());
@@ -37,10 +42,6 @@ public class SerializableManager<TManaged> where TManaged : ISerializable
         return Global.Directory.GetContentDir(EDirectory.USER_CONTENT);
     }
 
-    public virtual List<TManaged> CreatePrototypes()
-    {
-        throw new NotImplementedException();
-    }
 
     public virtual void SavePrototypes(List<TManaged> prototypes)
     {

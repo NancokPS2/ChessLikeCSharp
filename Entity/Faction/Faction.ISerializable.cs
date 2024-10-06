@@ -6,15 +6,15 @@ using ChessLike.Shared.Serialization;
 
 namespace ChessLike.Entity;
 
-public partial class Mob : ISerializable
+public partial class Faction : ISerializable
 {
     public string GetFileName()
     {
-        return DisplayedName;// + "_" + Godot.Time.GetTicksMsec().ToString();
+        return Enum.GetName(Identifier) + ".xml";
     }
 
     public string GetSubDirectory()
     {
-        return "mobs";
+        return "factions";
     }
 }

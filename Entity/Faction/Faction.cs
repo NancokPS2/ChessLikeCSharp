@@ -17,7 +17,7 @@ public partial class Faction : ISerializable
 
     public Dictionary<EFaction, float> RelationList { get; set; } = new();
 
-    public Inventory inventory = new(999);
+    public Inventory Inventory = new(999);
 
 
     public Faction(EFaction identifer = EFaction.NEUTRAL)
@@ -51,13 +51,4 @@ public partial class Faction : ISerializable
         return base.GetHashCode();
     }
 
-    public string GetFileName()
-    {
-        return Enum.GetName(Identifier) + ".xml";
-    }
-
-    public string GetSubDirectory()
-    {
-        return "factions";
-    }
 }
