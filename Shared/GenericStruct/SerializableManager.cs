@@ -7,7 +7,9 @@ using ChessLike.Shared.Serialization;
 
 namespace ChessLike.Shared.GenericStruct;
 
-public class SerializableManager<TManaged> where TManaged : ISerializable
+public class SerializableManager<TManaged, TResource> 
+    where TManaged : ISerializable, IResourceSerialize<TManaged, TResource> 
+    where TResource : Godot.Resource
 {
     protected static UniqueList<TManaged> Contents = new();
 
@@ -50,6 +52,8 @@ public class SerializableManager<TManaged> where TManaged : ISerializable
         {
             Serializer.SaveAsXml(item, Path.Combine(GetPrototypeFolder(), item.GetFileName() + ".xml"));
         }
+        Godot.DirAccess.MakeDirRecursiveAbsolute(IResourceSerialize<TManaged, TResource>.GetResourceFolderRes());
+        Godot.DirAccess.MakeDirRecursiveAbsolute(IResourceSerialize<TManaged, TResource>.GetResourceFolderUser());
     }
 
     public virtual List<TManaged> GetAll()

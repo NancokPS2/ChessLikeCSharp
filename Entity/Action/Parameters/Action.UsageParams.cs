@@ -29,11 +29,15 @@ public partial class Action
         /// <returns></returns>
         public List<Mob> MobsTargeted = new();
 
+        public int Priority = 0;
+
         public UsageParams(Mob owner, Grid grid, Action action_reference)
         {
             this.OwnerRef = owner;
             this.GridRef = grid;
             this.ActionRef = action_reference;
+
+            Priority = action_reference.PriorityDefault;
             //this.location_selected = location_selected;
         }
     }

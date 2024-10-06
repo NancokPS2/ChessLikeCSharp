@@ -7,7 +7,7 @@ namespace ChessLike.Entity;
 
 public partial class Faction
 {
-    public class Manager : SerializableManager<Faction>
+    public class Manager : SerializableManager<Faction, FactionResource>
     {
         public override List<Faction> CreatePrototypes()
         {

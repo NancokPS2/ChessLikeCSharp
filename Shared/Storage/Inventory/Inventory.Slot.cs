@@ -7,7 +7,7 @@ namespace ChessLike.Shared.Storage;
 
 public partial class Inventory
 {
-    public class Slot
+    public partial class Slot
     {
         public List<EItemFlag> FlagWhitelist = new();
         public List<EItemFlag> FlagBlacklist = new();

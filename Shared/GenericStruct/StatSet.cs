@@ -6,8 +6,8 @@ using System.Xml;
 using ChessLike.Entity;
 using Godot;
 
-namespace ChessLike.Shared.GenericStruct;
-public class StatSet<TStatEnum> where TStatEnum : notnull, Enum
+namespace ChessLike.Shared;
+public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 {
     public const string INVALID_BOOST_SOURCE = "__INVALID__";
     public delegate void StatChange(TStatEnum name, float amount);

@@ -10,4 +10,5 @@ public enum StatName
     AGILITY,
     INTELLIGENCE,
     JUMP,
+    
 }

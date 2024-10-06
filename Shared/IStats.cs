@@ -1,9 +1,10 @@
 using System.Numerics;
 using System.Xml;
 using ChessLike.Entity;
+using Godot;
 
 namespace ChessLike.Shared;
-public interface IStats<T> where T : Enum
+public interface IStats<[MustBeVariant]T> where T : Enum
 {
 
     public StatSet<T> Stats {set; get;}

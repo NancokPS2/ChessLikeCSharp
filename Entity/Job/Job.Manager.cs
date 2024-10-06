@@ -10,7 +10,7 @@ namespace ChessLike.Entity;
 
 public partial class Job
 {
-    public class Manager : SerializableManager<Job>
+    public class Manager : SerializableManager<Job, JobResource>
     {
 
 

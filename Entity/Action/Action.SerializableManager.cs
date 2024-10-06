@@ -8,7 +8,7 @@ namespace ChessLike.Entity;
 
 public partial class Action
 {
-    public class Manager : SerializableManager<Action>
+    public class Manager : SerializableManager<Action, ActionResource>
     {
 
         public override List<Action> CreatePrototypes()

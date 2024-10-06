@@ -7,7 +7,7 @@ namespace ChessLike.Shared.Storage;
 
 public partial class Item
 {
-    public class Manager : SerializableManager<Item>
+    public class Manager : SerializableManager<Item, ItemResource>
     {
         public override List<Item> CreatePrototypes()
         {

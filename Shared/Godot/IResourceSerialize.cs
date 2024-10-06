@@ -7,11 +7,11 @@ namespace ChessLike.Shared;
 
 public interface IResourceSerialize<TSerialized, TResource> where TResource : Godot.Resource
 {
-    public TSerialized FromResource(TResource resource);
+    //public TSerialized FromResource(TResource resource);
 
     public TResource ToResource();
 
-    public string GetResourceFolderRes() => "res://Resources/" + this.GetType().ToString();
+    public static string GetResourceFolderRes() => "res://Resources/" + typeof(TSerialized).ToString();
 
-    public string GetResourceFolderUser() => "user://Resources/" + this.GetType().ToString();
+    public static string GetResourceFolderUser() => "user://Resources/" + typeof(TSerialized).ToString();
 }

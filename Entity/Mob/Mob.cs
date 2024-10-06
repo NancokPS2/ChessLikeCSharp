@@ -100,7 +100,7 @@ public partial class Mob : IStats<StatName>
             Stats = StatSet<StatName>.GetAverage(Stats, job.Stats);
 
             //Add the actions.
-            Actions.AddRange(job.actions);
+            Actions.AddRange(job.Actions);
         }
     }
 

@@ -26,7 +26,7 @@ public partial class Action : IGridReader
 
     public string Name = "Undefined Action";
     public EAction Identifier = EAction.PUNCH;
-    public int Priority = 0;
+    public int PriorityDefault = 0;
 
     public FilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
