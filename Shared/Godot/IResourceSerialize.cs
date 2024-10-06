@@ -9,7 +9,7 @@ public interface IResourceSerialize<TSerialized, TResource> where TResource : Go
 {
     public TSerialized FromResource(TResource resource);
 
-    public TResource ToResource(TSerialized serialized);
+    public TResource ToResource();
 
     public string GetResourceFolderRes() => "res://Resources/" + this.GetType().ToString();
 

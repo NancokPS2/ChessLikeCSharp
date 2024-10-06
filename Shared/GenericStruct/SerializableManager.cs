@@ -59,7 +59,7 @@ public class SerializableManager<TManaged> where TManaged : ISerializable
 
     public void Add(TManaged managed)
     {
-        Contents.Add(managed);
+        Contents.Add(managed, false);
     }
     public void Add(TManaged[] managed)
     {

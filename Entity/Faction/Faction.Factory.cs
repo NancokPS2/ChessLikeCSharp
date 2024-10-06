@@ -13,14 +13,21 @@ public partial class Faction
         Faction output = new();
         output = faction_enum switch
         {
-            EFaction.PLAYER => output.ChainBasicInventory()
+            EFaction.PLAYER => output.ChainBasicInventory(),
+            EFaction.NEUTRAL => output.ChainBasicInventory(),
+            _ => output,
         }; 
-        return output;
+        return output.ChainIdentifier(faction_enum);
     }  
 
     public Faction ChainBasicInventory()
     {
         Inventory.AddItem(new Trinket(){Name = "Trinket"});
+        return this;
+    }
+    public Faction ChainIdentifier(EFaction faction)
+    {
+        Identifier = faction;
         return this;
     }
 

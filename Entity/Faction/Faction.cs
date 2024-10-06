@@ -39,7 +39,7 @@ public partial class Faction : ISerializable
     {
         if (obj is Faction faction)
         {
-            return faction == this;
+            return faction.Identifier == this.Identifier;
         }else
         {
             return false;

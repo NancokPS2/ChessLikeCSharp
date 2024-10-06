@@ -21,12 +21,12 @@ public partial class Item : IResourceSerialize<Item, ItemResource>
 
     }
 
-    public ItemResource ToResource(Item serialized)
+    public ItemResource ToResource()
     {
         ItemResource resource = new();
-        resource.Name = serialized.Name;
-        resource.Price = serialized.Price;
-        resource.Flags.AddRange(from item in serialized.Flags select item);
+        resource.Name = this.Name;
+        resource.Price = this.Price;
+        resource.Flags.AddRange(from item in this.Flags select item);
         return resource;
     }
 
@@ -58,15 +58,4 @@ public static class IResourceSerializeExtension
         return failed;
     }
 
-}
-
-[GlobalClass]
-public partial class ItemResource : Resource
-{
-    [Export]
-    public string Name;
-    [Export]
-    public Godot.Collections.Array<EItemFlag> Flags = new();
-    [Export]
-    public float Price;
 }

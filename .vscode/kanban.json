@@ -44,6 +44,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "Serialization to resources.",
+                    "id": "b1yuc2re8bl9bo1y6xyo00f0"
+                },
+                {
                     "text": "StatBoosts usage. Add equipment boosts to the stats when equipping.",
                     "id": "hemvui6jdj1zid1il3vnp5o2"
                 },
@@ -89,5 +93,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1727695193378
+    "timestamp": 1728182195148
 }
