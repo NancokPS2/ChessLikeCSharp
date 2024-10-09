@@ -28,7 +28,7 @@ public partial class BattleController
     public TurnManager CompTurnManager = new();
     public Grid CompGrid;
     public ActionRunner CompActionRunner = new();
-    public Pause CompPauseMenu = new();
+    public CanvasLayer CompCanvas = new();
 
     //Combat data
     public EncounterData Encounter;

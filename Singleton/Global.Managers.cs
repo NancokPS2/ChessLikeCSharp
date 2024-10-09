@@ -8,11 +8,11 @@ using Action = ChessLike.Entity.Action;
 
 public partial class Global
 {
-    public static Job.Manager ManagerJob = new();
-    public static Action.Manager ManagerAction = new();
-    public static Mob.Manager ManagerMob = new();
-    public static Faction.Manager ManagerFaction = new();
-    public static Item.Manager ManagerItem = new();
+    public static Job.Manager ManagerJob;
+    public static Action.Manager ManagerAction;
+    public static Mob.Manager ManagerMob;
+    public static Faction.Manager ManagerFaction;
+    public static Item.Manager ManagerItem;
 
 
 

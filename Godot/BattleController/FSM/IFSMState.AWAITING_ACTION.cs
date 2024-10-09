@@ -25,7 +25,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
 
         mob_ui.Update(User);
-        User.CompCombatUI.NodeActionUI.EnableActionButtons(false);
+        User.CompCombatUI.NodeActionUI.EnableActionButtons(true);
 
     }
 

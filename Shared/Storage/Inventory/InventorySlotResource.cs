@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Collections = Godot.Collections;
 using Godot;
-
-namespace ChessLike.Shared.Storage;
+using ChessLike.Shared.Storage;
 
 [GlobalClass]
 public partial class InventorySlotResource : Godot.Resource

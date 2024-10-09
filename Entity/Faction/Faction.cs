@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using ChessLike.Entity;
 using ChessLike.Shared.Serialization;
-using ChessLike.Entity;
 using ExtendedXmlSerializer;
 using ISerializable = ChessLike.Shared.Serialization.ISerializable;
 using ChessLike.Shared.Storage;

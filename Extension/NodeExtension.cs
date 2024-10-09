@@ -183,7 +183,7 @@ public static class NodeExtension
         return output;
     }
 
-    public static bool IsOnlyInGroup(this Node node, string group)
+    public static bool IsAloneInGroup(this Node node, string group)
     {
         var group_arr = node.GetTree().GetNodesInGroup(group);
         bool has_one = group_arr.Count == 1;
@@ -191,6 +191,14 @@ public static class NodeExtension
 
         return has_one && includes_this;
     }    
+
+    public static TButton AddListButton<TButton>(this Control @this, bool expanded = true) where TButton : BaseButton, new()
+    {
+        TButton button = new();
+        if (expanded) {button.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill; button.AnchorRight = 1.0f;}
+        @this.AddChild(button);
+        return button;
+    }
 }
 
 public struct NodeRequirement

@@ -47,7 +47,7 @@ public partial class BattleController
         CompCombatUI.NodeActionUI.ActionPressed += (act) => InputActionSelected = act;
         CompCombatUI.NodeActionUI.EndTurnPressed += () => InputEndTurnPressed++;
 
-        AddChild(CompPauseMenu);    
+        AddChild(CompCanvas);    
 
         GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());
 

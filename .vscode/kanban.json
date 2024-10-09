@@ -44,6 +44,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "UI for editing Mobs (Party UI)",
+                    "id": "w885wk1rv5ct4msnw7kxs4vl"
+                },
+                {
                     "text": "Serialization to resources.",
                     "id": "b1yuc2re8bl9bo1y6xyo00f0"
                 },
@@ -93,5 +97,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1728182195148
+    "timestamp": 1728263080606
 }

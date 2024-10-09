@@ -11,19 +11,21 @@ namespace Godot;
 
 public class BattleControllerStatePaused : BattleControllerState
 {
+
+    private Pause? _menu_reference;
+    private BattleControllerState? StatePrePause;
     public BattleControllerStatePaused(BattleController.State identifier) : base(identifier)
     {
     }
 
-    private BattleControllerState StatePrePause;
     public override void StateOnEnter()
     {
         StatePrePause = User.StatePrevious;
+
         User.CompCamera.SetControl(false);
-        User.CompPauseMenu.AddSceneWithDeclarations(
-            Pause.SCENE_PATH,
-            Pause.NodesRequired
-            );
+
+        _menu_reference = new Pause().GetInstantiatedScene<Pause>();
+        User.CompCanvas.AddChild(_menu_reference);
 
         if (User.StatePrevious is null)
         {
@@ -33,22 +35,34 @@ public class BattleControllerStatePaused : BattleControllerState
 
     public override void StateOnExit()
     {
-        User.CompPauseMenu.RemoveSelf();
+        if (_menu_reference is not null){_menu_reference.RemoveSelf();}
         User.CompCamera.SetControl(true);
     }
 
     public override void StateProcess(double delta)
     {
-        if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
+        bool pause_pressed = Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE); 
+        bool menu_null = _menu_reference is null;
+
+        if (
+            pause_pressed
+            || menu_null
+            || _menu_reference.GetParent() is null
+            )
         {
-            if (StatePrePause is BattleControllerState not_null)
-            {
-                User.FSMSetState(not_null);
-            }
-            else
-            {
-                throw new Exception("Entered pause without setting a previous state to return to!");
-            }
+            ReturnToPreviousState();
+        }
+    }
+
+    public void ReturnToPreviousState()
+    {
+        if (StatePrePause is BattleControllerState not_null)
+        {
+            User.FSMSetState(not_null);
+        }
+        else
+        {
+            throw new Exception("Entered pause without setting a previous state to return to!");
         }
     }
 }

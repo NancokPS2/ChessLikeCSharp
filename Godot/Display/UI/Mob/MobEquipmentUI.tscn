@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Godot/Display/UI/Mob/MobEquipmentUI.cs" id="1_hfhkq"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ygalq"]
 
-[node name="Equipment" type="Control"]
+[node name="Equipment" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +12,16 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ygalq")
 script = ExtResource("1_hfhkq")
+Container = NodePath("ScrollContainer/EQUIPMENT")
 metadata/_tab_index = 1
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -24,3 +33,5 @@ grow_vertical = 2
 
 [node name="EQUIPMENT" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Shared.Storage;
-
 [GlobalClass]
 public partial class InventoryResource : Godot.Resource
 {
