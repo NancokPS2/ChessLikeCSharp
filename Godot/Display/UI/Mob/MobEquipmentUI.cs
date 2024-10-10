@@ -8,6 +8,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, Inventory.Slot>, IS
 {
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobEquipmentUI.tscn";
 
+    protected Inventory MobInventory;
 
     public override void _Ready()
     {
@@ -18,7 +19,8 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, Inventory.Slot>, IS
 
     public void Update(Mob mob)
     {
-        Update(mob.Inventory.GetSlots());
+        MobInventory = mob.Inventory;
+        Update(MobInventory.GetSlots());
     }
 
     protected override void OnButtonPressed(Button button, Inventory.Slot slot)

@@ -5,13 +5,13 @@ public partial class Inventory
     public enum Error
     {
         NONE,
-        NO_SPACE,       //Add: Not enough slots left to fit the item.
-        SLOT_OCCUPIED,  //Add: Another item is in the slot.
-        NO_VALID_SLOT,      //Remove: No slot in this inventory can hold this item.
-        INVALID_SLOT,   //A forced attempt was made to add the item to an invalid slot.
-        ITEM_NOT_INSIDE, //Tried to interact with an item that's not in this inventory.
         FATAL,          //If something that's not supposed to happen, happens.
 
+        REMOVE_ITEM_NOT_INSIDE, //Tried to interact with an item that's not in this inventory.
+        REMOVE_ALREADY_EMPTY,
+
+        ADD_NO_SPACE,       //Add: Not enough slots left to fit the item.
+        ADD_INVALID_SLOT,   //A forced attempt was made to add the item to an invalid slot.
     }
      /*
     [Flags]
@@ -37,6 +37,7 @@ public partial class Inventory
         }
     }
 
+
     public void AddSlot(Slot slot)
     {
         Slots.Add(slot);
@@ -50,6 +51,26 @@ public partial class Inventory
         return Slots[slot].Item;
     }
 
+    public Error AddItem(Item item_to_add, Slot slot)
+    {
+
+        //The lost must be able to hold it
+        if (!slot.IsItemValid(item_to_add))
+        {
+            return Error.ADD_INVALID_SLOT;
+        }
+
+        //Fail if there's not enough slots.
+        if(GetFreeSlots() <= 0)
+        {
+            return Error.ADD_NO_SPACE;
+        }
+
+        //Finally add the item.
+        slot.Item = item_to_add;
+        return Error.NONE;
+    }
+
     public Error AddItem(Item item_to_add)
     {
         //Check if any slot can house the item.
@@ -60,55 +81,55 @@ public partial class Inventory
                 return AddItem(item_to_add, slot);
             }
         }
-        return Error.NO_VALID_SLOT;
+        return Error.ADD_INVALID_SLOT;
+    }
+    public Error AddItem(Slot slot)
+    {
+        if (slot.Item is null){throw new ArgumentException("The slot must contain something.");}
+        return AddItem(slot.Item);
     }
 
-    public Error AddItem(Item item_to_add, Slot slot)
+    public Error AddItem(Slot source_slot, Slot target_slot)
     {
-
-        //The lost must be able to hold it
-        if (!slot.IsItemValid(item_to_add))
-        {
-            return Error.INVALID_SLOT;
-        }
-
-        //Fail if there's not enough slots.
-        if(GetFreeSlots() <= 0)
-        {
-            return Error.NO_SPACE;
-        }
-
-        //Finally add the item.
-        slot.Item = item_to_add;
-        return Error.NONE;
+        if (source_slot.Item is null){throw new ArgumentException("The slot must contain something.");}
+        return AddItem(source_slot.Item, target_slot);
     }
 
     public Error RemoveItem(Item item)
     {
-        
-        Slot? with_item = GetSlotWithItem(item);
-        if (with_item is Slot not_null)
+        Slot? with_item = FindSlotWithItem(item);
+        if (with_item is not null)
         {
-            not_null.Item = null;
-            return Error.NONE;
+            return RemoveItem(with_item);
         }
         else
         {
-            return Error.ITEM_NOT_INSIDE;
+            return Error.REMOVE_ITEM_NOT_INSIDE;
         }
     }
 
     public Error RemoveItem(Slot slot)
     {
-        slot.Item = null;
-        return Error.NONE;
+        if (slot.Item is not null){return Error.REMOVE_ALREADY_EMPTY;}
+        else
+        {
+            slot.Item = null; 
+            return Error.NONE;
+        }
     }
 
     public bool ContainsItem(Item item) => Slots.Any( x => x.Item == item);
 
+    public bool ContainsSlot(Slot slot) => Slots.Any(x => x == slot);
+
     public List<Slot> GetSlotsEmpty() => Slots.Where(x => x.Item is null).ToList();
 
-    public Slot? GetSlotWithItem(Item item)
+    /// <summary>
+    /// Returns a slot containing the provided item.
+    /// </summary>
+    /// <param name="item">The item to look for.</param>
+    /// <returns>The slot with the item, or null if none are found in this inventory.</returns>
+    public Slot? FindSlotWithItem(Item item)
     {
         if (!ContainsItem(item))
         {
@@ -125,6 +146,30 @@ public partial class Inventory
     public bool IsSlotEmpty(int slot)
     {
         return GetItem(slot) == null;
+    }
+
+    public Error TransferItem(Item item, Inventory target_inv) => TransferItem(this, item, target_inv);
+    public Error TransferItem(Slot slot, Inventory target_inv) => TransferItem(this, slot, target_inv);
+
+    public static Error TransferItem(Inventory source_inv, Item item, Inventory target_inv) => TransferItem(source_inv, source_inv.FindSlotWithItem(item), target_inv);
+
+    public static Error TransferItem(Inventory source_inv, Slot slot, Inventory target_inv)
+    {
+        if (!source_inv.ContainsSlot(slot)){throw new ArgumentException("The slot must be inside the source inventory");}
+
+        Error remove_err = source_inv.RemoveItem(slot);
+        if (remove_err != Error.NONE)
+        {
+            return remove_err;
+        } 
+
+        Error add_err = target_inv.AddItem(slot);
+        if (add_err != Error.NONE)
+        {
+            return add_err;
+        } 
+
+        return Error.NONE;
     }
 
 

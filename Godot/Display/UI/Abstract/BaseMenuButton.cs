@@ -32,13 +32,13 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         Container = container;
     }
 
-    public void Update()
+    protected void Update()
     {
         if (_last_update is null) {GD.PushWarning("Nothing to update with. The last updated value is null or it was never set."); return;}
         Update(_last_update);
     }
 
-    public void Update(List<TAssociatedParam> parameter_list)
+    protected void Update(List<TAssociatedParam> parameter_list)
     {
         Control used_container = Container ?? this;
         used_container.FreeChildren();

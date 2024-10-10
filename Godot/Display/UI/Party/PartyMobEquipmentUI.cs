@@ -14,17 +14,23 @@ public partial class PartyMobEquipmentUI : MobEquipmentUI
 
     protected override void OnButtonPressed(Button button, Inventory.Slot slot)
     {
+        //No slot has been chosen yet.
         if (SlotSelected is null)
         {
+            if (!MobInventory.ContainsSlot(slot)){throw new Exception("This slot is from another inventory!?");}
+
             SlotSelected = slot;
             button.Modulate = MODULATE_SELECTED;
         }
+        //If one was selected and the new one is empty.
         else if (SlotSelected.Item is not null && slot.Item is null)
         {
             if (slot.IsItemValid(SlotSelected.Item))
             {
                 Item to_transfer = SlotSelected.Item;
-                slot.Item = to_transfer;
+                MobInventory.RemoveItem(to_transfer);
+                MobInventory.AddItem(to_transfer, slot);
+
                 button.Modulate = MODULATE_NORMAL;
                 Update();
             }

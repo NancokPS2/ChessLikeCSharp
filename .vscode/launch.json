@@ -14,7 +14,7 @@
             "request": "launch",
             //"debugServer": 6006,
             "preLaunchTask": "build",
-            "program": "C:\\Programs\\Godot 3.5\\Godot_v4.3-rc1_mono_win64.exe",
+            "program": "K:\\Programs\\Godot\\Godot_v4.3-rc1_mono_win64.exe",
             "args": ["--debug-collisions", "--verbose"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
