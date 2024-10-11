@@ -25,7 +25,7 @@ public partial class Job
             return output;
         }
 
-        public override Job ConvertFromResource(JobResource resource)
+        public override Job GetFromResource(JobResource resource)
         {
             return FromResource(resource);
         }
@@ -41,7 +41,9 @@ public partial class Job
 
         public Job GetFromEnum(EJob job)
         {
-            Job output = GetAll().First(x => x.Identifier == job);
+            List<JobResource> list = GetAllResources();
+            JobResource res = list.First(x => x.Identifier == job);
+            Job output = FromResource(res);
             return output;
         }
     }

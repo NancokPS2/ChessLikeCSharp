@@ -9,9 +9,9 @@ namespace ChessLike.Entity;
 
 public partial class Mob
 {
-    public class MobInventory : Inventory, StatSet<StatName>.IStatBooster
+    public class InventoryMob : Inventory, StatSet<StatName>.IStatBooster
     {
-        public MobInventory()
+        public InventoryMob()
         {
             AddSlot(
                 new Slot(new(){EItemFlag.WEAPON}, new())

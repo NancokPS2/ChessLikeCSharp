@@ -13,7 +13,8 @@ public class SerializableManager<TManaged, TResource>
     where TManaged : ISerializable, IResourceSerialize<TManaged, TResource> 
     where TResource : Godot.Resource
 {
-    protected static UniqueList<TManaged> Contents = new();
+    protected static UniqueList<TManaged> Pooled = new();
+    protected static UniqueList<TResource> Resources = new();
 
     public SerializableManager()
     {
@@ -23,15 +24,20 @@ public class SerializableManager<TManaged, TResource>
         
         //First try to load all existing ones.
         Preload();
-        //Then fill any missing ones with prototypes
-        SavePrototypes(CreatePrototypes());
+        //DEPRECATED: Then fill any missing ones with prototypes
+        //SavePrototypes(CreatePrototypes());
     }
 
-    public virtual TManaged ConvertFromResource(TResource resource)
+    public virtual TManaged GetFromResource(TResource resource)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// DEPRECATED
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public virtual List<TManaged> CreatePrototypes()
     {
         throw new NotImplementedException();
@@ -40,11 +46,11 @@ public class SerializableManager<TManaged, TResource>
     public void Preload()
     {
         
-        //Load XML objects.
+        //Load XML objects, deprecated.
         List<TManaged>? loaded = Serializer.LoadFolderAsXml<TManaged>(GetPrototypeFolder());
         foreach (var item in loaded)
         {
-            Add(item);
+            AddPooled(item);
         }
 
         //Load Resources
@@ -56,22 +62,28 @@ public class SerializableManager<TManaged, TResource>
             {
                 TResource? output;
 
+                //Get the item path.
                 string str_to_load = folder + item;
+
+                //Remove the remap extension if present.
                 string extension_to_remove = ".remap";
                 int index_to_remove = str_to_load.IndexOf(extension_to_remove);
-
                 if (index_to_remove != -1)
                 {
                     str_to_load = str_to_load.Remove(index_to_remove, extension_to_remove.Length);    
                 }
 
+                //If the filename has a valid extension, proceed.
                 if (str_to_load.EndsWith(".tres") || str_to_load.EndsWith(".res"))
                 {
                     output = GD.Load<TResource>(str_to_load);
 
                     if (output is not null)
                     {
-                        Add(ConvertFromResource(output));
+                        AddResource(output);
+                        //AddPooled(GetFromResource(output));
+
+            //After this, it is all debug printing.
                         res_debug_output += "\n " + str_to_load + " | ";
                     }
                 }
@@ -97,9 +109,12 @@ public class SerializableManager<TManaged, TResource>
     }
 
 
+    /// <summary>
+    /// DEPRECATED
+    /// </summary>
+    /// <param name="prototypes"></param>
     public virtual void SavePrototypes(List<TManaged> prototypes)
     {
-        
         foreach (TManaged item in prototypes)
         {
             Serializer.SaveAsXml(item, Path.Combine(GetPrototypeFolder(), item.GetFileName() + ".xml"));
@@ -107,22 +122,25 @@ public class SerializableManager<TManaged, TResource>
     }
 
 
-    public virtual List<TManaged> GetAll()
-    {
-        return Contents;
-    }
+    protected List<TManaged> GetAllPooled() => Pooled;
 
-    public void Add(TManaged managed)
+    public void AddPooled(TManaged managed)
     {
-        Contents.Add(managed, false);
+        Pooled.Add(managed, false);
     }
-    public void Add(TManaged[] managed)
+    public void AddPooled(List<TManaged> managed) => managed.ForEach(x => AddPooled(x));
+
+    /// <summary>
+    /// Gets all loaded resources.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception">If this shit's empty, YEET.</exception>
+    protected virtual List<TResource> GetAllResources() => Resources.Count != 0 ? Resources : throw new Exception("No resources loaded of type " + GetType().ToString());
+    public void AddResource(TResource resource)
     {
-        foreach (var item in managed)
-        {
-            Add(item);
-        }
+        Resources.Add(resource);
     }
+    public void AddResource(List<TResource> resources) => resources.ForEach(x => AddResource(x));
 
     public string GetResourceFolderRes() => IResourceSerialize<TManaged, TResource>.GetResourceFolderRes();
     public string GetResourceFolderUser() => IResourceSerialize<TManaged, TResource>.GetResourceFolderUser();

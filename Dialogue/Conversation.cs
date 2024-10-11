@@ -1,4 +1,5 @@
 using System.Dynamic;
+using Godot;
 
 namespace ChessLike.Dialogue;
 
@@ -12,7 +13,7 @@ public partial class Conversation
     public List<Snippet> snippets = new(){new Snippet("Nothing, sorry.")};
     int snippet_index = 0;
     float delta = 0;
-    Flags flags_in_use = new();
+    Flags<EDialog> flags_in_use = new();
 
     Snippet GetCurrentSnippet()
     {
@@ -29,9 +30,9 @@ public partial class Conversation
         snippet_index = index;
 
         //Logic for snippet validity.
-        Flags snippet_flags = GetCurrentSnippet().flags_for_valid;
+        Flags<EDialog> snippet_flags = GetCurrentSnippet().flags_for_valid;
         // If the current snippet has required flags but they are not present, jump to a set snippet.
-        if (snippet_flags != Flags.Empty && !Flags.AContainsAllInB(flags_in_use, snippet_flags))
+        if (snippet_flags != Flags<EDialog>.Empty && !Flags<EDialog>.AContainsAllInB(flags_in_use, snippet_flags))
         {
             JumpToSnippet(GetCurrentSnippet().snippet_if_not_valid);
         }

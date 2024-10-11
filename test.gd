@@ -1,9 +1,33 @@
-extends Node
-class_name ASS
+extends Button
+class_name UpgradeButton
 
-const scene: PackedScene = preload("res://Test.tscn")
-const scrip: Script = ASS
 
+
+func _physics_process(delta):
+	var raycast: RayCast2D = $RayCastChild
+	
+	var distance_to_floor: float = raycast.position.distance_to(raycast.get_collision_point()) 
+	position += Vector2.DOWN * distance_to_floor
+
+
+
+
+
+
+
+signal upgrade_selected(upgrade: Upgrade)
+
+@export var stored_upgrade: Upgrade
+
+func _init():
+	pressed.connect(emit_upgrade)
+
+func emit_upgrade():
+	upgrade_selected.emit(stored_upgrade)
+
+
+class Upgrade extends Resource:
+	pass
 @export var player: Node
 
 func load_file(path: String):
@@ -14,7 +38,6 @@ func load_file(path: String):
 	else:
 		config.load(path)
 	
-signal pressed
 	
 func _ready():
 	var node: Node = get_parent()

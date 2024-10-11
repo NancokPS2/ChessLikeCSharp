@@ -6,19 +6,17 @@ using Godot;
 namespace ChessLike.Entity;
 
 
-public partial class Mob : IStats<StatName>
+public partial class Mob
 {
-    static Dictionary<Vector3i, Mob> MobToLocationDict = new();
     public string DisplayedName = "UNNAMED";
     public List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
     private List<Action> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
-    public MobInventory Inventory = new();
+    public InventoryMob MobInventory = new();
     public EMovementMode MovementMode = EMovementMode.WALK;
     public EMobState MobState = EMobState.BENCHED;
-    public StatSet<StatName> Stats { get; set; } = new(){
-    };
+    public StatSet<StatName> Stats;
 
     public Vector3i Position;
 
@@ -26,11 +24,12 @@ public partial class Mob : IStats<StatName>
     {
         DisplayedName = new("Unknown Mcnown");
         //TODO: Move this somewhere else
-        Global.ManagerMob.Add(this);
+        Global.ManagerMob.AddPooled(this);
+        Stats = GetDefaultStats();
     }
 
     //TODO
-    private Action _movement;
+    private Action _movement = new();
     public void SetMovementMode(EMovementMode mode)
     {
         Actions.Remove(_movement);
@@ -64,24 +63,24 @@ public partial class Mob : IStats<StatName>
 
     public void EquipmentAdd(Equipment equip)
     {
-        var err = Inventory.AddItem(equip);
+        var err = MobInventory.AddItem(equip);
         if (err != Shared.Storage.Inventory.Error.NONE)
         {
             GD.PushWarning(string.Format("Failed to equip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
         }
         
-        Stats.BoostAdd(Inventory);
+        Stats.BoostAdd(MobInventory);
     }
 
     public void EquipmentRemove(Equipment equip)
     {
-        var err = Inventory.RemoveItem(equip);
+        var err = MobInventory.RemoveItem(equip);
         if (err != Shared.Storage.Inventory.Error.NONE)
         {
             GD.PushWarning(string.Format("Failed to unequip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
         }
 
-        Stats.BoostAdd(Inventory);
+        Stats.BoostAdd(MobInventory);
     }
 
     private void UpdateJobs()
@@ -104,5 +103,18 @@ public partial class Mob : IStats<StatName>
         }
     }
 
+    public static StatSet<StatName> GetDefaultStats()
+    {
+        StatSet<StatName> output = new();
+        output.SetStat(StatName.HEALTH, 100);
+        output.SetStat(StatName.ENERGY, 30);
+        output.SetStat(StatName.AGILITY, 100);
+        output.SetStat(StatName.STRENGTH, 100);
+        output.SetStat(StatName.INTELLIGENCE, 100);
+        output.SetStat(StatName.MOVEMENT, 3);
+        output.SetStat(StatName.JUMP, 2);
+        output.SetStat(StatName.DELAY, 100);
+        return output;
+    }
 
 }

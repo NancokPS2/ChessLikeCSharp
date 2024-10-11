@@ -15,12 +15,12 @@ public partial class Mob
 
     public static Mob CreatePrototype(EMobPrototype mob_template)
     {
-        Mob output = new();
+        Mob output = new Mob();
         output = mob_template switch
         {
             EMobPrototype.HUMAN => output
                 .ChainName("Human")
-                .ChainJob(Global.ManagerJob.GetFromEnum(EJob.DEFAULT))
+                .ChainJob(new(){Global.ManagerJob.GetFromEnum(EJob.DEFAULT)})
                 .ChainAction(Global.ManagerAction.GetFromEnum(EAction.MOVE))
                 .ChainRace(ERace.HUMAN),
             _ => new Mob()
@@ -30,18 +30,7 @@ public partial class Mob
 
     public Mob ChainBaseStats()
     {
-        Stats.SetStat(StatName.HEALTH, 100);
-        Stats.SetStat(StatName.ENERGY, 30);
-        Stats.SetStat(StatName.AGILITY, 100);
-        Stats.SetStat(StatName.STRENGTH, 100);
-        Stats.SetStat(StatName.INTELLIGENCE, 100);
-        Stats.SetStat(StatName.MOVEMENT, 3);
-        Stats.SetStat(StatName.JUMP, 2);
-        if (Stats.GetValue(StatName.MOVEMENT) != 3)
-        {
-            throw new Exception("What!?");
-        }
-        Stats.SetStat(StatName.JUMP, 2);
+        Stats = GetDefaultStats();
         return this;
     }
 
@@ -83,14 +72,6 @@ public partial class Mob
         {
             Jobs.Add(job);
         }
-        UpdateJobs();
-        return this;
-    }
-
-    public Mob ChainJob(Job job)
-    {
-        Jobs.Clear();
-        Jobs.Add(job);
         UpdateJobs();
         return this;
     }

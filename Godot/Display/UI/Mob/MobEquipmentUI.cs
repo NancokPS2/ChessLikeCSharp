@@ -19,7 +19,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, Inventory.Slot>, IS
 
     public void Update(Mob mob)
     {
-        MobInventory = mob.Inventory;
+        MobInventory = mob.MobInventory;
         Update(MobInventory.GetSlots());
     }
 

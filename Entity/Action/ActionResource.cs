@@ -10,6 +10,9 @@ namespace ChessLike.Entity;
 public partial class ActionResource : Godot.Resource
 {
     [Export]
+    public EAction Identifier;
+    
+    [Export]
     public string Name = "";
 
     [Export]

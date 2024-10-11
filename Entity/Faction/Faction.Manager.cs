@@ -20,7 +20,7 @@ public partial class Faction
             return output;
         }
 
-        public override Faction ConvertFromResource(FactionResource resource)
+        public override Faction GetFromResource(FactionResource resource)
         {
             return FromResource(resource);
         }
@@ -36,7 +36,9 @@ public partial class Faction
 
         public Faction GetFromEnum(EFaction faction)
         {
-            Faction output = GetAll().First(x => x.Identifier == faction);
+            Faction output = FromResource(
+              GetAllResources().First(x => x.Identifier == faction)
+            );
             return output;
         }
     }

@@ -14,7 +14,7 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>
 
     public void Update(EFaction faction)
 	{
-		var list = Global.ManagerMob.GetInFaction(faction);
+		var list = Global.ManagerMob.GetFromFaction(faction);
 		Update(list);
 	}
 

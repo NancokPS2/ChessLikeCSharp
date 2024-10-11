@@ -6,6 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity;
 
+[GlobalClass]
 public partial class JobResource : Godot.Resource
 {
     [Export]

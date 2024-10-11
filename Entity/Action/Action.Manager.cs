@@ -22,7 +22,7 @@ public partial class Action
             return output;
         }
 
-        public override Action ConvertFromResource(ActionResource resource)
+        public override Action GetFromResource(ActionResource resource)
         {
             return FromResource(resource);
         }
@@ -38,7 +38,9 @@ public partial class Action
 
         public Action GetFromEnum(EAction action)
         {
-            return GetAll().First(x => x.Identifier == action);
+            return FromResource(
+              GetAllResources().First(x => x.Identifier == action)
+            );
         }
     }
 }

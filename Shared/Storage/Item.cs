@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using static ChessLike.Entity.Mob;
 
 namespace ChessLike.Shared.Storage;
 public partial class Item : IValuable, StatSet<StatName>.IStatBooster

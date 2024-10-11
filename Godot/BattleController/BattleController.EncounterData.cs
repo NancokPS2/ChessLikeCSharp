@@ -13,7 +13,7 @@ public partial class BattleController
 
         public static EncounterData GetDefault()
         {
-            Global.Setup();
+
 
             EncounterData encounter = new();
             encounter.Grid = Grid.Generator.GenerateFlat(new(6));

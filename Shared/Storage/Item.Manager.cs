@@ -15,7 +15,7 @@ public partial class Item
             return output;
         }
 
-        public override Item ConvertFromResource(ItemResource resource)
+        public override Item GetFromResource(ItemResource resource)
         {
             return FromResource(resource);
         }

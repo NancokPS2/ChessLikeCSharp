@@ -25,7 +25,6 @@ public partial class Mob : IGridObject
                     );
                 return distance <= 1;
             
-
             default:
                 distance = from.DistanceManhattanWithToleranceTo(
                         to, 
@@ -44,8 +43,10 @@ public partial class Mob : IGridObject
         {
             case EMovementMode.WALK:
                 can_exist = grid.IsFlagInPosition(position, CellFlag.AIR);
+
                 can_stand_on = grid.IsPositionInbounds(position + Vector3i.DOWN) 
-                    && grid.IsFlagInPosition(position + Vector3i.DOWN, CellFlag.SOLID);
+                && grid.IsFlagInPosition(position + Vector3i.DOWN, CellFlag.SOLID);
+                
                 return can_exist && can_stand_on;
                 
             default:

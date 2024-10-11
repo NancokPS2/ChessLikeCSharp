@@ -14,8 +14,6 @@ public partial class Global
     public static Faction.Manager ManagerFaction;
     public static Item.Manager ManagerItem;
 
-
-
     public static void SetupManager()
     {
         ManagerJob = new();

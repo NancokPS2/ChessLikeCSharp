@@ -58,7 +58,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
     private void DisplayDummy()
     {
         Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
-        mob.Inventory.AddItem(new Trinket());
+        mob.MobInventory.AddItem(new Trinket());
         Update(mob);
     }
 

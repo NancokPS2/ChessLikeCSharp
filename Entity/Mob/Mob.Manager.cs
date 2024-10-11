@@ -8,24 +8,33 @@ namespace ChessLike.Entity;
 
 public partial class Mob
 {
-    public class Manager : Manager<Mob>
+    public class Manager : SerializableManager<Mob, MobResource>
     {
         public Dictionary<EMobPrototype, Mob> PrototypeDict = new();
 
-        public List<Mob> GetInFaction(EFaction faction)
+        public List<Mob> NewFromFaction(EFaction faction)
         {
-            return GetAll().FilterFromFaction(faction);
+            IEnumerable<Mob>? output =  
+                from mob_res 
+                in GetAllResources().Where(x => x.Faction == faction) 
+                select FromResource(mob_res);
+            return output.ToList();
+        }
+
+        public List<Mob> GetFromFaction(EFaction faction)
+        {
+            return GetAllPooled().FilterFromFaction(faction);
         }
 
         //TODO
         public List<Mob> GetInCombat()
         {
-            return GetAll().FilterFromState(EMobState.COMBAT);
+            return GetAllPooled().FilterFromState(EMobState.COMBAT);
         }
 
         public List<Mob> GetInPosition(Vector3i position)
         {
-            return GetAll().FilterFromPosition(position);
+            return GetAllPooled().FilterFromPosition(position);
         }
     }
 }

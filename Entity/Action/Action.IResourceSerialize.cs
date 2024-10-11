@@ -11,6 +11,7 @@ public partial class Action : IResourceSerialize<Action, ActionResource>
         public ActionResource ToResource()
         {
             ActionResource output = new();
+            output.Identifier = Identifier;
 
             output.Name = Name;
 
@@ -20,6 +21,7 @@ public partial class Action : IResourceSerialize<Action, ActionResource>
         public static Action FromResource(ActionResource resource)
         {
             Action output = new();
+            output.Identifier = resource.Identifier;
 
             output.Name = resource.Name;
 

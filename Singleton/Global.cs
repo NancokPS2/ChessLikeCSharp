@@ -38,11 +38,6 @@ public static partial class Global
 
     }
 
-    public static void Setup()
-    {
-
-    }
-
     static Global()
     {
         Console.WriteLine(Directory.GetContentDir(EDirectory.GAME_CONTENT));

@@ -38,7 +38,6 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		this.X = xArg;
 		this.Y = yArg;
 		this.Z = zArg;
-		var a = 1;
 	}
 	public Vector3i(int all_coordinates) : this(xArg: all_coordinates,all_coordinates,all_coordinates)
 	{

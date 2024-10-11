@@ -1,39 +1,33 @@
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 
 namespace ChessLike.Shared.GenericStruct;
-#pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
-public struct Flags
-#pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+public struct Flags<TEnum> where TEnum : notnull, Enum
 {
-    public static readonly Flags Empty = new();
+    public static readonly Flags<TEnum> Empty = new();
 
-    private Dictionary<string, bool> Contents = new() { };
+    private Dictionary<TEnum, bool> Contents = new() { };
 
     public Flags()
     {
         Contents = new();
     }
 
-    public Flags(string[] flags)
+    public Flags(TEnum[] flags)
     {
         Contents = new();
-        foreach (string flag in flags)
+        foreach (TEnum flag in flags)
         {
             SetFlag(flag, true);
         }
     }
 
-    public void SetFlag(string flag_name, bool state)
+    public void SetFlag(TEnum flag, bool state)
     {
-        Contents[flag_name] = state;
+        Contents[flag] = state;
     }
 
-    public void SetFlag(int flag_name, bool state)
-    {
-        SetFlag(flag_name.ToString(), state);
-    }
-
-    public bool GetFlag(string flag)
+    public bool GetFlag(TEnum flag)
     {
         bool output = false;
         Contents.TryGetValue(flag, out output);
@@ -45,11 +39,11 @@ public struct Flags
         return output;
     }
 
-    public static bool AContainsAllInB(Flags a, Flags b)
+    public static bool AContainsAllInB(Flags<TEnum> a, Flags<TEnum> b)
     {
-        string[] set_a = a.GetAllFlags();
-        string[] set_b = b.GetAllFlags();
-        foreach (string flag_b in set_b)
+        List<TEnum> set_a = a.GetAllFlags();
+        List<TEnum> set_b = b.GetAllFlags();
+        foreach (var flag_b in set_b)
         {
             if (!set_a.Contains(flag_b))
             {
@@ -59,38 +53,40 @@ public struct Flags
         return true;
     }
 
-    public bool Contains(Flags flags)
+    public bool Contains(Flags<TEnum> flags)
     {
         return AContainsAllInB(this, flags);
     }
 
 
-    public readonly string[] GetAllFlags()
+    public readonly List<TEnum> GetAllFlags()
     {
-        string[] output = new string[0];
-        foreach (string key in Contents.Keys)
+        List<TEnum> output = new();
+        foreach (var pair in Contents)
         {
-            if (Contents[key] == true)
+            if (pair.Value == true)
             {
-                output.Append(key);
+                output.Append(pair.Key);
             }
         }
         return output;
     }
 
-    public static bool operator ==(Flags a, Flags b)
+    public static bool operator ==(Flags<TEnum> a, Flags<TEnum> b)
     {
         return AContainsAllInB(a, b);
     }
 
-    public static bool operator !=(Flags a, Flags b)
+    public static bool operator !=(Flags<TEnum> a, Flags<TEnum> b)
     {
         return !(a == b);
     }
 
     public override readonly int GetHashCode()
     {
-        return GetHashCode();
+        return base.GetHashCode();
     }
+
+    public override bool Equals(object? obj) => obj is Flags<TEnum> typed && typed.Contents == Contents;
 }
 

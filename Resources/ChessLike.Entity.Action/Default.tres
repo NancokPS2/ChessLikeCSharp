@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ActionResource" load_steps=2 format=3 uid="uid://bl72ti7j3qtwu"]
+
+[ext_resource type="Script" path="res://Entity/Action/ActionResource.cs" id="1_mvwx6"]
+
+[resource]
+script = ExtResource("1_mvwx6")
+Identifier = 2
+Name = "MOVE"
+PriorityDefault = 0
+OnlyAffectOwner = false
+CanAffectMob = true
+CannotAffectAlly = false
+CannotAffectEnemy = false
+MaximumHealthPercent = 1.0
+TargetingRange = 4
+TargetingRangeStatBonus = -1
+MaxTargetedPositions = 1
+NeededVacancy = 0
+RespectsOwnerPathing = false
+AoeShape = 0
+AoERange = 0
+Duration = 1.0
