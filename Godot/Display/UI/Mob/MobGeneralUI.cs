@@ -9,7 +9,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
 	[Export]
 	public TabContainer? NodeTabContainer;
 	[Export]
-	public MobEquipmentUI? NodeEquipmentUI;
+	public InventoryUI? NodeEquipmentUI;
 	[Export]
 	public MobActionUI? NodeActionUI;
 
@@ -20,7 +20,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
     
 	public override void _Ready()
 	{
-		NodeEquipmentUI ??= (MobEquipmentUI?)FindChild("Equipment");
+		NodeEquipmentUI ??= (InventoryUI?)FindChild("Equipment");
 		NodeStatsUI ??= (MobStatsUI?)FindChild("Stats");
 		NodeActionUI ??= (MobActionUI?)FindChild("Action");
 		NodeTabContainer ??= this.GetChild<TabContainer>();
@@ -40,7 +40,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
 
 		Node current_ui = NodeTabContainer.GetChild<Control>(NodeTabContainer.CurrentTab);
 
-		if (current_ui is MobEquipmentUI equip)
+		if (current_ui is InventoryUI equip)
 		{
 			equip.Update(MobCurrent);
 		}

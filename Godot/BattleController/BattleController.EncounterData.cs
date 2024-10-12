@@ -20,16 +20,16 @@ public partial class BattleController
             encounter.SpawnLocations = new(){Vector3i.ONE};
 
             Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("SomeoneGuess1");
+                .ChainName("PlayerFac").ChainFaction(EFaction.PLAYER);
                 
             Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("SomeoneGuess2");
+                .ChainName("PlayerFac2").ChainFaction(EFaction.PLAYER);
 
             Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("SomeoneGuess3");
+                .ChainName("Someone1");
 
             Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("SomeoneGuess4");
+                .ChainName("SomeoneToo");
 
             encounter.PresetMobSpawns = new()
             {

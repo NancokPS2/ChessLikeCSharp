@@ -9,6 +9,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 {
     public delegate void ButtonInteraction(TButton button, TAssociatedParam param);
     public event ButtonInteraction? ButtonCreated;
+    public event ButtonInteraction? ButtonPressed;
 
 
     [Export]
@@ -27,7 +28,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         ButtonCreated += OnButtonCreated;
     }
     
-    public BaseButtonMenu(Control container) : base()
+    public BaseButtonMenu(Control container) : this()
     {
         Container = container;
     }
@@ -78,9 +79,12 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         button.FocusExited += () => OnButtonHovered(button, param, false);
     }
 
+    protected virtual void OnButtonPressed(TButton button, TAssociatedParam param)
+    {
+        ButtonPressed?.Invoke(button, param);
+    }
     protected abstract void OnButtonCreated(TButton button, TAssociatedParam param);
 
-    protected abstract void OnButtonPressed(TButton button, TAssociatedParam param);
 
     protected abstract void OnButtonHovered(TButton button, TAssociatedParam param, bool hovered);
 }

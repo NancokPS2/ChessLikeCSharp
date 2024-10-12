@@ -6,6 +6,11 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>
 {
 	public Mob? MobSelected;
 
+    public PartyMobListUI() : base()
+    {
+        ButtonVerticalFlags = SizeFlags.ExpandFill;
+    }
+
     public override void _Ready()
     {
         base._Ready();
@@ -26,6 +31,7 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>
     protected override void OnButtonPressed(Button button, Mob param)
     {
         MobSelected = param;
+        base.OnButtonPressed(button, param);
     }
 
     protected override void OnButtonHovered(Button button, Mob param, bool hovered)

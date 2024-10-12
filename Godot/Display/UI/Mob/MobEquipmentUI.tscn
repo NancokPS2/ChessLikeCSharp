@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://d1bfi2s6408s0"]
 
-[ext_resource type="Script" path="res://Godot/Display/UI/Mob/MobEquipmentUI.cs" id="1_hfhkq"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ygalq"]
+[ext_resource type="Script" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="2_nqci6"]
 
 [node name="Equipment" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3
@@ -11,7 +11,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ygalq")
-script = ExtResource("1_hfhkq")
+script = ExtResource("2_nqci6")
+SCENE_PATH = "res://Godot/Display/UI/Mob/MobEquipmentUI.tscn"
 Container = NodePath("ScrollContainer/EQUIPMENT")
 metadata/_tab_index = 1
 

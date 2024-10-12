@@ -7,7 +7,7 @@ using System;
 [GlobalClass]
 public partial class CombatGeneralUI : Control, ISceneDependency
 {
-    public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatGeneralUI.tscn";
+	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatGeneralUI.tscn";
 
 	[Export]
 	public CombatTurnUI? NodeTurnUI;
@@ -19,7 +19,7 @@ public partial class CombatGeneralUI : Control, ISceneDependency
 	public MobGeneralUI? NodeMobUI;
 
 	private BattleController? BattleControllerCurrent;
-    
+	
 	public override void _Ready()
 	{
 		NodeTurnUI ??= (CombatTurnUI?)FindChild("CombatTurnUI");
