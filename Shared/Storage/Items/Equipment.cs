@@ -6,7 +6,7 @@ using ChessLike.Entity;
 
 namespace ChessLike.Shared.Storage;
 
-public class Equipment : Item, StatSet<StatName>.IStatBooster
+public class Equipment : Item, MobStatSet.IStatBooster
 {
     
     public Equipment() : base()

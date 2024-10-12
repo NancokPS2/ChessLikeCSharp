@@ -9,10 +9,10 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class JobResource : Godot.Resource
 {
-    [Export]
-    public EJob Identifier = EJob.DEFAULT;
-    [Export]
-    public MobStatSetResource Stats = new();
-    [Export]
-    public Godot.Collections.Array<ActionResource> Actions = new();
+	[Export]
+	public EJob Identifier = EJob.DEFAULT;
+	[Export]
+	public MobStatSetResource Stats = new();
+	[Export]
+	public Godot.Collections.Array<ActionResource> Actions = new();
 }

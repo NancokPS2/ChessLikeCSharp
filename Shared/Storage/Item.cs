@@ -2,18 +2,18 @@ using ChessLike.Entity;
 using static ChessLike.Entity.Mob;
 
 namespace ChessLike.Shared.Storage;
-public partial class Item : IValuable, StatSet<StatName>.IStatBooster
+public partial class Item : IValuable, MobStatSet.IStatBooster
 {
 
     public string Name = "";
     public float Price = 0;
     public List<EItemFlag> Flags = new();
 
-    public string GetBoostSource() => StatSet<StatName>.INVALID_BOOST_SOURCE;
+    public string GetBoostSource() => MobStatSet.INVALID_BOOST_SOURCE;
 
-    public StatSet<StatName>.StatBoost? GetStatBoost() => StatBoost;
+    public MobStatSet.StatBoost? GetStatBoost() => StatBoost;
 
-    public StatSet<StatName>.StatBoost? StatBoost;
+    public MobStatSet.StatBoost? StatBoost;
 
     public float Value { get => Price; set => Price = value; }
 

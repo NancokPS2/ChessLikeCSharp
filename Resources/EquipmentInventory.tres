@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="InventoryResource" load_steps=8 format=3 uid="uid://cpwr0xm3pyv0m"]
+
+[ext_resource type="Script" path="res://Shared/Storage/Inventory/InventorySlotResource.cs" id="1_6fm7g"]
+[ext_resource type="Script" path="res://Shared/Storage/Inventory/InventoryResource.cs" id="1_xlawx"]
+
+[sub_resource type="Resource" id="Resource_lkdwn"]
+resource_local_to_scene = true
+script = ExtResource("1_6fm7g")
+FlagWhitelist = [1]
+FlagBlacklist = []
+
+[sub_resource type="Resource" id="Resource_4t6qu"]
+resource_local_to_scene = true
+script = ExtResource("1_6fm7g")
+FlagWhitelist = [4]
+FlagBlacklist = []
+
+[sub_resource type="Resource" id="Resource_xpj5f"]
+resource_local_to_scene = true
+script = ExtResource("1_6fm7g")
+FlagWhitelist = [5]
+FlagBlacklist = []
+
+[sub_resource type="Resource" id="Resource_mhjek"]
+resource_local_to_scene = true
+script = ExtResource("1_6fm7g")
+FlagWhitelist = [6]
+FlagBlacklist = []
+
+[sub_resource type="Resource" id="Resource_pxmw8"]
+resource_local_to_scene = true
+script = ExtResource("1_6fm7g")
+FlagWhitelist = [6]
+FlagBlacklist = []
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_xlawx")
+Slots = [SubResource("Resource_lkdwn"), SubResource("Resource_4t6qu"), SubResource("Resource_xpj5f"), SubResource("Resource_mhjek"), SubResource("Resource_pxmw8")]

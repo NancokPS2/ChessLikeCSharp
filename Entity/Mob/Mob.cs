@@ -13,19 +13,20 @@ public partial class Mob
     private List<Action> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
-    public InventoryMob MobInventory = new();
+    public Inventory MobInventory = new();
     public EMovementMode MovementMode = EMovementMode.WALK;
     public EMobState MobState = EMobState.BENCHED;
-    public StatSet<StatName> Stats;
+    public MobStatSet Stats = GetDefaultStats();
 
     public Vector3i Position;
 
     public Mob()
     {
-        DisplayedName = new("Unknown Mcnown");
         //TODO: Move this somewhere else
         Global.ManagerMob.AddPooled(this);
         Stats = GetDefaultStats();
+        Inventory inv = Inventory.FromResource(Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT));
+        MobInventory = inv;
     }
 
     //TODO
@@ -96,16 +97,16 @@ public partial class Mob
         foreach (Job job in Jobs)
         {
             //Average the stats from the job's.
-            Stats = StatSet<StatName>.GetAverage(Stats, job.Stats);
+            Stats = new(MobStatSet.GetAverage(Stats, job.Stats));
 
             //Add the actions.
             Actions.AddRange(job.Actions);
         }
     }
 
-    public static StatSet<StatName> GetDefaultStats()
+    public static MobStatSet GetDefaultStats()
     {
-        StatSet<StatName> output = new();
+        MobStatSet output = new();
         output.SetStat(StatName.HEALTH, 100);
         output.SetStat(StatName.ENERGY, 30);
         output.SetStat(StatName.AGILITY, 100);

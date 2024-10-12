@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using Godot;
 
 namespace ChessLike.Shared;
 
-public partial class StatSet<[MustBeVariant]TStatEnum> : IResourceSerialize<StatSet<TStatEnum>, StatSetResource<TStatEnum>>
+public partial class StatSet<[MustBeVariant]TStatEnum>
 {
         public StatSetResource<TStatEnum> ToResource()
         {

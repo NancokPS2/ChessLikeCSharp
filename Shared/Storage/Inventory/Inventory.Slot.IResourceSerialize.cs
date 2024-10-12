@@ -12,7 +12,13 @@ public partial class Inventory
     {
         public InventorySlotResource ToResource()
         {
-            throw new NotImplementedException();
+            InventorySlotResource output = new();
+
+            output.FlagBlacklist.AddRange(FlagBlacklist);
+            output.FlagWhitelist.AddRange(FlagWhitelist);
+            output.Item = Item?.ToResource();
+
+            return output;
         }
 
         public static Slot FromResource(InventorySlotResource resource)

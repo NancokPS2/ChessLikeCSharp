@@ -43,7 +43,8 @@ public partial class Job
         {
             List<JobResource> list = GetAllResources();
             JobResource res = list.First(x => x.Identifier == job);
-            Job output = FromResource(res);
+            Job? from = FromResource(res);
+            Job output = from;
             return output;
         }
     }

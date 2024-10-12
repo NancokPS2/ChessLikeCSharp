@@ -23,7 +23,7 @@ public partial class Inventory
 
     public const int INVALID_SLOT = -1;
 
-    private List<Slot> Slots = new();
+    protected List<Slot> Slots = new();
 
     public Inventory()
     {

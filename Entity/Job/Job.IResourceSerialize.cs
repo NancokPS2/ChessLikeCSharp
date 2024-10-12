@@ -12,7 +12,7 @@ public partial class Job : IResourceSerialize<Job, JobResource>
             JobResource output = new();
 
             output.Identifier = Identifier;
-            output.Stats = (MobStatSetResource)Stats.ToResource();
+            output.Stats = Stats.ToResource();
             output.Actions.AddRange(from action in Actions select action.ToResource());
 
             return output;
@@ -23,7 +23,8 @@ public partial class Job : IResourceSerialize<Job, JobResource>
             Job output = new();
 
             output.Identifier = resource.Identifier;
-            output.Stats = StatSet<StatName>.FromResource(resource.Stats);
+            MobStatSet from = MobStatSet.FromResource(resource.Stats);
+            output.Stats = from;
             output.Actions.AddRange(from action in resource.Actions select Action.FromResource(action));
 
             return output;

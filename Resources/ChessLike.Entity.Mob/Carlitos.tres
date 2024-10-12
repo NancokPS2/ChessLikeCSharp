@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MobResource" load_steps=3 format=3 uid="uid://b8agnwka76f1a"]
+
+[ext_resource type="Resource" uid="uid://cpwr0xm3pyv0m" path="res://Resources/EquipmentInventory.tres" id="1_jwl33"]
+[ext_resource type="Script" path="res://Entity/Mob/MobResource.cs" id="2_5ckas"]
+
+[resource]
+script = ExtResource("2_5ckas")
+DisplayedName = "Carlitos"
+Jobs = [1, 2]
+Race = 0
+Faction = 0
+MobInventory = ExtResource("1_jwl33")

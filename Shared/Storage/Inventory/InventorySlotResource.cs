@@ -11,7 +11,9 @@ public partial class InventorySlotResource : Godot.Resource
 {
     [Export]
     public ItemResource? Item;
+    [Export]
     public Godot.Collections.Array<EItemFlag> FlagWhitelist = new();
+    [Export]
     public Godot.Collections.Array<EItemFlag> FlagBlacklist = new();
 
 }

@@ -10,7 +10,7 @@ public class Armor : Equipment
 {
     public Armor()
     {
-        StatBoost = new StatSet<StatName>.StatBoost(GetBoostSource());
+        StatBoost = new MobStatSet.StatBoost(GetBoostSource());
         StatBoost.SetAdditiveMax(StatName.HEALTH, 10);
     }
 }

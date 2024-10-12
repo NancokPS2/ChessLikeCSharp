@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MobResource" load_steps=3 format=3 uid="uid://bu3keqtgtp3bm"]
+
+[ext_resource type="Resource" uid="uid://cpwr0xm3pyv0m" path="res://Resources/EquipmentInventory.tres" id="1_vcc1g"]
+[ext_resource type="Script" path="res://Entity/Mob/MobResource.cs" id="2_5l23j"]
+
+[resource]
+script = ExtResource("2_5l23j")
+DisplayedName = "Albert"
+Jobs = [0, 1]
+Race = 0
+Faction = 0
+MobInventory = ExtResource("1_vcc1g")
