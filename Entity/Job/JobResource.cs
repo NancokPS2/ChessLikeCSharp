@@ -12,7 +12,7 @@ public partial class JobResource : Godot.Resource
     [Export]
     public EJob Identifier = EJob.DEFAULT;
     [Export]
-    public StatSetResource<StatName> Stats = new();
+    public MobStatSetResource Stats = new();
     [Export]
     public Godot.Collections.Array<ActionResource> Actions = new();
 }

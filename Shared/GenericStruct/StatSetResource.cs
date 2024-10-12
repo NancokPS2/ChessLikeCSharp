@@ -7,27 +7,19 @@ using Godot;
 
 namespace ChessLike.Shared;
 
+
 public partial class StatSetResource<[MustBeVariant] TEnum> : Godot.Resource where TEnum : notnull, Enum
 {
+
     [Export]
     public Godot.Collections.Dictionary<TEnum, float> Contents = new();
 
 
     public StatSetResource()
     {
-        if (this is StatSetResource<StatName> typed)
+        foreach (TEnum item in Enum.GetValues(typeof(TEnum)))
         {
-            foreach (var item in  Mob.GetDefaultStats().Contents)
-            {
-                typed.Contents[item.Key] = item.Value.GetMax();
-            }
-        }
-        else
-        {
-            foreach (TEnum item in Enum.GetValues(typeof(TEnum)))
-            {
-                Contents[item] = 0;
-            }
+            Contents[item] = 0;
         }
     }
 }
