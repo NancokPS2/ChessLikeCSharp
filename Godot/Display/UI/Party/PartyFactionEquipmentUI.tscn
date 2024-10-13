@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="1_yb17j"]
 
-[node name="PartyFactionEquipmentUi" type="Control"]
+[node name="PartyFactionEquipmentUi" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,3 +12,20 @@ grow_vertical = 2
 script = ExtResource("1_yb17j")
 SCENE_PATH = "res://Godot/Display/UI/Party/PartyFactionEquipmentUI.tscn"
 CanTransferItems = true
+Container = NodePath("Inventory")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Inventory" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

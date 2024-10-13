@@ -1,3 +1,4 @@
+using ChessLike.Entity;
 using Godot;
 using System;
 
@@ -16,17 +17,22 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 	public override void _Ready()
 	{
 		base._Ready();
-		//NodePartyListUI.ButtonPressed += (btn, mob) => NodeEquipmentUI.Update(mob);
+		//When a button from the party UI is pressed, update the equipment UI.
+		NodePartyListUI.ButtonPressed += OnPartyListUIPressed;
 	}
 
 	public void Update()
 	{
 		NodePartyListUI.Update(ChessLike.Entity.EFaction.PLAYER);
+		NodeFactionInventoryUI.Update(Global.ManagerFaction.GetFromEnum(ChessLike.Entity.EFaction.PLAYER));
 		if (NodePartyListUI.MobSelected is not null)
 		{
 			NodeMobEquipmentUI.Update(NodePartyListUI.MobSelected);
-			NodeFactionInventoryUI.Update(Global.ManagerFaction.GetFromEnum(ChessLike.Entity.EFaction.PLAYER));
-
 		}
+	}
+
+	public void OnPartyListUIPressed(Button button, Mob mob)
+	{
+		NodeMobEquipmentUI.Update(mob);
 	}
 }

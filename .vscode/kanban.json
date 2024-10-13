@@ -44,6 +44,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "PartyUI: Mob inventory.",
+                    "id": "mflla9xmd3tcphd3l7lwgzbn"
+                },
+                {
                     "text": "UI for editing Mobs (Party UI)",
                     "id": "w885wk1rv5ct4msnw7kxs4vl"
                 },
@@ -97,5 +101,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1728263080606
+    "timestamp": 1728842677433
 }

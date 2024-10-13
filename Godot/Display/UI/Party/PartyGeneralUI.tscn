@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://byh0x8syok53h"]
+[gd_scene load_steps=6 format=3 uid="uid://byh0x8syok53h"]
 
 [ext_resource type="Script" path="res://Godot/Display/UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
 [ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://Godot/Display/UI/Party/PartyMobListUI.tscn" id="2_ospk4"]
 [ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://Godot/Display/UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
 [ext_resource type="PackedScene" uid="uid://bok0g3pnl5rri" path="res://Godot/Display/UI/Party/PartyFactionEquipmentUI.tscn" id="4_8cy5q"]
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_ucgmu")
 script = ExtResource("1_imkr4")
 NodePartyListUI = NodePath("PartyUnitListUI")
 NodeMobEquipmentUI = NodePath("MobSelectedEquipment")

@@ -11,6 +11,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     public event ButtonInteraction? ButtonCreated;
     public event ButtonInteraction? ButtonPressed;
 
+    protected (TButton, TAssociatedParam)? TupleSelected;
 
     [Export]
     public Control? Container;

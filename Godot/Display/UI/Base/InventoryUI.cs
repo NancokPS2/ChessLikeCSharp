@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Extension;
 using ChessLike.Shared.Storage;
 using Godot;
 
@@ -14,7 +15,6 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 	[Export]
 	public string SCENE_PATH { get; set; } = "";
 
-	protected Inventory.Slot? SlotSelected;
 	protected Inventory InventorySelected;
 	private InventoryUI? _transfer_ui;
 	[Export]
@@ -30,11 +30,11 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 		if (current is not null)
 		{
-			current.ButtonPressed -= ProcessTransfer;
+			current.ButtonPressed -= OnTransferUIPressed;
 		}
 		if (entering is not null)
 		{
-			entering.ButtonPressed += ProcessTransfer;
+			entering.ButtonPressed += OnTransferUIPressed;
 			if (entering.TransferUI == this || entering.CanTransferItems){throw new Exception("2-way transfering is not supported.");}
 		}
 		else
@@ -58,28 +58,22 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	protected override void OnButtonPressed(Button button, Inventory.Slot slot)
 	{
-		//No slot has been chosen yet.
-		if (SlotSelected is null)
+		//Run the button's selection stuff.
+		if (!InventorySelected.ContainsSlot(slot)){throw new Exception("This slot is not from this inventory!?");}
+
+		//Deselect the current one.
+		if (TupleSelected is not null)
 		{
-			if (!InventorySelected.ContainsSlot(slot)){throw new Exception("This slot is from another inventory!?");}
-
-			SlotSelected = slot;
-			button.Modulate = MODULATE_SELECTED;
+			TupleSelected?.Item1.AnimateIntermitentGlowStop();          
 		}
-
-		//If one was selected and the new one is empty.
-		else if (SlotSelected.Item is not null && slot.Item is null)
+		//Select the new one if valid.
+		if (TupleSelected is not null)
 		{
-			if (slot.IsItemValid(SlotSelected.Item))
-			{
-				Item to_transfer = SlotSelected.Item;
-				InventorySelected.RemoveItem(to_transfer);
-				InventorySelected.AddItem(to_transfer, slot);
-
-				button.Modulate = MODULATE_NORMAL;
-				Update();
-			}
+			button.AnimateIntermitentGlow(1, MODULATE_SELECTED);
 		}
+		
+		TupleSelected = (button, slot);
+
 		base.OnButtonPressed(button, slot);
 	}
 
@@ -96,20 +90,41 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		else {button.Text = "EMPTY";}
 	}
 
-	public void ProcessTransfer(Button other_btn, Inventory.Slot other_slot)
+    //TODO: handle deselecting slots once an operation happens.
+    //TODO: handle the bi-directional transfer of items (FIRST think of how it will work)
+	public void OnTransferUIPressed(Button other_btn, Inventory.Slot other_slot)
 	{
+        //Must be able to transfer items
 		if (!CanTransferItems){return;}
-		if (SlotSelected is null){return;}
+        //A button on this side must be selected for the transfer to happen.
+		if (TupleSelected is null){return;}
+        //The selected slot must have an item.
+        if (TupleSelected?.Item2.Item is null || TransferUI?.TupleSelected?.Item2.Item is null)
+        {
+			LastError = Inventory.Error.FATAL; 
+            MessageQueue.AddMessage("Failed to transfer, there is no item in either of the slots.", 3);
+            return;
+        }
 
 		if (TransferUI is null){throw new Exception("No TransferUI has been set, transfering items should be disabled.");}
 
 		Inventory.Error remove_err = TransferUI.InventorySelected.RemoveItem(other_slot);
 		if (remove_err != Inventory.Error.NONE)
 		{
-			LastError = remove_err; return;
+			LastError = remove_err; 
+            MessageQueue.AddMessage("Failed to transfer due to " + LastError.ToString(), 3);
+            return;
 		}
 
-		Inventory.Error add_err = InventorySelected.AddItem(other_slot, SlotSelected);
+		Inventory.Error add_err = InventorySelected.AddItem(TupleSelected?.Item2.Item, TupleSelected?.Item2);
+		if (add_err != Inventory.Error.NONE)
+		{
+			LastError = add_err; 
+            MessageQueue.AddMessage("Failed to transfer due to " + LastError.ToString(), 3);
+            return;
+		}
+
+        OnButtonPressed(null, null);
 	}
 
 }
