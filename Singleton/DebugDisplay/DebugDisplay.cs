@@ -12,7 +12,7 @@ public partial class DebugDisplay : Node2D
     [Export]
     public Godot.Vector2 Offset = new(15,15);
     [Export]
-    public Godot.Font FontDraw = new SystemFont ();
+    public Godot.Font FontDraw = new SystemFont(){FontWeight = 700};
     [Export]
     public string ShowMenuAction = "debug_draw";
     private UniqueList<IDebugDisplay> Sources = new();
@@ -54,7 +54,26 @@ public partial class DebugDisplay : Node2D
     {
         base._Draw();
         if (SourceSelected is null) {return;}
-        DrawMultilineString(FontDraw, Offset, SourceSelected.GetText());
+        DrawMultilineStringOutline(
+            FontDraw, 
+            Offset, 
+            SourceSelected.GetText(), 
+            HorizontalAlignment.Left,
+            -1,
+            16,
+            -1,
+            1, new Godot.Color(0,0,0,1)
+        );
+        DrawMultilineString(
+            FontDraw, 
+            Offset, 
+            SourceSelected.GetText(), 
+            HorizontalAlignment.Left,
+            -1,
+            16,
+            -1, 
+            new Godot.Color(1,1,1,1)
+            );
     }
 
     public void ShowMenu()

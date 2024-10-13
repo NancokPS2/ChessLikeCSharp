@@ -17,6 +17,7 @@ public static partial class Global
 {
     private static Window RootNode = new Node().GetWindow();
     private static Node2D DrawNode = new(){TopLevel = true, ZIndex = 32};
+    private static Debug debug = new();
     public static void ConnectToWindow(Window window)
     {
         //Ignore if already done.
@@ -35,6 +36,8 @@ public static partial class Global
 
         RootNode.WindowInput += GInput.ParseMouseInputAsActionEvent;
         if (RootNode == null){throw new Exception("No window found.");}
+
+        DebugDisplay.Instance.Add(debug);
 
     }
 
