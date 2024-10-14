@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Extension;
 using ChessLike.Shared.Storage;
+using ExtendedXmlSerializer.Core.Sources;
 using Godot;
 
 public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, ISceneDependency
@@ -23,7 +24,8 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 	[Export]
 	public bool CanTransferItems;
 
-	private void SetTransferUI(InventoryUI? ui)
+
+    private void SetTransferUI(InventoryUI? ui)
 	{
 		InventoryUI? current = _transfer_ui;
 		InventoryUI? entering = ui;
@@ -58,25 +60,39 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	protected override void OnButtonPressed(Button button, Inventory.Slot slot)
 	{
-		//Run the button's selection stuff.
-		if (!InventorySelected.ContainsSlot(slot)){throw new Exception("This slot is not from this inventory!?");}
-
-		//Deselect the current one.
-		if (TupleSelected is not null)
-		{
-			TupleSelected?.Item1.AnimateIntermitentGlowStop();          
-		}
-		//Select the new one if valid.
-		if (TupleSelected is not null)
-		{
-			button.AnimateIntermitentGlow(1, MODULATE_SELECTED);
-		}
-		
-		TupleSelected = (button, slot);
+		ButtonSelection(button, slot);
 
 		base.OnButtonPressed(button, slot);
 	}
 
+	public void ButtonSelection(Button button, Inventory.Slot slot)
+	{
+		//Run the button's selection stuff.
+		if (slot is null){throw new Exception("ALL buttons should be paired with a slot.");}
+		if (!InventorySelected.ContainsSlot(slot)){throw new Exception("This slot is not from this inventory!?");}
+
+
+ 		//Deselect the current one if there is one.
+		if (TupleSelected is not null && GodotObject.IsInstanceValid(TupleSelected?.Item1))
+		{
+			Button? selected_btn = TupleSelected?.Item1;
+			if (selected_btn is not null)
+			{
+				selected_btn.AnimateIntermitentGlowStop();
+			}
+		}
+
+		//Select the new one.
+		button.Modulate = MODULATE_SELECTED;
+		TupleSelected = (button, slot);
+		button.AnimateIntermitentGlow(1, MODULATE_SELECTED);
+	}
+	public void ButtonDeselection()
+	{
+		TupleSelected?.Item1.AnimateIntermitentGlowStop();
+		TupleSelected = null;
+		return;
+	}
 
 	protected override void OnButtonHovered(Button button, Inventory.Slot slot, bool hovered)
 	{
@@ -90,41 +106,63 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		else {button.Text = "EMPTY";}
 	}
 
-    //TODO: handle deselecting slots once an operation happens.
-    //TODO: handle the bi-directional transfer of items (FIRST think of how it will work)
-	public void OnTransferUIPressed(Button other_btn, Inventory.Slot other_slot)
+	//TODO: handle deselecting slots once an operation happens.
+	//TODO: handle the bi-directional transfer of items (FIRST think of how it will work)
+	public void OnTransferUIPressed(Button transfer_ui_btn, Inventory.Slot transfer_ui_slot)
 	{
-        //Must be able to transfer items
+		//Must be able to transfer items
 		if (!CanTransferItems){return;}
-        //A button on this side must be selected for the transfer to happen.
-		if (TupleSelected is null){return;}
-        //The selected slot must have an item.
-        if (TupleSelected?.Item2.Item is null || TransferUI?.TupleSelected?.Item2.Item is null)
-        {
-			LastError = Inventory.Error.FATAL; 
-            MessageQueue.AddMessage("Failed to transfer, there is no item in either of the slots.", 3);
-            return;
-        }
-
+		//There must be an UI set to transfer to and from.
 		if (TransferUI is null){throw new Exception("No TransferUI has been set, transfering items should be disabled.");}
+		//A button on this side must be selected for the transfer to happen.
+		if (TupleSelected is null){TransferUI.ButtonDeselection(); return;}
+		//Either of the selected slots must have an item.
+		if (TupleSelected?.Item2.Item is null && TransferUI?.TupleSelected?.Item2.Item is null)
+		{
+			LastError = Inventory.Error.FATAL; 
+			MessageQueue.AddMessage("Failed to transfer, there is no item in either of the slots.", 3);
+			ButtonDeselection();
+			return;
+		}
 
-		Inventory.Error remove_err = TransferUI.InventorySelected.RemoveItem(other_slot);
+		LastError = Inventory.TransferItem(
+            InventorySelected, 
+            TupleSelected?.Item2,
+            TransferUI.InventorySelected,
+            transfer_ui_slot
+        );
+
+		if (LastError != Inventory.Error.NONE)
+		{
+			MessageQueue.AddMessage("Failed to transfer due to " + LastError.ToString(), 3);
+		}
+		else
+		{
+			Update();
+			TransferUI.Update();
+		}
+		ButtonDeselection();
+		TransferUI.ButtonDeselection();
+
+
+	}
+
+    public Inventory.Error TransferItemToInventory(Inventory source_inv, Inventory target_inv, Inventory.Slot source_slot, Inventory.Slot target_slot, Item item_to_transfer)
+    {
+
+		Inventory.Error remove_err = source_inv.RemoveItem(source_slot);
 		if (remove_err != Inventory.Error.NONE)
 		{
-			LastError = remove_err; 
-            MessageQueue.AddMessage("Failed to transfer due to " + LastError.ToString(), 3);
-            return;
+			return remove_err;
 		}
 
-		Inventory.Error add_err = InventorySelected.AddItem(TupleSelected?.Item2.Item, TupleSelected?.Item2);
+		Inventory.Error add_err = target_inv.AddItem(item_to_transfer, target_slot);
 		if (add_err != Inventory.Error.NONE)
 		{
-			LastError = add_err; 
-            MessageQueue.AddMessage("Failed to transfer due to " + LastError.ToString(), 3);
-            return;
+			return add_err;
 		}
 
-        OnButtonPressed(null, null);
-	}
+		return Inventory.Error.NONE;
+    }
 
 }

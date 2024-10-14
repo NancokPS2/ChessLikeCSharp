@@ -19,9 +19,9 @@ public partial class Inventory : MobStatSet.IStatBooster
         MobStatSet.StatBoost output = new(GetBoostSource());
         foreach (var slot in Slots)
         {
-            if (slot.Item is Equipment equip)
+            if (slot.Item is not null)
             {
-                var boost = equip.GetStatBoost();
+                var boost = slot.Item.GetStatBoost();
                 if (boost is not null)
                 {
                     output += boost;

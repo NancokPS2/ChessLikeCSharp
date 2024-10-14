@@ -1,3 +1,5 @@
+using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
+
 namespace ChessLike.Shared.Storage;
 
 public partial class Inventory
@@ -7,8 +9,8 @@ public partial class Inventory
         NONE,
         FATAL,          //If something that's not supposed to happen, happens.
 
-        REMOVE_ITEM_NOT_INSIDE, //Tried to interact with an item that's not in this inventory.
-        REMOVE_ALREADY_EMPTY,
+        REMOVE_ITEM_NOT_IN_INVENTORY, //Tried to take an item, but nothing was inside the inventory.
+        REMOVE_SLOT_ALREADY_EMPTY,
 
         ADD_NO_SPACE,       //Add: Not enough slots left to fit the item.
         ADD_INVALID_SLOT,   //A forced attempt was made to add the item to an invalid slot.
@@ -104,13 +106,13 @@ public partial class Inventory
         }
         else
         {
-            return Error.REMOVE_ITEM_NOT_INSIDE;
+            return Error.REMOVE_ITEM_NOT_IN_INVENTORY;
         }
     }
 
     public Error RemoveItem(Slot slot)
     {
-        if (slot.Item is not null){return Error.REMOVE_ALREADY_EMPTY;}
+        if (slot.Item is null){return Error.REMOVE_SLOT_ALREADY_EMPTY;}
         else
         {
             slot.Item = null; 
@@ -148,28 +150,70 @@ public partial class Inventory
         return GetItem(slot) == null;
     }
 
-    public Error TransferItem(Item item, Inventory target_inv) => TransferItem(this, item, target_inv);
-    public Error TransferItem(Slot slot, Inventory target_inv) => TransferItem(this, slot, target_inv);
-
-    public static Error TransferItem(Inventory source_inv, Item item, Inventory target_inv) => TransferItem(source_inv, source_inv.FindSlotWithItem(item), target_inv);
-
-    public static Error TransferItem(Inventory source_inv, Slot slot, Inventory target_inv)
+    private enum TransferMode {EXCHANGE, SEND_TO_TARGET, TAKE_FROM_TARGET }
+    public Error TransferItem(Slot source_slot, Inventory target_inv, Slot target_slot) => TransferItem(this, source_slot, target_inv, target_slot);
+    public static Error TransferItem(Inventory source_inv, Slot source_slot, Inventory target_inv, Slot target_slot)
     {
-        if (!source_inv.ContainsSlot(slot)){throw new ArgumentException("The slot must be inside the source inventory");}
+        if (!source_inv.ContainsSlot(source_slot)){throw new ArgumentException("The source slot must be inside the source inventory");}
+        if (!target_inv.ContainsSlot(target_slot)){throw new ArgumentException("The target slot must be inside the target inventory");}
 
-        Error remove_err = source_inv.RemoveItem(slot);
-        if (remove_err != Error.NONE)
-        {
-            return remove_err;
-        } 
+        Item? source_item = source_slot.Item;
+        Item? target_item = target_slot.Item;
 
-        Error add_err = target_inv.AddItem(slot);
-        if (add_err != Error.NONE)
+
+        TransferMode mode;
+        if (source_item is not null && target_item is null
+        && target_slot.IsItemValid(source_item))
+            {mode = TransferMode.SEND_TO_TARGET;}
+        else if (source_item is null && target_item is not null
+        && source_slot.IsItemValid(target_item)
+        )
+            {mode = TransferMode.TAKE_FROM_TARGET;}
+        else if (source_item is not null && target_item is not null 
+        && source_slot.IsItemValid(target_item) && target_slot.IsItemValid(source_item))
+            {mode = TransferMode.EXCHANGE;}
+        else 
+            {return Error.ADD_INVALID_SLOT;}
+
+        switch (mode)
         {
-            return add_err;
-        } 
+            case TransferMode.EXCHANGE:
+                //Remove the items.
+                ThrowOnError(source_inv.RemoveItem(source_slot));
+                ThrowOnError(target_inv.RemoveItem(target_slot));
+
+                //Add the items.
+                ThrowOnError(target_inv.AddItem(source_item, target_slot));
+                ThrowOnError(source_inv.AddItem(target_item, source_slot));
+                break;
+
+            case TransferMode.SEND_TO_TARGET:
+                ThrowOnError(source_inv.RemoveItem(source_slot));
+
+                ThrowOnError(target_inv.AddItem(source_item, target_slot));
+                break;
+            
+            case TransferMode.TAKE_FROM_TARGET:
+                ThrowOnError(target_inv.RemoveItem(target_slot));
+
+                ThrowOnError(source_inv.AddItem(target_item, source_slot));
+                break;
+
+            default:
+                throw new NotImplementedException();
+        }
+
+
 
         return Error.NONE;
+    }
+
+    private static void ThrowOnError(Error error, List<Error>? to_ignore = null)
+    {
+        if(error != Error.NONE || (!to_ignore?.Contains(error) ?? false))
+        {
+            throw new Exception("Failed due to error " + error.ToString());
+        }
     }
 
 

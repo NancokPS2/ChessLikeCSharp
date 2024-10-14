@@ -58,7 +58,7 @@ public partial class Mob
         return this;
     }
 
-    public Mob ChainEquipment(Equipment item)
+    public Mob ChainEquipment(Item item)
     {
         EquipmentAdd(item);
         return this;

@@ -5,6 +5,8 @@ using Godot;
 public partial class ItemResource : Resource
 {
     [Export]
+    public EItem Identifier;
+    [Export]
     public string Name = "";
     [Export]
     public Godot.Collections.Array<EItemFlag> Flags = new();

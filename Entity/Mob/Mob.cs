@@ -62,7 +62,7 @@ public partial class Mob
         return Actions;
     }
 
-    public void EquipmentAdd(Equipment equip)
+    public void EquipmentAdd(Item equip)
     {
         var err = MobInventory.AddItem(equip);
         if (err != Shared.Storage.Inventory.Error.NONE)
@@ -73,7 +73,7 @@ public partial class Mob
         Stats.BoostAdd(MobInventory);
     }
 
-    public void EquipmentRemove(Equipment equip)
+    public void EquipmentRemove(Item equip)
     {
         var err = MobInventory.RemoveItem(equip);
         if (err != Shared.Storage.Inventory.Error.NONE)

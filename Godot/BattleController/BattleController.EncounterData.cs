@@ -20,13 +20,18 @@ public partial class BattleController
             encounter.SpawnLocations = new(){Vector3i.ONE};
 
             Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("PlayerFac").ChainFaction(EFaction.PLAYER);
+                .ChainName("PlayerFac")
+                .ChainFaction(EFaction.PLAYER)
+                .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
                 
             Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("PlayerFac2").ChainFaction(EFaction.PLAYER);
+                .ChainName("PlayerFac2")
+                .ChainFaction(EFaction.PLAYER)
+                .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
             Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("Someone1");
+                .ChainName("Someone1")
+                .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
             Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
                 .ChainName("SomeoneToo");

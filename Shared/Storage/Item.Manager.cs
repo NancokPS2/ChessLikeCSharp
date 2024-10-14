@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ChessLike.Shared.Storage;
@@ -27,6 +28,12 @@ public partial class Item
                 "item"
             );
 
+        }
+        public Item GetFromEnum(EItem identifier)
+        {
+            ItemResource res = GetAllResources().First<ItemResource>(x => x.Identifier == identifier);
+            Item item = FromResource(res);
+            return item;
         }
     }
 

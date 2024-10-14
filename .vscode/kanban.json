@@ -44,7 +44,7 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "PartyUI: Mob inventory.",
+                    "text": "PartyUI: Mob inventory.\n- Better display what kind of items each slot supports.",
                     "id": "mflla9xmd3tcphd3l7lwgzbn"
                 },
                 {
@@ -101,5 +101,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1728842677433
+    "timestamp": 1728882110086
 }

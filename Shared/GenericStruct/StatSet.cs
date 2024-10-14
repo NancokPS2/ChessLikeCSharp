@@ -158,6 +158,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public void BoostAdd(IStatBooster booster)
     {
+        if (booster.GetBoostSource() == INVALID_BOOST_SOURCE){throw new Exception("Invalid source.");}
         var boost = booster.GetStatBoost();
         if (boost is not null)
         {

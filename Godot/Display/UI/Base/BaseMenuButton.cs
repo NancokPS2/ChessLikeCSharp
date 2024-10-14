@@ -24,6 +24,8 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 
     private List<TAssociatedParam>? _last_update;
 
+    private Dictionary<TButton, List<(Action, Action)>> _button_to_lambda = new();
+
     public BaseButtonMenu()
     {
         ButtonCreated += OnButtonCreated;
@@ -43,7 +45,12 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     protected void Update(List<TAssociatedParam> parameter_list)
     {
         Control used_container = Container ?? this;
-        used_container.FreeChildren();
+        foreach (var item in used_container.GetChildren<TButton>())
+        {
+            used_container.FreeChildren();           
+        }
+
+        _button_to_lambda.Clear();
 
         foreach (var parameter in parameter_list)
         {
@@ -69,15 +76,23 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         return button;
     }
 
+    //Posible memory leak.
     protected virtual void ButtonUpdateConnection(TButton button, TAssociatedParam param)
     {
-        button.Pressed += () => OnButtonPressed(button, param);
-        
-        button.MouseEntered += () => OnButtonHovered(button, param, true);
-        button.FocusEntered += () => OnButtonHovered(button, param, true);
+        Action on_pressed = () => OnButtonPressed(button, param);
+        Action on_mouse_entered = () => OnButtonHovered(button, param, true);
+        Action on_focus_entered = () => OnButtonHovered(button, param, true);
+        Action on_mouse_exited = () => OnButtonHovered(button, param, false);
+        Action on_focus_exited = () => OnButtonHovered(button, param, false);
 
-        button.MouseExited += () => OnButtonHovered(button, param, false);
-        button.FocusExited += () => OnButtonHovered(button, param, false);
+        button.Pressed += on_pressed;
+        
+        button.MouseEntered += on_mouse_entered;
+        button.FocusEntered += on_focus_entered;
+
+        button.MouseExited += on_mouse_exited;
+        button.FocusExited += on_focus_exited;
+
     }
 
     protected virtual void OnButtonPressed(TButton button, TAssociatedParam param)
