@@ -8,7 +8,7 @@ using ChessLike.Shared.Storage;
 using ExtendedXmlSerializer.Core.Sources;
 using Godot;
 
-public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, ISceneDependency
+public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, ISceneDependency, ITooltip
 {
 
 	public static readonly Godot.Color MODULATE_SELECTED = new(0.5f,0.5f,0.5f);
@@ -24,6 +24,11 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 	[Export]
 	public bool CanTransferItems;
 
+    public override void _Ready()
+    {
+        base._Ready();
+        AddChild(new TooltipComponent(this));
+    }
 
     private void SetTransferUI(InventoryUI? ui)
 	{
@@ -96,6 +101,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	protected override void OnButtonHovered(Button button, Inventory.Slot slot, bool hovered)
 	{
+		base.OnButtonHovered(button, slot, hovered);
 		button.Modulate = hovered ? new Godot.Color(0.5f, 0.5f, 0.5f) : new Godot.Color(1, 1, 1);
 	}
 
@@ -165,4 +171,23 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		return Inventory.Error.NONE;
     }
 
+    public string GetText()
+    {
+        return TupleHovered?.Item2?.Item?.Name ?? "";
+    }
+
+    public Godot.Font GetFont()
+    {
+        return Global.Readonly.FONT_SMALL;
+    }
+
+    public Godot.Vector2 GetRectSize()
+    {
+        return TupleSelected?.Item1?.Size * 1.25f ?? new(120,80);
+    }
+
+    public int GetFontSize()
+    {
+        return 16;
+    }
 }

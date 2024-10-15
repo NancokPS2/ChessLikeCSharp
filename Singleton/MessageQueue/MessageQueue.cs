@@ -46,7 +46,7 @@ public partial class MessageQueue : CanvasLayer
         AddChild(NodeContainer);
         NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
-        Layer = Global.Constants.LAYER_MSG_QUEUE;
+        Layer = Global.Readonly.LAYER_MSG_QUEUE;
     }
 
     public void SetAnchors(float left, float top, float right, float bottom)

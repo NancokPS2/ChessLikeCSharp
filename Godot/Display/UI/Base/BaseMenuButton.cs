@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Control 
+public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Control
     where TButton : BaseButton, new()
 {
     public delegate void ButtonInteraction(TButton button, TAssociatedParam param);
@@ -20,7 +20,9 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     [Export]
     public SizeFlags ButtonVerticalFlags = SizeFlags.ShrinkBegin;
     [Export]
-    Rect2 ButtonAnchors = new Rect2(0,0,1,0);
+    public Rect2 ButtonAnchors = new Rect2(0,0,1,0);
+
+    protected (TButton, TAssociatedParam)? TupleHovered;
 
     private List<TAssociatedParam>? _last_update;
 
@@ -101,6 +103,9 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     }
     protected abstract void OnButtonCreated(TButton button, TAssociatedParam param);
 
+    protected virtual void OnButtonHovered(TButton button, TAssociatedParam param, bool hovered)
+    {
+        TupleHovered = hovered ? (button, param) : null;
+    }
 
-    protected abstract void OnButtonHovered(TButton button, TAssociatedParam param, bool hovered);
 }

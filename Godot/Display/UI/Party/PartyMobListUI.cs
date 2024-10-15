@@ -36,6 +36,7 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>
 
     protected override void OnButtonHovered(Button button, Mob param, bool hovered)
     {
+        base.OnButtonHovered(button, param, hovered);
         if (hovered)
 		{
 			button.Modulate = Godot.Colors.White * 0.5f;

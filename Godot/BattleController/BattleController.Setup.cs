@@ -48,7 +48,7 @@ public partial class BattleController
         CompCombatUI.NodeActionUI.EndTurnPressed += () => InputEndTurnPressed++;
 
         AddChild(CompCanvas);
-        CompCanvas.Layer = Global.Constants.LAYER_CANVAS_COMP;
+        CompCanvas.Layer = Global.Readonly.LAYER_CANVAS_COMP;
 
         GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());
 
