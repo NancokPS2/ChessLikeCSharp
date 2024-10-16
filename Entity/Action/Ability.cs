@@ -5,7 +5,7 @@ using ChessLike.Entity;
 using ChessLike.Shared.Identification;
 using ChessLike.World;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
 /// <summary>
 /// Usage:
@@ -18,19 +18,23 @@ namespace ChessLike.Entity;
 /// Pass the result of GetTargetsAffected() to UsageParams.mob_targets
 /// 
 /// </summary>
-public partial class Action : IGridReader
+public partial class Ability : IGridReader
 {
 
     //References
     public Mob Owner;
 
     public string Name = "Undefined Action";
-    public EAction Identifier = EAction.PUNCH;
+    public EAbility Identifier = EAbility.PUNCH;
     public int PriorityDefault = 0;
+    public List<EPassiveTrigger> PassiveTriggers = new();
+    public float EnergyCost = 0;
+    public float HealthCost = 0;
 
     public FilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
     public AnimationParameters AnimationParams = new();
+    public PassiveParameters PassiveParams = new();
     public List<Effect> EffectParams = new();
 
 
@@ -88,10 +92,12 @@ public partial class Action : IGridReader
 
     public virtual void Use(UsageParams usage_params)
     {
+        usage_params.OwnerRef.Stats.ChangeValue(StatName.HEALTH, HealthCost);
+        usage_params.OwnerRef.Stats.ChangeValue(StatName.ENERGY, EnergyCost);
+
         foreach (Effect effect in EffectParams)
         {
-            effect.CustomUse(usage_params);
-            
+            effect.Use(usage_params);
         }
     }
 

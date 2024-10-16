@@ -1,6 +1,6 @@
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public enum EAction
+public enum EAbility
 {
     PUNCH,
     HEAL,

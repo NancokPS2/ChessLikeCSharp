@@ -1,3 +1,4 @@
+using ChessLike.Entity.Action;
 using ChessLike.Shared.Storage;
 using ChessLike.Turn;
 using ExtendedXmlSerializer.ExtensionModel.Content;
@@ -10,7 +11,7 @@ public partial class Mob
 {
     public string DisplayedName = "UNNAMED";
     public List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
-    private List<Action> Actions = new();
+    private List<Ability> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory MobInventory = new();
@@ -30,21 +31,21 @@ public partial class Mob
     }
 
     //TODO
-    private Action _movement = new();
+    private Ability _movement = new();
     public void SetMovementMode(EMovementMode mode)
     {
         Actions.Remove(_movement);
 
-        Global.ManagerAction.GetFromEnum(EAction.MOVE);
+        Global.ManagerAction.GetFromEnum(EAbility.MOVE);
     }
 
-    public void AddAction(Action action)
+    public void AddAction(Ability action)
     {
         Actions.Add(action);
         action.Owner = this;
     }
 
-    public void RemoveAction(EAction action_enum, bool all = true)
+    public void RemoveAction(EAbility action_enum, bool all = true)
     {
         if (all)
         {
@@ -57,7 +58,7 @@ public partial class Mob
 
     }
 
-    public List<Action> GetActions()
+    public List<Ability> GetActions()
     {
         return Actions;
     }
@@ -100,7 +101,7 @@ public partial class Mob
             Stats = new(MobStatSet.GetAverage(Stats, job.Stats));
 
             //Add the actions.
-            Actions.AddRange(job.Actions);
+            Actions.AddRange(job.Abilities);
         }
     }
 

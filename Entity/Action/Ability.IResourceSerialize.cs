@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action : IResourceSerialize<Action, ActionResource>
+public partial class Ability : IResourceSerialize<Ability, AbilityResource>
 {
     //TODO
-        public ActionResource ToResource()
+        public AbilityResource ToResource()
         {
-            ActionResource output = new();
+            AbilityResource output = new();
             output.Identifier = Identifier;
 
             output.Name = Name;
@@ -18,9 +18,9 @@ public partial class Action : IResourceSerialize<Action, ActionResource>
             return output;
         }
 
-        public static Action FromResource(ActionResource resource)
+        public static Ability FromResource(AbilityResource resource)
         {
-            Action output = new();
+            Ability output = new();
             output.Identifier = resource.Identifier;
 
             output.Name = resource.Name;

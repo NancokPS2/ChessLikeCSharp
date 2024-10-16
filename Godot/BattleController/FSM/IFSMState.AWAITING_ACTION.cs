@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Entity.Action;
 using ChessLike.Turn;
 using Godot.Display;
-using Action = ChessLike.Entity.Action;
 
 namespace Godot;
 
@@ -49,7 +49,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         if (User.InputActionSelected is not null)
         {
             //TODO: Owner cannot be null
-            User.TurnUsageParameters = new Action.UsageParams(
+            User.TurnUsageParameters = new Ability.UsageParams(
                 User.CompTurnManager.GetCurrentTurnTaker() as Mob, 
                 User.CompGrid, 
                 User.InputActionSelected

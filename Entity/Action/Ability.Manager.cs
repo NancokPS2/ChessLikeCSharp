@@ -4,25 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Shared.Serialization;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action
+public partial class Ability
 {
-    public class Manager : SerializableManager<Action, ActionResource>
+    public class Manager : SerializableManager<Ability, AbilityResource>
     {
 
-        public override List<Action> CreatePrototypes()
+        public override List<Ability> CreatePrototypes()
         {
-            List<Action> output = new()
+            List<Ability> output = new()
             {
-                Action.Create(EAction.HEAL),
-                Action.Create(EAction.PUNCH),
-                Action.Create(EAction.MOVE),
+                Ability.Create(EAbility.HEAL),
+                Ability.Create(EAbility.PUNCH),
+                Ability.Create(EAbility.MOVE),
             };
             return output;
         }
 
-        public override Action GetFromResource(ActionResource resource)
+        public override Ability GetFromResource(AbilityResource resource)
         {
             return FromResource(resource);
         }
@@ -36,7 +36,7 @@ public partial class Action
 
         }
 
-        public Action GetFromEnum(EAction action)
+        public Ability GetFromEnum(EAbility action)
         {
             return FromResource(
               GetAllResources().First(x => x.Identifier == action)

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.World;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action : IGridObject
+public partial class Ability : IGridObject
 {
     public Vector3i GetPosition()
     {

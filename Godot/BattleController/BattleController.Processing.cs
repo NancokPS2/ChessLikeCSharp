@@ -2,7 +2,6 @@ using ChessLike.Entity;
 
 using ChessLike.Turn;
 using ChessLike.World;
-using static ChessLike.Entity.Action;
 
 namespace Godot;
 

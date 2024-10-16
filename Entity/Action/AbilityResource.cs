@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
 [GlobalClass]
-public partial class ActionResource : Godot.Resource
+public partial class AbilityResource : Godot.Resource
 {
+
     [Export]
-    public EAction Identifier;
+    public EAbility Identifier;
     
     [Export]
     public string Name = "";
@@ -18,7 +19,7 @@ public partial class ActionResource : Godot.Resource
     [Export]
     public int PriorityDefault;
 
-    [ExportCategory("FilterParameters")]
+    [ExportCategory("Filter Parameters")]
     [Export]
     public bool OnlyAffectOwner = false;
     [Export]
@@ -33,7 +34,7 @@ public partial class ActionResource : Godot.Resource
     //The target must be below this health.
     public float MaximumHealthPercent = 1.0f;
 
-    [ExportCategory("TargetingParameters")]
+    [ExportCategory("Targeting Parameters")]
     [Export]
     public uint TargetingRange = 4;
     [Export]
@@ -42,21 +43,24 @@ public partial class ActionResource : Godot.Resource
     public int MaxTargetedPositions = 1;
     [Export]
     //Only works if there is a mob being hit that was deemed as valid.
-    public Action.TargetingParameters.VacancyStatus NeededVacancy = Action.TargetingParameters.VacancyStatus.HAS_MOB;
+    public Ability.TargetingParameters.VacancyStatus NeededVacancy = Ability.TargetingParameters.VacancyStatus.HAS_MOB;
     [Export]
     public bool RespectsOwnerPathing = false;
 
     [Export]
-    public Action.TargetingParameters.AoEMode AoeShape = Action.TargetingParameters.AoEMode.SINGLE;
+    public Ability.TargetingParameters.AoEMode AoeShape = Ability.TargetingParameters.AoEMode.SINGLE;
     [Export]
     //Area when in SINGLE mode.
     public uint AoERange = 0;
 
-    [ExportCategory("AnimationParameters")]
+    [ExportCategory("Animation Parameters")]
     [Export]
     public float Duration = 1f;
 
     //[ExportCategory("EffectList")]
     //TODO
+    [ExportCategory("Passive Parameters")]
+    [Export]
+    public Godot.Collections.Array<Ability.EPassiveTrigger> Triggers = new();
 
 }

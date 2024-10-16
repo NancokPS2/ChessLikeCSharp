@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.World;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action 
+public partial class Ability 
 {
     /// <summary>
     /// Variables for Effect usage. Must be filled in the order of the variables.
@@ -17,7 +17,7 @@ public partial class Action
     {
         public Mob OwnerRef;
         public Grid GridRef;
-        public Action ActionRef;
+        public Ability ActionRef;
         /// <summary>
         /// Positions that where selected during the targeting of this action
         /// </summary>
@@ -31,7 +31,7 @@ public partial class Action
 
         public int Priority = 0;
 
-        public UsageParams(Mob owner, Grid grid, Action action_reference)
+        public UsageParams(Mob owner, Grid grid, Ability action_reference)
         {
             this.OwnerRef = owner;
             this.GridRef = grid;

@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
-using static ChessLike.Entity.Action;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action
+public partial class Ability
 {
 
-    public static Action Create(EAction identity_enum)
+    public static Ability Create(EAbility identity_enum)
     {
-        Action output = new();
+        Ability output = new();
         output = identity_enum switch
         {
-            EAction.PUNCH => output
+            EAbility.PUNCH => output
                 .ChainName("Punch")
                 .ChainEffectDamageHealth(StatName.STRENGTH, 0.5f),
-            EAction.HEAL => output
+            EAbility.HEAL => output
                 .ChainName("Heal")
-                .ChainEffectHealPrecentage(0.25f),
-            EAction.MOVE => output
+                .ChainHealHealth(25),
+            EAbility.MOVE => output
                 .ChainName("Move")
                 .ChainEffectMove(),
             _ => throw new Exception("Non existent enum value."),
@@ -31,23 +30,24 @@ public partial class Action
         return output;
         
     }
-    public Action ChainIdentifier(EAction identifier)
+    public Ability ChainIdentifier(EAbility identifier)
     {
         Identifier = identifier;
         return this;
     }
 
-    public Action ChainName(string name)
+    public Ability ChainName(string name)
     {
         Name = name;
         return this;
     }
     
 
-    public Action ChainEffectDamageHealth(StatName stat_based, float damage)
+    public Ability ChainEffectDamageHealth(StatName stat_based, float damage)
     {
         //Effect
-        AttackEffect effect = new();
+        EffectStatChange effect = new();
+        effect.SetOwnerAddingBoost(StatName.STRENGTH, 1);
         EffectParams.Add(effect);
 
         //Targeting
@@ -56,16 +56,20 @@ public partial class Action
         return this;
     }
 
-    public Action ChainEffectHealPrecentage(float percent)
+    public Ability ChainHealHealth(float amount)
     {
-        RecoverPercentOfMaxEffect effect = new();
-        effect.percentage = percent;
+        //Effect
+        EffectStatChange effect = new();
+        effect.SetFlatAmount(amount);
         EffectParams.Add(effect);
+
+        //Targeting
+        TargetParams.TargetingRange = 1;
 
         return this;
     }
 
-    public Action ChainEffectMove()
+    public Ability ChainEffectMove()
     {
         WalkEffect effect = new();
         EffectParams.Add(effect);
@@ -81,7 +85,7 @@ public partial class Action
         return this;
     }
 
-    public Action ChainTargetBoostRangeByStat( StatName stat)
+    public Ability ChainTargetBoostRangeByStat( StatName stat)
     {
         TargetParams.TargetingRangeStatBonus = stat;
         return this;

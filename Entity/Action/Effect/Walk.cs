@@ -1,6 +1,6 @@
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action 
+public partial class Ability 
 {
     public class WalkEffect : Effect
     {

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using ChessLike.World;
 using Godot;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action
+public partial class Ability
 {
     public List<Vector3i> TargetingGetPositionsInRange(UsageParams usage_params)
     {

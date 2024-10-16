@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action
+public partial class Ability
 {
     //Properties used during the targeting phase to decide if the targets are valid.
     public class TargetingParameters

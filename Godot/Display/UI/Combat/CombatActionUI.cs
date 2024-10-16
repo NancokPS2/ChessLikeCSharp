@@ -1,11 +1,11 @@
 using ChessLike.Entity;
+using ChessLike.Entity.Action;
 using Godot;
 using System;
-using Action = ChessLike.Entity.Action;
 
 public partial class CombatActionUI : Control, ISceneDependency
 {
-    public delegate void ActionPressedEventHandler(Action action);
+    public delegate void ActionPressedEventHandler(Ability action);
     public delegate void ButtonPressed();
     public event ActionPressedEventHandler? ActionPressed;
     public event ButtonPressed? EndTurnPressed;
@@ -37,7 +37,7 @@ public partial class CombatActionUI : Control, ISceneDependency
         Control container = NodeActionContainer;
         container.FreeChildren();
         
-        foreach (ChessLike.Entity.Action action in mob.GetActions())
+        foreach (Ability action in mob.GetActions())
         {
             ActionButton button = new(action);
             container.AddChild(button);
@@ -69,9 +69,9 @@ public partial class CombatActionUI : Control, ISceneDependency
 
     private partial class ActionButton : Button
     {
-        public Action action;
+        public Ability action;
 
-        public ActionButton(Action action)
+        public ActionButton(Ability action)
         {
             this.action = action;
             Text = action.Name;

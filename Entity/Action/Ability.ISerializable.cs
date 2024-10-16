@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Shared.Serialization;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public partial class Action : ISerializable
+public partial class Ability : ISerializable
 {
     public string GetFileName()
     {
-        return Enum.GetName<EAction>(Identifier);
+        return Enum.GetName<EAbility>(Identifier);
     }
 }

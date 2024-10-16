@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Entity.Action;
 using ChessLike.Turn;
 using ChessLike.World;
 using Godot.Display;
-using Action = ChessLike.Entity.Action;
 
 namespace Godot;
 
@@ -18,7 +18,7 @@ public partial class BattleController
 
     //Misc inputs
     public int InputEndTurnPressed;
-    public Action? InputActionSelected;
+    public Ability? InputActionSelected;
 
     //Components
     public MobMeshDisplay CompMobMeshDisplay = new();
@@ -27,7 +27,7 @@ public partial class BattleController
     public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
     public TurnManager CompTurnManager = new();
     public Grid CompGrid;
-    public ActionRunner CompActionRunner = new();
+    public AbilityRunner CompActionRunner = new();
     public CanvasLayer CompCanvas = new();
 
     //Combat data
@@ -36,7 +36,7 @@ public partial class BattleController
     public Vector3i PositionSelected = Vector3i.INVALID; //This should always return to INVALID when not in use.
 
     //Current turn
-    public Action.UsageParams? TurnUsageParameters;
+    public Ability.UsageParams? TurnUsageParameters;
 
     //Misc
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Entity;
+namespace ChessLike.Entity.Action;
 
-public class ActionRunner : IDebugDisplay
+public class AbilityRunner : IDebugDisplay
 {
-    public delegate void ActionQueue(Action action, Action.UsageParams parameters);
+    public delegate void ActionQueue(Ability action, Ability.UsageParams parameters);
     public delegate void Delegate();
     public event ActionQueue? ActionQueued;
     public event ActionQueue? ActionStarted;
@@ -18,7 +18,7 @@ public class ActionRunner : IDebugDisplay
 
     private List<QueuedAction> Queue = new();
 
-    public uint Add(Action action, Action.UsageParams parameters)
+    public uint Add(Ability action, Ability.UsageParams parameters)
     {
         if(parameters.PositionsTargeted.Count == 0){throw new Exception("Invalid parameters.");}
         uint id = GetAvailableId();
@@ -26,7 +26,7 @@ public class ActionRunner : IDebugDisplay
         return Insert(action, parameters, index);
     }
 
-    private uint Insert(Action action, Action.UsageParams parameters, int index)
+    private uint Insert(Ability action, Ability.UsageParams parameters, int index)
     {
         uint id = GetAvailableId();
         Queue.Insert(index, new(action, parameters, id));
@@ -93,8 +93,8 @@ public class ActionRunner : IDebugDisplay
         if (RunningReadyToReplace == true)
         {
             RunningQueuedAction = Queue[RunningIndex];
-            Action action = RunningQueuedAction.action;
-            Action.UsageParams parameters = RunningQueuedAction.usage_params;
+            Ability action = RunningQueuedAction.action;
+            Ability.UsageParams parameters = RunningQueuedAction.usage_params;
 
             action.Use(parameters);
             ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
@@ -139,11 +139,11 @@ public class ActionRunner : IDebugDisplay
 
     private class QueuedAction
     {
-        public Action action;
-        public Action.UsageParams usage_params;
+        public Ability action;
+        public Ability.UsageParams usage_params;
         public uint id;
 
-        public QueuedAction(Action action, Action.UsageParams usage_params, uint id)
+        public QueuedAction(Ability action, Ability.UsageParams usage_params, uint id)
         {
             this.action = action;
             this.usage_params = usage_params;

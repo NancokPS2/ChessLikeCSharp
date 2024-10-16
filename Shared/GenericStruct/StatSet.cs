@@ -33,10 +33,11 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     }
 
 
-    public void ChangeValue(TStatEnum stat, float amount, ClampFloat.Modifier[]? modifiers = null)
+    public void ChangeValue(TStatEnum stat, float amount)
     {
-        Contents[stat].ChangeValue(amount, modifiers);
+        Contents[stat].ChangeValue(amount);
     }
+
 
     public void SetValue(TStatEnum stat, float value)
     {
@@ -53,6 +54,11 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
             throw new ArgumentOutOfRangeException("Must be a float from 0 to 1.");
         }
         SetValue(stat, GetMax(stat) * percent);
+    }
+
+    public void ChangeMax(TStatEnum stat, float value)
+    {
+        Contents[stat].ChangeMax(value);
     }
 
     public void SetMax(TStatEnum stat, float value)
