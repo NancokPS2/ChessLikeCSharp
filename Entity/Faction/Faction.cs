@@ -19,6 +19,17 @@ public partial class Faction : ISerializable
     public Inventory Inventory = new(999);
 
 
+    private float GetRelation(EFaction other)
+    {
+        float relation;
+        RelationList.TryGetValue(other, out relation);
+        return relation;
+    }
+
+    public bool IsAlly(EFaction other) => GetRelation(other) > 60;
+    public bool IsEnemy(EFaction other) => GetRelation(other) <= 0;
+    public bool IsNeutral(EFaction other) => !(IsAlly(other) || IsEnemy(other));
+
     public Faction(EFaction identifer = EFaction.NEUTRAL)
     {
         this.Identifier = identifer;
@@ -44,6 +55,7 @@ public partial class Faction : ISerializable
             return false;
         }
     }
+
 
     public override int GetHashCode()
     {

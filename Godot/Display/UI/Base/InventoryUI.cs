@@ -24,13 +24,13 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 	[Export]
 	public bool CanTransferItems;
 
-    public override void _Ready()
-    {
-        base._Ready();
-        AddChild(new TooltipComponent(this));
-    }
+	public override void _Ready()
+	{
+		base._Ready();
+		AddChild(new TooltipComponent(this));
+	}
 
-    private void SetTransferUI(InventoryUI? ui)
+	private void SetTransferUI(InventoryUI? ui)
 	{
 		InventoryUI? current = _transfer_ui;
 		InventoryUI? entering = ui;
@@ -132,11 +132,11 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		}
 
 		LastError = Inventory.TransferItem(
-            InventorySelected, 
-            TupleSelected?.Item2,
-            TransferUI.InventorySelected,
-            transfer_ui_slot
-        );
+			InventorySelected, 
+			TupleSelected?.Item2,
+			TransferUI.InventorySelected,
+			transfer_ui_slot
+		);
 
 		if (LastError != Inventory.Error.NONE)
 		{
@@ -153,8 +153,8 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	}
 
-    public Inventory.Error TransferItemToInventory(Inventory source_inv, Inventory target_inv, Inventory.Slot source_slot, Inventory.Slot target_slot, Item item_to_transfer)
-    {
+	public Inventory.Error TransferItemToInventory(Inventory source_inv, Inventory target_inv, Inventory.Slot source_slot, Inventory.Slot target_slot, Item item_to_transfer)
+	{
 
 		Inventory.Error remove_err = source_inv.RemoveItem(source_slot);
 		if (remove_err != Inventory.Error.NONE)
@@ -169,25 +169,25 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		}
 
 		return Inventory.Error.NONE;
-    }
+	}
 
-    public string GetText()
-    {
-        return TupleHovered?.Item2?.Item?.Name ?? "";
-    }
+	public string GetText()
+	{
+		return TupleHovered?.Item2?.Item?.Name ?? "";
+	}
 
-    public Godot.Font GetFont()
-    {
-        return Global.Readonly.FONT_SMALL;
-    }
+	public Godot.Font GetFont()
+	{
+		return Global.Readonly.FONT_SMALL;
+	}
 
-    public Godot.Vector2 GetRectSize()
-    {
-        return TupleSelected?.Item1?.Size * 1.25f ?? new(120,80);
-    }
+	public Godot.Vector2 GetRectSize()
+	{
+		return TupleSelected?.Item1?.Size * 1.25f ?? new(120,80);
+	}
 
-    public int GetFontSize()
-    {
-        return 16;
-    }
+	public int GetFontSize()
+	{
+		return 16;
+	}
 }

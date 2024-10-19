@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ public partial class Ability
         //Effect
         EffectStatChange effect = new();
         effect.SetOwnerAddingBoost(StatName.STRENGTH, 1);
-        EffectParams.Add(effect);
+        Effects.Add(effect);
 
         //Targeting
         TargetParams.TargetingRange = 1;
@@ -61,7 +62,7 @@ public partial class Ability
         //Effect
         EffectStatChange effect = new();
         effect.SetFlatAmount(amount);
-        EffectParams.Add(effect);
+        Effects.Add(effect);
 
         //Targeting
         TargetParams.TargetingRange = 1;
@@ -71,17 +72,11 @@ public partial class Ability
 
     public Ability ChainEffectMove()
     {
-        WalkEffect effect = new();
-        EffectParams.Add(effect);
-
         //TargetParams
         TargetParams.TargetingRangeStatBonus = StatName.MOVEMENT;
         TargetParams.TargetingRange = 0;
-        TargetParams.NeededVacancy = TargetingParameters.VacancyStatus.HAS_NO_MOB;
-        TargetParams.RespectsOwnerPathing = true;
-
-        FilterParams.CanAffectMob = false;
-
+        TargetParams.TargetingUsesPathing = true;
+        Effects.Add(new EffectTeleport());
         return this;
     }
 

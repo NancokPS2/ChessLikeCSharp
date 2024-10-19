@@ -42,9 +42,6 @@ public partial class AbilityResource : Godot.Resource
     [Export]
     public int MaxTargetedPositions = 1;
     [Export]
-    //Only works if there is a mob being hit that was deemed as valid.
-    public Ability.TargetingParameters.VacancyStatus NeededVacancy = Ability.TargetingParameters.VacancyStatus.HAS_MOB;
-    [Export]
     public bool RespectsOwnerPathing = false;
 
     [Export]

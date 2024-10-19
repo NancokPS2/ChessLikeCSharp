@@ -17,25 +17,17 @@ namespace ChessLike.Entity.Action;
 public abstract class Effect
 {
     public readonly bool CanBePassive = false;
-    
+
     public void Use(UsageParams usage_params)
     {
         CustomUse(usage_params);
     }
 
+    public virtual string GetDescription()
+    {
+        return "";
+    }
+
     public abstract void CustomUse(UsageParams usage_params);
 
-    public void EffectDamageTarget(UsageParams usageParams, float damage)
-    {
-        foreach (var item in usageParams.MobsTargeted)
-        {
-            item.Stats.ChangeValue(StatName.HEALTH, -damage);
-        }
-    }
-    public void EffectTeleport(UsageParams usage_params)
-    {
-        Mob owner = usage_params.OwnerRef;
-        Vector3i target = usage_params.PositionsTargeted[0];
-        usage_params.OwnerRef.Position = usage_params.PositionsTargeted[0];
-    }
 }

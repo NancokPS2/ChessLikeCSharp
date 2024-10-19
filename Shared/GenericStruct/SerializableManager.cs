@@ -135,7 +135,7 @@ public class SerializableManager<TManaged, TResource>
     /// </summary>
     /// <returns></returns>
     /// <exception cref="Exception">If this shit's empty, YEET.</exception>
-    protected virtual List<TResource> GetAllResources() => Resources.Count != 0 ? Resources : throw new Exception("No resources loaded of type " + GetType().ToString());
+    protected virtual List<TResource> GetAllResources() => Resources.Count != 0 ? Resources : throw new Exception("No resources loaded of type " + typeof(TResource).ToString());
     public void AddResource(TResource resource)
     {
         Resources.Add(resource);

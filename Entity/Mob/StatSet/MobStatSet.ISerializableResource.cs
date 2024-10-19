@@ -31,9 +31,6 @@ public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatS
     {
         MobStatSet output = new MobStatSet();
         
-        List<StatName> test1 = resource.Contents.Keys.ToList<StatName>();
-        List<StatName> test2 = output.Contents.Keys.ToList<StatName>();
-        Array test3 = Enum.GetValues(typeof(StatName));
         foreach (var item in resource.Contents)
         {
             output.SetStat(item.Key, item.Value);

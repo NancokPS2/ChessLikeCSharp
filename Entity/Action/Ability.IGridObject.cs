@@ -7,7 +7,7 @@ using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
 
-public partial class Ability : IGridObject
+public partial class Ability// : IGridObject
 {
     public Vector3i GetPosition()
     {
@@ -21,33 +21,7 @@ public partial class Ability : IGridObject
 
     public bool IsValidPositionToExist(Grid grid, Vector3i position)
     {
-        Mob? mob_found = Global.ManagerMob.GetInPosition(position).First();
-        bool mob_at_position = mob_found is Mob;
-
-        //Vacancy status
-        switch (TargetParams.NeededVacancy)
-        {
-            case TargetingParameters.VacancyStatus.HAS_MOB:
-                if(!mob_at_position){return false;}
-                break;
-
-            case TargetingParameters.VacancyStatus.HAS_NO_MOB:
-                if(mob_at_position){return false;}
-                break;
-
-            default:
-                throw new NotImplementedException();
-        }
-        
-        //Targeting range check
-        uint max_range = TargetParams.TargetingRange;
-        if (TargetParams.TargetingRangeStatBonus is StatName stat)
-        {
-            max_range += (uint)Owner.Stats.GetValue(stat);
-        }
-        if(position.DistanceManhattanTo(GetPosition()) > max_range){return false;}
-
-        return true;
+        return false;
     }
 
     public int PathingGetHorizontalRange()

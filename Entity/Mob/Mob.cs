@@ -10,12 +10,13 @@ namespace ChessLike.Entity;
 public partial class Mob
 {
     public string DisplayedName = "UNNAMED";
-    public List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
+    private List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
     private List<Ability> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory MobInventory = new();
-    public EMovementMode MovementMode = EMovementMode.WALK;
+    private EMovementMode _movement_mode;
+    public EMovementMode MovementMode {set => SetMovementMode(value); get => _movement_mode;}
     public EMobState MobState = EMobState.BENCHED;
     public MobStatSet Stats = GetDefaultStats();
 
@@ -35,17 +36,18 @@ public partial class Mob
     public void SetMovementMode(EMovementMode mode)
     {
         Actions.Remove(_movement);
-
-        Global.ManagerAction.GetFromEnum(EAbility.MOVE);
+        _movement = Ability.Create(EAbility.MOVE);
+        AddAbility(_movement);
+        _movement_mode = mode;
     }
 
-    public void AddAction(Ability action)
+    public void AddAbility(Ability action)
     {
         Actions.Add(action);
         action.Owner = this;
     }
 
-    public void RemoveAction(EAbility action_enum, bool all = true)
+    public void RemoveAbility(EAbility action_enum, bool all = true)
     {
         if (all)
         {
@@ -102,6 +104,9 @@ public partial class Mob
 
             //Add the actions.
             Actions.AddRange(job.Abilities);
+
+            //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
+            SetMovementMode(job.MovementMode);
         }
     }
 

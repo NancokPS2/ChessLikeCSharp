@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 namespace ChessLike.Turn;
 
+//TODO: add a log of the latest turns, so in case of continuous ties, the same ITurn is not selected repeatedly.
 public partial class TurnManager
 {
     public delegate void TurnChangeHandler(ITurn who);

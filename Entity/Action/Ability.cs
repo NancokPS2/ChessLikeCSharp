@@ -31,71 +31,19 @@ public partial class Ability : IGridReader
     public float EnergyCost = 0;
     public float HealthCost = 0;
 
-    public FilterParameters FilterParams = new();
+    public MobFilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
     public AnimationParameters AnimationParams = new();
     public PassiveParameters PassiveParams = new();
-    public List<Effect> EffectParams = new();
+    public List<Effect> Effects = new();
 
-
-    //TODO
-    public virtual List<Mob> GetTargetsAffected(UsageParams usage_params)
-    {
-        if (usage_params.PositionsTargeted.Count == 0){throw new Exception("Nothing has been targeted yet in these parameters.");}
-
-        List<Mob> output = new();
-        Mob owner = usage_params.OwnerRef;
-
-        foreach (Mob target in usage_params.MobsTargeted)
-        {
-            bool valid = false;
-            /* 
-            if(effect_filter_params)
-            {
-                valid = false
-                goto decide;
-            }
-            */
-            if (FilterParams.CanAffectMob && !(target is Mob))
-            {
-                valid = false;
-                goto decide;
-            }
-/* 
-            if (FilterParams.IgnoreAlly && (owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
-            {
-                valid = false;
-                goto decide;
-            }
-
-            if (FilterParams.IgnoreEnemy && !(owner.GetLevel(target.Identity) == RelationType.GOOD || owner.GetLevel(target.Identity) == RelationType.V_GOOD))
-            {
-                valid = false;
-                goto decide;
-            }
-*/
-            if (target.Stats.GetValuePrecent(StatName.HEALTH) > FilterParams.MaximumHealthPercent)
-            {
-                valid = false;
-                goto decide;
-            }
-
-        decide:
-            if (valid)
-            {
-                output.Add(target);
-            }
-
-        }
-        return output;
-    }
 
     public virtual void Use(UsageParams usage_params)
     {
         usage_params.OwnerRef.Stats.ChangeValue(StatName.HEALTH, HealthCost);
         usage_params.OwnerRef.Stats.ChangeValue(StatName.ENERGY, EnergyCost);
 
-        foreach (Effect effect in EffectParams)
+        foreach (Effect effect in Effects)
         {
             effect.Use(usage_params);
         }

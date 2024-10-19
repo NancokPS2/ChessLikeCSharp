@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Turn;
+using ExtendedXmlSerializer;
 using Godot.Display;
 using Action = ChessLike.Entity.Action;
 
@@ -12,20 +13,20 @@ namespace Godot;
 public class BattleControllerStateTargeting : BattleControllerState
 {
     private List<Vector3i> _last_param_positions = new();
-private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
+    private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
+    private List<Vector3i> _pos_valid_for_targeting = new();
 
     public BattleControllerStateTargeting(BattleController.State identifier) : base(identifier)
     {
     }
-    
+
+
     public override void StateOnEnter()
     {
-        List<Vector3i> range_to_mark = User.InputActionSelected.TargetingGetPositionsInRange(User.TurnUsageParameters);
-
-        GD.Print(range_to_mark.ToArray());
+        _pos_valid_for_targeting = User.InputActionSelected.TargetParams.GetTargetedPositions(User.TurnUsageParameters);
 
         User.CompDisplayGrid.MeshSet(
-            range_to_mark, 
+            _pos_valid_for_targeting, 
             GridNode.Layer.TARGETING, 
             Global.Resources.GetMesh(Global.Resources.MeshIdent.TARGETING_TARGETABLE)
             );
@@ -44,6 +45,7 @@ private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedSc
             User.InputActionSelected = null;
             User.TurnUsageParameters.PositionsTargeted = new();
         }
+        _pos_valid_for_targeting = new();
         //User.CompCombatUI.NodeConfirmationUI.Update(false);
     }
 
@@ -74,13 +76,14 @@ private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedSc
         //If ACCEPT pressed, select the position.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.ACCEPT))
         {
-            //If can still select positions, do so.
-            if (HasTargetPositionsRemaining())
+            //If can still select positions, add it to the usage parameters.
+            if (HasTargetPositionsRemaining() && _pos_valid_for_targeting.Contains(User.PositionHovered))
             {
                 User.TurnUsageParameters.PositionsTargeted.Add(User.PositionHovered);
             }
         }
 
+        //Position selection finished.
         if (!HasTargetPositionsRemaining())
         {
             if (_popup.GetParent() is null && _popup.IndexLastPressed == PopupButtonDialogUI.NO_INDEX)
@@ -112,7 +115,7 @@ private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedSc
     {
         if (User.TurnUsageParameters.PositionsTargeted.Count != 0)
         {
-            List<Vector3i> aoe_marks = User.InputActionSelected.TargetingGetPositionsInAoE(User.TurnUsageParameters);
+            List<Vector3i> aoe_marks = User.InputActionSelected.TargetParams.GetAoEPositions(User.TurnUsageParameters);
 
             User.CompDisplayGrid.MeshSet(
                 aoe_marks, 

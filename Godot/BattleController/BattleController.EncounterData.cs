@@ -25,16 +25,19 @@ public partial class BattleController
                 .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
                 
             Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("PlayerFac2")
+                .ChainName("PlayerFac2Warrior")
                 .ChainFaction(EFaction.PLAYER)
+                .ChainJob(new List<Job>(){Global.ManagerJob.GetFromEnum(EJob.WARRIOR)})
                 .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
             Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("Someone1")
+                .ChainName("Civilian")
+                .ChainJob(new List<Job>(){Global.ManagerJob.GetFromEnum(EJob.CIVILIAN)})
                 .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
             Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-                .ChainName("SomeoneToo");
+                .ChainJob(new List<Job>(){Global.ManagerJob.GetFromEnum(EJob.WIZARD)})
+                .ChainName("Neutral wizard");
 
             encounter.PresetMobSpawns = new()
             {

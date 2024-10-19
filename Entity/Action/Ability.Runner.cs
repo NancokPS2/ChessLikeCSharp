@@ -72,7 +72,7 @@ public class AbilityRunner : IDebugDisplay
         QueueStarted?.Invoke();
     }
 
-    public async void Process(float delta)
+    public void Process(float delta)
     {
         //If not allowed to run, stop.
         if (!RunningEnabled){return;}
@@ -83,7 +83,7 @@ public class AbilityRunner : IDebugDisplay
         if (RunningIndex >= Queue.Count)
         {
             //If one is still running, wait for it.
-            if (!current_expired){goto tick;}
+            //if (!current_expired){goto tick;}
 
             RunEnd();
             return;
@@ -98,6 +98,7 @@ public class AbilityRunner : IDebugDisplay
 
             action.Use(parameters);
             ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
+            RunningReadyToReplace = false;
         }
 
 
@@ -126,9 +127,9 @@ public class AbilityRunner : IDebugDisplay
     public string GetText()
     {
         string output = string.Format(
-            "Running action: {0} \nRunning time: {1} \nRunning index: {2} \nQueue count: {3}",
+            "Running ability: {0} \nRunning time: {1} \nRunning index: {2} \nQueue count: {3}",
             new object?[]{
-                RunningQueuedAction is not null ? RunningQueuedAction.ToString() : "null", 
+                RunningQueuedAction is not null ? RunningQueuedAction.action.Name : "null", 
                 RunningTime.ToString(),
                 RunningIndex.ToString(),
                 Queue.Count.ToString(),

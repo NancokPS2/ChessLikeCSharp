@@ -22,7 +22,6 @@ public partial class Mob
             EMobPrototype.HUMAN => output
                 .ChainName("Human")
                 .ChainJob(new(){Global.ManagerJob.GetFromEnum(EJob.DEFAULT)})
-                .ChainAction(Global.ManagerAction.GetFromEnum(EAbility.MOVE))
                 .ChainRace(ERace.HUMAN),
             _ => new Mob()
         };
@@ -79,7 +78,7 @@ public partial class Mob
 
     public Mob ChainAction(Ability action)
     {
-        AddAction(action);
+        AddAbility(action);
         return this;
     }
 
