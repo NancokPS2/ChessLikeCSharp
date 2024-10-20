@@ -27,7 +27,7 @@ public static class CanvasItemExtension
     private static void DeleteMetaTween(this CanvasItem @this, string meta_key)
     {
         if(!GodotObject.IsInstanceValid(@this)){return;}
-        
+
         Tween meta = (Tween)@this.GetMeta(meta_key);
         if (meta is Tween tween && GodotObject.IsInstanceValid(tween))
         {
@@ -40,6 +40,8 @@ public static class CanvasItemExtension
 
     public static void AnimateIntermitentGlow(this CanvasItem @this, float duration, Godot.Color target_color)
     {
+        if(!GodotObject.IsInstanceValid(@this)){return;}
+        
         const string TWEEN_META_KEY = "META_AnimateIntermitentGlow_CanvasItemExtension";
 
         Tween tween;

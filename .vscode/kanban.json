@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "PartyUI: Mob inventory.\n- Better display what kind of items each slot supports.",
+                    "id": "mflla9xmd3tcphd3l7lwgzbn"
+                },
+                {
                     "text": "UI for creating objects using reflection from typeof().*()",
                     "id": "yjh6slb4s6brhpviz7aqmn7k"
                 },
@@ -43,10 +47,6 @@
         {
             "title": "Doing",
             "tasks": [
-                {
-                    "text": "PartyUI: Mob inventory.\n- Better display what kind of items each slot supports.",
-                    "id": "mflla9xmd3tcphd3l7lwgzbn"
-                },
                 {
                     "text": "UI for editing Mobs (Party UI)",
                     "id": "w885wk1rv5ct4msnw7kxs4vl"
@@ -101,5 +101,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1728955641418
+    "timestamp": 1729438952951
 }

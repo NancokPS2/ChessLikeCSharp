@@ -20,7 +20,8 @@ public class BattleControllerStateEndingTurn : BattleControllerState
     public override void StateOnEnter()
     {
         User.CompTurnManager.EndTurn();
-        User.CompCombatUI.Update(User);
+        //Already updated when a turn starts, this is overdoing it.
+        //User.CompCombatUI.Update(User);
         User.FSMSetState(BattleController.State.TAKING_TURN);
     }
 

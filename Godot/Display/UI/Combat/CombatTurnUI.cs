@@ -26,9 +26,19 @@ public partial class CombatTurnUI : Control, ISceneDependency
 
         NodeTurnContainer.FreeChildren();
 
-        foreach (var item in manager.GetParticipants())
+        List<ITurn> participants = manager.GetParticipants();
+        participants.Sort( comparison: (ITurn x, ITurn y) => 
+            x.DelayCurrent < y.DelayCurrent ? -1 : 1
+        );
+
+        foreach (var item in participants)
         {
-            NodeTurnContainer.AddChild(new DelayContainer(item));
+            DelayContainer delay_container = new (item);
+            NodeTurnContainer.AddChild(delay_container);
+            if (item == manager.GetCurrentTurnTaker())
+            {
+                delay_container.Modulate = new(0.8f,1,0.8f);
+            }
         }
     }
 

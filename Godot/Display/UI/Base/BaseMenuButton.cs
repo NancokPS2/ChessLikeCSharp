@@ -25,8 +25,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     protected (TButton, TAssociatedParam)? TupleHovered;
 
     private List<TAssociatedParam>? _last_update;
-
-    private Dictionary<TButton, List<(Action, Action)>> _button_to_lambda = new();
+    private List<ButtonInstance> ButtonInstances = new();
 
     public BaseButtonMenu()
     {
@@ -47,25 +46,24 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     protected void Update(List<TAssociatedParam> parameter_list)
     {
         Control used_container = Container ?? this;
-        foreach (var item in used_container.GetChildren<TButton>())
+        foreach (var item in ButtonInstances)
         {
-            used_container.FreeChildren();           
+            ButtonDelete(item);
         }
 
-        _button_to_lambda.Clear();
+        ButtonInstances.Clear();
 
         foreach (var parameter in parameter_list)
         {
-            TButton button = ButtonCreate(parameter);
-            ButtonUpdateConnection(button, parameter);
-            ButtonCreated?.Invoke(button, parameter);
-            used_container.AddChild(button);
+            ButtonInstance button_instance = ButtonCreate(parameter);
+            ButtonCreated?.Invoke(button_instance.NodeReference, button_instance.ParameterReference);
+            used_container.AddChild(button_instance.NodeReference);
         }
 
         _last_update = parameter_list;
     }
 
-    protected virtual TButton ButtonCreate(TAssociatedParam param)
+    protected virtual ButtonInstance ButtonCreate(TAssociatedParam param)
     {
         TButton button = new(){
             AnchorLeft = ButtonAnchors.Position.X, 
@@ -75,26 +73,14 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
             SizeFlagsHorizontal = ButtonHorizontalFlags,
             SizeFlagsVertical = ButtonVerticalFlags
         };
-        return button;
+        ButtonInstance output = new(button, param, this);
+        ButtonInstances.Add(output);
+        return output;
     }
 
-    //Posible memory leak.
-    protected virtual void ButtonUpdateConnection(TButton button, TAssociatedParam param)
+    public virtual void ButtonDelete(ButtonInstance instance)
     {
-        Action on_pressed = () => OnButtonPressed(button, param);
-        Action on_mouse_entered = () => OnButtonHovered(button, param, true);
-        Action on_focus_entered = () => OnButtonHovered(button, param, true);
-        Action on_mouse_exited = () => OnButtonHovered(button, param, false);
-        Action on_focus_exited = () => OnButtonHovered(button, param, false);
-
-        button.Pressed += on_pressed;
-        
-        button.MouseEntered += on_mouse_entered;
-        button.FocusEntered += on_focus_entered;
-
-        button.MouseExited += on_mouse_exited;
-        button.FocusExited += on_focus_exited;
-
+        instance.NodeReference.QueueFree();
     }
 
     protected virtual void OnButtonPressed(TButton button, TAssociatedParam param)
@@ -108,4 +94,31 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         TupleHovered = hovered ? (button, param) : null;
     }
 
+    public class ButtonInstance
+    {
+        public TButton NodeReference;
+        public TAssociatedParam ParameterReference;
+        public BaseButtonMenu<TButton, TAssociatedParam> MenuReference;
+        public ButtonInstance(TButton button, TAssociatedParam param, BaseButtonMenu<TButton, TAssociatedParam> menu)      
+        {
+            NodeReference = button;
+            ParameterReference = param;
+            MenuReference = menu;
+            NodeReference.Connect(Button.SignalName.Pressed, Callable.From(OnPressed));
+            NodeReference.Connect(Button.SignalName.MouseEntered, Callable.From(OnMouseEntered));
+            NodeReference.Connect(Button.SignalName.MouseExited, Callable.From(OnMouseExited));
+            NodeReference.Connect(Button.SignalName.FocusEntered, Callable.From(OnFocusEntered));
+            NodeReference.Connect(Button.SignalName.FocusExited, Callable.From(OnFocusExited));
+        }
+
+        public void OnPressed() => MenuReference.OnButtonPressed(NodeReference, ParameterReference);
+
+        public void OnMouseEntered() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, true);
+
+        public void OnMouseExited() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, false);
+
+        public void OnFocusEntered() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, true);
+
+        public void OnFocusExited() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, false);
+    }
 }

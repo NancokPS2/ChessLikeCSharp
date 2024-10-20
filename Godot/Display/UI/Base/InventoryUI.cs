@@ -183,6 +183,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	public Godot.Vector2 GetRectSize()
 	{
+		if(!GodotObject.IsInstanceValid(TupleSelected?.Item1)){return new();}
 		return TupleSelected?.Item1?.Size * 1.25f ?? new(120,80);
 	}
 

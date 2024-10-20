@@ -45,7 +45,7 @@ public partial class TooltipComponent : Node
 
         //Parent.MouseEntered += ProcessingEnabled;
         //Parent.MouseExited += ProcessingDisabled;
-        DrawTarget.Draw += Draw;
+        DrawTarget.Connect(CanvasItem.SignalName.Draw, Callable.From(Draw));
     }
 
     public override void _ExitTree()
@@ -53,7 +53,6 @@ public partial class TooltipComponent : Node
         base._ExitTree();
         //Parent.MouseEntered -= ProcessingEnabled;
         //Parent.MouseExited -= ProcessingDisabled;
-        DrawTarget.Draw -= Draw;
     }
 
     public override void _Process(double delta)
