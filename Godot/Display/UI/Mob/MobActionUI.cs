@@ -23,7 +23,7 @@ public partial class MobActionUI : Control, ISceneDependency
 		if(ActionGrid is null) {throw new Exception("No ActionList");}
 
         ActionGrid.FreeChildren();
-		foreach (var item in mob.GetActions())
+		foreach (var item in mob.GetAbilities())
 		{
 			Label label = new(){Text = item.Name, SizeFlagsHorizontal = SizeFlags.ExpandFill};
 			ActionGrid.AddChild(label);

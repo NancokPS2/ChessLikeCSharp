@@ -16,6 +16,7 @@ public partial class BattleController
         AWAITING_ACTION,
         TARGETING,
         ACTION_RUNNING,
+        PREPARATION,
     }
 
     public List<BattleControllerState> StateList { get; set; } = new()
@@ -26,6 +27,7 @@ public partial class BattleController
         new BattleControllerStateTargeting(State.TARGETING),
         new BattleControllerStateAwaitingAction(State.AWAITING_ACTION),
         new BattleControllerStateActionRunning(State.ACTION_RUNNING),
+        new BattleControllerStatePreparation(State.PREPARATION),
     };
 
     private BattleControllerState _queued_state;
@@ -38,7 +40,7 @@ public partial class BattleController
         {
             item.User = this;
         }
-        FSMSetState(State.TAKING_TURN);
+        FSMSetState(State.PREPARATION);
     }
 
     public void FSMSetState(BattleControllerState state)

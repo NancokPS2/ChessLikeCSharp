@@ -24,7 +24,7 @@ public partial class BattleController
         //Add the mobs after setting their position.
         foreach (var item in Encounter.PresetMobSpawns)
         {
-            SetupParticipant(item.Value, item.Key);
+            SetupParticipant(item.Value, item.Key, true);
         }
     }
 
@@ -51,16 +51,36 @@ public partial class BattleController
         CompCanvas.Layer = Global.Readonly.LAYER_CANVAS_COMP;
 
         GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());
+        CompTurnManager.TurnEnded += CompActionRunner.PassiveTurnTick;
 
         DebugDisplay.Instance.Add(CompTurnManager);
         DebugDisplay.Instance.Add(CompActionRunner);
     }
 
-    public void SetupParticipant(Mob mob, Vector3i where)
+    public void SetupParticipant(Mob mob, Vector3i where, bool add_to_combat)
     {
-        mob.Position = where;
-        CompMobMeshDisplay.Add(mob);
-        CompTurnManager.Add(mob);
+        //If this mob was already set up, just update its position and state.
+        if(CompMobMeshDisplay.HasMob(mob) && CompTurnManager.GetParticipants().Contains(mob))
+        {
+            mob.Position = where;
+            if(add_to_combat){mob.ChainState(EMobState.COMBAT);}
+        }
+        else
+        {
+            mob.Position = where;
+            CompMobMeshDisplay.Add(mob);
+            CompTurnManager.Add(mob);
+            if(add_to_combat){mob.ChainState(EMobState.COMBAT);}
+
+        }
+    }
+
+    public void RemoveParticipant(Mob mob)
+    {
+        mob.Position = Vector3i.INVALID;
+        CompMobMeshDisplay.Remove(mob);
+        CompTurnManager.Remove(mob);
+        mob.MobState = EMobState.BENCHED;
     }
     
 }

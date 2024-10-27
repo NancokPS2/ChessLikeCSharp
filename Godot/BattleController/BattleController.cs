@@ -78,7 +78,7 @@ public partial class BattleController : Node, IDebugDisplay
 				StateCurrent is not null ? StateCurrent.StateIdentifier : "null", 
 				InputActionSelected is not null ? InputActionSelected.Name : "null", 
 				CompGrid != null ? CompGrid.Boundary : "null",
-				CompTurnManager.GetCurrentTurnTaker() as Mob is Mob ? (CompTurnManager.GetCurrentTurnTaker() as Mob).DisplayedName : "null",
+				CompTurnManager.GetCurrentTurnTaker() as Mob is Mob mob ? mob.DisplayedName : "null",
 				PositionHovered,
 				CompCamera != null ? CompCamera.Rotation : "???",
 				TurnUsageParameters is not null ? TurnUsageParameters.PositionsTargeted.ToArray().ToString() : "???",

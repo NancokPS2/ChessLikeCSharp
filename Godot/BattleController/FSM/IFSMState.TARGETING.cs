@@ -95,7 +95,7 @@ public class BattleControllerStateTargeting : BattleControllerState
 
             if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
             {
-                User.CompActionRunner.Add(User.InputActionSelected, User.TurnUsageParameters);
+                User.CompActionRunner.QueueAdd(User.InputActionSelected, User.TurnUsageParameters);
                 User.FSMSetState(BattleController.State.ACTION_RUNNING);
                 _popup.Reload();
             }

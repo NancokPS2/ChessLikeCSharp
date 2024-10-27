@@ -13,6 +13,7 @@ public partial class Ability
     {
 
         public bool Active;
+        public int DurationTurn = 0;
         public List<EPassiveTrigger> Triggers = new();
 
         public bool CanTrigger(UsageParams usageParams, EPassiveTrigger trigger) 

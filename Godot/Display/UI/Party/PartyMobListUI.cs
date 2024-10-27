@@ -2,9 +2,11 @@ using ChessLike.Entity;
 using Godot;
 using System;
 
-public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>
+public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>, ISceneDependency
 {
 	public Mob? MobSelected;
+
+    public string SCENE_PATH { get; } = "res://Godot/Display/UI/Party/PartyMobListUI.tscn";
 
     public PartyMobListUI() : base()
     {

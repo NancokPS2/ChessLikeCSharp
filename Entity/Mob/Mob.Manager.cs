@@ -34,8 +34,9 @@ public partial class Mob
 
         public List<Mob> GetInPosition(Vector3i position)
         {
-            return GetAllPooled().FilterFromPosition(position);
+            return GetAllPooled().FilterFromPosition(position).FilterFromState(EMobState.COMBAT);
         }
+
     }
 }
 public static class MobListExtension

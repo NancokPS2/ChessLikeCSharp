@@ -35,7 +35,7 @@ public class BattleControllerStatePaused : BattleControllerState
 
     public override void StateOnExit()
     {
-        if (_menu_reference is not null){_menu_reference.RemoveSelf();}
+        _menu_reference?.RemoveSelf();
         User.CompCamera.SetControl(true);
     }
 

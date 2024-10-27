@@ -60,7 +60,7 @@ public partial class Mob
 
     }
 
-    public List<Ability> GetActions()
+    public List<Ability> GetAbilities()
     {
         return Actions;
     }

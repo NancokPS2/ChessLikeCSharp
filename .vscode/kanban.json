@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Abilities:\n- Something must call Ability.Runner.PassiveTurnTick()\n",
+                    "id": "gq4mayam0jxuep2je50kfe3k"
+                },
+                {
                     "text": "PartyUI: Mob inventory.\n- Better display what kind of items each slot supports.",
                     "id": "mflla9xmd3tcphd3l7lwgzbn"
                 },
@@ -101,5 +105,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1729438952951
+    "timestamp": 1729977091783
 }

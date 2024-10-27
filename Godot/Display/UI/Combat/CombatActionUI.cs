@@ -37,7 +37,7 @@ public partial class CombatActionUI : Control, ISceneDependency
         Control container = NodeActionContainer;
         container.FreeChildren();
         
-        foreach (Ability action in mob.GetActions())
+        foreach (Ability action in mob.GetAbilities())
         {
             ActionButton button = new(action);
             container.AddChild(button);

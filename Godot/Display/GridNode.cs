@@ -18,6 +18,7 @@ public partial class GridNode : Node3D
         DECORATION,
         CURSOR,
         DEBUG,
+        MOB_GHOST,
     }
     private readonly Layer[] ALL_LAYERS = Enum.GetValues<Layer>();
 
@@ -88,8 +89,8 @@ public partial class GridNode : Node3D
         body.InputEvent += (
             cam,
             input,
-          pos,
-           norm,
+            pos,
+            norm,
             shape 
             ) => OnCellInput(input, position);
     }
@@ -98,7 +99,7 @@ public partial class GridNode : Node3D
     {
         if (new_mesh == null && CellComponents.ContainsKey(position) && CellComponents[position].mesh_instances.ContainsKey(layer))
         {
-            CellComponents[position].mesh_instances[layer].QueueFree();
+            MeshGetInstance(position, layer)?.QueueFree();
             CellComponents[position].mesh_instances.Remove(layer);
         }else
         {
@@ -114,6 +115,12 @@ public partial class GridNode : Node3D
         {
             MeshSet(item, layer, new_mesh);
         }
+    }
+
+    public MeshInstance3D? MeshGetInstance(Vector3i position, Layer layer)
+    {
+        return CellComponents[position] is null || CellComponents[position].mesh_instances[layer] is null ? null 
+        : CellComponents[position].mesh_instances[layer];
     }
 
     public void MeshRemove(Vector3i position, Layer layer)

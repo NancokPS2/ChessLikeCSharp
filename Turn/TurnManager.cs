@@ -58,9 +58,9 @@ public partial class TurnManager
 
         return output;
     }
-    public ITurn GetCurrentTurnTaker()
+    public ITurn? GetCurrentTurnTaker()
     {
-        return CurrentTaker is not null ? CurrentTaker : throw new Exception("There is not taker at this time, calm down.");
+        return CurrentTaker is not null ? CurrentTaker : null; //throw new Exception("There is not taker at this time, calm down.");
     }
 
     public void StartTurn()
