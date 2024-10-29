@@ -151,10 +151,9 @@ public partial class Global
 
         public static bool IsButtonPressed(Button button)
         {
-
-            return Godot.Input.IsActionPressed(
-                GetActionName(button)
-                );
+            string action = GetActionName(button);
+            bool pressed = Godot.Input.IsActionPressed(action);
+            return pressed;
         }
         public static bool IsActionJustReleased(Button button)
         {

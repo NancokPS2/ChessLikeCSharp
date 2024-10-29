@@ -24,6 +24,10 @@ public partial class BattleController
                 GridNode.Layer.CURSOR, 
                 Global.Resources.GetMesh(Global.Resources.MeshIdent.CURSOR)
                 );
+            
+            PositionSelected = CompDisplayGrid.PositionSelected;
+
+
         }
         else
         {

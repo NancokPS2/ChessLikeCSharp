@@ -301,5 +301,13 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
        return base.GetHashCode();
     }
 
+	public bool IsValid()
+	{
+		return !(
+		X < -2147483630 || X > 2147483630 
+		|| Y < -2147483630 || Y > 2147483630 
+		|| Z < -2147483630 || Z > 2147483630);
+	}
+
 }
 

@@ -185,7 +185,9 @@ public partial class GridNode : Node3D
         }
         else
         {
+            PositionCollidedSelected = Vector3i.INVALID;
             PositionCollidedHovered = comp_position;
         }
+
     }
 }
