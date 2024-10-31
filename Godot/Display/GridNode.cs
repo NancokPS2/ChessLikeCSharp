@@ -19,6 +19,7 @@ public partial class GridNode : Node3D
         CURSOR,
         DEBUG,
         MOB_GHOST,
+        SPAWN_POINT,
     }
     private readonly Layer[] ALL_LAYERS = Enum.GetValues<Layer>();
 
@@ -33,6 +34,18 @@ public partial class GridNode : Node3D
     public Vector3i PositionHovered {get => PositionCollidedHovered + Vector3i.UP;}
 
     public bool InputEnabled = true;
+
+    private List<Vector3i> PosDirty = new();
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        foreach (var item in PosDirty)
+        {
+            MeshRefresh(item);
+        }
+        PosDirty.Clear();
+    }
 
     public void SetGrid(Grid grid)
     {   
@@ -57,6 +70,16 @@ public partial class GridNode : Node3D
 
             CollisionConnect(position, component.collision_body);
             CollisionEnable(position, cell.flags.Contains(CellFlag.SOLID));
+
+            //Custom stuff.
+            if (grid.IsFlagInPosition(position, CellFlag.SOLID))
+            {
+                MeshSet(position, Layer.BASE, Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL));
+            }
+            if (grid.IsFlagInPosition(position, CellFlag.PLAYER_SPAWNPOINT))
+            {
+                MeshSet(position, Layer.SPAWN_POINT, Global.Resources.GetMesh(Global.Resources.MeshIdent.SPAWNPOINT));
+            }
         }
     }
 
@@ -105,8 +128,8 @@ public partial class GridNode : Node3D
         {
             MeshInstance3D instance = new(){Mesh = new_mesh};
             CellComponents[position].mesh_instances[layer] = instance;
-            MeshRefresh(position);    
         }
+        PosDirty.Add(position);
     }
 
     public void MeshSet(List<Vector3i> positions, Layer layer, Mesh? new_mesh)

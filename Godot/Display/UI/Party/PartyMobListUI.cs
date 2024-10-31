@@ -40,7 +40,8 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>, ISceneDepende
     protected override void OnButtonCreated(Button button, Mob param)
     {
 		button.Text = param.DisplayedName;
-        button.Material = (Material)Global.Readonly.SHADER_BORDER_CANVAS.Duplicate();
+        button.Material = (ShaderMaterial)Global.Readonly.SHADER_BORDER_CANVAS.Duplicate();
+        (button.Material as ShaderMaterial)?.SetShaderParameter("border_color", Colors.Transparent);
     }
 
     protected override void OnButtonPressed(Button button, Mob param)

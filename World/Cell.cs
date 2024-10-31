@@ -51,6 +51,12 @@ public partial class Grid
                 flags = new List<CellFlag>(){CellFlag.SOLID},
                 selectable = true,
             };
+            public static readonly Cell Spawnpoint = new()
+            {
+                name = "Spawnpoint",
+                flags = new List<CellFlag>(){CellFlag.AIR, CellFlag.PLAYER_SPAWNPOINT},
+                selectable = false,
+            };
             public static readonly Cell Invalid = new()
             {
                 name = "INVALID",

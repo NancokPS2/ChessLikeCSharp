@@ -24,14 +24,14 @@ public partial class Grid
         CellDictionary[position] = cell;
     }
 
-    public Cell GetCell(Vector3i position)
+    protected Cell GetCell(Vector3i position)
     {
         Cell cell = Cell.Preset.Invalid;
         if (!CellDictionary.TryGetValue(position, out cell)){throw new Exception("Not found!");}
         return cell;
     }
 
-    public Cell[] GetCells()
+    protected Cell[] GetCells()
     {
         return CellDictionary.Values.ToArray();
     }
@@ -120,19 +120,7 @@ public partial class Grid
 
         return flag == CellFlag.UNKNOWN || cell.flags.Contains(flag);
     }
-    public bool IsFlagInPosition(Vector3i position, CellFlag[] flags)
-    {
-        foreach (CellFlag flag in flags)
-        {
-            if(!IsFlagInPosition(position, flag))
-            {
-                return false;
-            }
-            
-        }
-        return true;
-    }
-    public bool IsFlagInPosition(Vector3i position, List<CellFlag> flags)
+    public bool IsFlagInPosition(Vector3i position, ICollection<CellFlag> flags)
     {
         foreach (CellFlag flag in flags)
         {

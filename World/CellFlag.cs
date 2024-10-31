@@ -6,4 +6,5 @@ public enum CellFlag
     SOLID,
     LIQUID,
     AIR,
+    PLAYER_SPAWNPOINT
 }

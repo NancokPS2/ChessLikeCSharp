@@ -16,16 +16,22 @@ public partial class Grid
             int[] Z = Enumerable.Range(0, (int)size.Z).ToArray();
             foreach (int ind_x in X)
             {
-                foreach (int ind_y in X)
+                foreach (int ind_y in Y)
                 {
-                    foreach (int ind_z in X)
+                    foreach (int ind_z in Z)
                     {
-                        if (ind_y < 1)
+                        Vector3i position = new(ind_x,ind_y,ind_z);
+                        if (position.Y < 1)
                         {
-                            output.SetCell(new Vector3i(ind_x,ind_y,ind_z), Cell.Preset.Floor);
-                        }else
+                            output.SetCell(position, Cell.Preset.Floor);
+                        }
+                        else if (position.X == 0 && position.Y == 1)
                         {
-                            output.SetCell(new Vector3i(ind_x,ind_y,ind_z), Cell.Preset.Air);
+                            output.SetCell(position, Cell.Preset.Spawnpoint);
+                        }
+                        else
+                        {
+                            output.SetCell(position, Cell.Preset.Air);
                         }
                     }
                 }

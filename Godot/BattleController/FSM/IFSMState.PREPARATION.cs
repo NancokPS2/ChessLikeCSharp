@@ -62,6 +62,11 @@ public class BattleControllerStatePreparation : BattleControllerState
             if (selected_mob is null){return;}
             //Invalid position, return.
             if (!selected_pos.IsValid()) {return;}
+            //Not a spawn point, return.
+            if (!User.CompGrid.IsFlagInPosition(selected_pos, ChessLike.World.CellFlag.PLAYER_SPAWNPOINT))
+            {
+                return;
+            }
 
             MobPlace(selected_mob, selected_pos);
         }

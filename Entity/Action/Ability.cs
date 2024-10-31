@@ -18,7 +18,7 @@ namespace ChessLike.Entity.Action;
 /// Pass the result of GetTargetsAffected() to UsageParams.mob_targets
 /// 
 /// </summary>
-public partial class Ability : IGridReader
+public partial class Ability
 {
 
     //References
