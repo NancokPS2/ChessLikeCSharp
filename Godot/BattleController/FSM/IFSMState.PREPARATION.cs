@@ -11,6 +11,7 @@ public class BattleControllerStatePreparation : BattleControllerState
 {
     private PartyMobListUI _unit_list;
     private Vector3i _last_hovered_pos;
+    private List<EFaction> FactionsEligible = new(){EFaction.PLAYER};
     private StandardMaterial3D _ghost_material = new(){
         Transparency = BaseMaterial3D.TransparencyEnum.Alpha,
         DepthDrawMode = BaseMaterial3D.DepthDrawModeEnum.Always,
@@ -24,7 +25,7 @@ public class BattleControllerStatePreparation : BattleControllerState
     public override void StateOnEnter()
     {
         _unit_list = new PartyMobListUI().GetInstantiatedScene<PartyMobListUI>();
-        _unit_list.Update(EFaction.PLAYER);
+        _unit_list.Update(FactionsEligible);
         User.CompCanvas.AddChild(_unit_list);
         _unit_list.AnchorBottom = 0.4f;
     }
@@ -43,37 +44,38 @@ public class BattleControllerStatePreparation : BattleControllerState
         Mob? selected_mob = _unit_list.MobSelected;
         Vector3i selected_pos = User.PositionSelected;
         Vector3i hovered_pos = User.PositionHovered;
-        GridNode.Layer layer = GridNode.Layer.MOB_GHOST;
-        //Control? hovered_menu = User.GetViewport().GuiGetHoveredControl();
 
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
             User.FSMSetState(BattleController.State.TAKING_TURN);
         }
 
-        //No mob selected, return.
-        if (selected_mob is null){return;}
-
-        //TODO: Not working.
-        //UpdateGhost(selected_pos, layer, selected_mob);
-
         //Set this position as the last valid one.
         _last_hovered_pos = hovered_pos;
 
-        //Invalid position
-        if (!selected_pos.IsValid()) {return;}
         //Do nothing if the chosen space is occupied.
         if (Global.ManagerMob.GetInPosition(selected_pos).Count != 0){return;}
 
-
-
         if (Global.GInput.IsButtonPressed(Global.GInput.Button.ACCEPT))
         {
+            //No mob selected, return.
+            if (selected_mob is null){return;}
+            //Invalid position, return.
+            if (!selected_pos.IsValid()) {return;}
+
             MobPlace(selected_mob, selected_pos);
         }
         else if (Global.GInput.IsButtonPressed(Global.GInput.Button.CANCEL))
         {
-            List<Mob> mobs_to_remove = Global.ManagerMob.GetInPosition(selected_pos);
+            //Invalid position, return.
+            if (!hovered_pos.IsValid()) {return;}
+
+            //Get all mobs of eligible factions.
+            List<Mob> mobs_to_remove = 
+                Global.ManagerMob.GetInPosition(hovered_pos).Where(
+                    x => FactionsEligible.Contains(x.Faction)
+                ).ToList();
+
             foreach (var mob in mobs_to_remove)
             {
                 MobRemove(mob);
@@ -82,11 +84,15 @@ public class BattleControllerStatePreparation : BattleControllerState
 
     }
 
-    public void UpdateGhost(Vector3i position, GridNode.Layer layer, Mob mob)
+    //TODO: Unimplemented.
+    public void UpdateGhost(Vector3i position, Mob mob)
     {
         bool same_position = _last_hovered_pos == position;
         bool pos_invalid = !position.IsValid();
         if (same_position || pos_invalid) {return;}
+
+        GridNode.Layer layer = GridNode.Layer.MOB_GHOST;
+
         User.CompDisplayGrid.MeshRemove(layer);
 
         Mesh mob_mesh = mob.GetMeshInstance().Mesh;

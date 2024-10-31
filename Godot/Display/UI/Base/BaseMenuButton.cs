@@ -25,7 +25,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     protected (TButton, TAssociatedParam)? TupleHovered;
 
     private List<TAssociatedParam>? _last_update;
-    private List<ButtonInstance> ButtonInstances = new();
+    protected List<ButtonInstance> ButtonInstances = new();
 
     public BaseButtonMenu()
     {

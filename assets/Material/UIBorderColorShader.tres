@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://rskty0n36g32"]
+
+[ext_resource type="Shader" path="res://assets/Shader/CanvasBorder.gdshader" id="1_rvu8t"]
+
+[resource]
+shader = ExtResource("1_rvu8t")
+shader_parameter/border_width = 0.071
+shader_parameter/border_color = Color(0, 1, 0, 0.65)

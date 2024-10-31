@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://c0wvb2iaodbck"]
+[gd_scene load_steps=9 format=3 uid="uid://c0wvb2iaodbck"]
 
 [ext_resource type="Texture2D" uid="uid://bmg5aorvrb6ki" path="res://icon.svg" id="1_17y0d"]
 [ext_resource type="Script" path="res://test.gd" id="1_f8wa5"]
 [ext_resource type="Texture2D" uid="uid://74qvqao60sya" path="res://assets/Texture/class/leader.png" id="2_8yqgt"]
 [ext_resource type="PackedScene" uid="uid://3keq3d6j44e" path="res://testinstance.tscn" id="4_mjnjg"]
+[ext_resource type="Material" uid="uid://dhrpnm6er71rr" path="res://assets/Material/UIPulseGlow.tres" id="5_ccupq"]
+[ext_resource type="Material" uid="uid://rskty0n36g32" path="res://assets/Material/UIBorderColorShader.tres" id="5_j54vh"]
 [ext_resource type="TileSet" uid="uid://gbrbq7i4fgmd" path="res://TestTileSet.tres" id="5_kftc5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqomv"]
@@ -29,6 +31,17 @@ texture_pressed = ExtResource("2_8yqgt")
 [node name="Sprite2D2" parent="." instance=ExtResource("4_mjnjg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 814, -8, 0)
 
+[node name="Skeleton3D" parent="Sprite2D2/Armature" index="0"]
+bones/0/position = Vector3(0, -0.0367026, 0)
+bones/1/rotation = Quaternion(-0.692355, 0.150347, 0.690938, 0.143681)
+bones/2/rotation = Quaternion(-0.199368, -2.14944e-08, -4.43017e-09, 0.979925)
+bones/5/rotation = Quaternion(0, 4.47035e-08, 0, 1)
+bones/6/rotation = Quaternion(-0.505152, -3.95909e-08, -0.24316, 0.828067)
+bones/8/rotation = Quaternion(0.692355, 0.150347, 0.690938, -0.143681)
+bones/9/rotation = Quaternion(-0.199368, 2.14944e-08, 4.43017e-09, 0.979925)
+bones/12/rotation = Quaternion(0, -4.47035e-08, 0, 1)
+bones/13/rotation = Quaternion(-0.505152, 3.95909e-08, 0.24316, 0.828067)
+
 [node name="Sprite2D" parent="." instance=ExtResource("4_mjnjg")]
 
 [node name="MeshInstance2D" type="MeshInstance3D" parent="Sprite2D"]
@@ -37,10 +50,20 @@ material_override = SubResource("StandardMaterial3D_kqomv")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Sprite2D/MeshInstance2D"]
 
 [node name="Sprite2D3" type="Sprite2D" parent="."]
+material = ExtResource("5_ccupq")
+position = Vector2(120, 120)
 texture = ExtResource("1_17y0d")
 offset = Vector2(60, 0)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Sprite2D3"]
 tile_set = ExtResource("5_kftc5")
+
+[node name="Label" type="Button" parent="Sprite2D3"]
+material = ExtResource("5_j54vh")
+offset_left = 208.0
+offset_top = -144.0
+offset_right = 472.0
+offset_bottom = 88.0
+text = "TEST TEST TEST asdasdi"
 
 [editable path="Sprite2D2"]
