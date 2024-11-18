@@ -1,10 +1,8 @@
 namespace ChessLike.Entity.Action;
 
-public partial class Ability
+public enum EPassiveTrigger
 {
-    public enum EPassiveTrigger
-    {
-        ON_TAKE_DAMAGE
-    }
-   
+    ON_TAKE_DAMAGE
 }
+   
+

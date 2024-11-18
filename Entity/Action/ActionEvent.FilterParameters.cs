@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity.Action;
 
-public partial class Ability
+public partial class ActionEvent
 {
     //Defines what can be affected with this and how.
     public class MobFilterParameters

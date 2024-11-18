@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Turn;
+using static ChessLike.Entity.Action.ActionEvent;
 
 namespace ChessLike.Entity.Action;
 
-public class AbilityRunner : IDebugDisplay
+public class ActionEventRunner : IDebugDisplay
 {
-    public delegate void ActionQueue(Ability action, Ability.UsageParams parameters);
+    public delegate void ActionQueue(ActionEvent action, UsageParams parameters);
     public delegate void Delegate();
     public event ActionQueue? ActionQueued;
     public event ActionQueue? ActionStarted;
@@ -19,36 +20,38 @@ public class AbilityRunner : IDebugDisplay
 
     private List<QueuedAction> Queue = new();
 
-    private UniqueList<Ability> PassivesTracked = new();
+    private UniqueList<Passive> PassivesTracked = new();
 
     /// <summary>
     /// ONLY accessible when adding a passive.
     /// </summary>
-    private Dictionary<Ability, int> PassiveTurnsPassed = new();
+    private Dictionary<Passive, int> PassiveTurnsPassed = new();
 
-    public void PassiveTrack(Ability ability)
+    public void PassiveTrack(Passive passive)
     {
-        if (!PassiveIsValid(ability)){return;}
+        if (!PassiveIsValid(passive)){return;}
 
-        PassivesTracked.Add(ability);
-        PassiveTurnsPassed[ability] = 0;
+        PassivesTracked.Add(passive);
+        PassiveTurnsPassed[passive] = 0;
     }
 
-    public void PassiveTrackStop(Ability ability)
+    public void PassiveTrackStop(Passive passive)
     {
-        if(!PassivesTracked.Contains(ability)){throw new Exception("This passive wasn't being tracked in the first place.");}
-        PassivesTracked.Remove(ability);
-        PassiveTurnsPassed.Remove(ability);
+        if(!PassivesTracked.Contains(passive)){throw new Exception("This passive wasn't being tracked in the first place.");}
+        PassivesTracked.Remove(passive);
+        PassiveTurnsPassed.Remove(passive);
     }
 
-    public bool PassiveIsValid(Ability ability)
+    public bool PassiveIsValid(Passive passive)
     {
-        return ability.PassiveParams.DurationTurn > 0;
+        bool turns_left = passive.DurationTurn > 0;
+        bool active = passive.Active;
+        return turns_left && active;
     }
 
     public void PassiveTrack(Mob mob)
     {
-        foreach (var item in mob.GetAbilities())
+        foreach (var item in mob.GetPassives())
         {
             PassiveTrack(item);
         }
@@ -59,14 +62,14 @@ public class AbilityRunner : IDebugDisplay
     /// </summary>
     public void PassiveTurnTick(Mob turn_ender)
     {
-        List<Ability> to_not_track = new();
+        List<Passive> to_not_track = new();
         foreach (var item in PassivesTracked)
         {
             //Skip if this isn't from the one that ended their turn.
             if(item.Owner != turn_ender){continue;}
 
             PassiveTurnsPassed[item] += 1;
-            if (PassiveTurnsPassed[item] >= item.PassiveParams.DurationTurn)
+            if (PassiveTurnsPassed[item] >= item.DurationTurn)
             {
                 to_not_track.Add(item);
             }
@@ -118,6 +121,8 @@ public class AbilityRunner : IDebugDisplay
         Queue.Clear();
     }
 
+    
+    // RUN LOGIC
 
     private bool RunningEnabled;
     private int RunningIndex = 0;
@@ -139,7 +144,8 @@ public class AbilityRunner : IDebugDisplay
         //If not allowed to run, stop.
         if (!RunningEnabled){return;}
 
-        bool current_expired = RunningQueuedAction is not null && RunningTime > RunningQueuedAction.action.AnimationParams.Duration;
+        bool current_expired = RunningQueuedAction is not null 
+        && RunningTime > RunningQueuedAction.action.AnimationParams.Duration;
 
         //If it reached the end, stop.
         if (RunningIndex >= Queue.Count)
@@ -155,7 +161,7 @@ public class AbilityRunner : IDebugDisplay
         if (RunningReadyToReplace == true)
         {
             RunningQueuedAction = Queue[RunningIndex];
-            Ability action = RunningQueuedAction.action;
+            ActionEvent action = RunningQueuedAction.action;
             Ability.UsageParams parameters = RunningQueuedAction.usage_params;
 
             action.Use(parameters);
@@ -202,7 +208,7 @@ public class AbilityRunner : IDebugDisplay
 
     private class QueuedAction
     {
-        public Ability action;
+        public ActionEvent action;
         public Ability.UsageParams usage_params;
         public uint id;
 

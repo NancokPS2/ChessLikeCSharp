@@ -9,7 +9,8 @@ using ChessLike.Shared.Storage;
 public partial class Global
 {
     public static Job.Manager ManagerJob;
-    public static Ability.Manager ManagerAction;
+    public static Ability.Manager ManagerAbility;
+    public static Passive.Manager ManagerPassive;
     public static Mob.Manager ManagerMob;
     public static Faction.Manager ManagerFaction;
     public static Item.Manager ManagerItem;
@@ -17,7 +18,8 @@ public partial class Global
     public static void SetupManager()
     {
         ManagerJob = new();
-        ManagerAction = new();
+        ManagerAbility = new();
+        ManagerPassive = new();
         ManagerMob = new();
         ManagerFaction = new();
         ManagerItem = new();

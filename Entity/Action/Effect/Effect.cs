@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.World;
 using static ChessLike.Entity.Action.Ability;
+using static ChessLike.Entity.Action.ActionEvent;
 
 namespace ChessLike.Entity.Action;
 
@@ -29,5 +30,4 @@ public abstract class Effect
     }
 
     public abstract void CustomUse(UsageParams usage_params);
-
 }

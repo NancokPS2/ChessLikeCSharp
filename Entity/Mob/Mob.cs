@@ -12,6 +12,7 @@ public partial class Mob
     public string DisplayedName = "UNNAMED";
     private List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
     private List<Ability> Actions = new();
+    private List<Passive> Passives = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory MobInventory = new();
@@ -64,6 +65,31 @@ public partial class Mob
     {
         return Actions;
     }
+
+    public void AddPassive(Passive passive)
+    {
+        Passives.Add(passive);
+        passive.Owner = this;
+    }
+
+    public void RemovePassive(EPassive passive_enum, bool all = true)
+    {
+        if (all)
+        {
+            Passives.RemoveAll(x => x.Identifier == passive_enum);
+        }
+        else
+        {
+            Passives.Remove( Passives.First(x => x.Identifier == passive_enum) );
+        }
+
+    }
+
+    public List<Passive> GetPassives()
+    {
+        return Passives;
+    }
+
 
     public void EquipmentAdd(Item equip)
     {

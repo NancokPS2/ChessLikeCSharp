@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity.Action;
 
-public partial class Ability
+public partial class ActionEvent
 {
     public class AnimationParameters
     {

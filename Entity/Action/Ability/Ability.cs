@@ -18,35 +18,25 @@ namespace ChessLike.Entity.Action;
 /// Pass the result of GetTargetsAffected() to UsageParams.mob_targets
 /// 
 /// </summary>
-public partial class Ability
+public partial class Ability : ActionEvent
 {
-
-    //References
-    public Mob Owner;
-
-    public string Name = "Undefined Action";
     public EAbility Identifier = EAbility.PUNCH;
+
     public int PriorityDefault = 0;
-    public List<EPassiveTrigger> PassiveTriggers = new();
     public float EnergyCost = 0;
     public float HealthCost = 0;
 
     public MobFilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
-    public AnimationParameters AnimationParams = new();
-    public PassiveParameters PassiveParams = new();
-    public List<Effect> Effects = new();
+  
 
 
-    public virtual void Use(UsageParams usage_params)
+    public override void Use(UsageParams usage_params)
     {
         usage_params.OwnerRef.Stats.ChangeValue(StatName.HEALTH, HealthCost);
         usage_params.OwnerRef.Stats.ChangeValue(StatName.ENERGY, EnergyCost);
 
-        foreach (Effect effect in Effects)
-        {
-            effect.Use(usage_params);
-        }
+        base.Use(usage_params);
     }
 
 /* 

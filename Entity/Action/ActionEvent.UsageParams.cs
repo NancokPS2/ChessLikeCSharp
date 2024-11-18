@@ -8,7 +8,7 @@ using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
 
-public partial class Ability 
+public partial class ActionEvent 
 {
     /// <summary>
     /// Variables for Effect usage. Must be filled in the order of the variables.
