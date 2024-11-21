@@ -97,4 +97,6 @@ public class ClampFloat
         return output;
     }
 
+    public void Fill() => SetCurrent(GetMax());
+
 }

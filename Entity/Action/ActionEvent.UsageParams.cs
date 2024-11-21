@@ -13,7 +13,7 @@ public partial class ActionEvent
     /// <summary>
     /// Variables for Effect usage. Must be filled in the order of the variables.
     /// </summary>
-    public class UsageParams
+    public class UsageParameters
     {
         public Mob OwnerRef;
         public Grid GridRef;
@@ -31,7 +31,7 @@ public partial class ActionEvent
 
         public int Priority = 0;
 
-        public UsageParams(Mob owner, Grid grid, Ability action_reference)
+        public UsageParameters(Mob owner, Grid grid, Ability action_reference)
         {
             this.OwnerRef = owner;
             this.GridRef = grid;

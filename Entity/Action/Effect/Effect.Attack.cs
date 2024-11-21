@@ -7,7 +7,7 @@ public class EffectAttack : Effect
     };
     public float FlatDamage = 0;
 
-    public override void CustomUse(Ability.UsageParams usage_params)
+    public override void CustomUse(Ability.UsageParameters usage_params)
     {
         float damage = FlatDamage;
         foreach (var item in AttackStatBoost)

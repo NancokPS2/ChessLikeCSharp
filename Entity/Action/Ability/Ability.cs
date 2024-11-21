@@ -31,7 +31,7 @@ public partial class Ability : ActionEvent
   
 
 
-    public override void Use(UsageParams usage_params)
+    public override void Use(UsageParameters usage_params)
     {
         usage_params.OwnerRef.Stats.ChangeValue(StatName.HEALTH, HealthCost);
         usage_params.OwnerRef.Stats.ChangeValue(StatName.ENERGY, EnergyCost);

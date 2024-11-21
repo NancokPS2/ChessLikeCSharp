@@ -36,7 +36,7 @@ public partial class BattleController
     public Vector3i PositionSelected = Vector3i.INVALID; //This should always return to INVALID when not in use.
 
     //Current turn
-    public Ability.UsageParams? TurnUsageParameters;
+    public Ability.UsageParameters? TurnUsageParameters;
 
     //Misc
 }

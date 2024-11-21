@@ -19,7 +19,7 @@ public abstract class Effect
 {
     public readonly bool CanBePassive = false;
 
-    public void Use(UsageParams usage_params)
+    public void Use(UsageParameters usage_params)
     {
         CustomUse(usage_params);
     }
@@ -29,5 +29,5 @@ public abstract class Effect
         return "";
     }
 
-    public abstract void CustomUse(UsageParams usage_params);
+    public abstract void CustomUse(UsageParameters usage_params);
 }

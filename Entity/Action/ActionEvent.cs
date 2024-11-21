@@ -12,12 +12,13 @@ public partial class ActionEvent
     public string Name = "Undefined Action";
 
     public AnimationParameters AnimationParams = new();
+    public MobFilterParameters MobFilterParams = new();
 
 
     public List<Effect> Effects = new();
 
 
-    public virtual void Use(UsageParams usage_params)
+    public virtual void Use(UsageParameters usage_params)
     {
         foreach (Effect effect in Effects)
         {

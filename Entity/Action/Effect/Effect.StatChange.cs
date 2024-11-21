@@ -39,7 +39,7 @@ public class EffectStatChange : Effect
     //How much to change it as a base.
     public float FlatAmount = 0;
 
-    public override void CustomUse(Ability.UsageParams usage_params)
+    public override void CustomUse(Ability.UsageParameters usage_params)
     {
         Mob owner = usage_params.OwnerRef;
 

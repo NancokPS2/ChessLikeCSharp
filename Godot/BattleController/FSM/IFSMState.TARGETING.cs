@@ -40,6 +40,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         User.PositionSelected = Vector3i.INVALID;
         _last_param_positions = new();
 
+        //Is it about to run the action? If not, also reset these values.
         if (User.StateCurrent is not BattleControllerStateActionRunning)
         {
             User.InputActionSelected = null;
@@ -80,6 +81,13 @@ public class BattleControllerStateTargeting : BattleControllerState
             if (HasTargetPositionsRemaining() && _pos_valid_for_targeting.Contains(User.PositionHovered))
             {
                 User.TurnUsageParameters.PositionsTargeted.Add(User.PositionHovered);
+
+                //If the selected action automatically picks mobs in the given location. Add them to the usage parameters.
+                if (User.InputActionSelected.MobFilterParams.PickMobInLocation)
+                {
+                    var mobs_found = Global.ManagerMob.GetInCombat().FilterFromPosition(User.PositionHovered);
+                    User.TurnUsageParameters.MobsTargeted.AddRange(mobs_found);
+                }
             }
         }
 

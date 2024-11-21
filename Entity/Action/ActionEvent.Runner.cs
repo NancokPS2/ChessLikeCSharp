@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ChessLike.Turn;
 using static ChessLike.Entity.Action.ActionEvent;
@@ -9,7 +10,7 @@ namespace ChessLike.Entity.Action;
 
 public class ActionEventRunner : IDebugDisplay
 {
-    public delegate void ActionQueue(ActionEvent action, UsageParams parameters);
+    public delegate void ActionQueue(ActionEvent action, UsageParameters parameters);
     public delegate void Delegate();
     public event ActionQueue? ActionQueued;
     public event ActionQueue? ActionStarted;
@@ -19,42 +20,47 @@ public class ActionEventRunner : IDebugDisplay
     public event Delegate? QueueEnded;
 
     private List<QueuedAction> Queue = new();
+    private UniqueList<Mob> MobsTracked = new();
 
-    private UniqueList<Passive> PassivesTracked = new();
 
-    /// <summary>
-    /// ONLY accessible when adding a passive.
-    /// </summary>
-    private Dictionary<Passive, int> PassiveTurnsPassed = new();
-
-    public void PassiveTrack(Passive passive)
+    public void TrackMob(Mob mob)
     {
-        if (!PassiveIsValid(passive)){return;}
-
-        PassivesTracked.Add(passive);
-        PassiveTurnsPassed[passive] = 0;
+        MobsTracked.Add(mob);
     }
 
-    public void PassiveTrackStop(Passive passive)
+    public void PassiveTriggerPropagate(EPassiveTrigger trigger)
     {
-        if(!PassivesTracked.Contains(passive)){throw new Exception("This passive wasn't being tracked in the first place.");}
-        PassivesTracked.Remove(passive);
-        PassiveTurnsPassed.Remove(passive);
-    }
-
-    public bool PassiveIsValid(Passive passive)
-    {
-        bool turns_left = passive.DurationTurn > 0;
-        bool active = passive.Active;
-        return turns_left && active;
-    }
-
-    public void PassiveTrack(Mob mob)
-    {
-        foreach (var item in mob.GetPassives())
+        foreach (var item in PassiveGetAll())
         {
-            PassiveTrack(item);
+            if (item.PassiveTriggers.Contains(trigger))
+            {
+                item.Use(item.GenerateUsageParameters());
+            }
         }
+    }
+
+    private List<Passive> PassiveGetAll()
+    {
+        List<Passive> output = new();
+        foreach (var item in MobsTracked)
+        {
+            //Skip if out of combat
+            if (item.MobState != EMobState.COMBAT){continue;}
+
+            foreach (var passive in item.GetPassives())
+            {
+                if (PassiveIsValid(passive)){output.Add(passive);}
+            }
+
+        } 
+        return output;
+    }
+
+    private bool PassiveIsValid(Passive passive)
+    {
+        bool not_finished = !passive.LimitParams.IsFinished();
+        bool active = passive.Active;
+        return not_finished && active;
     }
 
     /// <summary>
@@ -63,27 +69,22 @@ public class ActionEventRunner : IDebugDisplay
     public void PassiveTurnTick(Mob turn_ender)
     {
         List<Passive> to_not_track = new();
-        foreach (var item in PassivesTracked)
+        foreach (var item in PassiveGetAll())
         {
             //Skip if this isn't from the one that ended their turn.
             if(item.Owner != turn_ender){continue;}
 
-            PassiveTurnsPassed[item] += 1;
-            if (PassiveTurnsPassed[item] >= item.DurationTurn)
+            item.LimitParams.AdvanceTurns();
+            if (item.LimitParams.IsFinished())
             {
                 to_not_track.Add(item);
             }
-        }
-
-        foreach (var item in to_not_track)
-        {
-            PassiveTrackStop(item);
         }
     }
 
     public void PassiveTurnTick(ITurn turn_ender) => PassiveTurnTick((Mob)turn_ender);
 
-    public uint QueueAdd(Ability action, Ability.UsageParams parameters)
+    public uint QueueAdd(Ability action, Ability.UsageParameters parameters)
     {
         if(parameters.PositionsTargeted.Count == 0){throw new Exception("Invalid parameters.");}
         uint id = QueueGetAvailableId();
@@ -91,7 +92,7 @@ public class ActionEventRunner : IDebugDisplay
         return QueueInsert(action, parameters, index);
     }
 
-    private uint QueueInsert(Ability action, Ability.UsageParams parameters, int index)
+    private uint QueueInsert(Ability action, Ability.UsageParameters parameters, int index)
     {
         uint id = QueueGetAvailableId();
         Queue.Insert(index, new(action, parameters, id));
@@ -99,7 +100,7 @@ public class ActionEventRunner : IDebugDisplay
         return id;
     }
 
-    public bool QueueIsEmpty() => Queue.Count == 0;
+    private bool QueueIsEmpty() => Queue.Count == 0;
 
     private QueuedAction? GetById(uint id)
     {
@@ -116,7 +117,7 @@ public class ActionEventRunner : IDebugDisplay
         return id;
     }
 
-    public void QueueClear()
+    private void QueueClear()
     {
         Queue.Clear();
     }
@@ -162,7 +163,7 @@ public class ActionEventRunner : IDebugDisplay
         {
             RunningQueuedAction = Queue[RunningIndex];
             ActionEvent action = RunningQueuedAction.action;
-            Ability.UsageParams parameters = RunningQueuedAction.usage_params;
+            Ability.UsageParameters parameters = RunningQueuedAction.usage_params;
 
             action.Use(parameters);
             ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
@@ -209,10 +210,10 @@ public class ActionEventRunner : IDebugDisplay
     private class QueuedAction
     {
         public ActionEvent action;
-        public Ability.UsageParams usage_params;
+        public Ability.UsageParameters usage_params;
         public uint id;
 
-        public QueuedAction(Ability action, Ability.UsageParams usage_params, uint id)
+        public QueuedAction(Ability action, Ability.UsageParameters usage_params, uint id)
         {
             this.action = action;
             this.usage_params = usage_params;

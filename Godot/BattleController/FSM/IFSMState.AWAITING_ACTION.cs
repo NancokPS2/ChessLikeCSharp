@@ -49,7 +49,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         if (User.InputActionSelected is not null)
         {
             //TODO: Owner cannot be null
-            User.TurnUsageParameters = new Ability.UsageParams(
+            User.TurnUsageParameters = new Ability.UsageParameters(
                 User.CompTurnManager.GetCurrentTurnTaker() as Mob, 
                 User.CompGrid, 
                 User.InputActionSelected

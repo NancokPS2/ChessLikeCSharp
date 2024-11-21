@@ -46,7 +46,7 @@ public partial class Ability
             return output;
         }
 
-        public List<Vector3i> GetTargetedPositions(UsageParams usage_params)
+        public List<Vector3i> GetTargetedPositions(UsageParameters usage_params)
         {
             //if (usage_params.PositionsTargeted.Count != 0 || usage_params.MobsTargeted.Count != 0){throw new Exception("This should be called BEFORE locations have been chosen.");}
 
@@ -73,7 +73,7 @@ public partial class Ability
             return output;
         }
 
-        public List<Vector3i> GetAoEPositions(UsageParams usage_params)
+        public List<Vector3i> GetAoEPositions(UsageParameters usage_params)
         {
             if (usage_params.PositionsTargeted.Count == 0) {throw new Exception("No position to use AoE in.");}
 
