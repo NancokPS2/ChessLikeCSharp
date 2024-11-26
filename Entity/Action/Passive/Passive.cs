@@ -10,7 +10,10 @@ public partial class Passive : ActionEvent
 {
     public EPassive Identifier = EPassive.HEAL;
     public bool Active = true;
-    public LimitParameters LimitParams = new();
+
+    public bool IsTriggeredByPassive = false;
+    //public List<EAbility> AbilityTriggerFlags;
+    public DurationParameters DurationParams = new();
     
     public List<EPassiveTrigger> PassiveTriggers = new();
 
@@ -19,12 +22,15 @@ public partial class Passive : ActionEvent
         throw new NotImplementedException();
     }
 
-    public bool CanTrigger(UsageParameters usageParams, EPassiveTrigger trigger) 
-    => trigger switch
+    public bool IsTriggeredByEvent(ActionEvent action)
     {
-        EPassiveTrigger.ON_TAKE_DAMAGE => true,
-        _ => throw new NotImplementedException(),
-    };
+        if (action is Passive && !IsTriggeredByPassive)
+        {
+            return false;
+        }
+
+        return true;
+    }
 
 
     public override void Use(UsageParameters usage_params)
@@ -32,9 +38,24 @@ public partial class Passive : ActionEvent
         base.Use(usage_params);
 
         //Advance uses if they are not disabled.
-        if (!LimitParams.IsUsesDisabled())
+        if (!DurationParams.IsUsesDisabled())
         {
-            LimitParams.AdvanceUses();
+            DurationParams.AdvanceUses();
         }
+    }
+}
+public static class Extension
+{
+    public static List<Passive> FilterTriggeredByEvent(this List<Passive> passives, ActionEvent action)
+    {
+        List<Passive> output = new();
+        foreach (var item in passives)
+        {
+            if (item.IsTriggeredByEvent(action))
+            {
+                output.Add(item);
+            }
+        }
+        return output;
     }
 }

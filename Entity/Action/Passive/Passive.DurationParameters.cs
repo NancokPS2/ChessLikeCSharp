@@ -7,7 +7,7 @@ namespace ChessLike.Entity.Action;
 
 public partial class Passive
 {
-    public class LimitParameters
+    public class DurationParameters
     {
         const float DISABLE_MAX = float.MaxValue;
 
