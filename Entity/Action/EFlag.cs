@@ -5,4 +5,5 @@ public enum EFlag
     HOSTILE, 
     DEALS_DAMAGE,
     HEALING,
+    UNARMED,
 }

@@ -37,12 +37,19 @@ public partial class Ability
         return this;
     }
 
+    public Ability ChainFlag(EFlag flag)
+    {
+        Flags.Add(flag);
+        return this;
+    }
+
     public Ability ChainName(string name)
     {
         Name = name;
         return this;
     }
-    
+
+  
 
     public Ability ChainEffectDamageHealth(StatName stat_based, float damage)
     {

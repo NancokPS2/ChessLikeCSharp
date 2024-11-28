@@ -16,7 +16,7 @@ public partial class Ability
         //Distance from the user at which this can be used.
         public uint TargetingRange = 4;
         public StatName? TargetingRangeStatBonus = null;
-        public int MaxTargetedPositions = 1;
+        public int TargetingMaxPositions = 1;
         //Only works if the filter deems the position as valid.
         public bool TargetingNeedsValidMob = true;
         public bool TargetingUsesPathing = false;

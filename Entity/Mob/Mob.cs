@@ -38,28 +38,6 @@ public partial class Mob
 
     }
 
-    public void EquipmentAdd(Item equip)
-    {
-        var err = MobInventory.AddItem(equip);
-        if (err != Shared.Storage.Inventory.Error.NONE)
-        {
-            GD.PushWarning(string.Format("Failed to equip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
-        }
-        
-        Stats.BoostAdd(MobInventory);
-    }
-
-    public void EquipmentRemove(Item equip)
-    {
-        var err = MobInventory.RemoveItem(equip);
-        if (err != Shared.Storage.Inventory.Error.NONE)
-        {
-            GD.PushWarning(string.Format("Failed to unequip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
-        }
-
-        Stats.BoostAdd(MobInventory);
-    }
-
     private void UpdateJobs()
     {
         if (Jobs.Count == 0)

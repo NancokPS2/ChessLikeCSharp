@@ -11,7 +11,7 @@ public partial class ActionEvent
     public class MobFilterParameters
     {
         //If a mob is standing in a targeted location, they are included in the mob list of the UsageParameters.
-        public bool PickMobInLocation;
+        public bool PickMobInTargetPos = true;
         //Only the owner is a valid target. Should have a range of 0.
         public bool OnlyAffectOwner = false;
 

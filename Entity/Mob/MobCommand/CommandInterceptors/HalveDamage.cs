@@ -7,9 +7,13 @@ namespace ChessLike.Entity.Command;
 
 public class HalveDamage : MobCommandInterceptor
 {
+    public bool OnlyDirectHarm = true;
     public override bool CanIntercept(MobCommand command)
     {
-        return command is MobCommandTakeDamage;
+        bool is_damage = command is MobCommandTakeDamage;
+        bool respects_direct = OnlyDirectHarm && command.Flags.Contains(ECommandFlag.DIRECT)
+        || !OnlyDirectHarm;
+        return is_damage && respects_direct;
     }
 
     public override void UseInterceptor(MobCommand command)

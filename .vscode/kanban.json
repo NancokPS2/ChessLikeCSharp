@@ -56,6 +56,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "Command rework:\n- Ability that applies an interceptor for passive effects.\n- Ability that ends the turn.\n- Ability for moving.\n- Add the moving, end turn, and attack abilities as the default for all mobs.",
+                    "id": "qb09zdbj4dady4tx2hs98j5e"
+                },
+                {
                     "text": "UI for editing Mobs (Party UI)",
                     "id": "w885wk1rv5ct4msnw7kxs4vl"
                 },
@@ -109,5 +113,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1732623240132
+    "timestamp": 1732837186101
 }

@@ -82,10 +82,16 @@ public class BattleControllerStateTargeting : BattleControllerState
             {
                 User.TurnUsageParameters.PositionsTargeted.Add(User.PositionHovered);
 
-                //If the selected action automatically picks mobs in the given location. Add them to the usage parameters.
-                if (User.InputActionSelected.MobFilterParams.PickMobInLocation)
+                //If the selected action automatically picks mobs in the given location. Add them to the usage parameters too.
+                if (User.InputActionSelected?.MobFilterParams.PickMobInTargetPos ?? throw new Exception("There is no action selected, how did we get here?"))
                 {
                     var mobs_found = Global.ManagerMob.GetInCombat().FilterFromPosition(User.PositionHovered);
+                    //Filter invalid mobs.
+                    mobs_found = mobs_found.Where(
+                            x => User.InputActionSelected.MobFilterParams.IsMobValid(User.TurnUsageParameters, x)
+                            ).ToList();
+                    
+                    //Add them to the MobsTargeted list for the action to use.
                     User.TurnUsageParameters.MobsTargeted.AddRange(mobs_found);
                 }
             }
@@ -116,7 +122,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         }
     }
 
-    private bool HasTargetPositionsRemaining() => User.TurnUsageParameters.PositionsTargeted.Count < User.InputActionSelected.TargetParams.MaxTargetedPositions;
+    private bool HasTargetPositionsRemaining() => User.TurnUsageParameters.PositionsTargeted.Count < User.InputActionSelected.TargetParams.TargetingMaxPositions;
 
 
     private void UpdateAoEVisuals()

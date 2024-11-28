@@ -11,8 +11,8 @@ public abstract class MobCommand
 {
     private bool Used = false;
 
-    //If true, it will be considered for interacting with other commands and even modifying them.
-    public bool IsInterceptor = false;
+    public List<ECommandFlag> Flags = new();
+    
 
     public virtual void UseCommand(Mob mob)
     {
@@ -49,6 +49,7 @@ public abstract class MobCommand
             CommandUsed?.Invoke(dictionary);
         }
 
+        //TODO: Add the victims using UsageParameters and ditch the single Mob parameter altogheter.
         public static string ParseInfo(Dictionary<EInfo, string> dictionary)
         {
             string output = "";
