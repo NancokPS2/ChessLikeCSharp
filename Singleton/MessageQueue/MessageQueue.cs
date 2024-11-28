@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
+using ChessLike.Entity.Command;
 using ChessLike.Extension;
 using Godot;
 
@@ -47,6 +49,14 @@ public partial class MessageQueue : CanvasLayer
         NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
         Layer = Global.Readonly.LAYER_MSG_QUEUE;
+
+        MobCommand.ConnectActionToBroadcaster(AddMessageFromCommandBroadcaster);
+    }
+
+    private void AddMessageFromCommandBroadcaster(Mob victim, Dictionary<EInfo, string> dictionary)
+    {
+        string message = MobCommand.Broadcaster.ParseInfo(dictionary);
+        AddMessage(message, message.Length/6);
     }
 
     public void SetAnchors(float left, float top, float right, float bottom)

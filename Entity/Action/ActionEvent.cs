@@ -14,6 +14,7 @@ public partial class ActionEvent
     public AnimationParameters AnimationParams = new();
     public MobFilterParameters MobFilterParams = new();
 
+    public List<EFlag> Flags = new();
 
     public List<Effect> Effects = new();
 

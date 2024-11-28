@@ -29,17 +29,6 @@ public class ActionEventRunner : IDebugDisplay
         MobsTracked.Add(mob);
     }
 
-    private void PassiveTriggerPropagate(EPassiveTrigger trigger)
-    {
-        foreach (var item in PassiveGetAll())
-        {
-            if (item.PassiveTriggers.Contains(trigger))
-            {
-                item.Use(item.GenerateUsageParameters());
-            }
-        }
-    }
-
     private List<Passive> PassiveGetAll()
     {
         List<Passive> output = new();
@@ -80,7 +69,7 @@ public class ActionEventRunner : IDebugDisplay
         return id;
     }
 
-    private bool QueueIsEmpty() => Queue.Count == 0;
+    public bool QueueIsEmpty() => Queue.Count == 0;
 
     private QueuedAction? GetById(uint id)
     {

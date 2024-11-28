@@ -51,7 +51,6 @@ public partial class BattleController
         CompCanvas.Layer = Global.Readonly.LAYER_CANVAS_COMP;
 
         GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());
-        CompTurnManager.TurnEnded += CompActionRunner.PassiveTurnTick;
 
         DebugDisplay.Instance.Add(CompTurnManager);
         DebugDisplay.Instance.Add(CompActionRunner);

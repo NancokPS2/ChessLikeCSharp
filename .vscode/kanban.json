@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Ending the turn must be an action.",
+                    "id": "msgrxdq9x8t350t9egj6y7jv"
+                },
+                {
                     "text": "Abilities:\n- Something must call Ability.Runner.PassiveTurnTick()\n",
                     "id": "gq4mayam0jxuep2je50kfe3k"
                 },
@@ -105,5 +109,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1729977091783
+    "timestamp": 1732623240132
 }

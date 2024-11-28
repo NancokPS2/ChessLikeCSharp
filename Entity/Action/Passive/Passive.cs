@@ -2,20 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 using static ChessLike.Entity.Action.ActionEvent;
 
 namespace ChessLike.Entity.Action;
 
 public partial class Passive : ActionEvent
 {
-    public EPassive Identifier = EPassive.HEAL;
+    public EPassive Identifier = EPassive.DAMAGE_HALVED;
     public bool Active = true;
 
     public bool IsTriggeredByPassive = false;
-    //public List<EAbility> AbilityTriggerFlags;
+
     public DurationParameters DurationParams = new();
     
-    public List<EPassiveTrigger> PassiveTriggers = new();
+    public List<EFlag> FlagsForTrigger = new();
 
     public UsageParameters GenerateUsageParameters()
     {
@@ -24,7 +25,13 @@ public partial class Passive : ActionEvent
 
     public bool IsTriggeredByEvent(ActionEvent action)
     {
+        //If the action is a passive and those are not being considered, pass.
         if (action is Passive && !IsTriggeredByPassive)
+        {
+            return false;
+        }
+        //The action must contain all flags required for the trigger
+        else if (!action.Flags.ContainsAll(FlagsForTrigger) )
         {
             return false;
         }
