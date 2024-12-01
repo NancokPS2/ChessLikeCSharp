@@ -34,9 +34,9 @@ public partial class CombatGeneralUI : Control, ISceneDependency
 	
 		if (controller is null) {throw new Exception("Null controller!???");}
 
-		Mob taking_turn = controller.CompTurnManager.GetCurrentTurnTaker() as Mob;
+		Mob taking_turn = BattleController.CompTurnManager.GetCurrentTurnTaker() as Mob;
 
-		NodeTurnUI.Update(controller.CompTurnManager);
+		NodeTurnUI.Update(BattleController.CompTurnManager);
 		NodeActionUI.Update(taking_turn);
 		NodeMobUI.Update(taking_turn);
 	}

@@ -37,7 +37,7 @@ public partial class Ability
         return this;
     }
 
-    public Ability ChainFlag(EFlag flag)
+    public Ability ChainFlag(EActionFlag flag)
     {
         Flags.Add(flag);
         return this;
@@ -56,7 +56,6 @@ public partial class Ability
         //Effect
         EffectStatChange effect = new();
         effect.SetOwnerAddingBoost(StatName.STRENGTH, 1);
-        Effects.Add(effect);
 
         //Targeting
         TargetParams.TargetingRange = 1;
@@ -69,7 +68,6 @@ public partial class Ability
         //Effect
         EffectStatChange effect = new();
         effect.SetFlatAmount(amount);
-        Effects.Add(effect);
 
         //Targeting
         TargetParams.TargetingRange = 1;
@@ -83,7 +81,6 @@ public partial class Ability
         TargetParams.TargetingRangeStatBonus = StatName.MOVEMENT;
         TargetParams.TargetingRange = 0;
         TargetParams.TargetingUsesPathing = true;
-        Effects.Add(new EffectTeleport());
         return this;
     }
 

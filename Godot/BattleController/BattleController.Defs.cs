@@ -20,15 +20,15 @@ public partial class BattleController
     public int InputEndTurnPressed;
     public Ability? InputActionSelected;
 
-    //Components
-    public MobMeshDisplay CompMobMeshDisplay = new();
-    public CombatGeneralUI CompCombatUI = new CombatGeneralUI().GetInstantiatedScene<CombatGeneralUI>();
-    public GridNode CompDisplayGrid = new();
-    public Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
-    public TurnManager CompTurnManager = new();
-    public Grid CompGrid;
-    public ActionEventRunner CompActionRunner = new();
-    public CanvasLayer CompCanvas = new();
+    //Components (static)
+    public static MobMeshDisplay CompMobMeshDisplay = new();
+    public static CombatGeneralUI CompCombatUI = new CombatGeneralUI().GetInstantiatedScene<CombatGeneralUI>();
+    public static GridNode CompDisplayGrid = new();
+    public static Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
+    public static TurnManager CompTurnManager = new();
+    public static Grid CompGrid;
+    public static ActionEventRunner CompActionRunner = new();
+    public static CanvasLayer CompCanvas = new();
 
     //Combat data
     public EncounterData Encounter;

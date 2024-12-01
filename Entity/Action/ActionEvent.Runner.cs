@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -37,12 +38,19 @@ public class ActionEventRunner : IDebugDisplay
             //Skip if out of combat
             if (item.MobState != EMobState.COMBAT){continue;}
 
-            foreach (var passive in item.GetPassives())
-            {
-                if (PassiveIsValid(passive)){output.Add(passive);}
-            }
+            output.AddRange(PassiveGetFromMob(item));
 
         } 
+        return output;
+    }
+
+    private List<Passive> PassiveGetFromMob(Mob mob)
+    {
+        List<Passive> output = new();
+        foreach (var passive in mob.GetPassives())
+        {
+            if (PassiveIsValid(passive)){output.Add(passive);}
+        }
         return output;
     }
 
@@ -53,7 +61,7 @@ public class ActionEventRunner : IDebugDisplay
         return not_finished && active;
     }
 
-    public uint QueueAdd(Ability action, Ability.UsageParameters parameters)
+    public uint QueueAdd(ActionEvent action, Ability.UsageParameters parameters)
     {
         if(parameters.PositionsTargeted.Count == 0){throw new Exception("Invalid parameters.");}
         uint id = QueueGetAvailableId();
@@ -96,6 +104,7 @@ public class ActionEventRunner : IDebugDisplay
 
     private bool RunningEnabled;
     private int RunningIndex = 0;
+    [Obsolete("Pending removal.")]
     private float RunningTime = 0;
     private QueuedAction RunningQueuedAction;
     private bool RunningReadyToSet;
@@ -111,7 +120,7 @@ public class ActionEventRunner : IDebugDisplay
         QueueStarted?.Invoke();
     }
 
-    public void Process(float delta)
+    public void Process()
     {
         //If not allowed to run, stop.
         if (!RunningEnabled){return;}
@@ -138,7 +147,6 @@ public class ActionEventRunner : IDebugDisplay
             foreach (Passive item in triggered)
             {
                 QueueInsert(item, item.GenerateUsageParameters(), RunningIndex + 1);
-                
             }
             
             RunningReadyToSet = false;
@@ -154,7 +162,8 @@ public class ActionEventRunner : IDebugDisplay
             ActionEnded?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
         }
 
-        RunningTime += delta;
+        //TODO: Maybe don't rely on this random node for timing.
+        RunningTime += (float)BattleController.CompDisplayGrid.GetProcessDeltaTime();
     }
 
     private void RunEnd()
@@ -173,12 +182,34 @@ public class ActionEventRunner : IDebugDisplay
             "Running ability: {0} \nRunning time: {1} \nRunning index: {2} \nQueue count: {3}",
             new object?[]{
                 RunningQueuedAction is not null ? RunningQueuedAction.action.Name : "null", 
-                RunningTime.ToString(),
+                "Disabled",//RunningTime.ToString(),
                 RunningIndex.ToString(),
                 Queue.Count.ToString(),
             });
 
         return output;
+    }
+
+    public void OnTurnEnded(ITurn who)
+    {
+        if (who is Mob mob)
+        {
+            List<Passive> passives = PassiveGetFromMob(mob);
+            foreach (var item in passives)
+            {
+                item.DurationParams.AdvanceTurns();
+                if (item.IsTriggeredByTurnEnd)
+                {
+                    QueueAdd(item, item.GetUsageParams());
+                }
+            }
+
+        } else
+        {
+            throw new Exception("Only works on mobs.");
+        }
+        
+
     }
 
     private class QueuedAction

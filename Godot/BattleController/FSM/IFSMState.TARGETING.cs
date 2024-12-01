@@ -25,7 +25,7 @@ public class BattleControllerStateTargeting : BattleControllerState
     {
         _pos_valid_for_targeting = User.InputActionSelected.TargetParams.GetTargetedPositions(User.TurnUsageParameters);
 
-        User.CompDisplayGrid.MeshSet(
+        BattleController.CompDisplayGrid.MeshSet(
             _pos_valid_for_targeting, 
             GridNode.Layer.TARGETING, 
             Global.Resources.GetMesh(Global.Resources.MeshIdent.TARGETING_TARGETABLE)
@@ -34,8 +34,8 @@ public class BattleControllerStateTargeting : BattleControllerState
 
     public override void StateOnExit()
     {
-        User.CompDisplayGrid.MeshRemove(GridNode.Layer.TARGETING);
-        User.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
+        BattleController.CompDisplayGrid.MeshRemove(GridNode.Layer.TARGETING);
+        BattleController.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
         
         User.PositionSelected = Vector3i.INVALID;
         _last_param_positions = new();
@@ -109,7 +109,7 @@ public class BattleControllerStateTargeting : BattleControllerState
 
             if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
             {
-                User.CompActionRunner.QueueAdd(User.InputActionSelected, User.TurnUsageParameters);
+                BattleController.CompActionRunner.QueueAdd(User.InputActionSelected, User.TurnUsageParameters);
                 User.FSMSetState(BattleController.State.ACTION_RUNNING);
                 _popup.Reload();
             }
@@ -131,7 +131,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         {
             List<Vector3i> aoe_marks = User.InputActionSelected.TargetParams.GetAoEPositions(User.TurnUsageParameters);
 
-            User.CompDisplayGrid.MeshSet(
+            BattleController.CompDisplayGrid.MeshSet(
                 aoe_marks, 
                 GridNode.Layer.AOE, 
                 Global.Resources.GetMesh(Global.Resources.MeshIdent.TARGETING_AOE)
@@ -139,7 +139,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         }
         else
         {
-            User.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
+            BattleController.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
         }
     }
 }

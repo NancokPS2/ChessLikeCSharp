@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
+using ChessLike.Entity.Action.Preset;
 
 namespace ChessLike.Entity;
 
@@ -14,7 +15,7 @@ public partial class Mob
     public void SetMovementMode(EMovementMode mode)
     {
         Actions.Remove(_movement);
-        _movement = Ability.Create(EAbility.MOVE);
+        _movement = new AbilityMove(EMovementMode.WALK);
         AddAbility(_movement);
         _movement_mode = mode;
     }

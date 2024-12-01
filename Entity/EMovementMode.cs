@@ -3,7 +3,7 @@ namespace ChessLike.Entity;
 public enum EMovementMode
 {
     WALK,
-    SWIM,
-    SWIM_HAZARDOUS,
+    AMPHIBIOUS,
     FLY,
+    TELEPORT,
 }

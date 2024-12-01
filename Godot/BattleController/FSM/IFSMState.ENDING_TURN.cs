@@ -11,18 +11,13 @@ namespace Godot;
 
 public class BattleControllerStateEndingTurn : BattleControllerState
 {
-    private bool _confirmed;
-
     public BattleControllerStateEndingTurn(BattleController.State identifier) : base(identifier)
     {
     }
 
     public override void StateOnEnter()
     {
-        User.CompTurnManager.EndTurn();
-        //Already updated when a turn starts, this is overdoing it.
-        //User.CompCombatUI.Update(User);
-        User.FSMSetState(BattleController.State.TAKING_TURN);
+        BattleController.CompTurnManager.EndTurn();
     }
 
     public override void StateOnExit()
@@ -31,5 +26,11 @@ public class BattleControllerStateEndingTurn : BattleControllerState
 
     public override void StateProcess(double delta)
     {
+        //If any end of turn passives need to be used, wait for the queue to be emptied.
+        if (!BattleController.CompActionRunner.QueueIsEmpty())
+        {
+            return;
+        }
+        User.FSMSetState(BattleController.State.TAKING_TURN);
     }
 }

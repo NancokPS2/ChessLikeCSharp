@@ -36,21 +36,29 @@ public partial class BattleController
         //Connect it to the turn manager to handle turn-related display
         CompMobMeshDisplay.ConnectToManager(CompTurnManager);
 
+        //Display grid setup
         AddChild(CompDisplayGrid);
         CompDisplayGrid.SetGrid(CompGrid);
         CompDisplayGrid.Name = "GridDisplay";
 
+        //Camera
         AddChild(CompCamera);
         CompCamera.Name = "Camera";
 
+        //UI for combat inputs and display.
         AddChild(CompCombatUI);
         CompCombatUI.NodeActionUI.ActionPressed += (act) => InputActionSelected = act;
         CompCombatUI.NodeActionUI.EndTurnPressed += () => InputEndTurnPressed++;
 
+        //Canvas for displaying arbitrary UI elements.
         AddChild(CompCanvas);
         CompCanvas.Layer = Global.Readonly.LAYER_CANVAS_COMP;
 
-        GetTree().ProcessFrame += () => CompActionRunner.Process((float)GetProcessDeltaTime());
+        //ActionRunner connections
+        CompTurnManager.TurnEnded += CompActionRunner.OnTurnEnded;
+        GetTree().ProcessFrame += CompActionRunner.Process;
+
+
 
         DebugDisplay.Instance.Add(CompTurnManager);
         DebugDisplay.Instance.Add(CompActionRunner);

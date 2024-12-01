@@ -26,7 +26,7 @@ public class BattleControllerStatePreparation : BattleControllerState
     {
         _unit_list = new PartyMobListUI().GetInstantiatedScene<PartyMobListUI>();
         _unit_list.Update(FactionsEligible);
-        User.CompCanvas.AddChild(_unit_list);
+        BattleController.CompCanvas.AddChild(_unit_list);
         _unit_list.AnchorBottom = 0.4f;
     }
 
@@ -63,7 +63,7 @@ public class BattleControllerStatePreparation : BattleControllerState
             //Invalid position, return.
             if (!selected_pos.IsValid()) {return;}
             //Not a spawn point, return.
-            if (!User.CompGrid.IsFlagInPosition(selected_pos, ChessLike.World.CellFlag.PLAYER_SPAWNPOINT))
+            if (!BattleController.CompGrid.IsFlagInPosition(selected_pos, ChessLike.World.CellFlag.PLAYER_SPAWNPOINT))
             {
                 return;
             }
@@ -98,15 +98,15 @@ public class BattleControllerStatePreparation : BattleControllerState
 
         GridNode.Layer layer = GridNode.Layer.MOB_GHOST;
 
-        User.CompDisplayGrid.MeshRemove(layer);
+        BattleController.CompDisplayGrid.MeshRemove(layer);
 
         Mesh mob_mesh = mob.GetMeshInstance().Mesh;
-        User.CompDisplayGrid.MeshSet(
+        BattleController.CompDisplayGrid.MeshSet(
             position, 
             layer, 
             mob_mesh
         );
-        User.CompDisplayGrid.MeshGetInstance(position, layer)?.SetMaterialOverlay(_ghost_material);
+        BattleController.CompDisplayGrid.MeshGetInstance(position, layer)?.SetMaterialOverlay(_ghost_material);
     }
 
     public void MobPlace(Mob mob, Vector3i where)

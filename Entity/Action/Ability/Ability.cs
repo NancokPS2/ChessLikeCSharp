@@ -21,68 +21,14 @@ namespace ChessLike.Entity.Action;
 /// </summary>
 public partial class Ability : ActionEvent
 {
-    public EAbility Identifier = EAbility.PUNCH;
-
-    public int PriorityDefault = 0;
-    public float EnergyCost = 0;
-    public float HealthCost = 0;
+    public EAbility Identifier = EAbility.NULL;
 
     public MobFilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
-  
-
 
     public override void Use(UsageParameters usage_params)
     {
-        usage_params.OwnerRef.Stats.ChangeValue(StatName.HEALTH, HealthCost);
-        usage_params.OwnerRef.Stats.ChangeValue(StatName.ENERGY, EnergyCost);
-
-        base.Use(usage_params);
-    }
-
-/* 
-    public string GetEffectDescription(UsageParams usage_params)
-    {
-        string output = "";
-
-        //Target stat value changes.
-        foreach (StatSet.Name stat in effect_params.TargetStatChangeValue.Keys)
-        {
-            string? stat_string = Enum.GetName(typeof(StatSet.Name), stat);
-            if (stat_string == null)
-            {
-                throw new ArgumentNullException("What?");
-            }
-            string stat_value = effect_params.TargetStatChangeValue[stat].ToString();
-
-            output = new(output + "Inflict: " + stat_string + stat_value + "\n");
-        }
-
-        //Owner stat value changes.
-        foreach (StatSet.Name stat in effect_params.TargetStatChangeValue.Keys)
-        {
-            string? stat_string = Enum.GetName(typeof(StatSet.Name), stat);
-            if (stat_string == null)
-            {
-                throw new ArgumentNullException("What?");
-            }
-            string stat_value = effect_params.TargetStatChangeValue[stat].ToString();
-
-            output = new(output + "Suffer: " + stat_string + stat_value + "\n");
-        }
-
-        if (effect_params.PositionChange != Vector3i.ZERO)
-        {
-            output = new( output + effect_params.PositionChange.ToString() + "\n" );
-        }
-
-        if (output == "")
-        {
-            output = "Sorry, nothing.";
-        }
-        return output;
         
-            
-    } */
+    }
 }
 

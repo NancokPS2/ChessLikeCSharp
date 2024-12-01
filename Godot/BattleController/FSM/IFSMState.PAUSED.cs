@@ -22,10 +22,10 @@ public class BattleControllerStatePaused : BattleControllerState
     {
         StatePrePause = User.StatePrevious;
 
-        User.CompCamera.SetControl(false);
+        BattleController.CompCamera.SetControl(false);
 
         _menu_reference = new Pause().GetInstantiatedScene<Pause>();
-        User.CompCanvas.AddChild(_menu_reference);
+        BattleController.CompCanvas.AddChild(_menu_reference);
 
         if (User.StatePrevious is null)
         {
@@ -36,7 +36,7 @@ public class BattleControllerStatePaused : BattleControllerState
     public override void StateOnExit()
     {
         _menu_reference?.RemoveSelf();
-        User.CompCamera.SetControl(true);
+        BattleController.CompCamera.SetControl(true);
     }
 
     public override void StateProcess(double delta)

@@ -94,7 +94,7 @@ public partial class AStarGridPathing
             case EMovementMode.FLY:
                 return air_here;
             
-            case EMovementMode.SWIM:
+            case EMovementMode.AMPHIBIOUS:
                 return liquid_here;
 
             default:

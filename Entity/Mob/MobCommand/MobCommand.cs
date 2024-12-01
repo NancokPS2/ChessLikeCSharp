@@ -40,16 +40,11 @@ public abstract class MobCommand
         public static event InfoDictFromMob? CommandUsedOnMob;
         public static event InfoDict? CommandUsed;
 
-        public static void Broadcast(Mob victim, Dictionary<EInfo, string> dictionary)
-        {
-            CommandUsedOnMob?.Invoke(victim, dictionary);
-        }
         public static void Broadcast(Dictionary<EInfo, string> dictionary)
         {
             CommandUsed?.Invoke(dictionary);
         }
 
-        //TODO: Add the victims using UsageParameters and ditch the single Mob parameter altogheter.
         public static string ParseInfo(Dictionary<EInfo, string> dictionary)
         {
             string output = "";

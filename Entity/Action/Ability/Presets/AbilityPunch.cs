@@ -21,8 +21,8 @@ public class AbilityPunch : Ability
 
         ChainName("Attack");
         ChainIdentifier(EAbility.PUNCH);
-        ChainFlag(EFlag.DEALS_DAMAGE);
-        ChainFlag(EFlag.HOSTILE);
+        ChainFlag(EActionFlag.DEALS_DAMAGE);
+        ChainFlag(EActionFlag.HOSTILE);
 
         TargetParams = new TargetingParameters(){
             TargetingRange = 1,
@@ -38,7 +38,7 @@ public class AbilityPunch : Ability
         switch(variant)
         {
             case AbilityVariant.UNARMED:
-                ChainFlag(EFlag.UNARMED);
+                ChainFlag(EActionFlag.UNARMED);
                 break;
         }
     }

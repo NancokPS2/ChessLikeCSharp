@@ -19,19 +19,19 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
     public override void StateOnEnter()
     {
-        CombatGeneralUI mob_ui = User.CompCombatUI;
-        TurnManager turn_manager = User.CompTurnManager;
+        CombatGeneralUI mob_ui = BattleController.CompCombatUI;
+        TurnManager turn_manager = BattleController.CompTurnManager;
 
         Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
 
         mob_ui.Update(User);
-        User.CompCombatUI.NodeActionUI.EnableActionButtons(true);
+        BattleController.CompCombatUI.NodeActionUI.EnableActionButtons(true);
 
     }
 
     public override void StateOnExit()
     {
-        User.CompCombatUI.NodeActionUI.EnableActionButtons(false);
+        BattleController.CompCombatUI.NodeActionUI.EnableActionButtons(false);
     }
 
     public override void StateProcess(double delta)
@@ -50,8 +50,8 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         {
             //TODO: Owner cannot be null
             User.TurnUsageParameters = new Ability.UsageParameters(
-                User.CompTurnManager.GetCurrentTurnTaker() as Mob, 
-                User.CompGrid, 
+                BattleController.CompTurnManager.GetCurrentTurnTaker() as Mob, 
+                BattleController.CompGrid, 
                 User.InputActionSelected
                 );
             User.FSMSetState(BattleController.State.TARGETING);

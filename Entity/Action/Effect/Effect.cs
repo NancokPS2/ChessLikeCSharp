@@ -15,6 +15,7 @@ namespace ChessLike.Entity.Action;
 /// Decides what effect it will have on targets.
 /// By default it can only affect the owner's stats by a flat value, useful for setting a cost.
 /// </summary>
+[Obsolete("Replaced with MobCommand")]
 public abstract class Effect
 {
     public readonly bool CanBePassive = false;

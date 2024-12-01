@@ -17,8 +17,8 @@ public class BattleControllerStateTakingTurn : BattleControllerState
 
     public override void StateOnEnter()
     {
-        User.CompTurnManager.StartTurn();
-        User.CompCombatUI.Update(User);
+        BattleController.CompTurnManager.StartTurn();
+        BattleController.CompCombatUI.Update(User);
         User.FSMSetState(BattleController.State.AWAITING_ACTION);
     }
 

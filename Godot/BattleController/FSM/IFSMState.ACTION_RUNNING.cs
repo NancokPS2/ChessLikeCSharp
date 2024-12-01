@@ -17,22 +17,22 @@ public class BattleControllerStateActionRunning : BattleControllerState
 
     public override void StateOnEnter()
     {
-        if (User.CompActionRunner.QueueIsEmpty()){throw new Exception("Entered state without queued actions.");}
+        if (BattleController.CompActionRunner.QueueIsEmpty()){throw new Exception("Entered state without queued actions.");}
 
-        User.CompCombatUI.Hide();
-        User.CompActionRunner.RunStart();
+        BattleController.CompCombatUI.Hide();
+        BattleController.CompActionRunner.RunStart();
     }
 
     public override void StateOnExit()
     {
-        User.CompCombatUI.Show();
+        BattleController.CompCombatUI.Show();
         User.InputActionSelected = null;
         User.TurnUsageParameters.PositionsTargeted = new();
     }
 
     public override void StateProcess(double delta)
     {
-        if (User.CompActionRunner.QueueIsEmpty())
+        if (BattleController.CompActionRunner.QueueIsEmpty())
         {
             User.FSMSetState(BattleController.State.AWAITING_ACTION);
         }

@@ -42,6 +42,7 @@ public partial class PassiveResource : Godot.Resource
     //TODO
     [ExportCategory("Passive Parameters")]
     [Export]
-    public Godot.Collections.Array<EPassiveTrigger> Triggers = new();
+    bool dummy;
+    //public Godot.Collections.Array<EPassiveTrigger> Triggers = new();
 
 }

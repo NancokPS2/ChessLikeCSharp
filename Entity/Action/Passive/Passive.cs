@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Extension;
+using ChessLike.World;
+using Godot;
 using static ChessLike.Entity.Action.ActionEvent;
 
 namespace ChessLike.Entity.Action;
@@ -13,10 +15,23 @@ public partial class Passive : ActionEvent
     public bool Active = true;
 
     public bool IsTriggeredByPassive = false;
+    public bool IsTriggeredByTurnEnd = false;
 
-    public DurationParameters DurationParams = new();
+    public DurationParameters DurationParams = new DurationParameters(null, null, null);
     
-    public List<EFlag> FlagsForTrigger = new();
+    public List<EActionFlag> FlagsForTrigger = new();
+
+    private UsageParameters BaseParams;
+
+    public Passive() : base()
+    {
+        BaseParams = new(Owner, BattleController.CompGrid, this);
+    }
+
+    public virtual UsageParameters GetUsageParams()
+    {
+        return BaseParams;
+    }
 
     public UsageParameters GenerateUsageParameters()
     {
@@ -42,13 +57,7 @@ public partial class Passive : ActionEvent
 
     public override void Use(UsageParameters usage_params)
     {
-        base.Use(usage_params);
-
-        //Advance uses if they are not disabled.
-        if (!DurationParams.IsUsesDisabled())
-        {
-            DurationParams.AdvanceUses();
-        }
+        DurationParams.AdvanceUses();
     }
 }
 public static class Extension
@@ -65,4 +74,5 @@ public static class Extension
         }
         return output;
     }
+
 }

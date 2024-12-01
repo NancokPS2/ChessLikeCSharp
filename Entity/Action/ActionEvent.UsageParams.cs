@@ -17,7 +17,7 @@ public partial class ActionEvent
     {
         public Mob OwnerRef;
         public Grid GridRef;
-        public Ability ActionRef;
+        public ActionEvent ActionRef;
         /// <summary>
         /// Positions that where selected during the targeting of this action
         /// </summary>
@@ -31,14 +31,11 @@ public partial class ActionEvent
 
         public int Priority = 0;
 
-        public UsageParameters(Mob owner, Grid grid, Ability action_reference)
+        public UsageParameters(Mob owner, Grid grid, ActionEvent action_reference)
         {
             this.OwnerRef = owner;
             this.GridRef = grid;
-            this.ActionRef = action_reference;
-
-            Priority = action_reference.PriorityDefault;
-            //this.location_selected = location_selected;
+            this.ActionRef = action_reference;;
         }
     }
 }

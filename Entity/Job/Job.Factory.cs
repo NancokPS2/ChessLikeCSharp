@@ -45,7 +45,6 @@ public Job ChainDefaultStats()
         Stats.MultiplyStat(StatName.AGILITY, 1.0);
         Stats.MultiplyStat(StatName.INTELLIGENCE, 0.8);
         Stats.MultiplyStat(StatName.DELAY, 1.1);
-        Abilities.Add(Ability.Create(EAbility.PUNCH));
         return this;
     }
 
@@ -59,7 +58,6 @@ public Job ChainDefaultStats()
         Stats.MultiplyStat(StatName.AGILITY, 0.9);
         Stats.MultiplyStat(StatName.INTELLIGENCE, 1.4);
         Stats.MultiplyStat(StatName.DELAY, 1.2);
-        Abilities.Add(Ability.Create(EAbility.PUNCH));
         return this;
     }
 

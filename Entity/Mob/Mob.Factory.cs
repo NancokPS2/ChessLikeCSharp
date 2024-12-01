@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
+using ChessLike.Entity.Action.Preset;
 using ChessLike.Shared.Storage;
 
 namespace ChessLike.Entity;
@@ -21,18 +22,13 @@ public partial class Mob
         {
             EMobPrototype.HUMAN => output
                 .ChainName("Human")
-                .ChainJob(new(){Global.ManagerJob.GetFromEnum(EJob.DEFAULT)})
-                .ChainRace(ERace.HUMAN),
+                .ChainRace(ERace.HUMAN)
+                .ChainJob(new(){Global.ManagerJob.GetFromEnum(EJob.DEFAULT)}),
             _ => new Mob()
         };
         return output;
     }
 
-    public Mob ChainBaseStats()
-    {
-        Stats = GetDefaultStats();
-        return this;
-    }
 
     public Mob ChainName(string name)
     {
