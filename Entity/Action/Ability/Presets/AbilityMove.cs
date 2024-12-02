@@ -8,7 +8,7 @@ namespace ChessLike.Entity.Action.Preset;
 public class AbilityMove : Ability
 { 
     //TODO: implement variants
-    
+
     public AbilityMove(EMovementMode variant) : base()
     {
         ChainName("Move");
@@ -24,7 +24,7 @@ public class AbilityMove : Ability
 
         FilterParams = new MobFilterParameters()
         {
-            
+            PickMobInTargetPos = false
         };
     }
 

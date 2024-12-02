@@ -23,7 +23,7 @@ public partial class Mob
             EMobPrototype.HUMAN => output
                 .ChainName("Human")
                 .ChainRace(ERace.HUMAN)
-                .ChainJob(new(){Global.ManagerJob.GetFromEnum(EJob.DEFAULT)}),
+                .ChainJob(new(){Job.CreatePrototype(EJob.DEFAULT)}),
             _ => new Mob()
         };
         return output;

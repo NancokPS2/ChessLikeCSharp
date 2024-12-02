@@ -48,7 +48,10 @@ public class AbilityPunch : Ability
         base.Use(usage_params);
         float damage = usage_params.OwnerRef.Stats.GetValue(StatName.STRENGTH);
         MobCommandTakeDamage command = new MobCommandTakeDamage(damage);
-        usage_params.MobsTargeted.ForEach( x => x.CommandProcess(command));
+        foreach (var item in usage_params.MobsTargeted)
+        {
+            item.CommandProcess(command);
+        }
     }
 
 

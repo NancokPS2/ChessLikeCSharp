@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
+using ChessLike.Entity.Action.Preset;
 
 namespace ChessLike.Entity;
 
@@ -32,6 +33,8 @@ public Job ChainDefaultStats()
         Stats.SetStat(StatName.STRENGTH, 100);
         Stats.SetStat(StatName.AGILITY, 100);
         Stats.SetStat(StatName.INTELLIGENCE, 100);
+        Stats.SetStat(StatName.DEFENSE, 0);
+        Abilities.Add(new AbilityPunch());
         return this;
     }
 

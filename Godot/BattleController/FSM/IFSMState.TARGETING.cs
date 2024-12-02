@@ -41,7 +41,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         _last_param_positions = new();
 
         //Is it about to run the action? If not, also reset these values.
-        if (User.StateCurrent is not BattleControllerStateActionRunning)
+        if (User.StateCurrent is not BattleControllerStateActionRunning && User.StateCurrent is not BattleControllerStatePaused)
         {
             User.InputActionSelected = null;
             User.TurnUsageParameters.PositionsTargeted = new();

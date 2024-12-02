@@ -34,7 +34,7 @@ public partial class ActionEvent
                 return false;
             }
             //Health must be below this.
-            else if (mob.Stats.GetValuePrecent(StatName.HEALTH) >= MaximumHealthPercent)
+            else if (mob.Stats.GetValuePrecent(StatName.HEALTH) <= MaximumHealthPercent)
             {
                 return false;
             }
