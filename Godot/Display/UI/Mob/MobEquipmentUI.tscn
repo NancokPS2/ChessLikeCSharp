@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1bfi2s6408s0"]
+[gd_scene load_steps=4 format=3 uid="uid://d1bfi2s6408s0"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ygalq"]
 [ext_resource type="Script" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="2_nqci6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xax0c"]
+font_size = 23
 
 [node name="Equipment" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3
@@ -26,9 +29,11 @@ grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_top = 0.049
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 0.247999
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -36,3 +41,13 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.049
+offset_bottom = 0.247999
+grow_horizontal = 2
+text = "EQUIPMENT"
+label_settings = SubResource("LabelSettings_xax0c")

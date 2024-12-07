@@ -20,6 +20,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
     
 	public override void _Ready()
 	{
+		base._Ready();
 		NodeEquipmentUI ??= (InventoryUI?)FindChild("Equipment");
 		NodeStatsUI ??= (MobStatsUI?)FindChild("Stats");
 		NodeActionUI ??= (MobActionUI?)FindChild("Action");

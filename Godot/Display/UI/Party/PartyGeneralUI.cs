@@ -13,6 +13,8 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 	public InventoryUI? NodeMobEquipmentUI;
 	[Export]
 	public InventoryUI? NodeFactionInventoryUI;
+	[Export]
+	public PartyJobChangeUI? NodePartyJobChangeUI;
 
 	public override void _Ready()
 	{
@@ -25,14 +27,11 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 	{
 		NodePartyListUI.Update(ChessLike.Entity.EFaction.PLAYER);
 		NodeFactionInventoryUI.Update(Global.ManagerFaction.GetFromEnum(ChessLike.Entity.EFaction.PLAYER));
-		if (NodePartyListUI.MobSelected is not null)
-		{
-			NodeMobEquipmentUI.Update(NodePartyListUI.MobSelected);
-		}
 	}
 
 	public void OnPartyListUIPressed(Button button, Mob mob)
 	{
 		NodeMobEquipmentUI.Update(mob);
+		NodePartyJobChangeUI.Update(mob);
 	}
 }

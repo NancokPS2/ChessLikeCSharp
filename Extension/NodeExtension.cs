@@ -31,7 +31,7 @@ public static class NodeExtension
         }
     }
 
-    public static List<TNodeType> GetChildren<TNodeType>(this Node @this) where TNodeType : Node
+    public static ICollection<TNodeType> GetChildren<TNodeType>(this Node @this) where TNodeType : Node
     {
         List<TNodeType> output = new();
         foreach (var item in @this.GetChildren())

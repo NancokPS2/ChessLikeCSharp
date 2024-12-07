@@ -38,6 +38,11 @@ public partial class Mob
 
     }
 
+    public List<Job> GetJobs()
+    {
+        return Jobs;
+    }
+
     private void UpdateJobs()
     {
         if (Jobs.Count == 0)

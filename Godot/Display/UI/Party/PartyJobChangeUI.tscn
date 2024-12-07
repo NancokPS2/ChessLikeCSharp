@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7lfcu2mi4uaj"]
+
+[ext_resource type="Script" path="res://Godot/Display/UI/Party/PartyJobChangeUI.cs" id="1_r36bb"]
+
+[node name="MobJobChangeUI" type="Control" node_paths=PackedStringArray("NodeUsedJobs", "NodeAvailableJobs")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r36bb")
+NodeUsedJobs = NodePath("VSplitContainer/SelectedJobs")
+NodeAvailableJobs = NodePath("VSplitContainer/AvailableJobs")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+collapsed = true
+
+[node name="SelectedJobs" type="HBoxContainer" parent="VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="AvailableJobs" type="VBoxContainer" parent="VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true

@@ -67,7 +67,7 @@ public partial class MessageQueue : CanvasLayer
         NodeContainer.AnchorBottom = bottom;
     }
 
-    public static void AddMessage(string text, double duration)
+    public static void AddMessage(string text, double duration = 5)
     {
         TemporaryLabel new_label = new();
         new_label.Text = text;
