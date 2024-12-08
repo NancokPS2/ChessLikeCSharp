@@ -47,6 +47,7 @@ CanTransferItems = false
 metadata/_edit_use_anchors_ = true
 
 [node name="MobJobChangeUI" parent="." instance=ExtResource("6_rogee")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.777778

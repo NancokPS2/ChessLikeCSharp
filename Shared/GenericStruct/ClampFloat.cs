@@ -99,4 +99,9 @@ public class ClampFloat
 
     public void Fill() => SetCurrent(GetMax());
 
+    public override string ToString()
+    {
+        return GetCurrent().ToString() + "/" + GetMax().ToString();
+    }
+
 }

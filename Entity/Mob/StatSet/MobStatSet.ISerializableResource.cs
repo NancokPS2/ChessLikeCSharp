@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 
 namespace ChessLike.Entity;
@@ -38,5 +39,7 @@ public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatS
 
         return output;
     }
+
+    public override string ToString() => Contents.ToStringList();
 }
     

@@ -5,7 +5,11 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Ending the turn must be an action.",
+                    "text": "Add more classes to the DebugResourcemenu",
+                    "id": "njvkfpznpdq99jg4hm37707j"
+                },
+                {
+                    "text": "Ending the turn must be an action. (Maybe, maybe not)",
                     "id": "msgrxdq9x8t350t9egj6y7jv"
                 },
                 {
@@ -113,5 +117,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1732837186101
+    "timestamp": 1733673743594
 }

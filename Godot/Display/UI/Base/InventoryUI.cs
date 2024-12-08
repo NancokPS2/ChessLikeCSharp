@@ -24,12 +24,6 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 	[Export]
 	public bool CanTransferItems;
 
-	public override void _Ready()
-	{
-		base._Ready();
-		AddChild(new TooltipComponent(this));
-	}
-
 	private void SetTransferUI(InventoryUI? ui)
 	{
 		InventoryUI? current = _transfer_ui;
@@ -173,7 +167,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	public string GetText()
 	{
-		return TupleHovered?.Item2?.Item?.Name ?? "";
+		return TupleHovered?.Item2?.Item?.GetDescription() ?? "";
 	}
 
 	public Godot.Font GetFont()
@@ -181,11 +175,15 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		return Global.Readonly.FONT_SMALL;
 	}
 
-	public Godot.Vector2 GetRectSize()
+	public bool IsShown()
 	{
-		if(!GodotObject.IsInstanceValid(TupleSelected?.Item1)){return new();}
-		return TupleSelected?.Item1?.Size * 1.25f ?? new(120,80);
+		return TupleHovered?.Item2?.Item is not null;
 	}
+
+	/* public Godot.Vector2 GetRectSize()
+	{
+		return TupleSelected?.Item1?.Size * 1.25f ?? new(120,80);
+	} */
 
 	public int GetFontSize()
 	{

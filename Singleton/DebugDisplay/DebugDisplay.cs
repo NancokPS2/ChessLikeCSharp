@@ -15,16 +15,19 @@ public partial class DebugDisplay : Node2D
     public Godot.Font FontDraw = new SystemFont(){FontWeight = 700};
     [Export]
     public string ShowMenuAction = "debug_draw";
+    [Export]
+    public string ShowResourcesAction = "debug_show_res_list";
     private UniqueList<IDebugDisplay> Sources = new();
     private IDebugDisplay? SourceSelected;
-    private PopupMenu Menu = new();
+    private PopupMenu MenuDebugInfo = new();
+    private DebugResourceList MenuResources = new DebugResourceList().GetInstantiatedScene<DebugResourceList>();
 
     public override void _Ready()
     {
         base._Ready();
         Instance = this;
-        Menu.IdPressed += OnIdPressed;
-        AddChild(Menu);
+        MenuDebugInfo.IdPressed += OnIdPressed;
+        AddChild(MenuDebugInfo);
 
         ZIndex = (int)RenderingServer.CanvasItemZMax;
         TopLevel = true;
@@ -46,6 +49,10 @@ public partial class DebugDisplay : Node2D
         if (Input.IsActionJustPressed(ShowMenuAction))
         {
             ShowMenu();
+        }
+        else if (Input.IsActionJustPressed(ShowResourcesAction))
+        {
+            ShowResources();
         }
         QueueRedraw();
         
@@ -78,18 +85,32 @@ public partial class DebugDisplay : Node2D
 
     public void ShowMenu()
     {
-        Menu.Popup(new((int)Offset.X, (int)Offset.Y,240,240));
+        MenuDebugInfo.Popup(new((int)Offset.X, (int)Offset.Y,240,240));
+    }
 
+    public void ShowResources()
+    {
+        if (MenuResources.IsInsideTree())
+        {
+            MenuResources.RemoveSelf();
+        }
+        else
+        {
+            //MenuResources.Position = new(40,40);
+            MenuResources.CustomMinimumSize = new(400,400);
+            GetTree().Root.AddChild(MenuResources);
+            MenuResources.RefreshEntries();
+        }
     }
 
     public void UpdateMenu()
     {
-        Menu.Clear(true);
+        MenuDebugInfo.Clear(true);
         int id = 0;
 
         foreach (var item in Sources)
         {
-            Menu.AddItem(item.GetName(), id);
+            MenuDebugInfo.AddItem(item.GetName(), id);
 
             Debug.Assert(Sources[id] == item);
 

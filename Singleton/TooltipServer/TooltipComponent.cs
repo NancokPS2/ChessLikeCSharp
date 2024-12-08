@@ -7,6 +7,7 @@ using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
 using Vector2 = Godot.Vector2;
 
+[Obsolete("Replaced with TooltipServer")]
 public partial class TooltipComponent : Node
 {
     private Control Parent;
@@ -108,10 +109,4 @@ public partial class TooltipComponent : Node
     }
 }
 
-public interface ITooltip
-{
-    public string GetText();
-    public Godot.Font GetFont();
-    public Vector2 GetRectSize();
-    public int GetFontSize();
-}
+

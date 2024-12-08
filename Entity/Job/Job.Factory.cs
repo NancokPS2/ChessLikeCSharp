@@ -40,8 +40,6 @@ public Job ChainDefaultStats()
 
     public Job ChainWarrior()
     {
-        this.ChainDefaultStats();
-
         Stats.MultiplyStat(StatName.HEALTH, 1.2);
         Stats.MultiplyStat(StatName.ENERGY, 0.8);
         Stats.MultiplyStat(StatName.STRENGTH, 1.3);
@@ -53,8 +51,6 @@ public Job ChainDefaultStats()
 
     public Job ChainWizard()
     {
-        this.ChainDefaultStats();
-
         Stats.MultiplyStat(StatName.HEALTH, 0.7);
         Stats.MultiplyStat(StatName.ENERGY, 1.5);
         Stats.MultiplyStat(StatName.STRENGTH, 0.6);
