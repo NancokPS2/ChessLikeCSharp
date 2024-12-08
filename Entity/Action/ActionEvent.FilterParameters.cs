@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 
 namespace ChessLike.Entity.Action;
 
@@ -47,6 +48,11 @@ public partial class ActionEvent
                 return false;
             }
             return true;
+        }
+
+        public override string ToString()
+        {
+            return this.GetFieldValuesAsDict().ToStringList();
         }
     }
 }

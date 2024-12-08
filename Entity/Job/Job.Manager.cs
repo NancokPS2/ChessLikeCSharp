@@ -13,7 +13,6 @@ public partial class Job
     public class Manager : SerializableManager<Job, JobResource>
     {
 
-
         public override List<Job> CreatePrototypes()
         {
             List<Job> output = new();

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 using ChessLike.World;
 using Godot;
 
@@ -95,6 +97,18 @@ public partial class Ability
             if (output.Count == 0) {GD.PushWarning("Action's AoE is empty. Could not target here. Maybe tweak its TargetingParams.");}//throw new Exception("Nothing to select?");}
 
             return output;
+        }
+
+        public override string ToString()
+        {
+            /* Dictionary<string, string> output = new Dictionary<string, string>()
+            {
+                {"Targeting Range", TargetingRange.ToString()},
+
+                {"AoE Range", AoERange.ToString()},
+
+             };*/
+            return this.GetFieldValuesAsDict<TargetingParameters>().ToStringList();
         }
     }
 }

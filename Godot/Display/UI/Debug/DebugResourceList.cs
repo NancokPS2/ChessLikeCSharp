@@ -9,6 +9,8 @@ using Godot;
 public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , ISceneDependency
 {
     const int ID_JOB = 0;
+    const int ID_ITEM = 1;
+    const int ID_ABILITY = 2;
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Debug/DebugResourceList.tscn";
 
     [Export]
@@ -41,12 +43,21 @@ public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , 
 
         //Jobs
         List<IDescription> jobs = new();
-        foreach (var item in Enum.GetValues<EJob>())
-        {
-            jobs.Add(Job.CreatePrototype(item));
-        }
+        jobs.AddRange(Global.ManagerJob.CreatePrototypes());
         Entries.Add(ID_JOB, jobs);
         NodeResourceTypeMenu?.GetPopup().AddItem("Jobs", ID_JOB);
+
+        //Items
+        List<IDescription> items = new();
+        items.AddRange(Global.ManagerItem.CreatePrototypes());
+        Entries.Add(ID_ITEM, items);
+        NodeResourceTypeMenu?.GetPopup().AddItem("Items", ID_ITEM);
+
+        //Abilities
+        List<IDescription> abilities = new();
+        abilities.AddRange(Global.ManagerAbility.CreatePrototypes());
+        Entries.Add(ID_ABILITY, abilities);
+        NodeResourceTypeMenu?.GetPopup().AddItem("Abilities", ID_ABILITY);
     }
 
     protected override void OnButtonCreated(Button button, IDescription param)

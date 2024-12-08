@@ -2,7 +2,7 @@ using ChessLike.Entity;
 using static ChessLike.Entity.Mob;
 
 namespace ChessLike.Shared.Storage;
-public partial class Item : IValuable, MobStatSet.IStatBooster, IDescription
+public partial class Item : IValuable, MobStatSet.IStatBooster
 {
 
     public string Name = "";
@@ -38,17 +38,7 @@ public partial class Item : IValuable, MobStatSet.IStatBooster, IDescription
     }
 
 
-    public string GetDescription(bool extended = false)
-    {
-        return string.Format(@"Name: {0}
-        Price: {1}
-        Flags: {2}", Name, Price, Flags);
-    }
 
-    public string GetDescriptiveName()
-    {
-        return Name;
-    }
 }
 
 

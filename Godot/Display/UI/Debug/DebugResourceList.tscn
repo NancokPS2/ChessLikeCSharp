@@ -12,7 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_0lxtq")
 NodeDescription = NodePath("Description")
 NodeResourceTypeMenu = NodePath("MenuButton")
-Container = NodePath("VBoxContainer")
+Container = NodePath("ScrollContainer/VBoxContainer")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -22,13 +22,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.2225
-anchor_bottom = 1.00027
-offset_right = -0.32
-offset_bottom = -0.176003
+anchor_right = 0.222
+anchor_bottom = 1.00035
+offset_right = 0.255981
+offset_bottom = -0.223999
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="Description" type="RichTextLabel" parent="."]
