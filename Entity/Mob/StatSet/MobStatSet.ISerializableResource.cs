@@ -22,7 +22,7 @@ public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatS
         MobStatSetResource output = new();
         foreach (var item in Contents)
         {
-            output.Contents.Add(item.Key, item.Value.GetMax());
+            output.Contents[item.Key] = item.Value.GetMax();
         }
         return output;
     }
