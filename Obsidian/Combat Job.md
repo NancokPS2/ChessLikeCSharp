@@ -7,7 +7,7 @@ Originally referred to as a "soldier", the term fell out of favor with the emerg
 
 - [[Phoenix Warrior]] (Melee with AoE and HP costs)
 - [[Celestial Priest]] (Healer)
-- [[Wisp Tamer]] (Summoner)ñc  
+- [[Wisp Tamer]] (Summoner) 
 - [[Vagrant]] (Jack of all trades)
 - [[Artificer]] (Item specialist)
 - [[Mimic Witch]] (Blue mage)
