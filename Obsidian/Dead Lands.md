@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - region
+  - location/region
 ---
 A vastly barren land. Deemed to have little of value.
 

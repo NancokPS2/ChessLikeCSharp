@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - sub_region
+  - location/sub_region
 ---
 A name was born as both a joke and superstition. This sub region's existence is widely doubted.
 

@@ -1,3 +1,9 @@
+---
+tags:
+  - location
+  - location/region
+subregions: "1"
+---
 Fittingly, it is the largest of the regions, with a mix of many cultures and governments. It is common for its inhabitants to refer to anything outside of it as the outer lands.
 
 When the first maps where being drawn, most of the populace of this now-region where actually completely detached from each other.

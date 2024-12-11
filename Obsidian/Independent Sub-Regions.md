@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - region
+  - location/region
 ---
 This is the name given to the remaining land without any clear ownership or characteristics.
 

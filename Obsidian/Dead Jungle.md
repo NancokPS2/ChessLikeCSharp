@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - sub_region
+  - location/sub_region
 ---
 A giant jungle situated in the middle of the [[Dead Lands]]. 
 Ironically, the jungle is the only thing that's not dead in the region. But it is called as such because most who venture are always marked up as dead.

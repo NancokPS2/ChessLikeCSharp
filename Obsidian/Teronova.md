@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - region
+  - location/region
 ---
 [[Main Character]]'s home [[Region]].
 

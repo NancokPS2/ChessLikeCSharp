@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - sub_region
+  - location/sub_region
 ---
 A large savanna that surrounds the edges of the [[Dead Lands]].
 

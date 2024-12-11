@@ -1,53 +1,37 @@
 {
   "main": {
-    "id": "8d5a29d50bede923",
+    "id": "8efce600af8976a1",
     "type": "split",
     "children": [
       {
-        "id": "637378088e095d3a",
+        "id": "d9012022a1efdbab",
         "type": "tabs",
         "children": [
           {
-            "id": "bb25b6c34d50386c",
+            "id": "2ed448b7350fa35f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Mimic Witch.md",
-                "mode": "source",
-                "backlinks": true,
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Mimic Witch"
-            }
-          },
-          {
-            "id": "4e27f0a1a2383c02",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "7956ee8569ec81b1",
+    "id": "af8f045de5879307",
     "type": "split",
     "children": [
       {
-        "id": "e9e5ee3c38bd5d0f",
+        "id": "04ac12ab39fc748f",
         "type": "tabs",
         "children": [
           {
-            "id": "328ec5e07c09dc4f",
+            "id": "57c65f371ebac2e6",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -59,12 +43,12 @@
             }
           },
           {
-            "id": "49bc309236f82f47",
+            "id": "04e87e01658489be",
             "type": "leaf",
             "state": {
               "type": "search",
               "state": {
-                "query": "Broneg",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,33 +60,13 @@
             }
           },
           {
-            "id": "e6b97e1dec509cdf",
+            "id": "7bff3f576a7bdd47",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
               "state": {},
               "icon": "lucide-bookmark",
               "title": "Bookmarks"
-            }
-          },
-          {
-            "id": "6a760efcc0b7c784",
-            "type": "leaf",
-            "state": {
-              "type": "tagfolder-view",
-              "state": {},
-              "icon": "stacked-levels",
-              "title": "Tag Folder"
-            }
-          },
-          {
-            "id": "b4bdbdb4d640a5ad",
-            "type": "leaf",
-            "state": {
-              "type": "tagfolder-view",
-              "state": {},
-              "icon": "stacked-levels",
-              "title": "Tag Folder"
             }
           }
         ]
@@ -112,15 +76,15 @@
     "width": 300
   },
   "right": {
-    "id": "0914bee97bd23037",
+    "id": "aa19d583376658d0",
     "type": "split",
     "children": [
       {
-        "id": "0d29bc44659946b0",
+        "id": "f5a28d541f0c0aed",
         "type": "tabs",
         "children": [
           {
-            "id": "086eccbb3320418f",
+            "id": "e275d1aaca44574d",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -138,7 +102,7 @@
             }
           },
           {
-            "id": "e2a22d5f8f74cbd9",
+            "id": "aa3d7a660615168a",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -151,7 +115,7 @@
             }
           },
           {
-            "id": "e9e3a65526626a0a",
+            "id": "26337796f1b35d8a",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -164,7 +128,7 @@
             }
           },
           {
-            "id": "116c545553d05f1a",
+            "id": "a67ee4ab741c8b07",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -173,12 +137,12 @@
               "title": "Outline"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -187,42 +151,15 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "publish:Publish changes...": false
+      "command-palette:Open command palette": false
     }
   },
-  "active": "4e27f0a1a2383c02",
+  "active": "57c65f371ebac2e6",
   "lastOpenFiles": [
-    "SUMMARY.md",
-    "README.md",
-    "pininfo.md",
-    "Broneg.md",
-    "templates/CombatJob.md",
-    "Mimic Witch.md",
-    "Phoenix Warrior.md",
-    "Combat Job.md",
-    "Celestial Priest.md",
-    "MC Village.md",
-    "Main Character.md",
-    "Rasemblé.md",
-    "Lieren.md",
-    "Fungal Uprising.md",
-    "templates/Region.md",
-    "Dushe.md",
-    "Teronova.md",
-    "templates",
-    "Nueva carpeta",
-    "Language.md",
-    "Aperion.md",
-    "Untitled 2.canvas",
-    "2024-12-10.md",
-    "location.md",
-    "Tierge.md",
-    "Espra.md",
-    "Weit.md",
-    "Untitled 1.canvas",
-    "Untitled.canvas",
-    "Solida Prosperon.md",
-    "Nova Prosperon.md"
+    "templates.json",
+    "themes/Minimal/theme.css",
+    "themes/Minimal/manifest.json",
+    "themes/Minimal",
+    "themes"
   ]
 }

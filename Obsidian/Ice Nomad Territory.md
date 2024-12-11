@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - sub_region
+  - location/sub_region
 ---
 
 The far south and north of the land have a few spots where the neighboring regions don't reach. Mostly due to the amount of mountainous terrain.

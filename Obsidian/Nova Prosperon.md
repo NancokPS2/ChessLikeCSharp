@@ -1,7 +1,7 @@
 ---
 tags:
   - location
-  - sub_region
+  - location/sub_region
 ---
 After the disaster of the [[Fungal Uprising]]. Most of the people from [[Solida Prosperon]] marched further east to different lands. After passing trough what's now known as [[Verdavalo]], and refusing to stop. The people continued to the distant mountains.
 

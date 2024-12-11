@@ -8,20 +8,6 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "tag:#sub_region  ",
-      "color": {
-        "a": 1,
-        "rgb": 5431382
-      }
-    },
-    {
-      "query": "tag:#region  ",
-      "color": {
-        "a": 1,
-        "rgb": 14725458
-      }
-    },
-    {
       "query": "tag:#concept  ",
       "color": {
         "a": 1,
@@ -39,6 +25,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 1.0000000000000109,
+  "scale": 0.3628873693012173,
   "close": false
 }
