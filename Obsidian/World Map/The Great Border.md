@@ -2,6 +2,7 @@
 tags:
   - location
   - location/sub_region
+  - historic_event
 ---
 A large swathe of land between [[Dushe]] and [[Rasemblé]]. That for political reasons, belongs to the [[Outskirts]].
 

@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "tag:#location",
+  "search": "tag:#job OR file:Combat Job",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -8,17 +8,10 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "tag:#location/region  ",
+      "query": "tag:#job  ",
       "color": {
         "a": 1,
-        "rgb": 12669664
-      }
-    },
-    {
-      "query": "tag:#location/sub_region  ",
-      "color": {
-        "a": 1,
-        "rgb": 14725458
+        "rgb": 14701138
       }
     }
   ],
@@ -32,6 +25,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.43554034831256394,
-  "close": true
+  "scale": 0.8560789647531739,
+  "close": false
 }

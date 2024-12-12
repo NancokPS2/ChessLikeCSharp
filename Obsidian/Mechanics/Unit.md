@@ -4,7 +4,7 @@ tags:
 ---
 Units can have the following properties:
 - [[Character Stats]]
-- [[Status Effects]]
+- [[Passive]]
 - [[Combat Job]]
 - [[Faction]]
 - [[Race]]

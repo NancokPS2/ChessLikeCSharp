@@ -4,7 +4,7 @@ tags:
 ---
 ### Health
 How combat ready a [[Unit]] is, when it reaches 0, the unit can't fight anymore.
-Units below 20% of their health become more susceptible to some harmful effects as they become [[Status Effects|Gravely Hurt]].
+Units below 20% of their health become more susceptible to some harmful effects as they become [[Passive|Gravely Hurt]].
 
 ### Energy
 Many abilities require energy to use. Energy recovers at the start of each turn by 20% of max energy.
