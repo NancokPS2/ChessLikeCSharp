@@ -1,6 +1,6 @@
 {
-  "collapse-filter": true,
-  "search": "",
+  "collapse-filter": false,
+  "search": "tag:#location",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
@@ -8,14 +8,21 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "tag:#concept  ",
+      "query": "tag:#location/region  ",
       "color": {
         "a": 1,
         "rgb": 12669664
       }
+    },
+    {
+      "query": "tag:#location/sub_region  ",
+      "color": {
+        "a": 1,
+        "rgb": 14725458
+      }
     }
   ],
-  "collapse-display": true,
+  "collapse-display": false,
   "showArrow": false,
   "textFadeMultiplier": 0,
   "nodeSizeMultiplier": 1,
@@ -25,6 +32,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.3628873693012173,
-  "close": false
+  "scale": 0.43554034831256394,
+  "close": true
 }

@@ -3,17 +3,17 @@ tags:
   - mechanical
 ---
 ### Health
-How combat ready a unit is, when it reaches 0, the unit can't fight anymore.
+How combat ready a [[Unit]] is, when it reaches 0, the unit can't fight anymore.
 Units below 20% of their health become more susceptible to some harmful effects as they become [[Status Effects|Gravely Hurt]].
 
 ### Energy
 Many abilities require energy to use. Energy recovers at the start of each turn by 20% of max energy.
 
 ### Delay
-The amount of time the next turn of the unit takes to arrive. Higher amounts means it takes longer for the turn to come. This is usually modified by used abilities.
+The amount of time the next turn of the [[Unit]] takes to arrive. Higher amounts means it takes longer for the turn to come. This is usually modified by used abilities.
 
 ### Movement
-How many cells horizontally a unit can move. The vertical amount depends on movement type:
+How many cells horizontally a [[Unit]] can move. The vertical amount depends on movement type:
 - Flying: Infinite height.
 - Fluid: same as movement.
 - Agile: 3/4 of movement.

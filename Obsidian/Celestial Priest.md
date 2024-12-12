@@ -7,7 +7,7 @@ They wrangle the power of the energy outputted by the stars to cast powerful hea
 ### [[Ability|Abilities]]
 - Light Bath: Heals targets in an area for 20% of their max health.
 - Spotlight: Target heals twice as much health from all external sources. Only one target can be under its effects at a time. (Fast)
-- Soothing Shine: The user heals all friendly units at the end of its turn.
+- Soothing Shine: The user heals all friendly [[Unit]]s at the end of its turn.
 - Star Mark: All enemies in an area loose a flat 50% evasion
 
 ### [[Passive|Passives]]

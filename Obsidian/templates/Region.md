@@ -4,5 +4,5 @@ tags:
   - location/region
 ---
 ### Sub Regions
-It is divided in {{subregions}} sub regions:
+It is divided in these sub regions:
 - 
