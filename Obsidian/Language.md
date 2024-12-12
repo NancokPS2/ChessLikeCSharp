@@ -3,10 +3,10 @@ tags:
   - concept
 ---
 There's 3 main languages developed trough the region. 
-- [[Espra]] 
-- [[Lieren]]
-- [[Weit]]
-And a mythical 4th language that is said to be nature's tongue.
-- [[Tierge]]
+- [[Tongue]] 
+- [[Dushean]]
+- [[Wide-Speak]]
+- [[Deep-Speak]]
+- [[Mercantile]]
 
 >[!todo] Revert these to be named as their normal tongue

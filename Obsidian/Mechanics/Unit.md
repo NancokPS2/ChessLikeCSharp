@@ -7,3 +7,4 @@ Units can have the following properties:
 - [[Status Effects]]
 - [[Combat Job]]
 - [[Faction]]
+- [[Race]]

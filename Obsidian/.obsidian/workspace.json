@@ -4,56 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "647eb9c6b7cfc803",
+        "id": "267a6aac4c6c68e3",
         "type": "tabs",
         "children": [
           {
-            "id": "919361063d64370d",
+            "id": "99ed25a638e2127d",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Chakta.md",
-                "mode": "source",
-                "backlinks": true,
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Chakta"
-            }
-          },
-          {
-            "id": "194f9e78d722d332",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Pozyn.md",
-                "mode": "source",
-                "backlinks": true,
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Pozyn"
-            }
-          },
-          {
-            "id": "efe8a11746b92a7a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Underworld.md",
-                "mode": "source",
-                "backlinks": true,
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Underworld"
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -84,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#mechanical",
+                "query": "|",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -115,7 +79,8 @@
               "title": "Tag Folder"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -135,7 +100,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "World Map/Underworld.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -145,7 +109,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Underworld"
+              "title": "Backlinks"
             }
           },
           {
@@ -179,18 +143,18 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "World Map/Underworld.md"
-              },
+              "state": {},
               "icon": "lucide-list",
-              "title": "Outline of Underworld"
+              "title": "Outline"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -203,39 +167,42 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "328ec5e07c09dc4f",
+  "active": "99ed25a638e2127d",
   "lastOpenFiles": [
+    "World Map/Chakta.md",
+    "World Map/Pozyn.md",
+    "Mechanics/Character Stats.md",
+    "templates/CombatJob.md",
+    "Mechanics/Combat Job.md",
+    "Celestial Priest.md",
+    "Language.md",
+    "Untitled.canvas",
+    "Language/Mercantile.md",
+    "Language",
+    "Language/Deep-Speak.md",
+    "templates/Language.md",
+    "Language/Wide-Speak.md",
+    "Language/Dushean.md",
+    "Language/Tongue.md",
+    "Mechanics/Unit.md",
+    "Phoenix Warrior.md",
+    "Mechanics",
+    "World Map/General map layout.canvas",
+    "World Map/Dead Lands.md",
+    "World Map/Dushe.md",
+    "World Map/Underworld.md",
     "Plot",
     "World Map/Rasemblé.md",
-    "World Map/Pozyn.md",
     "World Map/Outskirts.md",
-    "World Map/Dushe.md",
     "World Map/Dead Jungle.md",
-    "World Map/Chakta.md",
     "World Map/Brojownie.md",
-    "World Map/General map layout.canvas",
     "Untitled 1.canvas",
-    "Untitled.canvas",
     "World Map",
     "Untitled 2.canvas",
     "templates/Region.md",
     "World Map/Stolick.md",
-    "templates/Untitled.md",
     "World Map/Teronova.md",
     "Mimic Witch.md",
-    "Celestial Priest.md",
-    "MC Village.md",
-    "Unit.md",
-    "Character Stats.md",
-    "Ability.md",
-    "templates/CombatJob.md",
-    "SUMMARY.md",
-    "README.md",
-    "pininfo.md",
-    "Broneg.md",
-    "Phoenix Warrior.md",
-    "Combat Job.md",
-    "Main Character.md",
     "templates",
     "Nueva carpeta"
   ]

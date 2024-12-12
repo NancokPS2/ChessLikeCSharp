@@ -1,1 +1,10 @@
-{}
+{
+	"nodes":[
+		{"id":"4f48cfbe1b7cba02","type":"file","file":"World Map/Rasemblé.md","x":-400,"y":-1040,"width":1520,"height":1160,"color":"5"},
+		{"id":"f8773298521e4e64","type":"file","file":"World Map/Teronova.md","x":1280,"y":-380,"width":1280,"height":1000,"color":"4"},
+		{"id":"e6dc673903e093fa","type":"file","file":"World Map/Dushe.md","x":-1280,"y":120,"width":800,"height":700,"color":"3"},
+		{"id":"d5abacb8a9d39c2b","x":-60,"y":290,"width":840,"height":660,"color":"#36533c","type":"file","file":"World Map/Dead Lands.md"},
+		{"id":"3a6b890c5ad1163c","x":-1480,"y":-1920,"width":400,"height":400,"color":"6","type":"file","file":"World Map/Independent Sub-Regions.md"}
+	],
+	"edges":[]
+}
