@@ -3,8 +3,8 @@ tags:
   - job
   - mechanical
 ---
-### Abilities
+### [[Ability|Abilities]]
 - 
 
-### Passives
+### [[Passive|Passives]]
 - 

@@ -26,14 +26,34 @@
             "id": "4e27f0a1a2383c02",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Celestial Priest.md",
+                "mode": "source",
+                "backlinks": true,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Celestial Priest"
+            }
+          },
+          {
+            "id": "b067c05e8818606b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Character Stats.md",
+                "mode": "source",
+                "backlinks": true,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Character Stats"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -191,17 +211,19 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "4e27f0a1a2383c02",
+  "active": "b067c05e8818606b",
   "lastOpenFiles": [
+    "Celestial Priest.md",
+    "Character Stats.md",
+    "Ability.md",
+    "templates/CombatJob.md",
     "SUMMARY.md",
     "README.md",
     "pininfo.md",
     "Broneg.md",
-    "templates/CombatJob.md",
     "Mimic Witch.md",
     "Phoenix Warrior.md",
     "Combat Job.md",
-    "Celestial Priest.md",
     "MC Village.md",
     "Main Character.md",
     "Rasemblé.md",
@@ -221,8 +243,6 @@
     "Espra.md",
     "Weit.md",
     "Untitled 1.canvas",
-    "Untitled.canvas",
-    "Solida Prosperon.md",
-    "Nova Prosperon.md"
+    "Untitled.canvas"
   ]
 }
