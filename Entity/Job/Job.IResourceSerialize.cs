@@ -13,7 +13,7 @@ public partial class Job : IResourceSerialize<Job, JobResource>
             JobResource output = new();
 
             output.Identifier = Identifier;
-            output.Stats = Stats.ToResource();
+            output.Stats = StatMultiplicativeBoostDict.ToResource();
             output.Actions.AddRange(from action in Abilities select action.ToResource());
 
             return output;
@@ -25,7 +25,7 @@ public partial class Job : IResourceSerialize<Job, JobResource>
 
             output.Identifier = resource.Identifier;
             MobStatSet from = MobStatSet.FromResource(resource.Stats);
-            output.Stats = from;
+            output.StatMultiplicativeBoostDict = from;
             output.Abilities.AddRange(from action in resource.Actions select Ability.FromResource(action));
 
             return output;

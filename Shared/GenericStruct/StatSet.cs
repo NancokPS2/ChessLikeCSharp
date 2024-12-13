@@ -163,15 +163,38 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     }
 
     public void BoostAdd(IStatBooster booster)
+
+    public void BoostAdd(IStatBooster booster, bool replace)
     {
         if (booster.GetBoostSource() == INVALID_BOOST_SOURCE){throw new Exception("Invalid source.");}
-        var boost = booster.GetStatBoost();
+        StatBoost? boost = booster.GetStatBoost();
         if (boost is not null)
         {
-            Boosts[booster.GetBoostSource()] = boost;
+            BoostAdd(booster.GetBoostSource(), boost);
         }
     }
 
+    private void BoostAdd(string source, StatBoost boost, bool replace = true)
+    {
+        if (replace)
+        {
+            Boosts[source] = boost;
+        } else
+        {
+            
+        }
+
+    }
+
+
+    public void BoostRemove(string source)
+    {
+        if (source == INVALID_BOOST_SOURCE){throw new Exception("Invalid source.");}
+        if (Boosts.ContainsKey(source))
+        {
+            Boosts.Remove(source);
+        }
+    }
 /*     public void BoostReset(string source)
     {
         Boosts[source] = new(source);

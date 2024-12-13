@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Jobs should apply modifiers to stats instead of setting them.",
+                    "id": "w47r9m4dgjokc93mdvva3rhs"
+                },
+                {
                     "text": "Add more classes to the DebugResourcemenu",
                     "id": "njvkfpznpdq99jg4hm37707j"
                 },
@@ -117,5 +121,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1733673743594
+    "timestamp": 1734095459791
 }

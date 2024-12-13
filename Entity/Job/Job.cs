@@ -7,7 +7,7 @@ namespace ChessLike.Entity;
 public partial class Job
 {
     public EJob Identifier = EJob.DEFAULT;
-    public MobStatSet Stats = new();
+    public Dictionary<StatName, float> StatMultiplicativeBoostDict = new();
     public List<Ability> Abilities = new();
     public EMovementMode MovementMode = EMovementMode.WALK;
 }

@@ -14,7 +14,7 @@ public partial class Job : IDescription
         return String.Format(
             "Identifier: {0} \nStats: {1} \nAbilities: {2} \nMovement Mode: {3}",
             GetDescriptiveName(),
-            Stats.ToString(),
+            StatMultiplicativeBoostDict.ToString(),
             Abilities.ToStringList(),
             MovementMode.ToString()
         );

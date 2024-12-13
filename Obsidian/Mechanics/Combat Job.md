@@ -15,7 +15,8 @@ Originally referred to as a "soldier", the term fell out of favor with the emerg
 - [[Mimic Witch]] (Blue mage)
 
 ## Mechanics
-Each [[Combat Job]] has a list of [[passive]]s and [[Ability]]s that they have access to. As well as slots for selecting which a [[Unit]] will be able to use within each [[Encounter]].
+Each [[Combat Job]] has a list of [[passive]]s and [[Ability]]s that they have access to. As well as slots for selecting which ones a [[Unit]] will be able to use within each [[Encounter]].
+**They also apply modifiers to the [[Unit]]s stats.**
 Slots:
 - 10 Active slots
 - 2 Passive slot

@@ -25,38 +25,38 @@ public partial class Job
 
 public Job ChainDefaultStats()
     {
-        Stats.SetStat(StatName.HEALTH, 100);
-        Stats.SetStat(StatName.ENERGY, 40);
-        Stats.SetStat(StatName.MOVEMENT, 3);
-        Stats.SetStat(StatName.JUMP, 2);
-        Stats.SetStat(StatName.DELAY, 100);
-        Stats.SetStat(StatName.STRENGTH, 100);
-        Stats.SetStat(StatName.AGILITY, 100);
-        Stats.SetStat(StatName.INTELLIGENCE, 100);
-        Stats.SetStat(StatName.DEFENSE, 0);
+        StatMultiplicativeBoostDict.SetStat(StatName.HEALTH, 100);
+        StatMultiplicativeBoostDict.SetStat(StatName.ENERGY, 40);
+        StatMultiplicativeBoostDict.SetStat(StatName.MOVEMENT, 3);
+        StatMultiplicativeBoostDict.SetStat(StatName.JUMP, 2);
+        StatMultiplicativeBoostDict.SetStat(StatName.DELAY, 100);
+        StatMultiplicativeBoostDict.SetStat(StatName.STRENGTH, 100);
+        StatMultiplicativeBoostDict.SetStat(StatName.AGILITY, 100);
+        StatMultiplicativeBoostDict.SetStat(StatName.INTELLIGENCE, 100);
+        StatMultiplicativeBoostDict.SetStat(StatName.DEFENSE, 0);
         Abilities.Add(new AbilityPunch());
         return this;
     }
 
     public Job ChainWarrior()
     {
-        Stats.MultiplyStat(StatName.HEALTH, 1.2);
-        Stats.MultiplyStat(StatName.ENERGY, 0.8);
-        Stats.MultiplyStat(StatName.STRENGTH, 1.3);
-        Stats.MultiplyStat(StatName.AGILITY, 1.0);
-        Stats.MultiplyStat(StatName.INTELLIGENCE, 0.8);
-        Stats.MultiplyStat(StatName.DELAY, 1.1);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.HEALTH, 1.2);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.ENERGY, 0.8);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.STRENGTH, 1.3);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.AGILITY, 1.0);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.INTELLIGENCE, 0.8);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.DELAY, 1.1);
         return this;
     }
 
     public Job ChainWizard()
     {
-        Stats.MultiplyStat(StatName.HEALTH, 0.7);
-        Stats.MultiplyStat(StatName.ENERGY, 1.5);
-        Stats.MultiplyStat(StatName.STRENGTH, 0.6);
-        Stats.MultiplyStat(StatName.AGILITY, 0.9);
-        Stats.MultiplyStat(StatName.INTELLIGENCE, 1.4);
-        Stats.MultiplyStat(StatName.DELAY, 1.2);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.HEALTH, 0.7);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.ENERGY, 1.5);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.STRENGTH, 0.6);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.AGILITY, 0.9);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.INTELLIGENCE, 1.4);
+        StatMultiplicativeBoostDict.MultiplyStat(StatName.DELAY, 1.2);
         return this;
     }
 

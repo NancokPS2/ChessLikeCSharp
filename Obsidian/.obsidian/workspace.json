@@ -28,13 +28,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Mechanics/Encounter.md",
+                "file": "Celestial Priest.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Encounter"
+              "title": "Celestial Priest"
             }
           }
         ],
@@ -193,11 +193,12 @@
   "active": "f0fc83a6594a25f2",
   "lastOpenFiles": [
     "Mechanics/Combat Job.md",
+    "Phoenix Warrior.md",
+    "templates/CombatJob.md",
     "Mechanics/Encounter.md",
     "Passive.md",
     "Mechanics/Character Stats.md",
     "Celestial Priest.md",
-    "Phoenix Warrior.md",
     "Mechanics/Status Effects.md",
     "templates/Untitled.md",
     "Ability.md",
@@ -212,7 +213,6 @@
     "Faction.md",
     "World Map/Rasemblé.md",
     "World Map/The Great Border.md",
-    "templates/CombatJob.md",
     "Language.md",
     "Untitled.canvas",
     "Language/Mercantile.md",
