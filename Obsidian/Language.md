@@ -2,9 +2,8 @@
 tags:
   - concept
 ---
-There's 3 main languages developed trough the region. 
 - [[Tongue]] 
-- [[Dushean]]
+- [[Dushki]]
 - [[Wide-Speak]]
 - [[Deep-Speak]]
 - [[Mercantile]]

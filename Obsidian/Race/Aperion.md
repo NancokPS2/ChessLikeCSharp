@@ -3,7 +3,7 @@ tags:
   - race
 ---
 A race of beings that shine brightly, literally.
-[[Aperion]] have their own phonetics as they are incapable of making the same sounds most other humanoids can. Even if someone where to learn their language, reproducing it would be difficult. As such most of them learn common languages to better fit in.
+[[Aperion]] have their own phonetics as they are incapable of making the same sounds most other humanoids can. Even if someone where to learn their language, reproducing it would be difficult. As such most of them learn common languages to better fit in, as difficult it is for them to reproduce it accurately.
 Despite their shine, they are very susceptible to sun-burns so they take extra care of covering themselves in clothes from top to bottom. 
 
 ## Appearance
