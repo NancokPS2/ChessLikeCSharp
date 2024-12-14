@@ -33,11 +33,6 @@ public partial class Passive : ActionEvent
         return BaseParams;
     }
 
-    public UsageParameters GenerateUsageParameters()
-    {
-        throw new NotImplementedException();
-    }
-
     public bool IsTriggeredByEvent(ActionEvent action)
     {
         //If the action is a passive and those are not being considered, pass.

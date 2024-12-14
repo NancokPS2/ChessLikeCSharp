@@ -1,6 +1,6 @@
 namespace ChessLike.World;
 
-public enum CellFlag
+public enum ECellFlag
 {
     UNKNOWN,
     SOLID,

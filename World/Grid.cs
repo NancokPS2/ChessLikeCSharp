@@ -31,7 +31,7 @@ public partial class Grid
         return cell;
     }
 
-    protected Cell[] GetCells()
+    protected ICollection<Cell> GetCells()
     {
         return CellDictionary.Values.ToArray();
     }
@@ -110,7 +110,7 @@ public partial class Grid
     /// <param name="position">The position to check.</param>
     /// <param name="flag">The flag to check, Cell.Flag.UNKNOWN it will always return true.</param>
     /// <returns>If the flag qualifies as being in the position.</returns>
-    public bool IsFlagInPosition(Vector3i position, CellFlag flag)
+    public bool IsFlagInPosition(Vector3i position, ECellFlag flag)
     {
         Cell cell = GetCell(position);
         if(cell == Cell.Preset.Invalid)
@@ -118,11 +118,11 @@ public partial class Grid
             return false;
         }
 
-        return flag == CellFlag.UNKNOWN || cell.flags.Contains(flag);
+        return flag == ECellFlag.UNKNOWN || cell.Flags.Contains(flag);
     }
-    public bool IsFlagInPosition(Vector3i position, ICollection<CellFlag> flags)
+    public bool IsFlagInPosition(Vector3i position, ICollection<ECellFlag> flags)
     {
-        foreach (CellFlag flag in flags)
+        foreach (ECellFlag flag in flags)
         {
             if(!IsFlagInPosition(position, flag))
             {
@@ -143,9 +143,9 @@ public partial class Grid
     public struct FloodFillParameters
     {
         public int VerticalTolerance;
-        public List<CellFlag> BlacklistedFlags;
+        public List<ECellFlag> BlacklistedFlags;
 
-        public FloodFillParameters(List<CellFlag> blacklisted_flags, int vertical_tolerance = 0)
+        public FloodFillParameters(List<ECellFlag> blacklisted_flags, int vertical_tolerance = 0)
         {
             this.BlacklistedFlags = blacklisted_flags;
             this.VerticalTolerance = vertical_tolerance;

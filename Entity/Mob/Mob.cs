@@ -52,6 +52,9 @@ public partial class Mob
         }
         //Reset job modifiers
         Stats.BoostRemove(Job.BOOST_SOURCE);
+
+        //Reset abilities
+        ClearAbility();
         
         MobStatSet.StatBoost total_boost = new(Job.BOOST_SOURCE); 
         foreach (Job job in Jobs)

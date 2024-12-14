@@ -42,16 +42,16 @@ public partial class Mob : IGridObject
         switch (MovementMode)
         {
             case EMovementMode.WALK:
-                can_exist = grid.IsFlagInPosition(position, CellFlag.AIR);
+                can_exist = grid.IsFlagInPosition(position, ECellFlag.AIR);
 
                 can_stand_on = grid.IsPositionInbounds(position + Vector3i.DOWN) 
-                && grid.IsFlagInPosition(position + Vector3i.DOWN, CellFlag.SOLID);
+                && grid.IsFlagInPosition(position + Vector3i.DOWN, ECellFlag.SOLID);
                 
                 return can_exist && can_stand_on;
                 
             default:
-                can_exist = grid.IsFlagInPosition(position, CellFlag.AIR);
-                can_stand_on = grid.IsFlagInPosition(position + Vector3i.DOWN, CellFlag.SOLID);
+                can_exist = grid.IsFlagInPosition(position, ECellFlag.AIR);
+                can_stand_on = grid.IsFlagInPosition(position + Vector3i.DOWN, ECellFlag.SOLID);
                 return can_exist && can_stand_on;
         }
         

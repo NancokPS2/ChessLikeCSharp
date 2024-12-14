@@ -26,6 +26,11 @@ public partial class Mob
         action.Owner = this;
     }
 
+
+    public void ClearAbility()
+    {
+        Actions.Clear();
+    }
     public void RemoveAbility(EAbility action_enum, bool all = true)
     {
         if (all)

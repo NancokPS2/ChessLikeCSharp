@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Turn;
+using ChessLike.World.Encounter;
 
 namespace Godot;
 

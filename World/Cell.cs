@@ -5,65 +5,68 @@ using System.Threading.Tasks;
 
 namespace ChessLike.World;
 
-public partial class Grid
+public partial struct Cell : IEquatable<Cell>
 {
 
-    public struct Cell : IEquatable<Cell>
+    public string Name = "UNNAMED";
+    public List<ECellFlag> Flags = new List<ECellFlag>();
+    public bool Selectable = false;
+
+    public Cell()
     {
-
-        public string name = "UNNAMED";
-        public List<CellFlag> flags = new List<CellFlag>();
-        public bool selectable = false;
-
-        public Cell()
-        {
-            name = "";
-            flags = new List<CellFlag>();
-
-        }
-
-        public bool Equals(Cell other)
-        {
-            return name == other.name && flags == other.flags && selectable == other.selectable;
-        }
-
-        public static bool operator ==(Cell a, Cell b)
-        {
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(Cell a, Cell b)
-        {
-            return !a.Equals(b);
-        }
-
-        public static class Preset
-        {
-            public static readonly Cell Air = new()
-            {
-                name = "Air",
-                flags = new List<CellFlag>(){CellFlag.AIR},
-                selectable = false,
-            };
-            public static readonly Cell Floor = new()
-            {
-                name = "Floor",
-                flags = new List<CellFlag>(){CellFlag.SOLID},
-                selectable = true,
-            };
-            public static readonly Cell Spawnpoint = new()
-            {
-                name = "Spawnpoint",
-                flags = new List<CellFlag>(){CellFlag.AIR, CellFlag.PLAYER_SPAWNPOINT},
-                selectable = false,
-            };
-            public static readonly Cell Invalid = new()
-            {
-                name = "INVALID",
-                flags = new List<CellFlag>(){CellFlag.UNKNOWN},
-                selectable = false,
-            };
-        }
+        Name = "";
+        Flags = new List<ECellFlag>();
 
     }
+
+    public Cell(string name, List<ECellFlag> flags, bool selectable)
+    {
+        Name = name;
+        Flags = flags;
+        Selectable = selectable;
+    }
+
+    public bool Equals(Cell other)
+    {
+        return Name == other.Name && Flags == other.Flags && Selectable == other.Selectable;
+    }
+
+    public static bool operator ==(Cell a, Cell b)
+    {
+        return a.Equals(b);
+    }
+
+    public static bool operator !=(Cell a, Cell b)
+    {
+        return !a.Equals(b);
+    }
+
+    public static class Preset
+    {
+        public static readonly Cell Air = new()
+        {
+            Name = "Air",
+            Flags = new List<ECellFlag>(){ECellFlag.AIR},
+            Selectable = false,
+        };
+        public static readonly Cell Floor = new()
+        {
+            Name = "Floor",
+            Flags = new List<ECellFlag>(){ECellFlag.SOLID},
+            Selectable = true,
+        };
+        public static readonly Cell Spawnpoint = new()
+        {
+            Name = "Spawnpoint",
+            Flags = new List<ECellFlag>(){ECellFlag.AIR, ECellFlag.PLAYER_SPAWNPOINT},
+            Selectable = false,
+        };
+        public static readonly Cell Invalid = new()
+        {
+            Name = "INVALID",
+            Flags = new List<ECellFlag>(){ECellFlag.UNKNOWN},
+            Selectable = false,
+        };
+    }
+
 }

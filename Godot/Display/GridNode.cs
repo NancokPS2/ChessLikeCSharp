@@ -69,14 +69,14 @@ public partial class GridNode : Node3D
             MeshRefresh(position);
 
             CollisionConnect(position, component.collision_body);
-            CollisionEnable(position, cell.flags.Contains(CellFlag.SOLID));
+            CollisionEnable(position, cell.flags.Contains(ECellFlag.SOLID));
 
             //Custom stuff.
-            if (grid.IsFlagInPosition(position, CellFlag.SOLID))
+            if (grid.IsFlagInPosition(position, ECellFlag.SOLID))
             {
                 MeshSet(position, Layer.BASE, Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL));
             }
-            if (grid.IsFlagInPosition(position, CellFlag.PLAYER_SPAWNPOINT))
+            if (grid.IsFlagInPosition(position, ECellFlag.PLAYER_SPAWNPOINT))
             {
                 MeshSet(position, Layer.SPAWN_POINT, Global.Resources.GetMesh(Global.Resources.MeshIdent.SPAWNPOINT));
             }

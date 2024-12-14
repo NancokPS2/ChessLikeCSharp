@@ -14,7 +14,8 @@ public partial class Job : IResourceSerialize<Job, JobResource>
 
             output.Identifier = Identifier;
             output.StatMultiplicativeBoostDict = new(StatMultiplicativeBoostDict);
-            output.Actions.AddRange(from action in Abilities select action.ToResource());
+            output.Abilities.AddRange(from action in Abilities select action.ToResource());
+            output.Passives.AddRange(from action in Passives select action.ToResource());
 
             return output;
         }
@@ -29,7 +30,8 @@ public partial class Job : IResourceSerialize<Job, JobResource>
                 x => x.Key, y => y.Value
                 );
             
-            output.Abilities.AddRange(from action in resource.Actions select Ability.FromResource(action));
+            output.Abilities.AddRange(from action in resource.Abilities select Ability.FromResource(action));
+            output.Passives.AddRange( from action in resource.Passives select Passive.FromResource(action));
 
             return output;
         }

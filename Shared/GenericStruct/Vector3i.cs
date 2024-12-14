@@ -204,6 +204,12 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return new Godot.Vector3(X, Y, Z);
 	}
 
+	public Godot.Vector3I ToGVector3I()
+	{
+		return new Godot.Vector3I(X, Y, Z);
+	}
+
+
 /* 	public override string ToString()
 	{
 		return string.Format("( {0} | {1} | {2} )", X.ToString(),Y.ToString(),Z.ToString());

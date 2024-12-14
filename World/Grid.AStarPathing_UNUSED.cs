@@ -82,9 +82,9 @@ public partial class AStarGridPathing
 
     public bool IsPositionPathable(Vector3i position, EMovementMode mode)
     {
-        bool solid_below = grid.IsFlagInPosition(position + Vector3i.DOWN, CellFlag.SOLID);
-        bool air_here = grid.IsFlagInPosition(position, CellFlag.AIR);
-        bool liquid_here = grid.IsFlagInPosition(position, CellFlag.LIQUID);
+        bool solid_below = grid.IsFlagInPosition(position + Vector3i.DOWN, ECellFlag.SOLID);
+        bool air_here = grid.IsFlagInPosition(position, ECellFlag.AIR);
+        bool liquid_here = grid.IsFlagInPosition(position, ECellFlag.LIQUID);
         switch (mode)
         {
             case EMovementMode.WALK:

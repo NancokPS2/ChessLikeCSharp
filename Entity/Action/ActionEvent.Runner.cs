@@ -22,18 +22,11 @@ public class ActionEventRunner : IDebugDisplay
     public event Delegate? QueueEnded;
 
     private List<QueuedAction> Queue = new();
-    private UniqueList<Mob> MobsTracked = new();
-
-
-    public void TrackMob(Mob mob)
-    {
-        MobsTracked.Add(mob);
-    }
 
     private List<Passive> PassiveGetAll()
     {
         List<Passive> output = new();
-        foreach (var item in MobsTracked)
+        foreach (var item in Global.ManagerMob.GetInCombat())
         {
             //Skip if out of combat
             if (item.MobState != EMobState.COMBAT){continue;}
@@ -146,7 +139,7 @@ public class ActionEventRunner : IDebugDisplay
             var triggered = RunningConsideredPassives.FilterTriggeredByEvent(action);
             foreach (Passive item in triggered)
             {
-                QueueInsert(item, item.GenerateUsageParameters(), RunningIndex + 1);
+                QueueInsert(item, item.GetUsageParams(), RunningIndex + 1);
             }
             
             RunningReadyToSet = false;

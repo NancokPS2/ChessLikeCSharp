@@ -15,5 +15,7 @@ public partial class JobResource : Godot.Resource
 	[Export]
 	public Godot.Collections.Dictionary<StatName, float> StatMultiplicativeBoostDict = new();
 	[Export]
-	public Godot.Collections.Array<AbilityResource> Actions = new();
+	public Godot.Collections.Array<AbilityResource> Abilities = new();
+	[Export]
+	public Godot.Collections.Array<PassiveResource> Passives = new();
 }

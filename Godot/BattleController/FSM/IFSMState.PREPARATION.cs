@@ -63,7 +63,7 @@ public class BattleControllerStatePreparation : BattleControllerState
             //Invalid position, return.
             if (!selected_pos.IsValid()) {return;}
             //Not a spawn point, return.
-            if (!BattleController.CompGrid.IsFlagInPosition(selected_pos, ChessLike.World.CellFlag.PLAYER_SPAWNPOINT))
+            if (!BattleController.CompGrid.IsFlagInPosition(selected_pos, ChessLike.World.ECellFlag.PLAYER_SPAWNPOINT))
             {
                 return;
             }

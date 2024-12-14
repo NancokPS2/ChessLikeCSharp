@@ -18,7 +18,7 @@ public partial class GridNode : Node3D
         {
             mesh_instances.Add(Layer.BASE, new MeshInstance3D());
 
-            if (cell.flags.Contains(CellFlag.SOLID))
+            if (cell.flags.Contains(ECellFlag.SOLID))
             {
                 mesh_instances[Layer.BASE].Mesh = Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL);
             }

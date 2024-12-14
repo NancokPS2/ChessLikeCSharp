@@ -5,8 +5,8 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Jobs should apply modifiers to stats instead of setting them.",
-                    "id": "w47r9m4dgjokc93mdvva3rhs"
+                    "text": "Add functions to trigger when adding a passive or action to a Mob",
+                    "id": "p873zqho9t7nyxum2uxzjjqr"
                 },
                 {
                     "text": "Add more classes to the DebugResourcemenu",
@@ -99,10 +99,6 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Equipment labels dissapeared.",
-                    "id": "cvg1fcfa3yh15f0be123w03i"
-                },
-                {
                     "text": "Turn \"READY!\" popup does not come from the position of the owner.",
                     "id": "jkiy6t2nko5dqs0hhtkwax1v"
                 },
@@ -121,5 +117,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1734095459791
+    "timestamp": 1734188666055
 }
