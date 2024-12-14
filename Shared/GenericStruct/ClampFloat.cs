@@ -1,10 +1,13 @@
 using System.Security.Cryptography.X509Certificates;
+using Godot;
 using Microsoft.VisualBasic;
 
 namespace ChessLike.Shared.GenericStruct;
 
+[Obsolete("Overcomplication")]
 public class ClampFloat
 {
+    public float MaxPrecision = 0.1f;
 
     public ClampFloat()
     {
@@ -51,7 +54,7 @@ public class ClampFloat
 
     public void SetMax(float value)
     {
-        Max = value;
+        Max = Mathf.Snapped(value, MaxPrecision);
     }
     public float GetMax()
     {
@@ -59,7 +62,7 @@ public class ClampFloat
     }
     public void SetMin(float value)
     {
-        Min = value;
+        Min = Mathf.Snapped(value, MaxPrecision);;
     }
     public float GetMin()
     {
@@ -67,7 +70,7 @@ public class ClampFloat
     }
     public void SetCurrent(float value)
     {
-        Current = Math.Clamp(value, Min, Max);
+        Current = Mathf.Snapped(value, MaxPrecision); //Math.Clamp(value, Min, Max);
     }
     public float GetCurrent()
     {
@@ -83,16 +86,18 @@ public class ClampFloat
     public float ChangeValue(float amount)
     {
         float output = amount;
+        float new_val = Current + output;
     
-        Current += output;
+        SetCurrent(new_val);
 
         return output;
     }
     public float ChangeMax(float amount)
     {
         float output = amount;
+        float new_val = Max + output;
         
-        Max += output;
+        SetMax(new_val);
 
         return output;
     }

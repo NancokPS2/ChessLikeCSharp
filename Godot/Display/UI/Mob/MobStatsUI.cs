@@ -23,13 +23,12 @@ public partial class MobStatsUI : Control, ISceneDependency
 		if(NodeStatContainer is null) {throw new Exception("Null NodeStatContainer");}
 
 		NodeStatContainer.FreeChildren();
-		foreach (var item in mob.Stats.GetStatDictionary())
+		foreach (var item in mob.Stats.GetMaxStatDictionary().Keys)
 		{
-			StatName stat = item.Key;
-			float current = item.Value.GetCurrent();
-			float max = item.Value.GetMax();
+			float current = mob.Stats.GetValue(item);
+			float max = mob.Stats.GetMax(item);
 
-			string text = stat.ToString() + ": ";
+			string text = item.ToString() + ": ";
 			if (current == max){text += max.ToString();}
 			else {text += current.ToString() + "/" + max.ToString();}
 

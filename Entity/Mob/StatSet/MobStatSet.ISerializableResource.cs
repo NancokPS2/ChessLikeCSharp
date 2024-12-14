@@ -16,14 +16,14 @@ public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatS
 
     public  MobStatSet(StatSet<StatName> stats) : this()
     {
-        Contents = stats.Contents;
+        MaxDict = stats.MaxDict;
     }
     public new MobStatSetResource ToResource()
     {
         MobStatSetResource output = new();
-        foreach (var item in Contents)
+        foreach (var item in MaxDict)
         {
-            output.Contents[item.Key] = item.Value.GetMax();
+            output.Contents[item.Key] = GetMax(item.Key);
         }
         return output;
     }
@@ -40,6 +40,16 @@ public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatS
         return output;
     }
 
-    public override string ToString() => Contents.ToStringList();
+    public override string ToString()
+    {
+        string output = "";
+        foreach (StatName item in MaxDict.Keys)
+        {
+            output += item.ToString() + ": " 
+            + GetValue(item).ToString() + "/" 
+            + GetMax(item).ToString() + "\n";
+        }
+        return output;
+    }
 }
     

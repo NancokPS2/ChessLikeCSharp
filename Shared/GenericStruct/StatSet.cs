@@ -13,14 +13,15 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     public delegate void StatChange(TStatEnum name, float amount);
     public event StatChange StatValueChanged;
 
-    public Dictionary<TStatEnum, ClampFloat> Contents {get; set;} = new();
+    public Dictionary<TStatEnum, float> MaxDict {get; set;} = new();
+    public Dictionary<TStatEnum, float> CurrentDict {get; set;} = new();
     public Dictionary<string, StatBoost> Boosts = new();
 
     public StatSet()
     {
         foreach (TStatEnum stat in Enum.GetValues(typeof(TStatEnum)))
         {
-            Contents[stat] = new();
+            MaxDict[stat] = new();
         }
     }
 
@@ -35,14 +36,16 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public void ChangeValue(TStatEnum stat, float amount)
     {
-        Contents[stat].ChangeValue(amount);
+        CurrentDict[stat] = CurrentDict[stat] + amount;
     }
 
 
     public void SetValue(TStatEnum stat, float value)
     {
-        float original_val = Contents[stat].GetCurrent();
-        Contents[stat].SetCurrent(value);
+        float original_val;
+        CurrentDict.TryGetValue(stat, out original_val);
+        float max = GetMax(stat);
+        CurrentDict[stat] = MathF.Min(value, max);
 
         StatValueChanged?.Invoke(stat, value - original_val);
     }
@@ -58,23 +61,17 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public void ChangeMax(TStatEnum stat, float value)
     {
-        Contents[stat].ChangeMax(value);
+        MaxDict[stat] = MaxDict[stat] + value;
     }
 
     public void SetMax(TStatEnum stat, float value)
     {
-        Contents[stat].SetMax(value);
-    }
-
-    public void SetMin(TStatEnum stat, float value)
-    {
-        if(value < 0){throw new ArgumentOutOfRangeException("Negative minimums are not supported yet.");}
-        Contents[stat].SetMin(value);
+        MaxDict[stat] = value;
     }
 
     public float GetValue(TStatEnum stat)
     {
-        var val = Contents[stat].GetCurrent();
+        var val = CurrentDict[stat];
         float additive = 0;
         float multiplicative = 1;
 /*      foreach (var item in Boosts.Values)
@@ -84,7 +81,12 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         } 
 */
         Debug.Assert(multiplicative != 0);
-        return (val + additive) * multiplicative;
+        return Mathf.Snapped(
+            MathF.Min(
+                (val + additive) * multiplicative,
+                GetMax(stat)),
+            0.1f
+            );
     }
 
     public float GetValuePrecent(TStatEnum stat)
@@ -94,7 +96,8 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public float GetMax(TStatEnum stat)
     {
-        var val = Contents[stat].GetMax();
+        float val;
+        MaxDict.TryGetValue(stat, out val);
         float additive = 0;
         float multiplicative = 1;
         foreach (var item in Boosts.Values)
@@ -103,12 +106,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
             multiplicative *= item.GetMultiplicativeMax(stat);
         }
         Debug.Assert(multiplicative != 0);
-        return (val + additive) * multiplicative;
-    }
-
-    public float GetMin(TStatEnum stat)
-    {
-        return Contents[stat].GetMin();
+        return Mathf.Snapped((val + additive) * multiplicative, 0.1f);
     }
 
 
@@ -120,7 +118,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     public void SetStat(TStatEnum stat, float value)
     {
         SetMax(stat, value);
-        SetValue(stat: stat, value);
+        SetValue(stat, GetMax(stat));
         Debug.Assert(GetValue(stat: stat) == value, "The value does not match.");
     }
 
@@ -234,9 +232,9 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         }
         return output;
     }
-    public Dictionary<TStatEnum, ClampFloat> GetStatDictionary()
+    public Dictionary<TStatEnum, float> GetMaxStatDictionary()
     {
-        return Contents;
+        return MaxDict;
     }
 
     public static StatSet<TStatEnum> GetAverage(StatSet<TStatEnum> a, StatSet<TStatEnum> b)
@@ -261,8 +259,8 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         public string Source;
         //public Dictionary<TStatEnum, float> ValueAdditiveBonus = new();
         //public Dictionary<TStatEnum, float> ValueMultiplicativeBonus = new();
-        public Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
-        public Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
+        private Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
+        private Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
 
         public StatBoost(string Source)
         {
@@ -279,7 +277,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
             MaxAdditiveBonus.ContainsKey(stat) ? MaxAdditiveBonus[stat] : 0;
 
         public float GetMultiplicativeMax(TStatEnum stat) => 
-            MaxMultiplicativeBonus.ContainsKey(stat) ? MaxMultiplicativeBonus[stat] : 0;
+            MaxMultiplicativeBonus.ContainsKey(stat) ? MaxMultiplicativeBonus[stat] : 1;
         
 /* 
         public void SetAdditiveValue(TStatEnum stat, float value)

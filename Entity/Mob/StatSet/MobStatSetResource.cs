@@ -18,9 +18,9 @@ public partial class MobStatSetResource : Resource
 
     public MobStatSetResource()
     {
-        foreach (var item in  Mob.GetDefaultStats().Contents)
+        foreach (var item in Mob.GetDefaultStats().MaxDict)
         {
-            Contents[item.Key] = item.Value.GetMax();
+            Contents[item.Key] = item.Value;
         }
     }
     

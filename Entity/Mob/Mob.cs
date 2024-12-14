@@ -65,6 +65,7 @@ public partial class Mob
             //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
             SetMovementMode(job.MovementMode);
         }
+        Stats.SetToMax();
     }
 
     public static MobStatSet GetDefaultStats()
