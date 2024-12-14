@@ -17,7 +17,7 @@ public partial class Mob
             GD.PushWarning(string.Format("Failed to equip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
         }
         
-        Stats.BoostAdd(MobInventory);
+        Stats.BoostAdd(MobInventory, true);
     }
 
     public void EquipmentRemove(Item equip)
@@ -28,6 +28,6 @@ public partial class Mob
             GD.PushWarning(string.Format("Failed to unequip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
         }
 
-        Stats.BoostAdd(MobInventory);
+        Stats.BoostAdd(MobInventory, true);
     }   
 }

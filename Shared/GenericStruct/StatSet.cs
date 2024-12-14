@@ -162,8 +162,6 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         }
     }
 
-    public void BoostAdd(IStatBooster booster)
-
     public void BoostAdd(IStatBooster booster, bool replace)
     {
         if (booster.GetBoostSource() == INVALID_BOOST_SOURCE){throw new Exception("Invalid source.");}
@@ -176,12 +174,15 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     private void BoostAdd(string source, StatBoost boost, bool replace = true)
     {
-        if (replace)
+        //Replacing the boost with a new one. Force a replacement if there is no source in the first place.
+        if (replace || !Boosts.ContainsKey(source))
         {
             Boosts[source] = boost;
-        } else
+        }
+        //Not replacing and there is an existing boost, add to it.
+        else
         {
-            
+            Boosts[source] = Boosts[source] + boost;
         }
 
     }
@@ -304,6 +305,10 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         public static StatBoost operator+(StatBoost sourcer, StatBoost added)
         {
             StatBoost output = new(sourcer.Source);
+            if (sourcer.Source != added.Source)
+            {
+                throw new Exception("Differing Source properties, can't handle.");
+            }
             foreach (TStatEnum item in Enum.GetValues(typeof(TStatEnum)))
             {
                 float sourcer_max_add = sourcer.GetAdditiveMax(item);

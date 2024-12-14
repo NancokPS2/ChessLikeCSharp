@@ -50,13 +50,14 @@ public partial class Mob
         {
             throw new Exception("No jobs defined.");
         }
-        
+        //Reset job modifiers
         Stats.BoostRemove(Job.BOOST_SOURCE);
+        
         MobStatSet.StatBoost total_boost = new(Job.BOOST_SOURCE); 
         foreach (Job job in Jobs)
         {
             //Average the stats from the job's.
-            Stats = new(MobStatSet.GetAverage(Stats, job.StatMultiplicativeBoostDict));
+            Stats.BoostAdd(job, false);
 
             //Add the actions.
             Actions.AddRange(job.Abilities);
@@ -64,7 +65,6 @@ public partial class Mob
             //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
             SetMovementMode(job.MovementMode);
         }
-        Stats.BoostAdd(Job.BOOST_SOURCE, total_boost);
     }
 
     public static MobStatSet GetDefaultStats()

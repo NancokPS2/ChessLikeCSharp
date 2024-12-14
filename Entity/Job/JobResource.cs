@@ -13,7 +13,7 @@ public partial class JobResource : Godot.Resource
 	[Export]
 	public EJob Identifier = EJob.DEFAULT;
 	[Export]
-	public MobStatSetResource Stats = new();
+	public Godot.Collections.Dictionary<StatName, float> StatMultiplicativeBoostDict = new();
 	[Export]
 	public Godot.Collections.Array<AbilityResource> Actions = new();
 }

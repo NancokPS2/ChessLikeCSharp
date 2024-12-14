@@ -13,7 +13,7 @@ public partial class Job : IResourceSerialize<Job, JobResource>
             JobResource output = new();
 
             output.Identifier = Identifier;
-            output.Stats = StatMultiplicativeBoostDict.ToResource();
+            output.StatMultiplicativeBoostDict = new(StatMultiplicativeBoostDict);
             output.Actions.AddRange(from action in Abilities select action.ToResource());
 
             return output;
@@ -24,8 +24,11 @@ public partial class Job : IResourceSerialize<Job, JobResource>
             Job output = new();
 
             output.Identifier = resource.Identifier;
-            MobStatSet from = MobStatSet.FromResource(resource.Stats);
-            output.StatMultiplicativeBoostDict = from;
+            Godot.Collections.Dictionary<StatName, float> from = resource.StatMultiplicativeBoostDict;
+            output.StatMultiplicativeBoostDict = from.ToDictionary(
+                x => x.Key, y => y.Value
+                );
+            
             output.Abilities.AddRange(from action in resource.Actions select Ability.FromResource(action));
 
             return output;

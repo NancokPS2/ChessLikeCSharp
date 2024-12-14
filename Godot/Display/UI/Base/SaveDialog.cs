@@ -8,7 +8,7 @@ public partial class SaveDialog : RefCounted
 {
     private FileDialog NodeDialog = new(){FileMode = FileDialog.FileModeEnum.SaveFile};
 
-    private Resource? ResourceToSave;
+    private List<Resource> ResourcesToSave = new();
 
     private Node Parent;
 
@@ -27,9 +27,11 @@ public partial class SaveDialog : RefCounted
         }
     }
 
-    public void Use(Resource resource)
+    public void Use(Resource resource) => Use( new List<Resource>(){resource});
+
+    public void Use(List<Resource> resource)
     {
-        ResourceToSave = resource;
+        ResourcesToSave = resource;
         
         NodeDialog.ModeOverridesTitle = false;
         NodeDialog.Access = AccessMode;
@@ -41,13 +43,34 @@ public partial class SaveDialog : RefCounted
 
     private void OnFileSelected(string file)
     {
-        if (ResourceToSave is null)
+        if (ResourcesToSave is null)
         {
             throw new Exception();
         }
 
-        ResourceSaver.Save(ResourceToSave, file, ResourceSaver.SaverFlags.ChangePath);
+        int file_count = 0;
+        foreach (var item in ResourcesToSave)
+        {
+            Error error;
+            //If there's only 1 file, save it as is.
+            if (ResourcesToSave.Count == 1)
+            {
+                error = ResourceSaver.Save(item, file, ResourceSaver.SaverFlags.ChangePath);
+            }else
+            {
+                string dir = file.GetBaseDir() + "/";
+                string extension = "." + file.GetExtension();
+                string file_name = file.GetFile().TrimSuffix(extension);
+                string new_file = dir + file_name + file_count.ToString() + extension;
+                
+                error = ResourceSaver.Save(item, new_file, ResourceSaver.SaverFlags.ChangePath);
+            }
+
+            if (error != Error.Ok){throw new Exception(error.ToString());}
+            file_count ++;
+            
+        }
         NodeDialog.RemoveSelf();
-        ResourceToSave = null;
+        ResourcesToSave = new();
     }
 }

@@ -15,8 +15,8 @@ public partial class Job
         output = identity_enum switch
         {
             EJob.DEFAULT => output.ChainDefaultStats(),
-            EJob.WARRIOR => output.ChainDefaultStats().ChainWarrior(),
-            EJob.WIZARD => output.ChainDefaultStats().ChainWizard(),
+            EJob.WARRIOR => output.ChainWarrior(),
+            EJob.WIZARD => output.ChainWizard(),
             EJob.RANGER => output.ChainDefaultStats(),
             _ => output.ChainDefaultStats(),
         };
@@ -25,38 +25,38 @@ public partial class Job
 
 public Job ChainDefaultStats()
     {
-        StatMultiplicativeBoostDict.SetStat(StatName.HEALTH, 100);
-        StatMultiplicativeBoostDict.SetStat(StatName.ENERGY, 40);
-        StatMultiplicativeBoostDict.SetStat(StatName.MOVEMENT, 3);
-        StatMultiplicativeBoostDict.SetStat(StatName.JUMP, 2);
-        StatMultiplicativeBoostDict.SetStat(StatName.DELAY, 100);
-        StatMultiplicativeBoostDict.SetStat(StatName.STRENGTH, 100);
-        StatMultiplicativeBoostDict.SetStat(StatName.AGILITY, 100);
-        StatMultiplicativeBoostDict.SetStat(StatName.INTELLIGENCE, 100);
-        StatMultiplicativeBoostDict.SetStat(StatName.DEFENSE, 0);
+        StatMultiplicativeBoostDict.Add(StatName.HEALTH, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.ENERGY, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.MOVEMENT, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.JUMP, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.DELAY, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.STRENGTH, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.AGILITY, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.INTELLIGENCE, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.DEFENSE, 1.0f);
         Abilities.Add(new AbilityPunch());
         return this;
     }
 
     public Job ChainWarrior()
     {
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.HEALTH, 1.2);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.ENERGY, 0.8);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.STRENGTH, 1.3);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.AGILITY, 1.0);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.INTELLIGENCE, 0.8);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.DELAY, 1.1);
+        StatMultiplicativeBoostDict.Add(StatName.HEALTH, 1.2f);
+        StatMultiplicativeBoostDict.Add(StatName.ENERGY, 0.8f);
+        StatMultiplicativeBoostDict.Add(StatName.STRENGTH, 1.3f);
+        StatMultiplicativeBoostDict.Add(StatName.AGILITY, 1.0f);
+        StatMultiplicativeBoostDict.Add(StatName.INTELLIGENCE, 0.8f);
+        StatMultiplicativeBoostDict.Add(StatName.DELAY, 1.1f);
         return this;
     }
 
     public Job ChainWizard()
     {
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.HEALTH, 0.7);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.ENERGY, 1.5);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.STRENGTH, 0.6);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.AGILITY, 0.9);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.INTELLIGENCE, 1.4);
-        StatMultiplicativeBoostDict.MultiplyStat(StatName.DELAY, 1.2);
+        StatMultiplicativeBoostDict.Add(StatName.HEALTH, 0.7f);
+        StatMultiplicativeBoostDict.Add(StatName.ENERGY, 1.5f);
+        StatMultiplicativeBoostDict.Add(StatName.STRENGTH, 0.6f);
+        StatMultiplicativeBoostDict.Add(StatName.AGILITY, 0.9f);
+        StatMultiplicativeBoostDict.Add(StatName.INTELLIGENCE, 1.4f);
+        StatMultiplicativeBoostDict.Add(StatName.DELAY, 1.2f);
         return this;
     }
 

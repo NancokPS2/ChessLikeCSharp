@@ -1,11 +1,13 @@
 using ChessLike.Entity;
 using Godot;
 using System;
+using System.Collections;
 
 [GlobalClass]
 public partial class PartyGeneralUI : Control, ISceneDependency
 {
-	private const int DEBUG_ACTION_SAVE = 0;
+	private const int DEBUG_ACTION_SAVE_JOBS = 0;
+	private const int DEBUG_ACTION_SAVE_UNIT = 1;
 	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Party/PartyGeneralUI.tscn";
 
 	[Export]
@@ -30,7 +32,8 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 		NodePartyListUI.ButtonPressed += OnPartyListUIPressed;
 
 		NodeDebugOptions.GetPopup().IdPressed += OnIdPressed;
-		NodeDebugOptions.GetPopup().AddItem("SAVE", DEBUG_ACTION_SAVE);
+		NodeDebugOptions.GetPopup().AddItem("SAVE", DEBUG_ACTION_SAVE_JOBS);
+		NodeDebugOptions.GetPopup().AddItem("Save Unit", DEBUG_ACTION_SAVE_UNIT);
 
 	}
 
@@ -46,11 +49,25 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 		NodePartyJobChangeUI.Update(mob);
 	}
 	private void OnIdPressed(long id)
-	{
-		if (id == DEBUG_ACTION_SAVE)
+	{	
+		SaveDialog saver = new SaveDialog(this);
+		switch (id)
 		{
-			SaveDialog saver = new SaveDialog(this, Job.CreatePrototype(EJob.CIVILIAN).ToResource());
-			saver.Use(Job.CreatePrototype(EJob.CIVILIAN).ToResource());
+		case DEBUG_ACTION_SAVE_JOBS:
+			List<Resource> job_prototypes = (from job in Global.ManagerJob.CreatePrototypes() select job.ToResource()).ToList<Resource>();
+			saver.Use(job_prototypes);
+			break;
+		
+		case DEBUG_ACTION_SAVE_UNIT:
+			if (NodePartyListUI is not null && NodePartyListUI.MobSelected is not null)
+			{
+				saver.Use(NodePartyListUI.MobSelected.ToResource());
+				
+			} else
+			{
+				MessageQueue.AddMessage("No unit has been selected, cannot save.");
+			}
+			break;
 		}
 	}
 }
