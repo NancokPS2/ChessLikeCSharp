@@ -28,13 +28,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Celestial Priest.md",
+                "file": "Mechanics/Character Stats.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Celestial Priest"
+              "title": "Character Stats"
             }
           }
         ],
@@ -192,13 +192,20 @@
   },
   "active": "f0fc83a6594a25f2",
   "lastOpenFiles": [
+    "World Map/Dead Jungle.md",
+    "World Map/The barrens.md",
+    "World Map/Underworld.md",
+    "World Map/General map layout.canvas",
+    "Untitled.canvas",
+    "Mechanics/Character Stats.md",
+    "World Map/Dead Lands.md",
+    "World Map/Independent Sub-Regions.md",
+    "Celestial Priest.md",
     "Mechanics/Combat Job.md",
     "Phoenix Warrior.md",
     "templates/CombatJob.md",
     "Mechanics/Encounter.md",
     "Passive.md",
-    "Mechanics/Character Stats.md",
-    "Celestial Priest.md",
     "Mechanics/Status Effects.md",
     "templates/Untitled.md",
     "Ability.md",
@@ -213,15 +220,8 @@
     "Faction.md",
     "World Map/Rasemblé.md",
     "World Map/The Great Border.md",
-    "Language.md",
-    "Untitled.canvas",
-    "Language/Mercantile.md",
     "Language",
-    "Language/Deep-Speak.md",
-    "templates/Language.md",
-    "Language/Wide-Speak.md",
     "Mechanics",
-    "World Map/General map layout.canvas",
     "Plot",
     "Untitled 1.canvas",
     "World Map",
