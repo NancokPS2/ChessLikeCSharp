@@ -14,11 +14,11 @@ public partial class GridNode : Node3D
         public StaticBody3D collision_body = new(){InputRayPickable = true};
         public CollisionShape3D collision_shape = new(){Shape = new BoxShape3D()};
 
-        public CellComponent(Grid.Cell cell)
+        public CellComponent(Cell cell)
         {
             mesh_instances.Add(Layer.BASE, new MeshInstance3D());
 
-            if (cell.flags.Contains(ECellFlag.SOLID))
+            if (cell.Flags.Contains(ECellFlag.SOLID))
             {
                 mesh_instances[Layer.BASE].Mesh = Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL);
             }

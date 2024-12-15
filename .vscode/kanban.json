@@ -99,6 +99,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "AOE targeting mesh is not being removed, possible issue in the Grid script.",
+                    "id": "jymqaz1w8nlnkbvm9ut3n62v"
+                },
+                {
                     "text": "Turn \"READY!\" popup does not come from the position of the owner.",
                     "id": "jkiy6t2nko5dqs0hhtkwax1v"
                 },
@@ -117,5 +121,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1734188666055
+    "timestamp": 1734278181488
 }

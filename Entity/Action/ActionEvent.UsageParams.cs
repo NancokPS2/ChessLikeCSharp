@@ -22,12 +22,12 @@ public partial class ActionEvent
         /// Positions that where selected during the targeting of this action
         /// </summary>
         /// <returns></returns>
-        public List<Vector3i> PositionsTargeted = new();
+        public UniqueList<Vector3i> PositionsTargeted = new();
         /// <summary>
         /// Mobs found in the targeted locations or caught in the AoE and filtered afterwards to be deemed as valid to affect.
         /// </summary>
         /// <returns></returns>
-        public List<Mob> MobsTargeted = new();
+        public UniqueList<Mob> MobsTargeted = new();
 
         public int Priority = 0;
 

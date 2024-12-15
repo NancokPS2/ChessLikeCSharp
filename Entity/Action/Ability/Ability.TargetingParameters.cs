@@ -69,19 +69,19 @@ public partial class Ability
             //Get general area for performance reasons.
             output = grid.GetShapeCube(origin, max_range);
 
-            //Validate positions
+            //Select positions within range.
             output = output.Where(x => x.DistanceManhattanTo(origin) <= max_range).ToList();
 
             return output;
         }
 
-        public List<Vector3i> GetAoEPositions(UsageParameters usage_params)
+        public List<Vector3i> GetAoEPositions(UsageParameters usage_params, List<Vector3i> targets)
         {
-            if (usage_params.PositionsTargeted.Count == 0) {throw new Exception("No position to use AoE in.");}
+            if (targets.Count == 0) {throw new Exception("No position to use AoE in.");}
 
             List<Vector3i> output = new();
 
-            foreach (Vector3i item in usage_params.PositionsTargeted)
+            foreach (Vector3i item in targets)
             {    
                 Vector3i origin = item;
                 Grid grid = usage_params.GridRef;

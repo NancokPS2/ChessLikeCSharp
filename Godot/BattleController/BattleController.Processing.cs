@@ -10,13 +10,14 @@ public partial class BattleController
 
     const float MINIMUM_MOVEMENT_DELTA = 0.12f;
     private float _last_movement_time;
+    private Vector3i _last_spot;
     public void UpdateCursorMovement()
     {
         //Decide between mouse based input and key input.
         if (CompDisplayGrid.InputEnabled)
         {
             if (!CompGrid.IsPositionInbounds(CompDisplayGrid.PositionHovered)){return;}
-
+            if (_last_spot == CompDisplayGrid.PositionHovered){return;}
             PositionHovered = CompDisplayGrid.PositionHovered;
             CompDisplayGrid.MeshRemove(GridNode.Layer.CURSOR);
             CompDisplayGrid.MeshSet(
@@ -26,8 +27,6 @@ public partial class BattleController
                 );
             
             PositionSelected = CompDisplayGrid.PositionSelected;
-
-
         }
         else
         {
@@ -51,6 +50,7 @@ public partial class BattleController
                 GD.PushError(string.Format("Position {0} out of bounds.", (move + PositionHovered).ToString()));
             }
         }
+        _last_spot = CompDisplayGrid.PositionHovered;
 
     }
 
@@ -79,6 +79,5 @@ public partial class BattleController
         }
 
         _last_hovered_mob = mob;
-        //display_mob.MobUINode.UpdateStatNodes();
     }
 }

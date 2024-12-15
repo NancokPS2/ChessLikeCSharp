@@ -4,6 +4,7 @@ using ChessLike.Entity;
 using ChessLike.Shared.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
+using ChessLike.World.Encounter;
 using Godot.Display;
 
 using Action = ChessLike.Entity.Action;

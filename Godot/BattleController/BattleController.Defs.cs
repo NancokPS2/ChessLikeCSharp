@@ -6,6 +6,7 @@ using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Turn;
 using ChessLike.World;
+using ChessLike.World.Encounter;
 using Godot.Display;
 
 namespace Godot;

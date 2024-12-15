@@ -7,8 +7,8 @@ namespace ChessLike.Shared.GenericStruct;
 
 public class UniqueList<T> : List<T>
 {
-
-    public bool Add(T obj, bool safe = true)
+    public bool Safe = true;
+    public bool Add(T obj, bool safe)
     {
         if (!Contains(obj))
         {
@@ -22,4 +22,6 @@ public class UniqueList<T> : List<T>
             return false;
         }
     }
+
+public new bool Add(T obj) => Add(obj, Safe);
 }

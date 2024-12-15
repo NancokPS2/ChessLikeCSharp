@@ -61,7 +61,7 @@ public partial class GridNode : Node3D
         CellComponents.Clear();
         foreach (Vector3i position in grid.CellDictionary.Keys)
         {
-            Grid.Cell cell = grid.CellDictionary[position];
+            Cell cell = grid.CellDictionary[position];
             CellComponent component = new CellComponent(cell);
 
             CellComponents.Add(position, component);
@@ -69,7 +69,7 @@ public partial class GridNode : Node3D
             MeshRefresh(position);
 
             CollisionConnect(position, component.collision_body);
-            CollisionEnable(position, cell.flags.Contains(ECellFlag.SOLID));
+            CollisionEnable(position, cell.Flags.Contains(ECellFlag.SOLID));
 
             //Custom stuff.
             if (grid.IsFlagInPosition(position, ECellFlag.SOLID))

@@ -26,8 +26,7 @@ public partial class MobMeshDisplay : Godot.Node3D
 
     public void RemoveComponents(Mob mob)
     {
-        RemoveChild(MobComponents[mob].mesh_instance);
-        RemoveChild(MobComponents[mob].name_tag);
+        MobComponents[mob].FreeNodes();
         MobComponents.Remove(mob);
     }
 
@@ -40,39 +39,45 @@ public partial class MobMeshDisplay : Godot.Node3D
     {
         foreach (Mob mob in mobs)
         {
-            MobDisplayComponent components = MobComponents[mob];
+            MobDisplayComponent component = MobComponents[mob];
             //Invisible if not in combat.
-            components.mesh_instance.Visible = mob.MobState == EMobState.COMBAT;
-            components.mesh_instance.Position = mob.Position.ToGVector3();
-            components.name_tag.Position = mob.Position.ToGVector3() + Vector3.Up;
+            component.MeshInstance.Visible = mob.MobState == EMobState.COMBAT;
+            component.MeshInstance.Position = mob.Position.ToGVector3();
+            component.NameTag.Position = mob.Position.ToGVector3() + Vector3.Up;
         }
     }
 
     
     public class MobDisplayComponent
     {
-        public MeshInstance3D mesh_instance = new();
-        public Label3D name_tag = new(){Billboard = BaseMaterial3D.BillboardModeEnum.Enabled};
+        public MeshInstance3D MeshInstance = new();
+        public Label3D NameTag = new(){Billboard = BaseMaterial3D.BillboardModeEnum.Enabled};
+
+        public void FreeNodes()
+        {
+            NameTag.QueueFree();
+            MeshInstance.QueueFree();
+        }
 
         public void SetMesh(Mesh mesh)
         {
-            this.mesh_instance.Mesh = mesh;
+            this.MeshInstance.Mesh = mesh;
         }
         
         public void SetNameTag(string name)
         {
-            this.name_tag.Text = name;
+            this.NameTag.Text = name;
         }
 
         public void AddToDisplay(MobMeshDisplay mob_display)
         {
-            mob_display.AddChild(name_tag);
-            mob_display.AddChild(mesh_instance);
+            mob_display.AddChild(NameTag);
+            mob_display.AddChild(MeshInstance);
         }
 
         public Vector3 GetPositionGlobal()
         {
-            return mesh_instance.GlobalPosition;
+            return MeshInstance.GlobalPosition;
         }
 
     }
