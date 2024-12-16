@@ -73,13 +73,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Mechanics/Encounter.md",
+                "file": "Mechanics/UI/Ability Usage.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Encounter"
+              "title": "Ability Usage"
             }
           }
         ],
@@ -222,7 +222,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -235,10 +236,14 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "8104e650f57f70a8",
+  "active": "328ec5e07c09dc4f",
   "lastOpenFiles": [
-    "Mechanics/Passive.md",
+    "Mechanics/UI",
+    "Mechanics/Untitled.md",
+    "Mechanics/UI/Ability Usage.md",
     "Mechanics/Ability.md",
+    "Mechanics/Encounter.md",
+    "Mechanics/Passive.md",
     "Race/Humans.md",
     "Race/Aperion.md",
     "Race/Poxt.md",
@@ -259,13 +264,9 @@
     "World Map/Independent Sub-Regions.md",
     "Celestial Priest.md",
     "Phoenix Warrior.md",
-    "Mechanics/Encounter.md",
     "Mechanics/Status Effects.md",
     "templates/Untitled.md",
     "combatant.md",
-    "World Map/Verdavalo.md",
-    "World Map/Chakta.md",
-    "World Map/Stolick.md",
     "Language",
     "Mechanics",
     "Plot",
