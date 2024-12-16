@@ -24,24 +24,26 @@ public partial class Mob
     {
         Actions.Add(action);
         action.Owner = this;
+        action.OnAddedToMob();
     }
 
 
     public void ClearAbility()
     {
-        Actions.Clear();
+        IEnumerable<EAbility> identifiers = from abil in Actions select abil.Identifier;
+        foreach (var item in identifiers)
+        {
+            RemoveAbility(item);
+        }
     }
-    public void RemoveAbility(EAbility action_enum, bool all = true)
-    {
-        if (all)
-        {
-            Actions.RemoveAll(x => x.Identifier == action_enum);
-        }
-        else
-        {
-            Actions.Remove( Actions.First(x => x.Identifier == action_enum) );
-        }
 
+    public void RemoveAbility(EAbility action_enum)
+    {
+        foreach (var item in Actions.Where(x => x.Identifier == action_enum))
+        {
+            item.OnRemovedFromMob();
+            Actions.Remove(item); 
+        }
     }
 
     public List<Ability> GetAbilities()
@@ -53,19 +55,25 @@ public partial class Mob
     {
         Passives.Add(passive);
         passive.Owner = this;
+        passive.OnAddedToMob();
     }
 
-    public void RemovePassive(EPassive passive_enum, bool all = true)
+    public void RemovePassive(EPassive passive_enum)
     {
-        if (all)
+        foreach (var item in Passives.Where(x => x.Identifier == passive_enum))
         {
-            Passives.RemoveAll(x => x.Identifier == passive_enum);
+            item.OnRemovedFromMob();
+            Passives.Remove(item); 
         }
-        else
-        {
-            Passives.Remove( Passives.First(x => x.Identifier == passive_enum) );
-        }
+    }
 
+    public void ClearPassive()
+    {
+        IEnumerable<EPassive> identifiers = from abil in Passives select abil.Identifier;
+        foreach (var item in identifiers)
+        {
+            RemovePassive(item);
+        }
     }
 
     public List<Passive> GetPassives()

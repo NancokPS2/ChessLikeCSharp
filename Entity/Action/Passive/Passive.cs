@@ -54,6 +54,16 @@ public partial class Passive : ActionEvent
     {
         DurationParams.AdvanceUses();
     }
+
+    public override void OnAddedToMob()
+    {
+        
+    }
+
+    public override void OnRemovedFromMob()
+    {
+        
+    }
 }
 public static class Extension
 {
