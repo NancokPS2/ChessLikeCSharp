@@ -64,6 +64,26 @@ public partial class Passive : ActionEvent
     {
         
     }
+
+    public override string GetDescription() => "\n" + GetDurationDescription();
+
+    protected virtual string GetDurationDescription()
+    {
+        string output = "";
+        if (DurationParams.Turns.GetTimeLeft() > 0)
+        {
+            output += $"Remaining turns: {DurationParams.Turns}\n";
+        }
+        if (DurationParams.Delay.GetTimeLeft() > 0)
+        {
+            output += $"Remaining delay: {DurationParams.Delay}\n";
+        }
+        if (DurationParams.Uses.GetTimeLeft() > 0)
+        {
+            output += $"Remaining uses: {DurationParams.Uses}\n";
+        }
+        return output;
+    }
 }
 public static class Extension
 {

@@ -14,7 +14,11 @@ public partial class Mob
         CommandInterceptors.Add(command);
     }
     public List<MobCommandInterceptor> CommandGetInterceptors() => CommandInterceptors;
-    
+
+    public bool CommandRemoveInterceptor(MobCommandInterceptor to_remove)
+    {
+        return CommandInterceptors.Remove(to_remove);
+    }
 
     public void CommandProcess(MobCommand command)
     {

@@ -26,4 +26,9 @@ public class DoT : Passive
         MobCommand command = new MobCommandTakeDamage(health_to_loose){DefenseRatioAccounted = 100};
         usage_params.OwnerRef.CommandProcess(command);
     }
+
+    public override string GetDescription()
+    {
+        return $"Take {Percentage*100}% of damage at the end of its turn." + base.GetDescription();
+    }
 }

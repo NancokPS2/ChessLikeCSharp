@@ -12,8 +12,7 @@ public class AbilityMove : Ability
     public AbilityMove(EMovementMode variant) : base()
     {
         ChainName("Move");
-        ChainIdentifier(EAbility.NULL);
-        ChainFlag(EActionFlag.DEALS_DAMAGE);
+        ChainIdentifier(EAbility.MOVE);
 
         TargetParams = new TargetingParameters(){
             TargetingRange = 0,
@@ -34,5 +33,10 @@ public class AbilityMove : Ability
         Mob owner = usage_params.OwnerRef;
         Vector3i target = usage_params.PositionsTargeted[0];
         owner.Position = target;
+    }
+
+    public override string GetDescription()
+    {
+        return "Teleport to the target location.";
     }
 }

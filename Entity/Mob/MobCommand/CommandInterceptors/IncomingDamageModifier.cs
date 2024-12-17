@@ -5,9 +5,15 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity.Command;
 
-public class HalveDamage : MobCommandInterceptor
+public class IncomingDamageModifier : MobCommandInterceptor
 {
+    public float Percentage;
     public bool OnlyDirectHarm = true;
+
+    public IncomingDamageModifier(float percentage)
+    {
+        Percentage = percentage;
+    }
     public override bool CanIntercept(MobCommand command)
     {
         bool is_damage = command is MobCommandTakeDamage;
@@ -18,8 +24,12 @@ public class HalveDamage : MobCommandInterceptor
 
     public override void UseInterceptor(MobCommand command)
     {
-        float reduction = (command as MobCommandTakeDamage).Damage /= 2;
+        if (command is not MobCommandTakeDamage){throw new Exception("Invalid command, CanIntercept() should have failed already.");}
+
+        #pragma warning disable CS8602 // Dereference of a possibly null reference.
+        float reduction = (command as MobCommandTakeDamage).Damage *= Percentage;
         (command as MobCommandTakeDamage).Damage -= reduction;
+        #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         MobCommand.Broadcaster.Broadcast(new(){
             {EInfo.DAMAGE_REDUCED, reduction.ToString()}
