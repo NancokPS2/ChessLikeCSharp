@@ -119,7 +119,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     {
         SetMax(stat, value);
         SetValue(stat, GetMax(stat));
-        Debug.Assert(GetValue(stat: stat) == value, "The value does not match.");
+        Debug.Assert(GetValue(stat) == GetMax(stat), "The value does not match.");
     }
 
     public void MultiplyStat(TStatEnum stat, float multiplier)

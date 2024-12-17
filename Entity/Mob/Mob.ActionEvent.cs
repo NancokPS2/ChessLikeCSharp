@@ -30,7 +30,7 @@ public partial class Mob
 
     public void ClearAbility()
     {
-        IEnumerable<EAbility> identifiers = from abil in Actions select abil.Identifier;
+        List<EAbility> identifiers = new(from abil in Actions select abil.Identifier);
         foreach (var item in identifiers)
         {
             RemoveAbility(item);
@@ -39,11 +39,12 @@ public partial class Mob
 
     public void RemoveAbility(EAbility action_enum)
     {
-        foreach (var item in Actions.Where(x => x.Identifier == action_enum))
+        IEnumerable<Ability> to_remove = Actions.Where(x => x.Identifier == action_enum);
+        foreach (var item in to_remove)
         {
             item.OnRemovedFromMob();
-            Actions.Remove(item); 
         }
+        Actions.RemoveAll(x => x.Identifier == action_enum); 
     }
 
     public List<Ability> GetAbilities()
@@ -60,16 +61,17 @@ public partial class Mob
 
     public void RemovePassive(EPassive passive_enum)
     {
-        foreach (var item in Passives.Where(x => x.Identifier == passive_enum))
+        IEnumerable<Passive> to_remove = Passives.Where(x => x.Identifier == passive_enum);
+        foreach (var item in to_remove)
         {
             item.OnRemovedFromMob();
-            Passives.Remove(item); 
         }
+        Passives.RemoveAll(x => x.Identifier == passive_enum); 
     }
 
     public void ClearPassive()
     {
-        IEnumerable<EPassive> identifiers = from abil in Passives select abil.Identifier;
+        List<EPassive> identifiers = new(from abil in Passives select abil.Identifier);
         foreach (var item in identifiers)
         {
             RemovePassive(item);
