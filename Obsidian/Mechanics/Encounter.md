@@ -9,3 +9,4 @@ An encounter defines the following properties:
 - Pre-set spawns. Like specific [[Unit]]s
 - Victory and failure conditions.
 - Terrain.
+
