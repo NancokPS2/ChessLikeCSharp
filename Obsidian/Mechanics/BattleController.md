@@ -1,6 +1,6 @@
 ---
 tags:
-  - mechanical
+  - mechanical/combat
 ---
 A major class in charge of all combat related functionality.
 ### Loading an encounter.
@@ -13,7 +13,6 @@ A major class in charge of all combat related functionality.
 	4. Combat UI to display mob information and connects its inputs for selecting actions and ending turns.
 	5. CanvasLayer node for displaying arbitrary UI elements. (**TODO:** Add a function to automatically instantiate ISceneDependency objects)
 	6. ActionRunner for calling action functions during the designated state and connect it to the turn manager.
-	   
 4. Loads in every combatant defined in the encounter.
 	1. Update their position to the starting location
 	2. Register them under the turn manager and mob display manager.

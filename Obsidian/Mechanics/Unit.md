@@ -1,6 +1,6 @@
 ---
 tags:
-  - mechanical
+  - mechanical/combat
 ---
 Units can have the following properties:
 - [[Character Stats]]

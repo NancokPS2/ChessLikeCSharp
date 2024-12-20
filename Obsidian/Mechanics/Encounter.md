@@ -1,7 +1,6 @@
 ---
 tags:
-  - mechanical
-  - TODO
+  - mechanical/combat
 ---
 All combat is done within the context of an [[Encounter]].
 An encounter defines the following properties:
