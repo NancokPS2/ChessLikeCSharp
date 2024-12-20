@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Dynamically connected mesh for displaying areas in a more pretty way.",
+                    "id": "ldp35p0z4zsjmbm86p1g7p6j"
+                },
+                {
+                    "text": "Need more visual feedback, specially for debugging.",
+                    "id": "ivic4ux959heakv2576n9b75"
+                },
+                {
                     "text": "Add functions to trigger when adding a passive or action to a Mob",
                     "id": "p873zqho9t7nyxum2uxzjjqr"
                 },
@@ -121,5 +129,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1734278181488
+    "timestamp": 1734704673253
 }

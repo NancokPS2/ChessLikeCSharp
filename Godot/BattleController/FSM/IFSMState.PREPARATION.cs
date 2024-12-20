@@ -45,6 +45,8 @@ public class BattleControllerStatePreparation : BattleControllerState
         Vector3i selected_pos = User.PositionSelected;
         Vector3i hovered_pos = User.PositionHovered;
 
+        //If attempted to PAUSE, exit PREPARATION.
+        //TODO: Ask for confirmation.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
             User.FSMSetState(BattleController.State.TAKING_TURN);
@@ -56,6 +58,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         //Do nothing if the chosen space is occupied.
         if (Global.ManagerMob.GetInPosition(selected_pos).Count != 0){return;}
 
+        //If accepted.
         if (Global.GInput.IsButtonPressed(Global.GInput.Button.ACCEPT))
         {
             //No mob selected, return.
@@ -68,14 +71,17 @@ public class BattleControllerStatePreparation : BattleControllerState
                 return;
             }
 
+            //A move is selected and a valid position was selected. Place the unit.
             MobPlace(selected_mob, selected_pos);
         }
+
+        //If cancelled, try to remove the mob from the chosen location.
         else if (Global.GInput.IsButtonPressed(Global.GInput.Button.CANCEL))
         {
             //Invalid position, return.
             if (!hovered_pos.IsValid()) {return;}
 
-            //Get all mobs of eligible factions.
+            //Get all mobs of eligible factions at the given location.
             List<Mob> mobs_to_remove = 
                 Global.ManagerMob.GetInPosition(hovered_pos).Where(
                     x => FactionsEligible.Contains(x.Faction)
@@ -111,6 +117,7 @@ public class BattleControllerStatePreparation : BattleControllerState
 
     public void MobPlace(Mob mob, Vector3i where)
     {
+        //Place mobs only if the location is empty.
         if (Global.ManagerMob.GetInPosition(where).Count != 0)
         {
             MessageQueue.AddMessage("Cannot place unit, the space is occupied.", 2);

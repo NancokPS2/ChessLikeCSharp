@@ -32,6 +32,11 @@ public partial class Mob
             return GetAllPooled().FilterFromState(EMobState.COMBAT);
         }
 
+        /// <summary>
+        /// Gets all mobs in the given location that are in combat.
+        /// </summary>
+        /// <param name="position">The location to look for mobs in.</param>
+        /// <returns>A list of mobs found</returns>
         public List<Mob> GetInPosition(Vector3i position)
         {
             return GetAllPooled().FilterFromPosition(position).FilterFromState(EMobState.COMBAT);

@@ -20,9 +20,9 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
     public override void StateOnEnter()
     {
         CombatGeneralUI mob_ui = BattleController.CompCombatUI;
-        TurnManager turn_manager = BattleController.CompTurnManager;
+        //TurnManager turn_manager = BattleController.CompTurnManager;
 
-        Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
+        //Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
 
         mob_ui.Update(User);
         BattleController.CompCombatUI.NodeActionUI.EnableActionButtons(true);
@@ -36,7 +36,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
     public override void StateProcess(double delta)
     {
-
+        //Can switch to PAUSE state from here.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
             User.FSMSetState(BattleController.State.PAUSED);
@@ -48,6 +48,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         //If an action was selected, pass to the TARGETING state.
         if (User.InputActionSelected is not null)
         {
+            //
             //TODO: Owner cannot be null
             User.TurnUsageParameters = new Ability.UsageParameters(
                 BattleController.CompTurnManager.GetCurrentTurnTaker() as Mob, 

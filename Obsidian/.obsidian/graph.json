@@ -1,5 +1,5 @@
 {
-  "collapse-filter": false,
+  "collapse-filter": true,
   "search": "tag:#job OR file:Combat Job",
   "showTags": false,
   "showAttachments": false,
@@ -26,5 +26,5 @@
   "linkStrength": 1,
   "linkDistance": 250,
   "scale": 0.8560789647531739,
-  "close": false
+  "close": true
 }

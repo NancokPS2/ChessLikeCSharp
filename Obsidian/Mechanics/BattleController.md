@@ -18,3 +18,7 @@ A major class in charge of all combat related functionality.
 	2. Register them under the turn manager and mob display manager.
 	3. Set them as being in combat.
 After the steps are done, it starts running its state machine in the PREPARATION state for selecting [[Unit]]s.
+
+### Running an encounter
+1. If a new state has been selected, run its entering state. Otherwise run its processing logic.
+2. 
