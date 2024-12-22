@@ -39,4 +39,11 @@ public class AbilityMove : Ability
     {
         return "Teleport to the target location.";
     }
+
+    public override string GetUseText(UsageParameters parameters)
+    {
+        Vector3i position = parameters.PositionsTargeted.First();
+        return $"{Owner.DisplayedName} moved to {position}";
+
+    }
 }

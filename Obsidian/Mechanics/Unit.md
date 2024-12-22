@@ -8,3 +8,9 @@ Units can have the following properties:
 - [[Combat Job]]
 - [[Faction]]
 - [[Race]]
+
+## Construction
+**TODO:** When they exist, list sources of creation.
+- Added to the manager
+- Set default stats
+- Load an inventory preset.

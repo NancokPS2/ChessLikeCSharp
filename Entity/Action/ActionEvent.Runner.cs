@@ -133,6 +133,7 @@ public class ActionEventRunner : IDebugDisplay
             Ability.UsageParameters parameters = RunningQueuedAction.usage_params;
 
             action.Use(parameters);
+            MessageQueue.AddMessage(action.GetUseText(parameters));
             ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
             
             //Check if the action triggers any passive and add them to the queue if they do..

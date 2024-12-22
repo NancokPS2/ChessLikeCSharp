@@ -63,7 +63,10 @@ public partial class Mob
             Stats.BoostAdd(job, false);
 
             //Add the actions.
-            Actions.AddRange(job.Abilities);
+            foreach (var item in job.Abilities)
+            {
+                AddAbility(item);
+            }
 
             //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
             SetMovementMode(job.MovementMode);

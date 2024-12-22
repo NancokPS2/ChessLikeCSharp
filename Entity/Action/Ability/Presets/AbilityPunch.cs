@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.Command;
+using ChessLike.Extension;
 
 namespace ChessLike.Entity.Action.Preset;
 
@@ -63,4 +64,11 @@ public class AbilityPunch : Ability
             usage.OwnerRef.Stats.GetValue(StatName.STRENGTH) / 2,
         _ => 0,
     };
+
+    public override string GetUseText(UsageParameters parameters)
+    {
+        string targets = (from mob in parameters.MobsTargeted select mob.DisplayedName).ToStringList(", ");
+        return $"{Owner.DisplayedName} attacked {targets}";
+
+    }
 }

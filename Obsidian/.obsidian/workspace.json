@@ -43,13 +43,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Mechanics/Combat flow.md",
+                "file": "Mechanics/Unit.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Combat flow"
+              "title": "Unit"
             }
           },
           {
@@ -99,7 +99,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:mechanical",
+                "query": "tag:character",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -222,10 +222,11 @@
   },
   "active": "90bc25d4896a9fa8",
   "lastOpenFiles": [
+    "Main Character.md",
+    "Mechanics/Combat flow.md",
     "Race/Humans.md",
     "Race/Poxt.md",
     "Mechanics/UI/Ability Usage.md",
-    "Mechanics/Combat flow.md",
     "Mechanics/BattleController.md",
     "Mechanics/Unit.md",
     "Mechanics/Ability.md",
@@ -254,7 +255,6 @@
     "World Map/Dead Lands.md",
     "World Map/Independent Sub-Regions.md",
     "Celestial Priest.md",
-    "Phoenix Warrior.md",
     "Language",
     "Mechanics",
     "Plot",

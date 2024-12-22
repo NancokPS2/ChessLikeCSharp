@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Shared.Storage;
 
 namespace ChessLike.Extension;
 
@@ -35,9 +36,35 @@ public static class ICollectionExtension
     where T : notnull
     {
         string output = "";
-        foreach (var item in collection)
+        if (collection.Count() == 1)
         {
-            output += item.ToString() + separator;
+            output = collection.First().ToString() ?? throw new Exception();
+        }
+        else
+        {
+            foreach (var item in collection)
+            {
+                output += item.ToString() + separator;
+            }
+            
+        }
+        return output;
+    }
+    public static string ToStringList<T>(this IEnumerable<T> collection, string separator = "|")
+    where T : notnull
+    {
+        string output = "";
+        if (collection.Count() == 1)
+        {
+            output = collection.First().ToString() ?? "";
+        }
+        else
+        {
+            foreach (var item in collection)
+            {
+                output += item.ToString() + separator;
+            }
+            
         }
         return output;
     }

@@ -27,6 +27,7 @@ public class BattleControllerStateTargeting : BattleControllerState
 
     public override void StateOnEnter()
     {
+        ResetTargetingSelections();
         _pos_valid_for_targeting = GetSelectedAbility().TargetParams
             .GetTargetedPositions(GetUsageParameters());
 
@@ -102,7 +103,6 @@ public class BattleControllerStateTargeting : BattleControllerState
         //Position selection finished.
         if (!HasTargetPositionsRemaining())
         {
-            AddTargetedToUsageParameters();
             //Show the popup to confirm if it hasn't yet.
             if (_popup.GetParent() is null && _popup.IndexLastPressed == PopupButtonDialogUI.NO_INDEX)
             {
@@ -114,6 +114,9 @@ public class BattleControllerStateTargeting : BattleControllerState
             //If confirmed, change the state.
             if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
             {
+                //Update the usage parameters with the ones targeted.
+                AddTargetedToUsageParameters();
+                //Add action to the queue
                 BattleController.CompActionRunner.QueueAdd(
                     GetSelectedAbility(), 
                     GetUsageParameters()
@@ -138,7 +141,7 @@ public class BattleControllerStateTargeting : BattleControllerState
     /// </summary>
     public void AddTargetedToUsageParameters()
     {
-        //Add the AoE positions steming from targeted ones.
+        //Add the AoE positions steming from SELECTED ones.
         UniqueList<Vector3i> positions_to_add = new(){Safe = false};
         positions_to_add.AddRange(
             GetSelectedAbility().TargetParams.GetAoEPositions(
@@ -147,24 +150,29 @@ public class BattleControllerStateTargeting : BattleControllerState
             );
         GetUsageParameters().PositionsTargeted = positions_to_add;
 
+        //If mobs cannot be considered, stop here.
+        if (!GetSelectedAbility().MobFilterParams.PickMobInTargetPos){return;}   
+
         //Add the targeted mobs to the UsageParameters if valid.
         List<Mob> mobs_found = new();
-        foreach (var item in GetUsageParameters().PositionsTargeted)
-        {                    
-            if (GetSelectedAbility().MobFilterParams.PickMobInTargetPos)
-            {
+        foreach (var pos in GetUsageParameters().PositionsTargeted)
+        {      
                 //Get the mobs at this position.
                 List<Mob> mobs_here = Global.ManagerMob
                     .GetInCombat()
-                    .FilterFromPosition(User.PositionHovered);
+                    .FilterFromPosition(pos);
                 
+                List<Mob> mobs_filtered = new();
+                foreach (var mob in mobs_here)
+                {
+                    if (GetSelectedAbility().MobFilterParams.IsMobValid(GetUsageParameters(), mob))
+                    {
+                        mobs_filtered.Add(mob);            
+                    }
+                }
+
                 //Add filtered mobs to the MobsTargeted list for the action to use.
-                GetUsageParameters().MobsTargeted.AddRange(
-                    mobs_found.Where(
-                        x => GetSelectedAbility().MobFilterParams.IsMobValid(GetUsageParameters(), x)
-                        )
-                    );
-            }   
+                GetUsageParameters().MobsTargeted.AddRange(mobs_filtered);
         }
     }
 

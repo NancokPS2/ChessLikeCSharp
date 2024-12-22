@@ -42,7 +42,6 @@ public class BattleControllerStatePreparation : BattleControllerState
         User.UpdateHoveredMobUI();
 
         Mob? selected_mob = _unit_list.MobSelected;
-        Vector3i selected_pos = User.PositionSelected;
         Vector3i hovered_pos = User.PositionHovered;
 
         //If attempted to PAUSE, exit PREPARATION.
@@ -56,7 +55,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         _last_hovered_pos = hovered_pos;
 
         //Do nothing if the chosen space is occupied.
-        if (Global.ManagerMob.GetInPosition(selected_pos).Count != 0){return;}
+        if (Global.ManagerMob.GetInPosition(hovered_pos).Count != 0){return;}
 
         //If accepted.
         if (Global.GInput.IsButtonPressed(Global.GInput.Button.ACCEPT))
@@ -64,15 +63,15 @@ public class BattleControllerStatePreparation : BattleControllerState
             //No mob selected, return.
             if (selected_mob is null){return;}
             //Invalid position, return.
-            if (!selected_pos.IsValid()) {return;}
+            if (!hovered_pos.IsValid()) {return;}
             //Not a spawn point, return.
-            if (!BattleController.CompGrid.IsFlagInPosition(selected_pos, ChessLike.World.ECellFlag.PLAYER_SPAWNPOINT))
+            if (!BattleController.CompGrid.IsFlagInPosition(hovered_pos, ChessLike.World.ECellFlag.PLAYER_SPAWNPOINT))
             {
                 return;
             }
 
             //A move is selected and a valid position was selected. Place the unit.
-            MobPlace(selected_mob, selected_pos);
+            MobPlace(selected_mob, hovered_pos);
         }
 
         //If cancelled, try to remove the mob from the chosen location.
