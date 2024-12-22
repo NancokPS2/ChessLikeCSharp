@@ -18,8 +18,10 @@ config/icon="res://icon.svg"
 [autoload]
 
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
+Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
+NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 
 [dotnet]
 

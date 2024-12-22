@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://dbymrquo0bici"]
+
+[ext_resource type="Texture2D" uid="uid://bqpx6od8kivp3" path="res://assets/Texture/particle/shine.png" id="1_wj2no"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uawnm"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_wj2no")
+texture_filter = 0
+texture_repeat = false
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_15vf6"]
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="Gradient" id="Gradient_e8nkq"]
+offsets = PackedFloat32Array(0, 0.766355, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_s5jn2"]
+colors = PackedColorArray(1, 1, 0.627451, 1, 0.992157, 1, 0, 1)
+
+[node name="ShineHalo" type="CPUParticles3D"]
+material_override = SubResource("StandardMaterial3D_uawnm")
+amount = 5
+lifetime = 1.2
+lifetime_randomness = 0.16
+mesh = SubResource("QuadMesh_15vf6")
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.4
+direction = Vector3(0, 1, 0)
+gravity = Vector3(0, 0.8, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 0.5
+scale_amount_max = 2.0
+color_ramp = SubResource("Gradient_e8nkq")
+color_initial_ramp = SubResource("Gradient_s5jn2")
