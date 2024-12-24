@@ -25,7 +25,6 @@ public partial class BattleController : Node, IDebugDisplay
 
 		FSMSetup();
 		SetupEncounter(EncounterData.GetDefault());
-		//FSMSetState(State.TAKING_TURN);
 
 		SetDeferred("_ready_for_debug", true);
 

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7lfcu2mi4uaj"]
+[gd_scene load_steps=4 format=3 uid="uid://c7lfcu2mi4uaj"]
 
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_lvy4g"]
 [ext_resource type="Script" path="res://Godot/Display/UI/Party/PartyJobChangeUI.cs" id="1_r36bb"]
+[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://Godot/Display/UI/Base/HelpTooltip.tscn" id="3_svj7g"]
 
 [node name="MobJobChangeUI" type="Control" node_paths=PackedStringArray("NodeUsedJobs", "NodeAvailableJobs")]
 layout_mode = 3
@@ -9,9 +11,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_lvy4g")
 script = ExtResource("1_r36bb")
-NodeUsedJobs = NodePath("VSplitContainer/SelectedJobs")
-NodeAvailableJobs = NodePath("VSplitContainer/AvailableJobs")
+NodeUsedJobs = NodePath("MarginContainer/VSplitContainer/SelectedJobs")
+NodeAvailableJobs = NodePath("MarginContainer/VSplitContainer/AvailableJobs")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -21,21 +24,42 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VSplitContainer" type="VSplitContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = -1
+anchor_right = 0.972
 anchor_bottom = 1.0
+offset_right = 0.255981
 grow_horizontal = 2
 grow_vertical = 2
-collapsed = true
+theme = ExtResource("1_lvy4g")
 
-[node name="SelectedJobs" type="HBoxContainer" parent="VSplitContainer"]
+[node name="VSplitContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="JobsOwned" type="Label" parent="MarginContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"LabelHeader"
+text = "Jobs"
+
+[node name="SelectedJobs" type="HBoxContainer" parent="MarginContainer/VSplitContainer"]
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.3
 
-[node name="AvailableJobs" type="VBoxContainer" parent="VSplitContainer"]
+[node name="JobsAvailable" type="Label" parent="MarginContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"LabelHeader"
+text = "Available"
+
+[node name="AvailableJobs" type="VBoxContainer" parent="MarginContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_use_anchors_ = true
+
+[node name="HelpTooltip" parent="." instance=ExtResource("3_svj7g")]
+layout_mode = 1
+Text = "Select the slot from the top menu that you want to swap. Then choose one from the menu below."

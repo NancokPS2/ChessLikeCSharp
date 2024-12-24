@@ -10,7 +10,7 @@ public interface ITooltip
     public Godot.Font GetFont();
     public int GetFontSize();
 
-    public Godot.Vector2 GetRectSize() => new(120,80);
+    public Godot.Vector2 GetRectSize() => new(140,80);
     public bool IsDirty() => true;
     bool IsShown()
     {

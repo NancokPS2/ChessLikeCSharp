@@ -2,9 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_m8yvf"]
 [ext_resource type="Script" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="1_yb17j"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_0o1yx"]
-font_size = 23
+[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://Godot/Display/UI/Base/HelpTooltip.tscn" id="3_ue5iu"]
 
 [node name="PartyFactionEquipmentUi" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3
@@ -44,5 +42,10 @@ anchor_right = 1.0
 anchor_bottom = 0.049
 offset_bottom = 0.247999
 grow_horizontal = 2
+theme = ExtResource("1_m8yvf")
+theme_type_variation = &"LabelHeader"
 text = "FACTION_INVENTORY"
-label_settings = SubResource("LabelSettings_0o1yx")
+
+[node name="HelpTooltip" parent="." instance=ExtResource("3_ue5iu")]
+layout_mode = 1
+Text = "Select a slot from the unit's inventory and then select a slot with an item in this inventory to equip it."

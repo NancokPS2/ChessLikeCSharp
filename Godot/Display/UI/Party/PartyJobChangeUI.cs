@@ -24,7 +24,7 @@ public partial class PartyJobChangeUI : Control, ISceneDependency
     public override void _Ready()
     {
         base._Ready();
-        NodeUsedJobs ??= (HBoxContainer?)FindChild("SelectedJobs");
+        NodeUsedJobs ??= (HBoxContainer)FindChild("SelectedJobs");
         NodeAvailableJobs ??= (VBoxContainer)FindChild("AvailableJobs");
 
         //Fill with all jobs if no jobs have been defined as available.
@@ -69,6 +69,11 @@ public partial class PartyJobChangeUI : Control, ISceneDependency
         MobCurrent = mob;
     }
 
+    /// <summary>
+    /// Fired when a job from the list is selected.
+    /// </summary>
+    /// <param name="button"></param>
+    /// <exception cref="Exception"></exception>
     private void OnAvailablePressed(JobButton button)
     {
         if (MobCurrent is null){ throw new Exception();}

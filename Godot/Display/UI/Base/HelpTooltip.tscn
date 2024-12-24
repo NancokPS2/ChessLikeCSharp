@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://1o62s57ghh6r"]
+
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_1gflf"]
+[ext_resource type="Script" path="res://Godot/Display/UI/Base/HelpTooltip.cs" id="1_j71vv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r4js5"]
+
+[sub_resource type="SystemFont" id="SystemFont_sm4m4"]
+font_names = PackedStringArray("Verdana")
+
+[sub_resource type="LabelSettings" id="LabelSettings_ry2ol"]
+font = SubResource("SystemFont_sm4m4")
+font_size = 24
+
+[node name="HelpTooltip" type="Panel"]
+custom_minimum_size = Vector2(48, 48)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -48.0
+offset_bottom = 48.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme = ExtResource("1_1gflf")
+script = ExtResource("1_j71vv")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_r4js5")
+text = "?"
+label_settings = SubResource("LabelSettings_ry2ol")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -79,7 +79,9 @@ texture_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qbc3q"]
 texture = ExtResource("16_iwgsx")
-texture_margin_right = 15.0
+texture_margin_left = 8.0
+texture_margin_top = 2.0
+texture_margin_right = 8.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5uwyn"]
 texture = ExtResource("17_27b6v")
@@ -225,6 +227,16 @@ HScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_0jtf7")
 HScrollBar/styles/scroll = SubResource("StyleBoxTexture_2wbeh")
 Label/fonts/font = ExtResource("15_j35h0")
 Label/styles/normal = SubResource("StyleBoxTexture_qbc3q")
+LabelHeader/base_type = &"Label"
+LabelHeader/colors/font_shadow_color = Color(0, 0, 0, 1)
+LabelHeader/constants/shadow_offset_x = -2
+LabelHeader/constants/shadow_offset_y = 2
+LabelHeader/constants/shadow_outline_size = 1
+LabelHeader/font_sizes/font_size = 24
+MarginContainer/constants/margin_bottom = 6
+MarginContainer/constants/margin_left = 6
+MarginContainer/constants/margin_right = 6
+MarginContainer/constants/margin_top = 6
 Panel/styles/panel = SubResource("StyleBoxTexture_5uwyn")
 PanelMobUI/base_type = &"Panel"
 PanelMobUI/styles/panel = SubResource("StyleBoxTexture_lqiaf")
