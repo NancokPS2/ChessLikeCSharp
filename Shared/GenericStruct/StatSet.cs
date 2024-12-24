@@ -34,9 +34,12 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     }
 
 
-    public void ChangeValue(TStatEnum stat, float amount)
+    public float ChangeValue(TStatEnum stat, float amount)
     {
+        float original_value = GetValue(stat);
         CurrentDict[stat] = CurrentDict[stat] + amount;
+        float final_value = GetValue(stat);
+        return final_value - original_value;
     }
 
 

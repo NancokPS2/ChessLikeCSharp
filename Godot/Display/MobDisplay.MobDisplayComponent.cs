@@ -30,7 +30,7 @@ public partial class MobMeshDisplay : Godot.Node3D
         MobComponents.Remove(mob);
     }
 
-    public MobDisplayComponent GetComponents(Mob mob)
+    public MobDisplayComponent GetComponent(Mob mob)
     {
         return MobComponents[mob];
     }

@@ -23,48 +23,25 @@ public abstract class MobCommand
         Used = true;
     }
 
-    public static void ConnectActionToBroadcaster(Broadcaster.InfoDictFromMob action)
+    public static string ParseInfo(Dictionary<EInfo, string> dictionary)
     {
-        Broadcaster.CommandUsedOnMob += action;
-    }
-    public static void ConnectActionToBroadcaster(Broadcaster.InfoDict action)
-    {
-        Broadcaster.CommandUsed += action;
-    }
+        string output = "";
 
-    public static class Broadcaster
-    {
-        public delegate void InfoDict(Dictionary<EInfo, string> dictionary);
-        public delegate void InfoDictFromMob(Mob victim, Dictionary<EInfo, string> dictionary);
-
-        public static event InfoDictFromMob? CommandUsedOnMob;
-        public static event InfoDict? CommandUsed;
-
-        public static void Broadcast(Dictionary<EInfo, string> dictionary)
+        foreach (KeyValuePair<EInfo, string> item in dictionary)
         {
-            CommandUsed?.Invoke(dictionary);
-        }
-
-        public static string ParseInfo(Dictionary<EInfo, string> dictionary)
-        {
-            string output = "";
-
-            foreach (KeyValuePair<EInfo, string> item in dictionary)
+            switch(item.Key)
             {
-                switch(item.Key)
-                {
-                    case EInfo.DAMAGE_DEALT:
-                        output += "Dealt " + item.Value.ToString() + " damage.";
-                        break;
+                case EInfo.DAMAGE_DEALT:
+                    output += "Dealt " + item.Value.ToString() + " damage.";
+                    break;
 
-                    default:
-                        output += " And something mysterious.";
-                        break;
-                }
+                default:
+                    output += " And something mysterious.";
+                    break;
             }
-
-            return output;
         }
+
+        return output;
     }
 }
 

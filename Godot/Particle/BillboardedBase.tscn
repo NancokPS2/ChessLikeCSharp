@@ -12,7 +12,6 @@ billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
-grow_amount = 0.794
 
 [sub_resource type="QuadMesh" id="QuadMesh_okb15"]
 size = Vector2(0.1, 0.1)

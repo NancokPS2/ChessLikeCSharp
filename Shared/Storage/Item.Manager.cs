@@ -16,11 +16,6 @@ public partial class Item
             return output;
         }
 
-        public override Item GetFromResource(ItemResource resource)
-        {
-            return FromResource(resource);
-        }
-
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

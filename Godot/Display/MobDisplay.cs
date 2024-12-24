@@ -28,7 +28,6 @@ public partial class MobMeshDisplay : Godot.Node3D
 
         MobDisplayComponent component = AddComponents(mob);
         component.AddToDisplay(this);
-        SetupEventsForMob(mob);
     }
 
     public void Add(List<Mob> mobs)

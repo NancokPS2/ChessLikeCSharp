@@ -9,9 +9,9 @@ namespace ChessLike.Turn;
 //TODO: add a log of the latest turns, so in case of continuous ties, the same ITurn is not selected repeatedly.
 public partial class TurnManager
 {
-    public delegate void TurnChangeHandler(ITurn who);
-    public event TurnChangeHandler? TurnEnded;
-    public event TurnChangeHandler? TurnStarted;
+    //public delegate void TurnChangeHandler(ITurn who);
+    //public event TurnChangeHandler? TurnEnded;
+    //public event TurnChangeHandler? TurnStarted;
 
 
     UniqueList<ITurn> Participants = new();
@@ -80,7 +80,7 @@ public partial class TurnManager
         {
             throw new Exception("Unexpected result.");
         }
-        TurnStarted?.Invoke(CurrentTaker);
+        //TurnStarted?.Invoke(CurrentTaker);
     }
 
     public void EndTurn()
@@ -90,7 +90,7 @@ public partial class TurnManager
         //Reset the delay, the CurrentTaker should end up with a high delay.
         ResetDelay(CurrentTaker);
 
-        TurnEnded?.Invoke(CurrentTaker);
+        //TurnEnded?.Invoke(CurrentTaker);
     }
 
     private void ResetDelay(ITurn turn)

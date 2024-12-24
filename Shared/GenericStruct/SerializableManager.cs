@@ -9,6 +9,11 @@ using Godot;
 
 namespace ChessLike.Shared.GenericStruct;
 
+/// <summary>
+/// This class manages objects that can be serialized.
+/// </summary>
+/// <typeparam name="TManaged">The object to manage, which implements interfaces for serialization trough resources.</typeparam>
+/// <typeparam name="TResource">The resource class that this object can be turned into.</typeparam>
 public class SerializableManager<TManaged, TResource> 
     where TManaged : ISerializable, IResourceSerialize<TManaged, TResource> 
     where TResource : Godot.Resource
@@ -18,19 +23,13 @@ public class SerializableManager<TManaged, TResource>
 
     public SerializableManager()
     {
+        //Create directories.
         Godot.DirAccess.MakeDirRecursiveAbsolute(GetResourceFolderRes());
         Godot.DirAccess.MakeDirRecursiveAbsolute(GetResourceFolderUser());
         DirectoryInfo? info = Directory.CreateDirectory(GetPrototypeFolder());
         
         //First try to load all existing ones.
         Preload();
-        //DEPRECATED: Then fill any missing ones with prototypes
-        //SavePrototypes(CreatePrototypes());
-    }
-
-    public virtual TManaged GetFromResource(TResource resource)
-    {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -42,17 +41,11 @@ public class SerializableManager<TManaged, TResource>
     {
         throw new NotImplementedException();
     }
+
+    public virtual void StorePrototypesAsResources() => CreatePrototypes().ForEach(x => AddResource(x.ToResource()));
     
     public void Preload()
     {
-        
-        //Load XML objects, deprecated.
-        List<TManaged>? loaded = Serializer.LoadFolderAsXml<TManaged>(GetPrototypeFolder());
-        foreach (var item in loaded)
-        {
-            AddPooled(item);
-        }
-
         //Load Resources
         string res_debug_output = "";
         foreach (var folder in new string[]{GetResourceFolderRes()+"/", GetResourceFolderUser()+"/"})
@@ -97,37 +90,22 @@ public class SerializableManager<TManaged, TResource>
         }
     }
 
-    public virtual TManaged? LoadPrototype(TManaged managed)
-    {
-        TManaged? loaded = Serializer.LoadAsXml<TManaged>(Path.Combine(GetPrototypeFolder(), managed.GetFileName() + ".xml"));
-        return loaded;
-
-    }
+    /// <summary>
+    /// Gets a path to a folder with all prototypes of Resource type.
+    /// </summary>
+    /// <returns>The folder that contains the prototypes</returns>
     public virtual string GetPrototypeFolder()
     {
-        return Path.Combine( Global.Directory.GetContentDir(EDirectory.USER_CONTENT), "Prototypes");
-    }
-
-
-    /// <summary>
-    /// DEPRECATED
-    /// </summary>
-    /// <param name="prototypes"></param>
-    public virtual void SavePrototypes(List<TManaged> prototypes)
-    {
-        foreach (TManaged item in prototypes)
-        {
-            Serializer.SaveAsXml(item, Path.Combine(GetPrototypeFolder(), item.GetFileName() + ".xml"));
-        }
+        return Path.Combine( 
+            Global.Directory.GetContentDir(EDirectory.USER_CONTENT), 
+            "Prototypes");
     }
 
 
     protected List<TManaged> GetAllPooled() => Pooled;
 
-    public void AddPooled(TManaged managed)
-    {
-        Pooled.Add(managed, false);
-    }
+    public void AddPooled(TManaged managed) => Pooled.Add(managed, false);
+
     public void AddPooled(List<TManaged> managed) => managed.ForEach(x => AddPooled(x));
 
     /// <summary>
@@ -136,10 +114,7 @@ public class SerializableManager<TManaged, TResource>
     /// <returns></returns>
     /// <exception cref="Exception">If this shit's empty, YEET.</exception>
     protected virtual List<TResource> GetAllResources() => Resources.Count != 0 ? Resources : throw new Exception("No resources loaded of type " + typeof(TResource).ToString());
-    public void AddResource(TResource resource)
-    {
-        Resources.Add(resource);
-    }
+    public void AddResource(TResource resource) => Resources.Add(resource);
     public void AddResource(List<TResource> resources) => resources.ForEach(x => AddResource(x));
 
     public string GetResourceFolderRes() => IResourceSerialize<TManaged, TResource>.GetResourceFolderRes();

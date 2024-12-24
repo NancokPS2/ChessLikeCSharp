@@ -22,11 +22,6 @@ public partial class Ability
             return output;
         }
 
-        public override Ability GetFromResource(AbilityResource resource)
-        {
-            return FromResource(resource);
-        }
-
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

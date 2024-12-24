@@ -20,11 +20,6 @@ public partial class Faction
             return output;
         }
 
-        public override Faction GetFromResource(FactionResource resource)
-        {
-            return FromResource(resource);
-        }
-
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

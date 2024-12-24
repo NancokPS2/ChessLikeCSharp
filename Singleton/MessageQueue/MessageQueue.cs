@@ -50,12 +50,12 @@ public partial class MessageQueue : CanvasLayer
 
         Layer = Global.Readonly.LAYER_MSG_QUEUE;
 
-        MobCommand.ConnectActionToBroadcaster(AddMessageFromCommandBroadcaster);
+        EventBus.MobCommandUsed += AddMessageFromCommand;
     }
 
-    private void AddMessageFromCommandBroadcaster(Mob victim, Dictionary<EInfo, string> dictionary)
+    private void AddMessageFromCommand(Dictionary<EInfo, string> dictionary)
     {
-        string message = MobCommand.Broadcaster.ParseInfo(dictionary);
+        string message = MobCommand.ParseInfo(dictionary);
         AddMessage(message, message.Length/6);
     }
 

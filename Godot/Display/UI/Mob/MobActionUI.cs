@@ -4,8 +4,6 @@ using Godot;
 
 public partial class MobActionUI : Control, ISceneDependency
 {
-	public delegate void ActionPress(Ability action);
-	public event ActionPress? ActionPressed;
 
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobEquipmentUI.tscn";
 

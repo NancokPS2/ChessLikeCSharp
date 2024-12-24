@@ -14,12 +14,12 @@ public class ActionEventRunner : IDebugDisplay
 {
     public delegate void ActionQueue(ActionEvent action, UsageParameters parameters);
     public delegate void Delegate();
-    public event ActionQueue? ActionQueued;
-    public event ActionQueue? ActionStarted;
-    public event ActionQueue? ActionEnded;
+    private event ActionQueue? ActionQueued;
+    private event ActionQueue? ActionStarted;
+    private event ActionQueue? ActionEnded;
 
-    public event Delegate? QueueStarted;
-    public event Delegate? QueueEnded;
+    private event Delegate? QueueStarted;
+    private event Delegate? QueueEnded;
 
     private List<QueuedAction> Queue = new();
 
@@ -184,25 +184,17 @@ public class ActionEventRunner : IDebugDisplay
         return output;
     }
 
-    public void OnTurnEnded(ITurn who)
+    public void OnTurnEnded(Mob who)
     {
-        if (who is Mob mob)
+        List<Passive> passives = PassiveGetFromMob(who);
+        foreach (var item in passives)
         {
-            List<Passive> passives = PassiveGetFromMob(mob);
-            foreach (var item in passives)
+            item.DurationParams.AdvanceTurns();
+            if (item.IsTriggeredByTurnEnd)
             {
-                item.DurationParams.AdvanceTurns();
-                if (item.IsTriggeredByTurnEnd)
-                {
-                    QueueAdd(item, item.GetUsageParams());
-                }
+                QueueAdd(item, item.GetUsageParams());
             }
-
-        } else
-        {
-            throw new Exception("Only works on mobs.");
-        }
-        
+        }       
 
     }
 

@@ -12,15 +12,6 @@ public partial class Mob
     {
         public Dictionary<EMobPrototype, Mob> PrototypeDict = new();
 
-        public List<Mob> NewFromFaction(EFaction faction)
-        {
-            IEnumerable<Mob>? output =  
-                from mob_res 
-                in GetAllResources().Where(x => x.Faction == faction) 
-                select FromResource(mob_res);
-            return output.ToList();
-        }
-
         public List<Mob> GetFromFaction(EFaction faction)
         {
             return GetAllPooled().FilterFromFaction(faction);

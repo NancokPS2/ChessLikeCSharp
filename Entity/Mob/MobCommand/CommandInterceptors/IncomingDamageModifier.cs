@@ -31,12 +31,8 @@ public class IncomingDamageModifier : MobCommandInterceptor
         (command as MobCommandTakeDamage).Damage -= reduction;
         #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-        MobCommand.Broadcaster.Broadcast(new(){
+        EventBus.MobCommandUsed?.Invoke(new(){
             {EInfo.DAMAGE_REDUCED, reduction.ToString()}
         });
-    }
-    public void Use(MobCommandTakeDamage command)
-    {
-
     }
 }

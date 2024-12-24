@@ -35,7 +35,6 @@ public partial class BattleController
         AddChild(CompMobMeshDisplay);
         CompMobMeshDisplay.Name = "MobDisplay";
         //Connect it to the turn manager to handle turn-related display
-        CompMobMeshDisplay.ConnectToManager(CompTurnManager);
 
         //Display grid setup
         AddChild(CompDisplayGrid);
@@ -48,15 +47,15 @@ public partial class BattleController
 
         //UI for combat inputs and display.
         AddChild(CompCombatUI);
-        CompCombatUI.NodeActionUI.ActionPressed += (act) => InputActionSelected = act;
-        CompCombatUI.NodeActionUI.EndTurnPressed += () => InputEndTurnPressed++;
+        EventBus.ActionSelected += (act) => InputActionSelected = act;
+        EventBus.TurnEndRequested += () => InputEndTurnPressed++;
 
         //Canvas for displaying arbitrary UI elements.
         AddChild(CompCanvas);
         CompCanvas.Layer = Global.Readonly.LAYER_CANVAS_COMP;
 
         //ActionRunner connections
-        CompTurnManager.TurnEnded += CompActionRunner.OnTurnEnded;
+        EventBus.MobTurnEnded += CompActionRunner.OnTurnEnded;
         GetTree().ProcessFrame += CompActionRunner.Process;
 
 

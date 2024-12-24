@@ -20,11 +20,6 @@ public partial class Passive
             return output;
         }
 
-        public override Passive GetFromResource(PassiveResource resource)
-        {
-            return FromResource(resource);
-        }
-
         public override string GetPrototypeFolder()
         {
             return Path.Combine(

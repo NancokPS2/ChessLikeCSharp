@@ -23,6 +23,10 @@ public static class NodeExtension
         }
     }
 
+    /// <summary>
+    /// WARNING: Using this can lead to memory leaks.
+    /// </summary>
+    /// <param name="this"></param>
     public static void RemoveChildren(this Node @this)
     {
         foreach (var item in @this.GetChildren())

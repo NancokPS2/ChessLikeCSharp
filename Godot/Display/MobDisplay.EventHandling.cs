@@ -9,21 +9,16 @@ namespace Godot.Display;
 
 public partial class MobMeshDisplay
 {
-    public void SetupEventsForMob(Mob mob)
+
+    public MobMeshDisplay()
     {
-        mob.Stats.StatValueChanged += (StatName stat, float amount) => 
-            OnMobStatValueChanged(
-                MobComponents[mob], stat, amount
-            );
-       
-    }
-    public void ConnectToManager(TurnManager manager)
-    {
-        manager.TurnStarted += OnTurnStarted;
+        EventBus.MobTurnStarted += OnTurnStarted;
+        EventBus.MobStatChanged += OnMobStatValueChanged;
     }
 
-    public void OnMobStatValueChanged(MobDisplayComponent comp, StatName stat, float amount)
+    public void OnMobStatValueChanged(Mob mob, StatName stat, float amount)
     {
+        MobDisplayComponent comp = GetComponent(mob);
         Vector3 global_pos = comp.GetPositionGlobal();
         Color color = new(1,1,1); 
         int sign = MathF.Sign(amount);
@@ -36,17 +31,28 @@ public partial class MobMeshDisplay
             color = new(0,1,0);
         }
 
-        GetTree().Root.AddChild(new PopText(amount.ToString(), Vector3.Up, color).SetAnimation(PopText.Animation.SHAKE_AT_END));
+        GetTree().Root.AddChild(
+            new PopText(){
+                Text = amount.ToString(), 
+                Direction = Vector3.Up, 
+                TextColor = color,
+                GlobalPosition = global_pos,
+                AnimationMode = PopText.Animation.SHAKE_AT_END
+            }
+        );
     }
 
-    public void OnTurnStarted(ITurn who)
+    public void OnTurnStarted(Mob who)
     {
-        if (who is Mob mob)
-        {
-            MobDisplayComponent component = MobComponents[mob];
-            Vector3 global_pos = component.GetPositionGlobal();
-            GetTree().Root.AddChild( new PopText("READY!").SetAnimation(PopText.Animation.SHAKE_AT_END));
+        MobDisplayComponent component = MobComponents[who];
+        Vector3 global_pos = component.GetPositionGlobal();
+        GetTree().Root.AddChild( 
+            new PopText(){
+                Text = "READY",
+                GlobalPosition = global_pos,
+                AnimationMode = PopText.Animation.SHAKE_AT_END
+            }
+        );
             
-        }
     }
 }

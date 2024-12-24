@@ -5,17 +5,12 @@ using System;
 
 public partial class CombatActionUI : Control, ISceneDependency
 {
-    public delegate void ActionPressedEventHandler(Ability action);
-    public delegate void ButtonPressed();
-    public event ActionPressedEventHandler? ActionPressed;
-    public event ButtonPressed? EndTurnPressed;
-
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatActionUI.tscn";
 
 	[Export]
 	public Control? NodeActionContainer;
 
-	private Mob MobCurrent;
+	private Mob? MobCurrent;
 
     public override void _Ready()
     {
@@ -44,12 +39,12 @@ public partial class CombatActionUI : Control, ISceneDependency
 
             button.Text = action.Name;
             Console.WriteLine(button.GetPath());
-            button.Pressed += () => ActionPressed?.Invoke(action);
+            button.Pressed += () => EventBus.ActionSelected?.Invoke(action);
         }
 
         //Button for ending turn.
         Button end_turn = new();
-        end_turn.Pressed += () => EndTurnPressed.Invoke();
+        end_turn.Pressed += () => EventBus.TurnEndRequested?.Invoke();
         end_turn.Text = "End Turn";
         container.AddChild(end_turn);
     }

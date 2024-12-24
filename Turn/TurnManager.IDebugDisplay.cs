@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
 using Godot;
 
 namespace ChessLike.Turn;
@@ -13,14 +14,15 @@ public partial class TurnManager : IDebugDisplay
         return "TurnManager";
     }
 
+    //TODO: Make sure this still works
     public string GetText()
     {
         string output = ""; 
         foreach (var item in GetParticipants())
         {
-            if (item is TurnTakerTest taker)
+            if (item is Mob mob)
             {
-                output += taker.Name + " | " + taker.DelayCurrent + "\n";
+                output += mob.DisplayedName + " | " + mob.DelayCurrent + "\n";
             }
             else
             {

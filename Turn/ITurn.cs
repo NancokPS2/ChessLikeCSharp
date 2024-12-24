@@ -7,7 +7,6 @@ namespace ChessLike.Turn;
 
 public interface ITurn
 {
-    public event TurnManager.TurnChangeHandler TurnStarted;
     public float DelayCurrent {get;set;}
     public float DelayToAddOnTurnEnd {get;set;}
 
