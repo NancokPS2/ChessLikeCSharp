@@ -30,6 +30,15 @@ public partial struct Cell : IEquatable<Cell>
     {
         return Name == other.Name && Flags == other.Flags && Selectable == other.Selectable;
     }
+    public override bool Equals(Object? obj)
+    {
+        return base.Equals(obj);
+        //return GetHashCode() == obj?.GetHashCode();
+    }
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 
     public static bool operator ==(Cell a, Cell b)
     {

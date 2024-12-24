@@ -11,7 +11,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 {
     public const string INVALID_BOOST_SOURCE = "__INVALID__";
     public delegate void StatChange(TStatEnum name, float amount);
-    public event StatChange StatValueChanged;
+    public event StatChange? StatValueChanged;
 
     public Dictionary<TStatEnum, float> MaxDict {get; set;} = new();
     public Dictionary<TStatEnum, float> CurrentDict {get; set;} = new();

@@ -10,6 +10,6 @@ public partial class Passive : ISerializable
 {
     public string GetFileName()
     {
-        return Enum.GetName<EPassive>(Identifier);
+        return Enum.GetName(Identifier) ?? throw new Exception();
     }
 }

@@ -14,7 +14,6 @@ namespace Godot;
 public partial class BattleController
 {
     //State-machine-related
-    private State? StatePrePause;
     public float StateTimeWithoutChange;
 
     //Misc inputs

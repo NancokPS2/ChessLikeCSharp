@@ -73,9 +73,10 @@ public partial class BattleController
         
         Mob mob = mob_list.First();
 
+        //Update the mob in the UI if it is different from the last one checked.
         if (mob is not null && _last_hovered_mob != mob)
         {
-            CompCombatUI.NodeMobUI.Update(mob);
+            (CompCombatUI ?? throw new Exception()).NodeMobUI?.Update(mob);
         }
 
         _last_hovered_mob = mob;

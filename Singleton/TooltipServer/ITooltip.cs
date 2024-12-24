@@ -24,16 +24,5 @@ public interface ITooltip
         }
     }
 
-    public CanvasItem GetCanvasItem()
-    {
-        return Global.DrawNode;
-        if (this is CanvasItem canvas)
-        {
-            return canvas;
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
-    }
+    public CanvasItem GetCanvasItem() => Global.DrawNode;
 }

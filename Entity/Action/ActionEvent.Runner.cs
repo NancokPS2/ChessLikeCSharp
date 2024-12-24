@@ -97,9 +97,9 @@ public class ActionEventRunner : IDebugDisplay
 
     private bool RunningEnabled;
     private int RunningIndex = 0;
-    [Obsolete("Pending removal.")]
+    //[Obsolete("Pending removal.")]
     private float RunningTime = 0;
-    private QueuedAction RunningQueuedAction;
+    private QueuedAction? RunningQueuedAction;
     private bool RunningReadyToSet;
     private List<Passive> RunningConsideredPassives = new();
     public void RunStart()
@@ -148,7 +148,8 @@ public class ActionEventRunner : IDebugDisplay
 
 
         //If the animation already played out, pass onto the next action.
-        if (RunningTime > RunningQueuedAction.action.AnimationParams.Duration)
+        float duration = RunningQueuedAction?.action.AnimationParams.Duration ?? throw new Exception("Could not get a duration.");
+        if (RunningTime > duration)
         {
             RunningReadyToSet = true;
             RunningTime = 0;

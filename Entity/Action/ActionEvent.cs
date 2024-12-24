@@ -8,7 +8,8 @@ namespace ChessLike.Entity.Action;
 
 public abstract partial class ActionEvent
 {
-    public Mob Owner;
+    private Mob? owner;
+    public Mob Owner { get => owner ?? throw new Exception("Owner should be set before usage."); set => owner = value; }
 
     public string Name = "Undefined Action";
 
@@ -16,6 +17,8 @@ public abstract partial class ActionEvent
     public MobFilterParameters MobFilterParams = new();
 
     public List<EActionFlag> Flags = new();
+
+
 
     public abstract void Use(UsageParameters usage_params);
     public abstract void OnAddedToMob();
@@ -26,6 +29,6 @@ public abstract partial class ActionEvent
     }
     public virtual string GetUseText(UsageParameters parameters)
     {
-        return Owner.DisplayedName + "did something mysterious to " + parameters.MobsTargeted.ToStringList(", ");
+        return $"{Owner.DisplayedName ?? "ERROR"} did something mysterious to {parameters.MobsTargeted.ToStringList(", ")}";
     }
 }

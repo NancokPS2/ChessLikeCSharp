@@ -10,6 +10,6 @@ public partial class Ability : ISerializable
 {
     public string GetFileName()
     {
-        return Enum.GetName<EAbility>(Identifier);
+        return Enum.GetName(Identifier) ?? throw new Exception();
     }
 }

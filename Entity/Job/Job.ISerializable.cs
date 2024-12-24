@@ -7,7 +7,7 @@ public partial class Job : ISerializable
 {
     public string GetFileName()
     {
-        return Enum.GetName<EJob>(Identifier);
+        return Enum.GetName(Identifier) ?? throw new Exception();
     }
 
     public string GetSubDirectory()

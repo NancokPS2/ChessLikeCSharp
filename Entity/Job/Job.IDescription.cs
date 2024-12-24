@@ -22,7 +22,7 @@ public partial class Job : IDescription
 
     public string GetDescriptiveName()
     {
-        return Enum.GetName(Identifier);
+        return Enum.GetName(Identifier) ?? throw new Exception();
     }
 
 }

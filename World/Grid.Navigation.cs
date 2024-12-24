@@ -110,9 +110,9 @@ public partial class Grid
 
     }
 
+    [Obsolete("Rework needed")]
     public static List<Vector3i> NavGetShortestPath(List<Vector3i> positions, Vector3i start, Vector3i target)
     {
-        throw new NotImplementedException("Rework needed.");
         if (!positions.Contains(start))
         {
             throw new Exception("start must be included in the positions.");

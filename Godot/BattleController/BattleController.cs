@@ -72,7 +72,7 @@ public partial class BattleController : Node, IDebugDisplay
 				CompTurnManager.GetCurrentTurnTaker() as Mob is Mob mob ? mob.DisplayedName : "null",
 				PositionHovered,
 				CompCamera != null ? CompCamera.Rotation : "???",
-				TurnUsageParameters is not null ? TurnUsageParameters.PositionsTargeted.ToArray().ToString() : "???",
+				TurnUsageParameters is not null ? TurnUsageParameters.PositionsTargeted.ToArray().ToString()  ?? throw new Exception() : "???",
 				}
 			
 		);

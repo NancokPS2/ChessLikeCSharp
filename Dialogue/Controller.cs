@@ -14,13 +14,11 @@ public partial class Controller
     List<string> message_log = new();
     Conversation conversation_curr = new();
 
-    float advance_delta = 0;
     int advance_char_index = 0;
 
     public void LoadConversation(Conversation conversation)
     {
         conversation_curr = conversation;
-        advance_delta = 0;
         advance_char_index = 0;
     }
 

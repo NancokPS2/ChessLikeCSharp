@@ -73,7 +73,7 @@ public static class Serializer
         string xml_string = serializer.Serialize(new XmlWriterSettings {Indent = true}, obj);
 
         //Ensure the directory exists.
-        string dir = Path.GetDirectoryName(full_file_path);
+        string dir = Path.GetDirectoryName(full_file_path) ?? throw new Exception("Could not get directory name.");
         DirectoryInfo? info = Directory.CreateDirectory(dir);
 
         //Create writer.
@@ -85,7 +85,7 @@ public static class Serializer
         }
         catch (IOException ex)
         {
-            GD.PushError("File " + full_file_path + " is currently in use.");
+            GD.PushError("File " + full_file_path + " is currently in use. " + ex.ToString());
         }
         
 
@@ -99,7 +99,8 @@ public static class Serializer
 
         foreach (string item in Directory.EnumerateFiles(folder_path))
         {
-            output.Add(LoadAsXml<T>(Path.Combine(item)));
+            string path = Path.Combine(item);
+            output.Add(LoadAsXml<T>(path) ?? throw new Exception($"Could not load file at path: {path}"));
         }
 
         return output;

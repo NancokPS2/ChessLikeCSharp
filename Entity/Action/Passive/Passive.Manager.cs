@@ -14,10 +14,6 @@ public partial class Passive
         public override List<Passive> CreatePrototypes()
         {
             throw new NotImplementedException();
-            List<Passive> output = new()
-            {
-            };
-            return output;
         }
 
         public override string GetPrototypeFolder()

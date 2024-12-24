@@ -33,7 +33,7 @@ public static class ObjectExtension
             object? value = field.GetValue(@this);
             if (value is not null)
             {
-                output[field.Name] = value.ToString();
+                output[field.Name] = value.ToString() ?? throw new Exception();
             }
         }
         return output;
