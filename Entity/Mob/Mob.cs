@@ -57,7 +57,8 @@ public partial class Mob
         ClearAbility();
         
         MobStatSet.StatBoost total_boost = new(Job.BOOST_SOURCE); 
-        foreach (Job job in Jobs)
+        //TODO: Jobs should not be able to be null in the first place.
+        foreach (Job job in Jobs.Where(x => x is not null))
         {
             //Average the stats from the job's.
             Stats.BoostAdd(job, false);

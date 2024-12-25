@@ -33,7 +33,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         }
     }
 
-
+    #region Modify stats
     public float ChangeValue(TStatEnum stat, float amount)
     {
         float original_value = GetValue(stat);
@@ -147,11 +147,27 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
         foreach (TStatEnum stat in stats)
         {
-            SetStat(stat, GetMax(stat));
+            SetValue(stat, GetMax(stat));
         }
     }
+    #endregion
+   
+    #region Boosts
+    public string BoostGetListOfStatChanges(TStatEnum name)
+    {
+        string output = $"Base: {MaxDict[name]}\n";
+        
+        foreach (StatBoost boost in Boosts.Values)
+        {
+            string source = boost.Source;
+            float total_mult = boost.GetMultiplicativeMax(name);
+            float total_add = boost.GetAdditiveMax(name);
+            output += $"{source}: +{total_add} | (x{total_mult})\n";
+        }
+        return output;
+    }
 
-    private StatBoost BoostGetInstance(string source)
+    private StatBoost BoostGetFromSource(string source)
     {
         if (Boosts.ContainsKey(source))
         {
@@ -197,30 +213,8 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
             Boosts.Remove(source);
         }
     }
-/*     public void BoostReset(string source)
-    {
-        Boosts[source] = new(source);
-    }
 
-    public void BoostSetMaxAdditive(string source, TStatEnum stat, float amount)
-    {
-        BoostGetInstance(source).MaxAdditiveBonus[stat] = amount;
-    }
-
-    public void BoostSetValueAdditive(string source, TStatEnum stat, float amount)
-    {
-        BoostGetInstance(source).MaxAdditiveBonus[stat] = amount;
-    }
-
-    public void BoostSetMaxMultiplicative(string source, TStatEnum stat, float amount)
-    {
-        BoostGetInstance(source).MaxMultiplicativeBonus[stat] = amount;
-    }
-
-    public void BoostSetValueMultiplicative(string source, TStatEnum stat, float amount)
-    {
-        BoostGetInstance(source).ValueMultiplicativeBonus[stat] = amount;
-    } */
+    #endregion
 
     public static TStatEnum[] GetArrayOfNames()
     {
@@ -325,6 +319,8 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
             return output;
         }
     }
+
+
 
     public interface IStatBooster
     {

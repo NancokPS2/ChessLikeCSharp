@@ -11,9 +11,15 @@ public partial class Passive
     public class Manager : SerializableManager<Passive, PassiveResource>
     {
 
+        //TODO
         public override List<Passive> CreatePrototypes()
         {
-            throw new NotImplementedException();
+            return new List<Passive>();
+            List<Passive> output = new(){
+                new PassiveDamageReduction(1), 
+                new PassiveDoT(1)
+                };
+            return output;
         }
 
         public override string GetPrototypeFolder()

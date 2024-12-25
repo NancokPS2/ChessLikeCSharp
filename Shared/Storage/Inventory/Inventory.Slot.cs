@@ -20,6 +20,11 @@ public partial class Inventory
             Item = null;
         }
 
+        public Slot( Slot slot ) : this(slot.FlagWhitelist, slot.FlagBlacklist, slot.Item)
+        {
+            
+        }
+
         public Slot(List<EItemFlag> flag_wl, List<EItemFlag> flag_bl, Item? item = null)
         {
             FlagWhitelist = flag_wl;

@@ -31,9 +31,14 @@ public partial class Faction
 
         public Faction GetFromEnum(EFaction faction)
         {
-            Faction output = FromResource(
-              GetAllResources().First(x => x.Identifier == faction)
-            );
+            Faction output = GetAllPooled().First(x => x.Identifier == faction);
+
+            if (output is null)
+            {
+                output = FromResource(
+                GetAllResources().First(x => x.Identifier == faction)
+                );
+            }
             return output;
         }
     }

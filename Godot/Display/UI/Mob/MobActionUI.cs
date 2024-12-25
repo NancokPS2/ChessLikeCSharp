@@ -23,9 +23,22 @@ public partial class MobActionUI : Control, ISceneDependency
         ActionGrid.FreeChildren();
 		foreach (var item in mob.GetAbilities())
 		{
-			Label label = new(){Text = item.Name, SizeFlagsHorizontal = SizeFlags.ExpandFill};
+			ActionLabel label = new(item){Text = item.Name, SizeFlagsHorizontal = SizeFlags.ExpandFill};
 			ActionGrid.AddChild(label);
 
 		}
+    }
+
+    private partial class ActionLabel : Label, ITooltip
+    {
+        ActionEvent Action;
+
+        public ActionLabel(ActionEvent action)
+        {
+            Action = action;
+        }
+
+        string ITooltip.GetText() => Action.GetDescription();
+        Godot.Vector2 ITooltip.GetRectSize() => new(200,80);
     }
 }

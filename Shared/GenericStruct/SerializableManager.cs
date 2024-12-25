@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,23 +29,26 @@ public class SerializableManager<TManaged, TResource>
         Godot.DirAccess.MakeDirRecursiveAbsolute(GetResourceFolderUser());
         DirectoryInfo? info = Directory.CreateDirectory(GetPrototypeFolder());
         
-        //First try to load all existing ones.
-        Preload();
+        //First try to load all resources.
+        PreloadResources();
+
+        //Then store all prototypes?
+        AddPooled(CreatePrototypes());
     }
 
-    /// <summary>
-    /// DEPRECATED
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    //TODO
     public virtual List<TManaged> CreatePrototypes()
     {
-        throw new NotImplementedException();
+        return new();
     }
 
+    [Obsolete("Probably don't use this.")]
     public virtual void StorePrototypesAsResources() => CreatePrototypes().ForEach(x => AddResource(x.ToResource()));
     
-    public void Preload()
+    /// <summary>
+    /// Loads all resources from the designated folders and adds them to the Resource list.
+    /// </summary>
+    public void PreloadResources()
     {
         //Load Resources
         string res_debug_output = "";
@@ -76,7 +80,7 @@ public class SerializableManager<TManaged, TResource>
                         AddResource(output);
                         //AddPooled(GetFromResource(output));
 
-            //After this, it is all debug printing.
+                        //After this, it is all debug printing.
                         res_debug_output += "\n " + str_to_load + " | ";
                     }
                 }

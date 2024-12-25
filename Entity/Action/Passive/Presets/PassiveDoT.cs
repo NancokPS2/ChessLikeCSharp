@@ -9,11 +9,11 @@ using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
 
-public class DoT : Passive
+public class PassiveDoT : Passive
 {
     public float Percentage = 0.15f;
 
-    public DoT(int TurnDuration) : base()
+    public PassiveDoT(int TurnDuration) : base()
     {
         IsTriggeredByTurnEnd = true;
         DurationParams = new(TurnDuration, null, null);

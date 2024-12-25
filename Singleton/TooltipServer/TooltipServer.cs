@@ -20,6 +20,7 @@ public partial class TooltipServer : Node
     public override void _Ready()
     {
         base._Ready();
+        //Don't put this in the NodeInterceptor singleton. Stuff breaks.
         GetTree().NodeAdded += OnNodeEntered;
 
     }

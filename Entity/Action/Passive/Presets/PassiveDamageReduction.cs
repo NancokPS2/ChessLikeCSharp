@@ -9,12 +9,12 @@ using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
 
-public class DamageReduction : Passive
+public class PassiveDamageReduction : Passive
 {
     public float Percentage = 0.15f;
     private IncomingDamageModifier? _command_interceptor_ref;
 
-    public DamageReduction(int TurnDuration) : base()
+    public PassiveDamageReduction(int TurnDuration) : base()
     {
         DurationParams = new(TurnDuration, null, null);
     }

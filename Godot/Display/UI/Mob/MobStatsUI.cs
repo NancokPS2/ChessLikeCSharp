@@ -32,10 +32,32 @@ public partial class MobStatsUI : Control, ISceneDependency
 			if (current == max){text += max.ToString();}
 			else {text += current.ToString() + "/" + max.ToString();}
 
-			Label label = new(){Text = text, SizeFlagsHorizontal = SizeFlags.ExpandFill};
+			StatsLabel label = new(mob.Stats, item){Text = text, SizeFlagsHorizontal = SizeFlags.ExpandFill};
 			NodeStatContainer.AddChild(label);
 
 		}
 
 	}
+
+    private partial class StatsLabel : Label, ITooltip
+    {
+		public MobStatSet StatSet;
+		public StatName Stat;
+
+		public StatsLabel(MobStatSet stat_set, StatName stat)
+		{
+			StatSet = stat_set;
+			Stat = stat;
+		}
+		string ITooltip.GetText()
+		{
+			string output = $"{Enum.GetName(Stat) ?? throw new Exception()}\n" 
+			+ $"{StatSet.BoostGetListOfStatChanges(Stat)}";
+			
+			return output;
+		}
+
+		Godot.Vector2 ITooltip.GetRectSize() => new(200,80);
+		
+    }
 }

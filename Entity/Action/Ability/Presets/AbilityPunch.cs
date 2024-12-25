@@ -47,7 +47,7 @@ public class AbilityPunch : Ability
     public override void Use(UsageParameters usage_params)
     {
         base.Use(usage_params);
-        float damage = usage_params.OwnerRef.Stats.GetValue(StatName.STRENGTH);
+        float damage = GetDamage(usage_params);
         MobCommandTakeDamage command = new MobCommandTakeDamage(damage);
         foreach (var item in usage_params.MobsTargeted)
         {
@@ -68,7 +68,11 @@ public class AbilityPunch : Ability
     public override string GetUseText(UsageParameters parameters)
     {
         string targets = (from mob in parameters.MobsTargeted select mob.DisplayedName).ToStringList(", ");
-        return $"{Owner.DisplayedName} attacked {targets}";
+        return $"{Owner.DisplayedName} attacked {targets} for {GetDamage(parameters)} damage";
+    }
 
+    public override string GetDescription()
+    {
+        return $"Attack a target with your weapon, dealing {Owner.Stats.GetValue(StatName.STRENGTH)} damage. (100% {StatName.STRENGTH})";
     }
 }

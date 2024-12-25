@@ -54,6 +54,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 	public void Update(Faction faction)
 	{
 		InventorySelected = faction.Inventory;
+		InventorySelected.ClearEmptySlots();
 		Update(InventorySelected.GetSlots());
 	}
 

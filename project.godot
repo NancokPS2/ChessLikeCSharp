@@ -17,12 +17,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
-NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 
 [dotnet]
 

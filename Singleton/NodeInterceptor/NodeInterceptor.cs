@@ -51,13 +51,13 @@ public partial class NodeInterceptor : Node
         }
     }
 
-    public void AddInterceptorFunction<TNodeType>(Action<Node> function) where TNodeType : notnull, Node
+    public static void AddInterceptorFunction<TNodeType>(Action<Node> function) where TNodeType : notnull, Node
     {
-        if (!InterceptorFunctionDict.ContainsKey(typeof(TNodeType)))
+        if (!Instance.InterceptorFunctionDict.ContainsKey(typeof(TNodeType)))
         {
-            InterceptorFunctionDict[typeof(TNodeType)] = new();
+            Instance.InterceptorFunctionDict[typeof(TNodeType)] = new();
         }
-        InterceptorFunctionDict[typeof(TNodeType)].Add(function);
+        Instance.InterceptorFunctionDict[typeof(TNodeType)].Add(function);
     }
     public void ClearInterceptorFunction<TNodeType>() where TNodeType : notnull, Node
     {
