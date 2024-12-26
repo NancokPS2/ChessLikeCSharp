@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0wvb2iaodbck"]
+
+[ext_resource type="Script" path="res://Test/test.gd" id="1_0rn7f"]
+[ext_resource type="Script" path="res://Test/test_resource.gd" id="2_wg8gl"]
+
+[sub_resource type="Resource" id="Resource_xxxkg"]
+script = ExtResource("2_wg8gl")
+character_name = ""
+text = ""
+
+[node name="Test" type="Node2D"]
+
+[node name="DialogueDisplay" type="Label" parent="." node_paths=PackedStringArray("audio_stream_player")]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_0rn7f")
+audio_stream_player = NodePath("../AudioStreamPlayer")
+dialogues = Array[ExtResource("2_wg8gl")]([SubResource("Resource_xxxkg"), null])
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

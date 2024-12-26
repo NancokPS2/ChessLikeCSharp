@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DialogueLine" load_steps=2 format=3 uid="uid://d3rge216tmwix"]
+
+[ext_resource type="Script" path="res://Test/test_resource.gd" id="1_kmt4n"]
+
+[resource]
+script = ExtResource("1_kmt4n")
+character_name = ""
+text = ""

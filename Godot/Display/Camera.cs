@@ -119,7 +119,11 @@ public partial class Camera : Camera3D
         //Relative
         RotateY(relative_input.X * (float)delta);
         Orthonormalize();
-        float x_capped = Mathf.Clamp(Rotation.X + (relative_input.Y * (float)delta), -Mathf.Pi*0.45f, Mathf.Pi*0.45f);
+        float x_capped = Mathf.Clamp(
+            Rotation.X + (relative_input.Y * (float)delta), 
+            -Mathf.Pi*0.45f, 
+            Mathf.Pi*0.45f
+        );
         Rotation = new(x_capped, Rotation.Y, Rotation.Z);
 
         //Directional
