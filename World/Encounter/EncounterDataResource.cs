@@ -11,4 +11,6 @@ public partial class EncounterDataResource : Resource
     public Collections.Dictionary<Vector3I, Collections.Array<EFaction>> FactionSpawns = new();
     [Export]
     public Collections.Dictionary<Vector3I, MobResource> PresetMobSpawns = new();
+    [Export]
+    public int RoundLimit = 0;
 }

@@ -14,11 +14,13 @@ namespace Godot;
 [GlobalClass]
 public partial class BattleController : Node, IDebugDisplay
 {
-
+	public static BattleController Instance;
 	private bool _ready_for_debug;
+
 	public override void _Ready()
 	{
 		base._Ready();
+		Instance = this;
 
 		Global.ConnectToWindow(GetWindow());
 		DebugDisplay.Instance.Add(this);
@@ -33,6 +35,8 @@ public partial class BattleController : Node, IDebugDisplay
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
+
+		Encounter.EncounterProcess();
 
 		FSMProcess(delta);
 

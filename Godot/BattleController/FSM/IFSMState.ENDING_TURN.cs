@@ -31,6 +31,12 @@ public class BattleControllerStateEndingTurn : BattleControllerState
         {
             return;
         }
+
+        if (BattleController.Encounter.IsEncounterOver())
+        {
+            User.FSMSetState(BattleController.State.END_COMBAT);
+        }
+
         User.FSMSetState(BattleController.State.TAKING_TURN);
     }
 }

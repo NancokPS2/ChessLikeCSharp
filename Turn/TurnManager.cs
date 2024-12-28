@@ -18,6 +18,11 @@ public partial class TurnManager
 
     ITurn? CurrentTaker;
 
+    ITurn? _round_ender;
+
+    public ITurn? RoundEnder { get => _round_ender; set => _round_ender = value; }
+
+
     public void Add(List<ITurn> participants)
     {
         foreach (var item in participants)
@@ -42,7 +47,20 @@ public partial class TurnManager
         return Participants;
     }
 
-    private ITurn GetWithLowestDelay()
+    public void UpdateRoundEnder()
+    {
+        //If the ender is null or is no longer in the Participant list. Set a new one.
+        if (RoundEnder is null || !Participants.Contains(RoundEnder))
+        {
+            RoundEnder = GetWithHighestDelay();
+        }
+    }
+
+    private ITurn GetWithLowestDelay() => GetByDelay(true);
+    
+    public ITurn GetWithHighestDelay() => GetByDelay(false);
+    
+    private ITurn GetByDelay(bool lowest)
     {
         if (Participants.Count == 0) {throw new Exception("No participants to iterate over.");}
 
@@ -50,14 +68,25 @@ public partial class TurnManager
 
         foreach (var item in Participants)
         {
-            if (item.DelayCurrent < output.DelayCurrent)
+            if (lowest)
             {
-                output = item;
+                if (item.DelayCurrent < output.DelayCurrent)
+                {
+                    output = item;
+                }
+                
+            } else
+            {
+                if (item.DelayCurrent > output.DelayCurrent)
+                {
+                    output = item;
+                }
             }
         }
 
         return output;
     }
+
     public ITurn? GetCurrentTurnTaker()
     {
         return CurrentTaker is not null ? CurrentTaker : null; //throw new Exception("There is not taker at this time, calm down.");
@@ -80,7 +109,12 @@ public partial class TurnManager
         {
             throw new Exception("Unexpected result.");
         }
-        //TurnStarted?.Invoke(CurrentTaker);
+        if (CurrentTaker is Mob mob)
+        {
+            EventBus.MobTurnStarted?.Invoke(mob);
+        }
+
+        UpdateRoundEnder();
     }
 
     public void EndTurn()
@@ -90,7 +124,17 @@ public partial class TurnManager
         //Reset the delay, the CurrentTaker should end up with a high delay.
         ResetDelay(CurrentTaker);
 
-        //TurnEnded?.Invoke(CurrentTaker);
+        if (CurrentTaker is Mob mob)
+        {
+            EventBus.MobTurnEnded?.Invoke(mob);
+        }
+
+        //If the round ender just finished their turn, count that as the round ending.
+        if (CurrentTaker == RoundEnder)
+        {
+            RoundEnder = null;
+            EventBus.RoundEnded?.Invoke();
+        }
     }
 
     private void ResetDelay(ITurn turn)

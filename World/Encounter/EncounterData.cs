@@ -1,5 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.World;
+using Godot;
 
 namespace ChessLike.World.Encounter;
 
@@ -8,6 +9,30 @@ public partial class EncounterData
     public Grid Grid = new();
     public Dictionary<Vector3i, List<EFaction>> FactionSpawns = new();
     public Dictionary<Vector3i, Mob> PresetMobSpawns = new();
+    public int RoundLimit = -1;
+
+    int RoundCount;
+
+    public EncounterData()
+    {
+        EventBus.RoundEnded += () => RoundCount ++;
+    }
+
+    public virtual void EncounterProcess()
+    {
+        
+    }
+
+    public virtual bool IsEncounterOver()
+    {
+        bool no_hostiles_remaining = Global.ManagerMob.GetInCombat()
+            .FilterFromHostilesFaction(EFaction.PLAYER)
+            .Count == 0;
+
+        bool turn_limit_reached = RoundLimit > 0 && RoundCount >= RoundLimit; 
+
+        return no_hostiles_remaining || turn_limit_reached;
+    }
 
     public static EncounterData GetDefault()
     {

@@ -17,6 +17,7 @@ public partial class BattleController
         TARGETING,
         ACTION_RUNNING,
         PREPARATION,
+        END_COMBAT,
     }
 
     public List<BattleControllerState> StateList { get; set; } = new()
@@ -28,6 +29,7 @@ public partial class BattleController
         new BattleControllerStateAwaitingAction(State.AWAITING_ACTION),
         new BattleControllerStateActionRunning(State.ACTION_RUNNING),
         new BattleControllerStatePreparation(State.PREPARATION),
+        new BattleControllerStateEndCombat(State.END_COMBAT),
     };
 
     private BattleControllerState _queued_state;

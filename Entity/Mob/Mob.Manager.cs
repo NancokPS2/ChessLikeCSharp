@@ -37,6 +37,22 @@ public partial class Mob
 }
 public static class MobListExtension
 {
+    public static List<Mob> FilterFromHostilesFaction(this List<Mob> @this, EFaction main_faction_key)
+    {
+        List<Mob> output = new();
+        Faction main_faction = Global.ManagerFaction.GetFromEnum(main_faction_key) ?? throw new Exception("No faction exists with this enum");
+
+        foreach (var mob in @this)
+        {
+            Faction other_faction = Global.ManagerFaction.GetFromEnum(mob.Faction);
+            if (main_faction.IsEnemy(other_faction.Identifier))
+            {
+                output.Add(mob);
+            } 
+        }
+
+        return output;
+    }
     public static List<Mob> FilterFromFaction(this List<Mob> @this, EFaction faction)
     {
         return @this.Where(x => x.Faction == faction).ToList();

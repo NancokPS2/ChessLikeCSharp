@@ -21,6 +21,9 @@ public partial class EventBus : Node
         Instance = this;
     }
 
+    //Encounter
+    public static Event? RoundEnded;
+
     //MOBS//
     public delegate void MobEvent(Mob mob);
     public static MobEvent? MobTurnStarted;

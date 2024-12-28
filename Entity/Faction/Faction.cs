@@ -28,7 +28,7 @@ public partial class Faction : ISerializable
 
     public bool IsAlly(EFaction other) => GetRelation(other) > 60;
     public bool IsEnemy(EFaction other) => GetRelation(other) <= 0;
-    public bool IsNeutral(EFaction other) => !(IsAlly(other) || IsEnemy(other));
+    public bool IsNeutral(EFaction other) => !IsAlly(other) && !IsEnemy(other);
 
     public Faction(EFaction identifer = EFaction.NEUTRAL)
     {
