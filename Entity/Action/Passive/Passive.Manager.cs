@@ -22,15 +22,6 @@ public partial class Passive
             return output;
         }
 
-        public override string GetPrototypeFolder()
-        {
-            return Path.Combine(
-                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "passive"
-            );
-
-        }
-
         public Passive GetFromEnum(EPassive action)
         {
             return FromResource(

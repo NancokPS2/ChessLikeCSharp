@@ -9,17 +9,22 @@ using Godot;
 
 /// <summary>
 /// This should be used ONLY for visual effects and other things detached from the direct logic loop.
+/// Hosts nearly all delegates.
 /// </summary>
 public partial class EventBus : Node
 {
     public static EventBus Instance;
     public delegate void Event();
+    public delegate void StringEvent(string text);
 
     public override void _Ready()
     {
         base._Ready();
         Instance = this;
     }
+
+    //Save profile
+    public static StringEvent? ProfileNameChanged;
 
     //Encounter
     public static Event? RoundEnded;

@@ -20,15 +20,6 @@ public partial class Faction
             return output;
         }
 
-        public override string GetPrototypeFolder()
-        {
-            return Path.Combine(
-                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "faction"
-            );
-
-        }
-
         public Faction GetFromEnum(EFaction faction)
         {
             Faction output = GetAllPooled().First(x => x.Identifier == faction);

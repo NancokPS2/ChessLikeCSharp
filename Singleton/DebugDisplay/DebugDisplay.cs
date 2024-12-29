@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
+/// <summary>
+/// Used to show togglable debug information.
+/// </summary>
 public partial class DebugDisplay : Node2D
 {
     public static DebugDisplay Instance;

@@ -22,15 +22,6 @@ public partial class Ability
             return output;
         }
 
-        public override string GetPrototypeFolder()
-        {
-            return Path.Combine(
-                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "action"
-            );
-
-        }
-
         public Ability GetFromEnum(EAbility action)
         {
             return FromResource(

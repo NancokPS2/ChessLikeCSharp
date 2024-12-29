@@ -16,14 +16,6 @@ public partial class Item
             return output;
         }
 
-        public override string GetPrototypeFolder()
-        {
-            return Path.Combine(
-                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "item"
-            );
-
-        }
         public Item GetFromEnum(EItem identifier)
         {
             ItemResource res = GetAllResources().First<ItemResource>(x => x.Identifier == identifier);

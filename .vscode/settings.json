@@ -5,5 +5,7 @@
         "configurations": [],
         "compounds": []
     },
-    "godotTools.editorPath.godot4": "K:\\Programs\\Godot\\Godot_v4.3-rc1_mono_win64.exe\"
+    "dotnetAcquisitionExtension.enablePreviewFeatures": true,
+    "godotTools.editorPath.godot4": "K:\\Programs\\Godot\\Godot_v4.3-rc1_mono_win64.exe"
+    
 }

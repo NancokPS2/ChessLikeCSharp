@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
+SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"

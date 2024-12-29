@@ -17,6 +17,7 @@ public interface ISerializable
 
 }
 
+[Obsolete]
 public static class ISerializableExtension
 {
     public static void SaveAsXml(this ISerializable @this) 

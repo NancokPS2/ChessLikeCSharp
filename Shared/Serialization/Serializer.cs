@@ -16,6 +16,7 @@ using System.Diagnostics;
 
 namespace ChessLike.Shared.Serialization;
 
+[Obsolete("Using Godot.Resource now")]
 public static class Serializer
 {
 

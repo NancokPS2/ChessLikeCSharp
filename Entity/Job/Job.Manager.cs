@@ -24,15 +24,6 @@ public partial class Job
             return output;
         }
 
-        public override string GetPrototypeFolder()
-        {
-            return Path.Combine(
-                Global.Directory.GetContentDir(EDirectory.USER_CONTENT),
-                "job"
-            );
-
-        }
-
         public Job GetFromEnum(EJob job)
         {
             List<JobResource> list = GetAllResources();
