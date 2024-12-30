@@ -24,6 +24,7 @@ Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
+SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
 
 [dotnet]
 

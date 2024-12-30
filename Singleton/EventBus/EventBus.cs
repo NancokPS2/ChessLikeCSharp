@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Command;
 using Godot;
+using Godot.WorldMap;
 
 /// <summary>
 /// This should be used ONLY for visual effects and other things detached from the direct logic loop.
@@ -22,6 +23,10 @@ public partial class EventBus : Node
         base._Ready();
         Instance = this;
     }
+
+    //World map
+    public delegate void MapMarkerEvent(MapMarker3D marker);
+    public static MapMarkerEvent? MarkerSelected;
 
     //Save profile
     public static StringEvent? ProfileNameChanged;
