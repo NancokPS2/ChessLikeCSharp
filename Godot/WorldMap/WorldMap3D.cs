@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 
 namespace Godot.WorldMap;
 
-public partial class WorldMap3D : Node
+public partial class WorldMap3D : Node, ISelectableCollection<MapMarker3D>
 {
     private Dictionary<MapMarker3D, (Node3D, MeshInstance3D, Area3D, Label3D)> MarkerNodes = new();
     private List<MapMarker3D> markers = new();
+    private int maxItemsSelected = 1;
 
     public List<MapMarker3D> Markers { get => markers; set => MarkersSet(value); }
+    public int MaxItemsSelected { get => maxItemsSelected; set => maxItemsSelected = value; }
 
     public void MarkersSet(ICollection<MapMarker3D> collection)
     {
@@ -59,24 +61,22 @@ public partial class WorldMap3D : Node
             EventBus.MarkerSelected?.Invoke(marker);
         } else if (input_event is InputEventMouseMotion motion)
         {
-            HighlightMarker(marker);
+            marker.Selected = true;
         }
 
     }
 
-    public void HighlightMarker(MapMarker3D marker) => HighlightMarker(new List<MapMarker3D>(){marker});
-    public void HighlightMarker(List<MapMarker3D> markers)
+    public void UpdateHighlights()
     {
-        foreach (var item in MarkerNodes)
+        var list = GetSelectables();
+        foreach (var item in list)
         {
-            Label3D label = item.Value.Item4;
-            if (markers.Contains(item.Key))
-            {
-                label.Modulate = Colors.Green;
-            }else
-            {
-                label.Modulate = Colors.White;
-            }
+            Label3D label = MarkerNodes[item].Item4;
+            label.Modulate = item.Selected ? label.Modulate = Colors.Green : label.Modulate = Colors.White;
         }
     }
+
+    public List<MapMarker3D> GetSelectables() => Markers;
+
+    public List<MapMarker3D> GetSelected() => Markers.Where(x => x.Selected).ToList();
 }
