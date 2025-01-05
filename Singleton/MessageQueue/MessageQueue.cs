@@ -7,9 +7,10 @@ using ChessLike.Entity.Command;
 using ChessLike.Extension;
 using Godot;
 
-public partial class MessageQueue : CanvasLayer
+public partial class MessageQueue: Node
 {
-    static public MessageQueue Instance;
+    public static MessageQueue Instance;
+    private CanvasLayer Canvas;
     private static VBoxContainer NodeContainer = new()
     {
         FocusMode = Control.FocusModeEnum.None,
@@ -45,10 +46,11 @@ public partial class MessageQueue : CanvasLayer
     {
         base._Ready();
         Instance = this;
-        AddChild(NodeContainer);
+        Canvas = UI.GetLayer(UI.ELayer.MSG_QUEUE);
+
+        Canvas.AddChild(NodeContainer);
         NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
-        Layer = Global.Readonly.LAYER_MSG_QUEUE;
 
         EventBus.MobCommandUsed += AddMessageFromCommand;
     }
@@ -67,13 +69,14 @@ public partial class MessageQueue : CanvasLayer
         NodeContainer.AnchorBottom = bottom;
     }
 
-    public static void AddMessage(string text, double duration = 5)
+    public static TemporaryLabel AddMessage(string text, double duration = 5)
     {
         TemporaryLabel new_label = new();
         new_label.Text = text;
         new_label.Duration = duration;
         NodeContainer.AddChild(new_label);
         Queue.Add(new_label);
+        return new_label;
     }
 
     public partial class TemporaryLabel : Label

@@ -26,7 +26,7 @@ public class BattleControllerStatePreparation : BattleControllerState
     {
         _unit_list = new PartyMobListUI().GetInstantiatedScene<PartyMobListUI>();
         _unit_list.Update(FactionsEligible);
-        BattleController.CompCanvas.AddChild(_unit_list);
+        UI.GetLayer(UI.ELayer.BASE_LAYER).AddChild(_unit_list);
         _unit_list.AnchorBottom = 0.4f;
     }
 

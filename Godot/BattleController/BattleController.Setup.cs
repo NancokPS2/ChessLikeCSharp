@@ -50,18 +50,14 @@ public partial class BattleController
         EventBus.ActionSelected += (act) => InputActionSelected = act;
         EventBus.TurnEndRequested += () => InputEndTurnPressed++;
 
-        //Canvas for displaying arbitrary UI elements.
-        AddChild(CompCanvas);
-        CompCanvas.Layer = Global.Readonly.LAYER_CANVAS_COMP;
-
         //ActionRunner connections
         EventBus.MobTurnEnded += CompActionRunner.OnTurnEnded;
         GetTree().ProcessFrame += CompActionRunner.Process;
 
 
 
-        DebugDisplay.Instance.Add(CompTurnManager);
-        DebugDisplay.Instance.Add(CompActionRunner);
+        DebugDisplay.Add(CompTurnManager);
+        DebugDisplay.Add(CompActionRunner);
     }
 
     public void SetupParticipant(Mob mob, Vector3i where, bool add_to_combat)

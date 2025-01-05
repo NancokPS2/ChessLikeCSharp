@@ -21,9 +21,7 @@ public partial class BattleController : Node, IDebugDisplay
 	{
 		base._Ready();
 		Instance = this;
-
-		Global.ConnectToWindow(GetWindow());
-		DebugDisplay.Instance.Add(this);
+		DebugDisplay.Add(this);
 
 		FSMSetup();
 		SetupEncounter(EncounterData.GetDefault());

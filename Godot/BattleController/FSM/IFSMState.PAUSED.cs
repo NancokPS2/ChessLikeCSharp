@@ -25,7 +25,7 @@ public class BattleControllerStatePaused : BattleControllerState
         BattleController.CompCamera.SetControl(false);
 
         _menu_reference = new Pause().GetInstantiatedScene<Pause>();
-        BattleController.CompCanvas.AddChild(_menu_reference);
+        UI.GetLayer(UI.ELayer.PAUSE_MENU).AddChild(_menu_reference);
 
         if (User.StatePrevious is null)
         {

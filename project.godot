@@ -18,13 +18,15 @@ config/icon="res://icon.svg"
 [autoload]
 
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
-SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
+SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
+UI="*res://Singleton/UI/UI.cs"
+SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
-SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
+Command="*res://Singleton/Command/Command.cs"
 
 [dotnet]
 
@@ -145,6 +147,11 @@ accept={
 debug_show_res_list={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194435,"key_label":0,"unicode":45,"location":0,"echo":false,"script":null)
+]
+}
+command_focus={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":true,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 

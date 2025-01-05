@@ -36,13 +36,13 @@ public partial class DebugDisplay : Node2D
         TopLevel = true;
     }
 
-    public void Add(IDebugDisplay source)
+    public static void Add(IDebugDisplay source)
     {
-        Sources.Add(source);
-        UpdateMenu();
-        if (SourceSelected is null)
+        Instance.Sources.Add(source);
+        Instance.UpdateMenu();
+        if (Instance.SourceSelected is null)
         {
-            OnIdPressed(0);
+            Instance.OnIdPressed(0);
         }
     }
 

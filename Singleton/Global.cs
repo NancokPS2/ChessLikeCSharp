@@ -39,7 +39,7 @@ public static partial class Global
         RootNode.WindowInput += GInput.ParseMouseInputAsActionEvent;
         if (RootNode == null){throw new Exception("No window found.");}
 
-        DebugDisplay.Instance.Add(debug);
+        DebugDisplay.Add(debug);
 
     }
 

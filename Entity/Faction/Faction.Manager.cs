@@ -22,7 +22,7 @@ public partial class Faction
 
         public Faction GetFromEnum(EFaction faction)
         {
-            Faction output = GetAllPooled().First(x => x.Identifier == faction);
+            Faction? output = GetAllPooled().FirstOrDefault(x => x.Identifier == faction);
 
             if (output is null)
             {

@@ -1,9 +1,11 @@
 using ChessLike.Entity.Action;
 using ChessLike.Entity.Command;
+using ChessLike.Extension;
 using ChessLike.Shared;
 using ChessLike.Shared.Storage;
 using ChessLike.Turn;
 using ExtendedXmlSerializer.ExtensionModel.Content;
+using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
 
 namespace ChessLike.Entity;
@@ -89,4 +91,14 @@ public partial class Mob
         return output;
     }
 
+    public override string ToString()
+    {
+        string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";
+
+        output += $"---\nStats: {Stats}";
+        output += $"---\nJobs: {Jobs.ToStringList()}";
+        output += $"---\nActions: {Actions.ToStringList()}";
+        output += $"---\nPassives: {Passives.ToStringList()}";
+        return output;
+    }
 }

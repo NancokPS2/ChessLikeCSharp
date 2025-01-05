@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Create preset identifiers for important characters. So they can be saved with Manager.ProfileSetContent()",
+                    "id": "do4cnkft0urs2p7icimzum3b"
+                },
+                {
                     "text": "Dynamically connected mesh for displaying areas in a more pretty way.",
                     "id": "ldp35p0z4zsjmbm86p1g7p6j"
                 },
@@ -121,5 +125,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1735494420437
+    "timestamp": 1735503864315
 }

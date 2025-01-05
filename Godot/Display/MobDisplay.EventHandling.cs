@@ -31,6 +31,7 @@ public partial class MobMeshDisplay
             color = new(0,1,0);
         }
 
+        //TODO: I don't think this does anything at this point.
         GetTree().Root.AddChild(
             new PopText(){
                 Text = amount.ToString(), 
