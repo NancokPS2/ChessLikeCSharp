@@ -7,7 +7,7 @@ Units can have the following properties:
 - [[Passive]]
 - [[Combat Job]]
 - [[Faction]]
-- [[Race]]
+- [[Race/Race]]
 
 ## Construction
 **TODO:** When they exist, list sources of creation.
