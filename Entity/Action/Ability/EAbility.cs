@@ -6,5 +6,6 @@ public enum EAbility
     PUNCH,
     HEAL,
     MOVE,
+    WEAPON_ATTACK,
 
 }

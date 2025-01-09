@@ -11,5 +11,6 @@ public class Trinket : Item
     {
         Name = "Trinket";
         Value = 0;
+        Flags = new(){EItemFlag.ACCESSORY};
     }
 }

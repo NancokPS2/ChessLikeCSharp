@@ -10,15 +10,8 @@ namespace ChessLike.Entity.Action.Preset;
 
 public class AbilityPunch : Ability
 {
-    public enum AbilityVariant {
-        WEAPON,
-        UNARMED,
-        }
-
-    public AbilityVariant VariantCurrent;
-    public AbilityPunch(AbilityVariant variant = AbilityVariant.WEAPON) : base()
+    public AbilityPunch() : base()
     {
-        VariantCurrent = variant;
 
         ChainName("Attack");
         ChainIdentifier(EAbility.PUNCH);
@@ -35,13 +28,6 @@ public class AbilityPunch : Ability
         {
             
         };
-
-        switch(variant)
-        {
-            case AbilityVariant.UNARMED:
-                ChainFlag(EActionFlag.UNARMED);
-                break;
-        }
     }
 
     public override void Use(UsageParameters usage_params)
@@ -56,14 +42,8 @@ public class AbilityPunch : Ability
     }
 
 
-    public float GetDamage(UsageParameters usage) => VariantCurrent switch
-    {
-        AbilityVariant.WEAPON => 
-            usage.OwnerRef.Stats.GetValue(StatName.STRENGTH) / 2,
-        AbilityVariant.UNARMED =>
-            usage.OwnerRef.Stats.GetValue(StatName.STRENGTH) / 2,
-        _ => 0,
-    };
+    public float GetDamage(UsageParameters usage)
+        => usage.OwnerRef.Stats.GetValue(StatName.STRENGTH) / 2;
 
     public override string GetUseText(UsageParameters parameters)
     {
@@ -73,6 +53,6 @@ public class AbilityPunch : Ability
 
     public override string GetDescription()
     {
-        return $"Attack a target with your weapon, dealing {Owner.Stats.GetValue(StatName.STRENGTH)} damage. (100% {StatName.STRENGTH})";
+        return $"Attack a target with your weapon, dealing {Owner.Stats.GetValue(StatName.STRENGTH) / 2} damage. (50% {StatName.STRENGTH})";
     }
 }
