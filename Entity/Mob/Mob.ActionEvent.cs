@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.Action.Preset;
+using ChessLike.Shared.Storage;
 
 namespace ChessLike.Entity;
 
@@ -12,6 +13,22 @@ public partial class Mob
 
 //TODO
     private Ability _movement = new();
+
+    private void UpdateActions()
+    {
+        ClearAbility();
+
+        foreach (IActionProvider job in Jobs)
+        {
+            AddAbility(job.GetAbilities());
+        }
+
+        foreach (IActionProvider item in MobInventory.GetItems())
+        {
+            AddAbility(item.GetAbilities());
+        }
+    }
+
     public void SetMovementMode(EMovementMode mode)
     {
         Actions.Remove(_movement);
@@ -20,6 +37,7 @@ public partial class Mob
         _movement_mode = mode;
     }
 
+    public void AddAbility(List<Ability> abilities) => abilities.ForEach(x => AddAbility(x));
     public void AddAbility(Ability action)
     {
         Actions.Add(action);
@@ -46,6 +64,7 @@ public partial class Mob
         }
         Actions.RemoveAll(x => x.Identifier == action_enum); 
     }
+
 
     public List<Ability> GetAbilities()
     {

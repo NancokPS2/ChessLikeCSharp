@@ -55,8 +55,6 @@ public partial class Mob
         //Reset job modifiers
         Stats.BoostRemove(Job.BOOST_SOURCE);
 
-        //Reset abilities
-        ClearAbility();
         
         MobStatSet.StatBoost total_boost = new(Job.BOOST_SOURCE); 
         //TODO: Jobs should not be able to be null in the first place.
@@ -65,15 +63,11 @@ public partial class Mob
             //Average the stats from the job's.
             Stats.BoostAdd(job, false);
 
-            //Add the actions.
-            foreach (var item in job.Abilities)
-            {
-                AddAbility(item);
-            }
-
             //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
             SetMovementMode(job.MovementMode);
         }
+        
+        UpdateActions();
         Stats.SetToMax();
     }
 

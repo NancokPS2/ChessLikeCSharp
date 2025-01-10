@@ -18,6 +18,7 @@ public partial class Mob
         }
         
         Stats.BoostAdd(MobInventory, true);
+        UpdateActions();
     }
 
     public void EquipmentRemove(Item equip)

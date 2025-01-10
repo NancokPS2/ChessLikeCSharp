@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using ChessLike.Shared.Storage;
 using ChessLike.World;
 using Godot;
 
@@ -60,7 +61,8 @@ public partial class EncounterData
 
         Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainJob(new List<Job>(){Job.CreatePrototype(EJob.WIZARD)})
-            .ChainName("Neutral wizard");
+            .ChainName("Neutral wizard")
+            .ChainEquipment(new WeaponSpear());
 
         encounter.PresetMobSpawns = new()
         {

@@ -19,7 +19,7 @@ public class AbilityWeaponAttack : Ability
         Variant = variant;
         WeaponDamage = weapon_damage;
 
-        ChainName("Attack");
+        ChainName("Weapon Attack");
         ChainIdentifier(EAbility.WEAPON_ATTACK);
         ChainFlag(EActionFlag.DEALS_DAMAGE);
         ChainFlag(EActionFlag.HOSTILE);

@@ -141,10 +141,15 @@ public partial class Inventory
     #region Item
     public Item? GetItem(int slot)
     {
-
         return Slots[slot].Item;
     }
 
+    public List<Item> GetItems() 
+        => (
+            from slot 
+            in GetSlots().Where(x => x.Item != null) 
+            select slot.Item
+            ).ToList();
 
     public Error AddItem(Item item_to_add, Slot slot)
     {

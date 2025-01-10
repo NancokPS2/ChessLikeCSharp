@@ -34,7 +34,7 @@ public Job ChainDefaultStats()
         StatMultiplicativeBoostDict.Add(StatName.AGILITY, 1.0f);
         StatMultiplicativeBoostDict.Add(StatName.INTELLIGENCE, 1.0f);
         StatMultiplicativeBoostDict.Add(StatName.DEFENSE, 1.0f);
-        Abilities.Add(new AbilityWeaponAttack());
+        Abilities.Add(new AbilityPunch());
         return this;
     }
 

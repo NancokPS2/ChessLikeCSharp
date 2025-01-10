@@ -76,20 +76,16 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "Improve PREPARATION state.",
+                    "id": "vq4jq6f1pweqsxdlxayu5y4s"
+                },
+                {
                     "text": "Command rework:\n- Ability that applies an interceptor for passive effects.\n- Ability that ends the turn.\n- Ability for moving.\n- Add the moving, end turn, and attack abilities as the default for all mobs.",
                     "id": "qb09zdbj4dady4tx2hs98j5e"
                 },
                 {
                     "text": "UI for editing Mobs (Party UI)",
                     "id": "w885wk1rv5ct4msnw7kxs4vl"
-                },
-                {
-                    "text": "Serialization to resources.",
-                    "id": "b1yuc2re8bl9bo1y6xyo00f0"
-                },
-                {
-                    "text": "StatBoosts usage. Add equipment boosts to the stats when equipping.",
-                    "id": "hemvui6jdj1zid1il3vnp5o2"
                 },
                 {
                     "text": "TARGETING state mostly complete. Properly implement returning to AWAITING_ACTION and prompting to end the turn in said state if there's nothing else to do.",
@@ -125,5 +121,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1735503864315
+    "timestamp": 1736466445131
 }
