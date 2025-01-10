@@ -76,7 +76,7 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "Improve PREPARATION state.",
+                    "text": "Improve PREPARATION state and PartyMobListUI scene.",
                     "id": "vq4jq6f1pweqsxdlxayu5y4s"
                 },
                 {
@@ -121,5 +121,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1736466445131
+    "timestamp": 1736523182586
 }
