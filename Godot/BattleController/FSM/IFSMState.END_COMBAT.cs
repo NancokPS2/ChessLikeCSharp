@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Turn;
+using ChessLike.World.Encounter;
 using Godot.Display;
 using Action = ChessLike.Entity.Action;
 
@@ -18,6 +19,7 @@ public class BattleControllerStateEndCombat : BattleControllerState
     public override void StateOnEnter()
     {
         MessageQueue.AddMessage("VICTORY");
+        BattleController.Encounter.Finish();
     }
 
     public override void StateOnExit()

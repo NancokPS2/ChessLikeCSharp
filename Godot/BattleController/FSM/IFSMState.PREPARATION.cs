@@ -9,7 +9,7 @@ namespace Godot;
 
 public class BattleControllerStatePreparation : BattleControllerState
 {
-    private PartyMobListUI _unit_list;
+    private PartyMobListUI? _unit_list;
     private Vector3i _last_hovered_pos;
     private List<EFaction> FactionsEligible = new(){EFaction.PLAYER};
     private StandardMaterial3D _ghost_material = new(){
@@ -41,7 +41,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         User.UpdateCameraPosition(delta);
         User.UpdateHoveredMobUI();
 
-        Mob? selected_mob = _unit_list.MobSelected;
+        Mob? selected_mob = _unit_list?.MobSelected ?? null;
         Vector3i hovered_pos = User.PositionHovered;
 
         //If attempted to PAUSE, exit PREPARATION.
@@ -51,21 +51,14 @@ public class BattleControllerStatePreparation : BattleControllerState
             User.FSMSetState(BattleController.State.TAKING_TURN);
         }
 
-        //Set this position as the last valid one.
-        _last_hovered_pos = hovered_pos;
-
-        //Do nothing if the chosen space is occupied.
-        if (Global.ManagerMob.GetInPosition(hovered_pos).Count != 0){return;}
-
         //If accepted.
         if (Global.GInput.IsButtonPressed(Global.GInput.Button.ACCEPT))
         {
-            //No mob selected, return.
+            //No mob selected, return.rr
             if (selected_mob is null){return;}
-            //Invalid position, return.
-            if (!hovered_pos.IsValid()) {return;}
-            //Not a spawn point, return.
-            if (!BattleController.CompGrid.IsFlagInPosition(hovered_pos, ChessLike.World.ECellFlag.PLAYER_SPAWNPOINT))
+
+            //Must be a valid and unoccupied position.
+            if (!IsValidSpawnPoint(hovered_pos) && !IsPointOccupied(hovered_pos))
             {
                 return;
             }
@@ -77,8 +70,6 @@ public class BattleControllerStatePreparation : BattleControllerState
         //If cancelled, try to remove the mob from the chosen location.
         else if (Global.GInput.IsButtonPressed(Global.GInput.Button.CANCEL))
         {
-            //Invalid position, return.
-            if (!hovered_pos.IsValid()) {return;}
 
             //Get all mobs of eligible factions at the given location.
             List<Mob> mobs_to_remove = 
@@ -92,13 +83,18 @@ public class BattleControllerStatePreparation : BattleControllerState
             }
         }
 
+        //Set this position as the last valid one.
+        if (IsValidSpawnPoint(hovered_pos) && !IsPointOccupied(hovered_pos))
+        {
+            _last_hovered_pos = hovered_pos;
+        }
     }
 
     //TODO: Unimplemented.
     public void UpdateGhost(Vector3i position, Mob mob)
     {
         bool same_position = _last_hovered_pos == position;
-        bool pos_invalid = !position.IsValid();
+        bool pos_invalid = !IsValidSpawnPoint(position);
         if (same_position || pos_invalid) {return;}
 
         GridNode.Layer layer = GridNode.Layer.MOB_GHOST;
@@ -113,6 +109,18 @@ public class BattleControllerStatePreparation : BattleControllerState
         );
         BattleController.CompDisplayGrid.MeshGetInstance(position, layer)?.SetMaterialOverlay(_ghost_material);
     }
+
+    public bool IsValidSpawnPoint(Vector3i position)
+    {
+        bool is_valid_position = position.IsValid();
+        bool is_spawn_point = BattleController.CompGrid.IsFlagInPosition(
+            position, ChessLike.World.ECellFlag.PLAYER_SPAWNPOINT
+            );
+
+        return is_valid_position && is_spawn_point;
+    }
+
+    public bool IsPointOccupied(Vector3i position) => Global.ManagerMob.GetInPosition(position).Count != 0;
 
     public void MobPlace(Mob mob, Vector3i where)
     {

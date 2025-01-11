@@ -33,6 +33,7 @@ public partial class BattleController
     public static EncounterData Encounter;
     public Vector3i PositionHovered;
     public Vector3i PositionSelected = Vector3i.INVALID; //This should always return to INVALID when not in use.
+    public int RoundsPassed;
 
     //Current turn
     public Ability.UsageParameters? TurnUsageParameters;

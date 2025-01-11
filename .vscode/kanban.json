@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "EncounterData should have variants for different win conditions.",
+                    "id": "uw3ay7ksqqgw4zk9e1z15nef"
+                },
+                {
                     "text": "Create preset identifiers for important characters. So they can be saved with Manager.ProfileSetContent()",
                     "id": "do4cnkft0urs2p7icimzum3b"
                 },
@@ -121,5 +125,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1736523182586
+    "timestamp": 1736604665613
 }

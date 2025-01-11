@@ -47,7 +47,7 @@ public partial class TurnManager
         return Participants;
     }
 
-    public void UpdateRoundEnder()
+    private void UpdateRoundEnder()
     {
         //If the ender is null or is no longer in the Participant list. Set a new one.
         if (RoundEnder is null || !Participants.Contains(RoundEnder))

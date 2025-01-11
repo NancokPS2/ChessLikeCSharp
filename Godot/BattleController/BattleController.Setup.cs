@@ -54,6 +54,9 @@ public partial class BattleController
         EventBus.MobTurnEnded += CompActionRunner.OnTurnEnded;
         GetTree().ProcessFrame += CompActionRunner.Process;
 
+        //Round counter
+        EventBus.RoundEnded += () => RoundsPassed ++;
+
 
 
         DebugDisplay.Add(CompTurnManager);

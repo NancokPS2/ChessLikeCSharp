@@ -43,11 +43,12 @@ public class BattleControllerStatePaused : BattleControllerState
     {
         bool pause_pressed = Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE); 
         bool menu_null = _menu_reference is null;
+        bool menu_parent_null = _menu_reference?.GetParent() is null;
 
         if (
             pause_pressed
             || menu_null
-            || _menu_reference.GetParent() is null
+            || menu_parent_null
             )
         {
             ReturnToPreviousState();

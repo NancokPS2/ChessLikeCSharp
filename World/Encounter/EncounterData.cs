@@ -24,7 +24,7 @@ public partial class EncounterData
         
     }
 
-    public virtual bool IsEncounterOver()
+    public virtual bool IsFinished()
     {
         bool no_hostiles_remaining = Global.ManagerMob.GetInCombat()
             .FilterFromHostilesFaction(EFaction.PLAYER)
@@ -87,14 +87,9 @@ public partial class EncounterData
         return encounter;
     }
 
-    public struct SpawnSlot
+    public virtual void Finish()
     {
-        public Vector3i Location;
-        public EFaction FactionAllowed;
-        public SpawnSlot(Vector3i location, EFaction faction)
-        {
-            Location = location;
-            FactionAllowed = faction;
-        }   
+
     }
+
 }
