@@ -3,7 +3,7 @@ using ChessLike.Extension;
 using Godot;
 using System;
 
-public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>, ISceneDependency
+public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipButton, Mob>, ISceneDependency
 {
 	public Mob? MobSelected;
 
@@ -44,14 +44,15 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>, ISceneDepende
 		Update(list);
 	}
 
-	protected override void OnButtonCreated(Button button, Mob param)
+	protected override void OnButtonCreated(MobTooltipButton button, Mob param)
 	{
+		button.MobReference = param;
 		button.Text = param.ToString();
 		button.Material = (ShaderMaterial)Global.Readonly.SHADER_BORDER_CANVAS.Duplicate();
 		(button.Material as ShaderMaterial)?.SetShaderParameter("border_color", Colors.Transparent);
 	}
 
-	protected override void OnButtonPressed(Button button, Mob param)
+	protected override void OnButtonPressed(MobTooltipButton button, Mob param)
 	{
 		MobSelected = param;     
 		foreach (var item in ButtonInstances)
@@ -69,7 +70,7 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>, ISceneDepende
 		base.OnButtonPressed(button, param);
 	}
 
-	protected override void OnButtonHovered(Button button, Mob param, bool hovered)
+	protected override void OnButtonHovered(MobTooltipButton button, Mob param, bool hovered)
 	{
 		base.OnButtonHovered(button, param, hovered);
 		//Do not affect the modulate if this is the selected button.
@@ -83,6 +84,25 @@ public partial class PartyMobListUI : BaseButtonMenu<Button, Mob>, ISceneDepende
 		{
 			button.Modulate = Godot.Colors.White;
 		}
+	}
+
+	public partial class MobTooltipButton : Button, ITooltip
+	{
+		public Mob? MobReference;
+
+        public MobTooltipButton()
+        {
+			MobReference = null;
+        }
+
+        public MobTooltipButton(Mob mobReference)
+        {
+            MobReference = mobReference;
+        }
+
+        string ITooltip.GetText() => MobReference?.ToStringStats() ?? "UNDEFINED";
+
+		Godot.Vector2 ITooltip.GetRectSize() => new (240,100);
 	}
 
 }

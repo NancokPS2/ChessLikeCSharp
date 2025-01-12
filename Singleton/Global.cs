@@ -16,7 +16,6 @@ using Godot;
 public static partial class Global
 {
     private static Window RootNode = new Node().GetWindow();
-    public static Node2D DrawNode = new(){TopLevel = true, ZIndex = Readonly.LAYER_GLOBAL_DRAW};
     private static Debug debug = new();
     public static void ConnectToWindow(Window window)
     {
@@ -26,15 +25,6 @@ public static partial class Global
             return;
         }
         RootNode = window;
-        
-        if (!DrawNode.IsInsideTree())
-        {
-            CanvasLayer layer = new(){Layer = Readonly.LAYER_GLOBAL_DRAW};
-            layer.AddChild(DrawNode);
-            RootNode.GetTree().CurrentScene.CallDeferred("add_child", layer);
-            DrawNode.Name = "DEBUG_DRAWER";
-        }
-        //GD.Print(DrawNode.GetPath());
 
         RootNode.WindowInput += GInput.ParseMouseInputAsActionEvent;
         if (RootNode == null){throw new Exception("No window found.");}

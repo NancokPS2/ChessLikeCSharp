@@ -13,13 +13,15 @@ public partial class UI: Node2D, IDebugDisplay
         BASE_LAYER,
         PAUSE_MENU,
         MSG_QUEUE,
-        GLOBAL_DRAW,
         CHEAT_INPUT,
+        GLOBAL_DRAW,
+        TOOLTIP,
+        DEBUG_DRAW,
     }
 
     public static UI Instance;
 
-    private Dictionary<ELayer, CanvasLayer> CanvasLayers = new();
+    private Dictionary<ELayer, CanvasWithTarget> CanvasLayers = new();
 
     public override void _Ready()
     {
@@ -27,26 +29,38 @@ public partial class UI: Node2D, IDebugDisplay
         Instance = this;
     }
 
-    public static CanvasLayer GetLayer(ELayer layer)
+    public static CanvasWithTarget GetLayer(ELayer layer)
     {
         if (!Instance.CanvasLayers.ContainsKey(layer))
         {
-            Instance.CanvasLayers[layer] = new(){Layer = (int)layer};
+            Instance.CanvasLayers[layer] = new(){Layer = (int)layer, Name = layer.ToString()};
+            Instance.AddChild(Instance.CanvasLayers[layer]);
         }
 
-        CanvasLayer canvas = Instance.CanvasLayers[layer];
-        Instance.AddChild(canvas);
+        CanvasWithTarget canvas = Instance.CanvasLayers[layer];
 
         return canvas;
 
     }
 
+    public static Node2D GetLayerDrawTarget(ELayer layer) => GetLayer(layer).DrawTarget;
+
     public static int GetLayerCount() => Instance.CanvasLayers.Values.Count;
 
-    public static List<CanvasLayer> GetCanvasLayers => Instance.CanvasLayers.Values.ToList();
+    public static List<CanvasWithTarget> GetCanvasLayers => Instance.CanvasLayers.Values.ToList();
 
     public string GetText()
     {
         return CanvasLayers.ToStringList();
+    }
+
+    public partial class CanvasWithTarget: CanvasLayer
+    {
+        public Node2D DrawTarget = new();
+        public override void _Ready()
+        {
+            base._Ready();
+            AddChild(DrawTarget);
+        }
     }
 }

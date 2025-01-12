@@ -31,4 +31,6 @@ public abstract partial class ActionEvent
     {
         return $"{Owner.DisplayedName ?? "ERROR"} did something mysterious to {parameters.MobsTargeted.ToStringList(", ")}";
     }
+
+    public override string ToString() => Name;
 }

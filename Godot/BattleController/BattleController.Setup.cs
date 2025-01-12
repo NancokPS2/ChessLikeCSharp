@@ -46,7 +46,7 @@ public partial class BattleController
         CompCamera.Name = "Camera";
 
         //UI for combat inputs and display.
-        AddChild(CompCombatUI);
+        UI.GetLayer(UI.ELayer.BASE_LAYER).AddChild(CompCombatUI);
         EventBus.ActionSelected += (act) => InputActionSelected = act;
         EventBus.TurnEndRequested += () => InputEndTurnPressed++;
 
@@ -56,8 +56,6 @@ public partial class BattleController
 
         //Round counter
         EventBus.RoundEnded += () => RoundsPassed ++;
-
-
 
         DebugDisplay.Add(CompTurnManager);
         DebugDisplay.Add(CompActionRunner);

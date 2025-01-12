@@ -15,7 +15,7 @@ public partial class TooltipServer : Node
     }
 
     private List<ITooltip> TooltipUsers = new();
-    private Dictionary<ITooltip, Action> LambdaDict = new();
+    //private Dictionary<ITooltip, Action> LambdaDict = new();
 
     public override void _Ready()
     {
@@ -36,15 +36,15 @@ public partial class TooltipServer : Node
     private void AddUser(ITooltip node)
     {
         TooltipUsers.Add(node);
-        LambdaDict[node] = () => Draw(node);
-        node.GetCanvasItem().Draw += LambdaDict[node];
+        //LambdaDict[node] = () => Draw(node);
+        node.GetCanvasItem().Draw += () => Draw(node);
     }
 
     private void RemoveUser(ITooltip node)
     {
         TooltipUsers.Remove(node);
-        node.GetCanvasItem().Draw -= LambdaDict[node];
-        LambdaDict.Remove(node);
+        //node.GetCanvasItem().Draw -= LambdaDict[node];
+        //LambdaDict.Remove(node);
     }
 
     public override void _Process(double delta)

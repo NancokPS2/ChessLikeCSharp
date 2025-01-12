@@ -89,9 +89,17 @@ public partial class Mob
     {
         string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";
 
-        output += $"---\nStats: {Stats}";
         output += $"---\nJobs: {Jobs.ToStringList()}";
-        output += $"---\nActions: {Actions.ToStringList()}";
+
+        return output;
+    }
+
+    public string ToStringStats() => $"---\nStats: {Stats}";
+
+    public string ToStringActions()
+    {
+        string output = "";
+        output += $"---\nAbilities: {Actions.ToStringList()}";
         output += $"---\nPassives: {Passives.ToStringList()}";
         return output;
     }

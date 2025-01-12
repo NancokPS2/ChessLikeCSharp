@@ -10,7 +10,6 @@ namespace Godot;
 public class BattleControllerStatePreparation : BattleControllerState
 {
     private PartyMobListUI? _unit_list;
-    private Vector3i _last_hovered_pos;
     private List<EFaction> FactionsEligible = new(){EFaction.PLAYER};
     private StandardMaterial3D _ghost_material = new(){
         Transparency = BaseMaterial3D.TransparencyEnum.Alpha,
@@ -27,7 +26,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         _unit_list = new PartyMobListUI().GetInstantiatedScene<PartyMobListUI>();
         _unit_list.Update(FactionsEligible);
         UI.GetLayer(UI.ELayer.BASE_LAYER).AddChild(_unit_list);
-        _unit_list.AnchorBottom = 0.4f;
+        _unit_list.AnchorBottom = 0.35f;
     }
 
     public override void StateOnExit()
@@ -83,24 +82,28 @@ public class BattleControllerStatePreparation : BattleControllerState
             }
         }
 
-        //Set this position as the last valid one.
-        if (IsValidSpawnPoint(hovered_pos) && !IsPointOccupied(hovered_pos))
+        //Update ghost
+        if (selected_mob is not null)
         {
-            _last_hovered_pos = hovered_pos;
+            UpdateGhost(hovered_pos, selected_mob);
         }
     }
 
-    //TODO: Unimplemented.
+    #region  Ghost
+    private Vector3i _last_valid_ghost_pos;
     public void UpdateGhost(Vector3i position, Mob mob)
     {
-        bool same_position = _last_hovered_pos == position;
+        //Make sure the position is valid and is different from the last one.
+        bool same_position = _last_valid_ghost_pos == position;
         bool pos_invalid = !IsValidSpawnPoint(position);
         if (same_position || pos_invalid) {return;}
 
         GridNode.Layer layer = GridNode.Layer.MOB_GHOST;
 
+        //Clean existing ghosts.
         BattleController.CompDisplayGrid.MeshRemove(layer);
 
+        //
         Mesh mob_mesh = mob.GetMeshInstance().Mesh;
         BattleController.CompDisplayGrid.MeshSet(
             position, 
@@ -108,8 +111,15 @@ public class BattleControllerStatePreparation : BattleControllerState
             mob_mesh
         );
         BattleController.CompDisplayGrid.MeshGetInstance(position, layer)?.SetMaterialOverlay(_ghost_material);
+                //Set this position as the last valid one.
+        if (IsValidSpawnPoint(position) && !IsPointOccupied(position))
+        {
+            _last_valid_ghost_pos = position;
+        }
     }
+    #endregion
 
+    #region Booleans
     public bool IsValidSpawnPoint(Vector3i position)
     {
         bool is_valid_position = position.IsValid();
@@ -121,6 +131,7 @@ public class BattleControllerStatePreparation : BattleControllerState
     }
 
     public bool IsPointOccupied(Vector3i position) => Global.ManagerMob.GetInPosition(position).Count != 0;
+    #endregion
 
     public void MobPlace(Mob mob, Vector3i where)
     {

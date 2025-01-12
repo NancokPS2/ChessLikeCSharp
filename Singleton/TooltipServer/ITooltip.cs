@@ -24,5 +24,5 @@ public interface ITooltip
         }
     }
 
-    public CanvasItem GetCanvasItem() => Global.DrawNode;
+    public CanvasItem GetCanvasItem() => UI.GetLayerDrawTarget(UI.ELayer.TOOLTIP);
 }

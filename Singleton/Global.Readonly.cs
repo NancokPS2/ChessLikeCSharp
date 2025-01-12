@@ -8,10 +8,7 @@ public partial class Global
 {
     public static class Readonly
     {
-        //LAYERS
-        public static readonly int LAYER_CANVAS_COMP = 10;
-        public static readonly int LAYER_MSG_QUEUE = 11;
-        public static readonly int LAYER_GLOBAL_DRAW = 32;
+
 
         //FONTS
         public static readonly Godot.Font FONT_SMALL = new Godot.SystemFont();

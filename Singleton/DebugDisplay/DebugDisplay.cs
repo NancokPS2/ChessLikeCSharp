@@ -8,7 +8,7 @@ using Godot;
 /// <summary>
 /// Used to show togglable debug information.
 /// </summary>
-public partial class DebugDisplay : Node2D
+public partial class DebugDisplay : Node
 {
     public static DebugDisplay Instance;
 
@@ -22,18 +22,21 @@ public partial class DebugDisplay : Node2D
     public string ShowResourcesAction = "debug_show_res_list";
     private UniqueList<IDebugDisplay> Sources = new();
     private IDebugDisplay? SourceSelected;
-    private PopupMenu MenuDebugInfo = new();
     private DebugResourceList MenuResources = new DebugResourceList().GetInstantiatedScene<DebugResourceList>();
+    private PopupMenu NodeMenuDebugInfo = new();
+    private Node2D NodeDrawTarget = new(){Name = "DebugDisplayDrawTarget"};
 
     public override void _Ready()
     {
         base._Ready();
         Instance = this;
-        MenuDebugInfo.IdPressed += OnIdPressed;
-        AddChild(MenuDebugInfo);
+        NodeMenuDebugInfo.IdPressed += OnIdPressed;
 
-        ZIndex = (int)RenderingServer.CanvasItemZMax;
-        TopLevel = true;
+        //Setup nodes
+        UI.GetLayer(UI.ELayer.DEBUG_DRAW).AddChild(NodeMenuDebugInfo);
+        UI.GetLayer(UI.ELayer.DEBUG_DRAW).AddChild(NodeDrawTarget);
+
+        NodeDrawTarget.Draw += DrawTarget;
     }
 
     public static void Add(IDebugDisplay source)
@@ -57,14 +60,13 @@ public partial class DebugDisplay : Node2D
         {
             ShowResources();
         }
-        QueueRedraw();
+        NodeDrawTarget.QueueRedraw();
         
     }
-    public override void _Draw()
+    public void DrawTarget()
     {
-        base._Draw();
         if (SourceSelected is null) {return;}
-        DrawMultilineStringOutline(
+        NodeDrawTarget.DrawMultilineStringOutline(
             FontDraw, 
             Offset, 
             SourceSelected.GetText(), 
@@ -74,7 +76,7 @@ public partial class DebugDisplay : Node2D
             -1,
             1, new Godot.Color(0,0,0,1)
         );
-        DrawMultilineString(
+        NodeDrawTarget.DrawMultilineString(
             FontDraw, 
             Offset, 
             SourceSelected.GetText(), 
@@ -88,7 +90,7 @@ public partial class DebugDisplay : Node2D
 
     public void ShowMenu()
     {
-        MenuDebugInfo.Popup(new((int)Offset.X, (int)Offset.Y,240,240));
+        NodeMenuDebugInfo.Popup(new((int)Offset.X, (int)Offset.Y,240,240));
     }
 
     public void ShowResources()
@@ -108,12 +110,12 @@ public partial class DebugDisplay : Node2D
 
     public void UpdateMenu()
     {
-        MenuDebugInfo.Clear(true);
+        NodeMenuDebugInfo.Clear(true);
         int id = 0;
 
         foreach (var item in Sources)
         {
-            MenuDebugInfo.AddItem(item.GetName(), id);
+            NodeMenuDebugInfo.AddItem(item.GetName(), id);
 
             Debug.Assert(Sources[id] == item);
 
