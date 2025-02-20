@@ -30,37 +30,37 @@ public partial class Mob
     }
 
 
-    public Mob ChainName(string name)
+    private Mob ChainName(string name)
     {
         DisplayedName = new(name);
         return this;
     }
 
-    public Mob ChainMovementMode(EMovementMode mode)
+    private Mob ChainMovementMode(EMovementMode mode)
     {
         MovementMode = mode;
         return this;
     }
 
-    public Mob ChainFaction(EFaction faction)
+    private Mob ChainFaction(EFaction faction)
     {
         Faction = faction;
         return this;
     }
 
-    public Mob ChainState(EMobState state)
+    private Mob ChainState(EMobState state)
     {
         MobState = state;
         return this;
     }
 
-    public Mob ChainEquipment(Item item)
+    private Mob ChainEquipment(Item item)
     {
         EquipmentAdd(item);
         return this;
     }
 
-    public Mob ChainJob(List<Job> jobs)
+    private Mob ChainJob(List<Job> jobs)
     {
         Jobs.Clear();
 
@@ -72,19 +72,19 @@ public partial class Mob
         return this;
     }
 
-    public Mob ChainAction(Ability action)
+    private Mob ChainAction(Ability action)
     {
         AddAbility(action);
         return this;
     }
 
-    public Mob ChainPosition(Vector3i position)
+    private Mob ChainPosition(Vector3i position)
     {
         Position = position;
         return this;
     }
 
-    public Mob ChainRace(ERace race)
+    private Mob ChainRace(ERace race)
     {
         Race = race;
         return this;

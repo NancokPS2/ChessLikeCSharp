@@ -39,7 +39,7 @@ public partial class Ability : ActionEvent
 
     public override void Use(UsageParameters usage_params)
     {
-        
+        EventBus.AbilityUsed?.Invoke(usage_params);
     }
 }
 

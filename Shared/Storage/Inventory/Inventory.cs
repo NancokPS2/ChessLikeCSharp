@@ -99,6 +99,12 @@ public partial class Inventory
 
     public List<Slot> GetSlots() => Slots;
 
+    public Slot? GetSlotForItem(Item item, bool must_be_empty)
+    {
+        List<Slot> list = must_be_empty ? GetSlotsEmpty() : GetSlots();
+        return list.First(x => x.IsItemValid(item));
+    }
+
     public bool ContainsSlot(Slot slot) => Slots.Any(x => x == slot);
 
     public List<Slot> GetSlotsEmpty() => Slots.Where(x => x.Item is null).ToList();

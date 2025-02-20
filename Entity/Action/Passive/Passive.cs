@@ -21,48 +21,32 @@ public partial class Passive : ActionEvent
     
     public List<EActionFlag> FlagsForTrigger = new();
 
-    private UsageParameters BaseParams;
+    public UsageParameters BaseParameters { get => baseParameters; set => baseParameters = value; }
+    private UsageParameters baseParameters;
+
+
 
     public Passive() : base()
     {
-        BaseParams = new(Owner, BattleController.CompGrid, this);
+        BaseParameters = new(Owner, BattleController.CompGrid, this);
+        EventBus.AbilityUsed += OnAbilityUsed;
+
     }
 
-    public virtual UsageParameters GetUsageParams()
+    private void OnAbilityUsed(UsageParameters parameters)
     {
-        return BaseParams;
+        if (IsTriggeredByUse(parameters))
+        {
+            Use(BaseParameters);
+        }
     }
 
-    public bool IsTriggeredByEvent(ActionEvent action)
-    {
-        //If the action is a passive and those are not being considered, pass.
-        if (action is Passive && !IsTriggeredByPassive)
-        {
-            return false;
-        }
-        //The action must contain all flags required for the trigger
-        else if (!action.Flags.ContainsAll(FlagsForTrigger) )
-        {
-            return false;
-        }
-
-        return true;
-    }
-
+    protected virtual bool IsTriggeredByUse(UsageParameters parameters){return false;}
 
     public override void Use(UsageParameters usage_params)
     {
         DurationParams.AdvanceUses();
-    }
-
-    public override void OnAddedToMob()
-    {
-        
-    }
-
-    public override void OnRemovedFromMob()
-    {
-        
+        EventBus.AbilityUsed?.Invoke(usage_params);
     }
 
     public override string GetDescription() => "\n" + GetDurationDescription();
@@ -84,20 +68,4 @@ public partial class Passive : ActionEvent
         }
         return output;
     }
-}
-public static class Extension
-{
-    public static List<Passive> FilterTriggeredByEvent(this List<Passive> passives, ActionEvent action)
-    {
-        List<Passive> output = new();
-        foreach (var item in passives)
-        {
-            if (item.IsTriggeredByEvent(action))
-            {
-                output.Add(item);
-            }
-        }
-        return output;
-    }
-
 }

@@ -1,4 +1,5 @@
 using ChessLike.Entity.Action;
+using ChessLike.Entity.Action.Preset;
 using ChessLike.Entity.Command;
 using ChessLike.Extension;
 using ChessLike.Shared;
@@ -39,8 +40,10 @@ public partial class Mob
         Inventory inv = Inventory.FromResource(Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT));
         MobInventory = inv;
 
+        EventBusSetup();
     }
 
+    #region Jobs
     public List<Job> GetJobs()
     {
         return Jobs;
@@ -84,7 +87,133 @@ public partial class Mob
         output.SetStat(StatName.DELAY, 100);
         return output;
     }
+    #endregion
 
+    #region Equipment
+    public void EquipmentAdd(Item equip, Inventory.Slot slot)
+    {
+        var err = MobInventory.AddItem(equip, slot);
+        if (err != Shared.Storage.Inventory.Error.NONE)
+        {
+            GD.PushWarning(string.Format("Failed to equip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
+        }
+        
+        Stats.BoostAdd(MobInventory, true);
+        UpdateActions();
+    }
+
+    public void EquipmentAdd(Item item)
+    {
+        Inventory.Slot? slot = MobInventory.GetSlotForItem(item, true);
+        
+        EquipmentAdd(item, slot)
+    }
+
+    public void EquipmentRemove(Item equip)
+    {
+        var err = MobInventory.RemoveItem(equip);
+        if (err != Shared.Storage.Inventory.Error.NONE)
+        {
+            GD.PushWarning(string.Format("Failed to unequip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
+        }
+
+        Stats.BoostAdd(MobInventory, true);
+    }   
+    #endregion
+
+    #region Actions
+        private Ability _movement = new();
+
+    private void UpdateActions()
+    {
+        ClearAbility();
+
+        foreach (IActionProvider job in Jobs)
+        {
+            AddAbility(job.GetAbilities());
+        }
+
+        foreach (IActionProvider item in MobInventory.GetItems())
+        {
+            AddAbility(item.GetAbilities());
+        }
+    }
+
+    public void SetMovementMode(EMovementMode mode)
+    {
+        Actions.Remove(_movement);
+        _movement = new AbilityMove(EMovementMode.WALK);
+        AddAbility(_movement);
+        _movement_mode = mode;
+    }
+
+    public void AddAbility(List<Ability> abilities) => abilities.ForEach(x => AddAbility(x));
+    public void AddAbility(Ability action)
+    {
+        Actions.Add(action);
+        action.Owner = this;
+        action.OnAddedToMob();
+    }
+
+
+    public void ClearAbility()
+    {
+        List<EAbility> identifiers = new(from abil in Actions select abil.Identifier);
+        foreach (var item in identifiers)
+        {
+            RemoveAbility(item);
+        }
+    }
+
+    public void RemoveAbility(EAbility action_enum)
+    {
+        IEnumerable<Ability> to_remove = Actions.Where(x => x.Identifier == action_enum);
+        foreach (var item in to_remove)
+        {
+            item.OnRemovedFromMob();
+        }
+        Actions.RemoveAll(x => x.Identifier == action_enum); 
+    }
+
+
+    public List<Ability> GetAbilities()
+    {
+        return Actions;
+    }
+
+    public void AddPassive(Passive passive)
+    {
+        Passives.Add(passive);
+        passive.Owner = this;
+        passive.OnAddedToMob();
+    }
+
+    public void RemovePassive(EPassive passive_enum)
+    {
+        IEnumerable<Passive> to_remove = Passives.Where(x => x.Identifier == passive_enum);
+        foreach (var item in to_remove)
+        {
+            item.OnRemovedFromMob();
+        }
+        Passives.RemoveAll(x => x.Identifier == passive_enum); 
+    }
+
+    public void ClearPassive()
+    {
+        List<EPassive> identifiers = new(from abil in Passives select abil.Identifier);
+        foreach (var item in identifiers)
+        {
+            RemovePassive(item);
+        }
+    }
+
+    public List<Passive> GetPassives()
+    {
+        return Passives;
+    }
+    #endregion
+
+    #region Misc
     public override string ToString()
     {
         string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";
@@ -103,4 +232,5 @@ public partial class Mob
         output += $"---\nPassives: {Passives.ToStringList()}";
         return output;
     }
+    #endregion
 }

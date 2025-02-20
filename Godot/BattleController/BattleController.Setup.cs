@@ -48,7 +48,7 @@ public partial class BattleController
         //UI for combat inputs and display.
         UI.GetLayer(UI.ELayer.BASE_LAYER).AddChild(CompCombatUI);
         EventBus.ActionSelected += (act) => InputActionSelected = act;
-        EventBus.TurnEndRequested += () => InputEndTurnPressed++;
+        EventBus.TurnEnded += () => InputEndTurnPressed++;
 
         //ActionRunner connections
         EventBus.MobTurnEnded += CompActionRunner.OnTurnEnded;

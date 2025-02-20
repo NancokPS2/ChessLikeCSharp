@@ -5,8 +5,10 @@ using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Command;
+using ChessLike.Shared.Storage;
 using Godot;
 using Godot.WorldMap;
+using static ChessLike.Entity.Action.ActionEvent;
 
 /// <summary>
 /// This should be used ONLY for visual effects and other things detached from the direct logic loop.
@@ -34,7 +36,7 @@ public partial class EventBus : Node
     //Encounter
     public static Event? RoundEnded;
 
-    //MOBS//
+    #region Mobs
     public delegate void MobEvent(Mob mob);
     public static MobEvent? MobTurnStarted;
     public static MobEvent? MobTurnEnded;
@@ -47,9 +49,26 @@ public partial class EventBus : Node
     public delegate void MobCommandEvent(Dictionary<EInfo, string> dict);
     public static MobCommandEvent? MobCommandUsed;
 
+    //Equipment
+    public delegate void MobEquip(Mob mob, Item item, Inventory.Slot slot);
+    public static MobEquip? MobEquipmentAdded;
+    public static MobEquip? MobEquipmentRemoved;
+
+    //Actions
+    public delegate void ActionUse(UsageParameters parameters);
+    public delegate void MobActionChange(Mob mob, ChessLike.Entity.Action.ActionEvent action);
+    public static ActionUse? AbilityUsed;
+    public static MobActionChange? MobActionAdded;
+    public static MobActionChange? MobActionRemoved;
+    #endregion
+
 
     //UI//
     public delegate void ActionEvent(ChessLike.Entity.Action.Ability action);
     public static ActionEvent? ActionSelected;
-    public static Event? TurnEndRequested;
+    public static Event? TurnEnded;
+
+    #region Storage
+    #endregion
+
 }
