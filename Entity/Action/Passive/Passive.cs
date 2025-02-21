@@ -40,7 +40,7 @@ public partial class Passive : ActionEvent
         }
     }
 
-    protected virtual bool IsTriggeredByUse(UsageParameters parameters){return false;}
+    public virtual bool IsTriggeredByUse(UsageParameters parameters){return false;}
 
     public override void Use(UsageParameters usage_params)
     {

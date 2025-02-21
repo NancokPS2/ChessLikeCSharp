@@ -21,8 +21,6 @@ public abstract partial class ActionEvent
 
 
     public abstract void Use(UsageParameters usage_params);
-    public abstract void OnAddedToMob();
-    public abstract void OnRemovedFromMob();
     public virtual string GetDescription()
     {
         return "Undefined action description.";
@@ -33,4 +31,5 @@ public abstract partial class ActionEvent
     }
 
     public override string ToString() => Name;
+
 }

@@ -42,8 +42,11 @@ public partial class EventBus : Node
     public static MobEvent? MobTurnStarted;
     public static MobEvent? MobTurnEnded;
 
+    public delegate void MobStateChange(Mob mob, EMobState state);
+    public static MobStateChange? MobStateChanged;
+
     //Mob stats
-    public delegate void MobEventStat(Mob mob, StatName stat);
+    public delegate void MobEventStat(Mob mob, StatName stat, float new_value);
     public static MobEventStat? MobStatChanged;
 
     //Movement

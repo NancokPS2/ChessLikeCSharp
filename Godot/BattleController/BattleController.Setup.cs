@@ -67,14 +67,14 @@ public partial class BattleController
         if(CompMobMeshDisplay.HasMob(mob) && CompTurnManager.GetParticipants().Contains(mob))
         {
             mob.Position = where;
-            if(add_to_combat){mob.ChainState(EMobState.COMBAT);}
+            if(add_to_combat){mob.MobState = EMobState.COMBAT;}
         }
         else
         {
             mob.Position = where;
             CompMobMeshDisplay.Add(mob);
             CompTurnManager.Add(mob);
-            if(add_to_combat){mob.ChainState(EMobState.COMBAT);}
+            if(add_to_combat){mob.MobState = EMobState.COMBAT;}
 
         }
     }

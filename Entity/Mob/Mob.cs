@@ -21,9 +21,21 @@ public partial class Mob
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory MobInventory = new();
-    private EMovementMode _movement_mode;
-    public EMovementMode MovementMode {set => SetMovementMode(value); get => _movement_mode;}
-    public EMobState MobState = EMobState.BENCHED;
+    private EMovementMode movementMode;
+    public EMovementMode MovementMode {set => SetMovementMode(value); get => movementMode;}
+    private EMobState mobState = EMobState.BENCHED;
+    public EMobState MobState
+    {
+        get => mobState;
+
+        set
+        {
+            mobState = value;
+            EventBus.MobStateChanged?.Invoke(this, mobState);
+        }
+
+    }
+
     public MobStatSet Stats = GetDefaultStats();
 
     public Vector3i Position;
@@ -47,6 +59,31 @@ public partial class Mob
     public List<Job> GetJobs()
     {
         return Jobs;
+    }
+
+    public void AddJob(List<Job> jobs, bool replace)
+    {
+        if (replace) ClearJobs();
+        
+        foreach (var item in jobs)
+        {
+            Jobs.Add(item);
+        }
+        UpdateJobs();
+    }
+
+    public void AddJob(Job job) => AddJob(new List<Job>(){job}, false);
+
+    public void RemoveJob(List<Job> jobs)
+    {
+        jobs.ForEach(x => RemoveJob(x));
+    }
+
+    public void RemoveJob(Job job) => RemoveJob(new List<Job>(){job});
+
+    private void ClearJobs()
+    {
+        RemoveJob(Jobs);
     }
 
     private void UpdateJobs()
@@ -131,7 +168,7 @@ public partial class Mob
         Actions.Remove(_movement);
         _movement = new AbilityMove(EMovementMode.WALK);
         AddAbility(_movement);
-        _movement_mode = mode;
+        movementMode = mode;
     }
 
     public void AddAbility(List<ActionEvent> actions) => actions.ForEach(x => AddAbility(x));
@@ -141,7 +178,6 @@ public partial class Mob
         else if (action is Passive pas) Passives.Add(pas);
         
         action.Owner = this;
-        action.OnAddedToMob();
         UpdateActions();
         EventBus.MobActionAdded?.Invoke(this, action);
     }
@@ -151,7 +187,6 @@ public partial class Mob
         if (action is Ability abil) Actions.Remove(abil);
         else if (action is Passive pas) Passives.Remove(pas);
 
-        action.OnRemovedFromMob();
         UpdateActions();
         EventBus.MobActionRemoved?.Invoke(this, action);
     }

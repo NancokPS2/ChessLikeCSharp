@@ -137,10 +137,10 @@ public class ActionEventRunner : IDebugDisplay
             ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
             
             //Check if the action triggers any passive and add them to the queue if they do..
-            var triggered = RunningConsideredPassives.FilterTriggeredByEvent(action);
+            var triggered = RunningConsideredPassives.Where(x => x.IsTriggeredByUse(parameters));
             foreach (Passive item in triggered)
             {
-                QueueInsert(item, item.GetUsageParams(), RunningIndex + 1);
+                QueueInsert(item, item.BaseParameters, RunningIndex + 1);
             }
             
             RunningReadyToSet = false;
@@ -193,7 +193,7 @@ public class ActionEventRunner : IDebugDisplay
             item.DurationParams.AdvanceTurns();
             if (item.IsTriggeredByTurnEnd)
             {
-                QueueAdd(item, item.GetUsageParams());
+                QueueAdd(item, item.BaseParameters);
             }
         }       
 

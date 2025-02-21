@@ -10,10 +10,11 @@ public class FactionPlayer : Faction
     public FactionPlayer()
     {
         Identifier = EFaction.PLAYER;
-        Inventory = new Shared.Storage.Inventory(){
-            IsInfiniteStorage = true,
-            StorageInventoryMaxSlots = 99,
-            StorageInventoryUniversalSlot = new()
-        };
+        Inventory = new Shared.Storage.Inventory();
+        for (int i = 0; i < 99; i++)
+        {
+            Inventory.AddSlot(new());
+        }
+        ;
     }
 }

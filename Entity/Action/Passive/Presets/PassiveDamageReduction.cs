@@ -14,6 +14,12 @@ public class PassiveDamageReduction : Passive
     public float Percentage = 0.15f;
     private IncomingDamageModifier? _command_interceptor_ref;
 
+    public PassiveDamageReduction()
+    {
+        EventBus.MobActionAdded += OnAddedToMob;
+        EventBus.MobActionRemoved += OnRemovedFromMob;
+    }
+
     public PassiveDamageReduction(int TurnDuration) : base()
     {
         DurationParams = new(TurnDuration, null, null);
@@ -24,15 +30,17 @@ public class PassiveDamageReduction : Passive
         base.Use(usage_params);
     }
 
-    public override void OnAddedToMob()
+    public void OnAddedToMob(Mob mob, ActionEvent action)
     {
-        base.OnAddedToMob();
+        if(action != this || mob != Owner) return;
+
         _command_interceptor_ref = new IncomingDamageModifier(Percentage);
         Owner.CommandAddInterceptor(_command_interceptor_ref);
     }
-    public override void OnRemovedFromMob()
+    public void OnRemovedFromMob(Mob mob, ActionEvent action)
     {
-        base.OnRemovedFromMob();
+        if(action != this || mob != Owner) return;
+        
         Owner.CommandRemoveInterceptor(_command_interceptor_ref ?? throw new Exception("The command was removed ahead of time!?"));
         _command_interceptor_ref = null;
     }

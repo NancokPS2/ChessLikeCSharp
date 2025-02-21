@@ -22,7 +22,6 @@ public partial class Inventory
 
         public Slot( Slot slot ) : this(slot.FlagWhitelist, slot.FlagBlacklist, slot.Item)
         {
-            
         }
 
         public Slot(List<EItemFlag> flag_wl, List<EItemFlag> flag_bl, Item? item = null)

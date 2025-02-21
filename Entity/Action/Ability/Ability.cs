@@ -26,17 +26,6 @@ public partial class Ability : ActionEvent
     public MobFilterParameters FilterParams = new();
     public TargetingParameters TargetParams = new();
 
-    public override void OnAddedToMob()
-    {
-        
-    }
-
-    public override void OnRemovedFromMob()
-    {
-        
-    }
-
-
     public override void Use(UsageParameters usage_params)
     {
         EventBus.AbilityUsed?.Invoke(usage_params);
