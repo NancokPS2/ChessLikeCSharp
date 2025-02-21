@@ -9,4 +9,11 @@ public interface IActionProvider
 {
     public List<Ability> GetAbilities();
     public List<Passive> GetPassives();
+    public List<ActionEvent> GetActionEvents()
+    {
+        List<ActionEvent> output = new();
+        output.AddRange(GetAbilities());
+        output.AddRange(GetPassives());
+        return output;
+    }
 }

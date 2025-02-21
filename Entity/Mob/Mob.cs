@@ -40,7 +40,7 @@ public partial class Mob
         Inventory inv = Inventory.FromResource(Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT));
         MobInventory = inv;
 
-        EventBusSetup();
+        SetupEventBus();
     }
 
     #region Jobs
@@ -89,40 +89,27 @@ public partial class Mob
     }
     #endregion
 
-    #region Equipment
-    public void EquipmentAdd(Item equip, Inventory.Slot slot)
+    #region Movement
+    public void Move(Vector3i to)
     {
-        var err = MobInventory.AddItem(equip, slot);
-        if (err != Shared.Storage.Inventory.Error.NONE)
-        {
-            GD.PushWarning(string.Format("Failed to equip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
-        }
-        
-        Stats.BoostAdd(MobInventory, true);
-        UpdateActions();
+        Vector3i original_pos = Position;
+        Position = to;
+        EventBus.MobMoved?.Invoke(this, original_pos, Position);
     }
 
-    public void EquipmentAdd(Item item)
+    public void MovePath(List<Vector3i> path)
     {
-        Inventory.Slot? slot = MobInventory.GetSlotForItem(item, true);
-        
-        EquipmentAdd(item, slot)
+        foreach (var item in path)
+        {
+            Move(item);
+        }
+        EventBus.MobFinishedMoving?.Invoke(this, path);
     }
 
-    public void EquipmentRemove(Item equip)
-    {
-        var err = MobInventory.RemoveItem(equip);
-        if (err != Shared.Storage.Inventory.Error.NONE)
-        {
-            GD.PushWarning(string.Format("Failed to unequip {0} due to {1}.", new object[]{ equip.Name, err.ToString()}));
-        }
-
-        Stats.BoostAdd(MobInventory, true);
-    }   
     #endregion
 
     #region Actions
-        private Ability _movement = new();
+    private Ability _movement = new();
 
     private void UpdateActions()
     {
@@ -130,12 +117,12 @@ public partial class Mob
 
         foreach (IActionProvider job in Jobs)
         {
-            AddAbility(job.GetAbilities());
+            AddAbility(job.GetActionEvents());
         }
 
         foreach (IActionProvider item in MobInventory.GetItems())
         {
-            AddAbility(item.GetAbilities());
+            AddAbility(item.GetActionEvents());
         }
     }
 
@@ -147,64 +134,40 @@ public partial class Mob
         _movement_mode = mode;
     }
 
-    public void AddAbility(List<Ability> abilities) => abilities.ForEach(x => AddAbility(x));
-    public void AddAbility(Ability action)
+    public void AddAbility(List<ActionEvent> actions) => actions.ForEach(x => AddAbility(x));
+    public void AddAbility(ActionEvent action)
     {
-        Actions.Add(action);
+        if (action is Ability abil) Actions.Add(abil);
+        else if (action is Passive pas) Passives.Add(pas);
+        
         action.Owner = this;
         action.OnAddedToMob();
+        UpdateActions();
+        EventBus.MobActionAdded?.Invoke(this, action);
     }
 
+    public void RemoveAbility(ActionEvent action)
+    {
+        if (action is Ability abil) Actions.Remove(abil);
+        else if (action is Passive pas) Passives.Remove(pas);
+
+        action.OnRemovedFromMob();
+        UpdateActions();
+        EventBus.MobActionRemoved?.Invoke(this, action);
+    }
 
     public void ClearAbility()
     {
         List<EAbility> identifiers = new(from abil in Actions select abil.Identifier);
-        foreach (var item in identifiers)
+        foreach (var item in Actions.Where(x => x is Ability))
         {
             RemoveAbility(item);
         }
     }
 
-    public void RemoveAbility(EAbility action_enum)
-    {
-        IEnumerable<Ability> to_remove = Actions.Where(x => x.Identifier == action_enum);
-        foreach (var item in to_remove)
-        {
-            item.OnRemovedFromMob();
-        }
-        Actions.RemoveAll(x => x.Identifier == action_enum); 
-    }
-
-
     public List<Ability> GetAbilities()
     {
         return Actions;
-    }
-
-    public void AddPassive(Passive passive)
-    {
-        Passives.Add(passive);
-        passive.Owner = this;
-        passive.OnAddedToMob();
-    }
-
-    public void RemovePassive(EPassive passive_enum)
-    {
-        IEnumerable<Passive> to_remove = Passives.Where(x => x.Identifier == passive_enum);
-        foreach (var item in to_remove)
-        {
-            item.OnRemovedFromMob();
-        }
-        Passives.RemoveAll(x => x.Identifier == passive_enum); 
-    }
-
-    public void ClearPassive()
-    {
-        List<EPassive> identifiers = new(from abil in Passives select abil.Identifier);
-        foreach (var item in identifiers)
-        {
-            RemovePassive(item);
-        }
     }
 
     public List<Passive> GetPassives()

@@ -11,7 +11,7 @@ public class FactionPlayer : Faction
     {
         Identifier = EFaction.PLAYER;
         Inventory = new Shared.Storage.Inventory(){
-            StorageInventory = true,
+            IsInfiniteStorage = true,
             StorageInventoryMaxSlots = 99,
             StorageInventoryUniversalSlot = new()
         };

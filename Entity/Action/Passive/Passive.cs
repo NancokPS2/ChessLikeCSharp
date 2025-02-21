@@ -30,7 +30,6 @@ public partial class Passive : ActionEvent
     {
         BaseParameters = new(Owner, BattleController.CompGrid, this);
         EventBus.AbilityUsed += OnAbilityUsed;
-
     }
 
     private void OnAbilityUsed(UsageParameters parameters)

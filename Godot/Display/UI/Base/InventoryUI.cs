@@ -120,7 +120,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		//Either of the selected slots must have an item.
 		if (TupleSelected?.Item2.Item is null && TransferUI?.TupleSelected?.Item2.Item is null)
 		{
-			LastError = Inventory.Error.FATAL; 
+			LastError = Inventory.Error.UNHANDLED; 
 			MessageQueue.AddMessage("Failed to transfer, there is no item in either of the slots.", 3);
 			ButtonDeselection();
 			return;

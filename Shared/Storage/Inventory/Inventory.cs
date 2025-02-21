@@ -8,23 +8,18 @@ public partial class Inventory
     public enum Error
     {
         NONE,
-        FATAL,          //If something that's not supposed to happen, happens.
+        UNHANDLED,          //If something that's not supposed to happen, happens.
 
         REMOVE_ITEM_NOT_IN_INVENTORY, //Tried to take an item, but nothing was inside the inventory.
         REMOVE_SLOT_ALREADY_EMPTY,
 
         ADD_NO_SPACE,       //Add: Not enough slots left to fit the item.
         ADD_INVALID_SLOT,   //A forced attempt was made to add the item to an invalid slot.
+        TRANSFER_FAILED,    //Any problem related to a transfer.
     }
 
     public const int INVALID_SLOT = -1;
 
-    /// <summary>
-    /// The inventory creates slots as neeeded and removes empty ones. Individual slot properties are ignored.
-    /// </summary>
-    private bool _storage_inventory = false;
-    public bool StorageInventory {get => _storage_inventory; set => StorageInventorySet(value);}
-    public int StorageInventoryMaxSlots = 99;
     /// <summary>
     /// When this is used as a slot and StorageInventory is true, the item is added regardless of existing slots. Maybe don't give this slot an item.
     /// </summary>
@@ -43,58 +38,17 @@ public partial class Inventory
         }
     }
 
-    #region Storage
-    private void StorageInventorySet(bool active)
-    {
-        if (active && GetFreeSlots() == 0)
-        {
-            AddSlot(StorageInventoryUniversalSlot);
-        }
-        _storage_inventory = active;
-    }
-    private Error StorageAddItem(Item item)
-    {
-        if (!StorageInventoryUniversalSlot.IsItemValid(item))
-        {
-            return Error.ADD_INVALID_SLOT;
-        }
-
-        //Fail if there's not enough slots.
-        if(GetFreeSlots() <= 0)
-        {
-            return Error.ADD_NO_SPACE;
-        }
-
-        Slot slot = new Slot(StorageInventoryUniversalSlot);
-        AddSlot( slot );
-        slot.Item = item;
-
-        return Error.NONE;
-    }
-
-    private Error StorageRemoveItem(Slot slot)
-    {
-        if (slot.Item is null)
-        {
-            return Error.REMOVE_SLOT_ALREADY_EMPTY;
-        } else
-        {
-            slot.Item = null;
-            RemoveSlot(slot);
-            return Error.NONE;
-        }
-    }
-    #endregion
-
     #region Slot
     public void AddSlot(Slot slot)
     {
         Slots.Add(slot);
+        EventBus.InventoryChanged?.Invoke(this);
     }
 
     public void RemoveSlot(Slot slot)
     {
         Slots.Remove(slot);
+        EventBus.InventoryChanged?.Invoke(this);
     }
 
     public List<Slot> GetSlots() => Slots;
@@ -112,11 +66,6 @@ public partial class Inventory
     public void ClearEmptySlots()
     {
         Slots.RemoveAll(x => x.Item is null);
-        //Make sure universal inventories always have a free slot to stuff things into.
-        if (StorageInventory)
-        {
-            AddSlot(StorageInventoryUniversalSlot);
-        }
     }
 
     /// <summary>
@@ -134,9 +83,7 @@ public partial class Inventory
         return Slots.First( x => x.Item == item);
     }
     
-    public int GetFreeSlots() => StorageInventory ? StorageInventoryMaxSlots : Slots.Count( x => x.Item is null);
-
-
+    public int GetFreeSlots() => Slots.Count( x => x.Item is null);
 
     public bool IsSlotEmpty(int slot)
     {
@@ -159,36 +106,38 @@ public partial class Inventory
 
     public Error AddItem(Item item_to_add, Slot slot)
     {
+        Error err;
         if (!ContainsSlot(slot))
         {
             throw new Exception("This function is meant to be used in one of this inventory's slots.");
-        }
-
-        //Deviate to storage if this is a Storage inventory.
-        if (StorageInventory)
-        {
-           return StorageAddItem(item_to_add);
         }
         
         //The lost must be able to hold it
         if (!slot.IsItemValid(item_to_add))
         {
-            return Error.ADD_INVALID_SLOT;
+            err = Error.ADD_INVALID_SLOT;
+            EventBus.InventoryErrored?.Invoke(this, err);
+            return err;
         }
 
         //Fail if there's not enough slots.
         if(GetFreeSlots() <= 0)
         {
-            return Error.ADD_NO_SPACE;
+            err = Error.ADD_NO_SPACE;
+            EventBus.InventoryErrored?.Invoke(this, err);
+            return err;
         }
 
         //Finally add the item.
         slot.Item = item_to_add;
+        EventBus.InventoryChanged?.Invoke(this);
+        EventBus.InventoryItemAdded?.Invoke(this, slot, item_to_add);
         return Error.NONE;
     }
 
     public Error AddItem(Item item_to_add)
     {
+        Error err;
         //Check if any slot can house the item.
         foreach (var slot in Slots)
         {
@@ -197,37 +146,41 @@ public partial class Inventory
                 return AddItem(item_to_add, slot);
             }
         }
-        return Error.ADD_INVALID_SLOT;
+        err = Error.ADD_INVALID_SLOT;
+        EventBus.InventoryErrored?.Invoke(this, err);
+        return err;
     }
     public Error AddItem(Slot source_slot, Slot target_slot)
     {
-        if (source_slot.Item is null){throw new ArgumentException("The slot must contain something.");}
+        if (source_slot.Item is null) throw new ArgumentException("The slot must contain something.");
         return AddItem(source_slot.Item, target_slot);
     }
 
     public Error RemoveItem(Item item)
     {
-        Slot? with_item = FindSlotWithItem(item);
-        if (with_item is not null)
+        Slot? slot_with_item = FindSlotWithItem(item);
+        Error err;
+        if (slot_with_item is not null)
         {
-            return RemoveItem(with_item);
+            err = RemoveItem(slot_with_item);
         }
         else
         {
-            return Error.REMOVE_ITEM_NOT_IN_INVENTORY;
+            err = Error.REMOVE_ITEM_NOT_IN_INVENTORY;
+            EventBus.InventoryErrored?.Invoke(this, err);
         }
+        return err;
     }
 
     public Error RemoveItem(Slot slot)
     {
-        if (StorageInventory)
-        {
-            return StorageRemoveItem(slot);
-        }
         if (slot.Item is null){return Error.REMOVE_SLOT_ALREADY_EMPTY;}
         else
         {
+            Item item = slot.Item;
             slot.Item = null; 
+            EventBus.InventoryChanged?.Invoke(this);
+            EventBus.InventoryItemRemoved?.Invoke(this, slot, item);
             return Error.NONE;
         }
     }
@@ -244,6 +197,7 @@ public partial class Inventory
         if (!source_inv.ContainsSlot(source_slot)){throw new ArgumentException("The source slot must be inside the source inventory");}
         if (!target_inv.ContainsSlot(target_slot)){throw new ArgumentException("The target slot must be inside the target inventory");}
 
+        //Fetch items for transfer.
         Item? source_item = source_slot.Item;
         Item? target_item = target_slot.Item;
 
@@ -268,6 +222,14 @@ public partial class Inventory
                 //Remove the items.
                 ThrowOnError(source_inv.RemoveItem(source_slot));
                 ThrowOnError(target_inv.RemoveItem(target_slot));
+
+                if (source_item is null || target_item is null)
+                {
+                    Error err = Error.TRANSFER_FAILED;
+                    EventBus.InventoryErrored?.Invoke(source_inv, err);
+                    EventBus.InventoryErrored?.Invoke(target_inv, err);
+                    return err;
+                }
 
                 //Add the items.
                 ThrowOnError(target_inv.AddItem(source_item, target_slot));

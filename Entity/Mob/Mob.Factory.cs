@@ -56,7 +56,10 @@ public partial class Mob
 
     private Mob ChainEquipment(Item item)
     {
-        EquipmentAdd(item);
+        Inventory.Slot? slot = MobInventory.GetSlotForItem(item, false);
+        if (slot is null) return this;
+
+        EventBus.InventoryItemAdded?.Invoke(MobInventory, slot, item);
         return this;
     }
 

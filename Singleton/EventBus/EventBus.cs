@@ -18,6 +18,7 @@ public partial class EventBus : Node
 {
     public static EventBus Instance;
     public delegate void Event();
+    public delegate void ObjectChanged<T>(T obj);
     public delegate void StringEvent(string text);
 
     public override void _Ready()
@@ -42,8 +43,14 @@ public partial class EventBus : Node
     public static MobEvent? MobTurnEnded;
 
     //Mob stats
-    public delegate void MobEventStat(Mob mob, StatName stat, float amount);
+    public delegate void MobEventStat(Mob mob, StatName stat);
     public static MobEventStat? MobStatChanged;
+
+    //Movement
+    public delegate void MobMovement(Mob mob, Vector3i from, Vector3i to);
+    public delegate void MobMovementPath(Mob mob, List<Vector3i> path);
+    public static MobMovement? MobMoved;
+    public static MobMovementPath? MobFinishedMoving;
 
     //Mob commands
     public delegate void MobCommandEvent(Dictionary<EInfo, string> dict);
@@ -58,6 +65,7 @@ public partial class EventBus : Node
     public delegate void ActionUse(UsageParameters parameters);
     public delegate void MobActionChange(Mob mob, ChessLike.Entity.Action.ActionEvent action);
     public static ActionUse? AbilityUsed;
+    public static ObjectChanged<Mob>? MobActionChanged;
     public static MobActionChange? MobActionAdded;
     public static MobActionChange? MobActionRemoved;
     #endregion
@@ -69,6 +77,12 @@ public partial class EventBus : Node
     public static Event? TurnEnded;
 
     #region Storage
+    public delegate void InventoryItemChange(Inventory inventory, Inventory.Slot slot, Item item);
+    public delegate void InventoryError(Inventory inventory, Inventory.Error error);
+    public static ObjectChanged<Inventory>? InventoryChanged;
+    public static InventoryItemChange? InventoryItemAdded;
+    public static InventoryItemChange? InventoryItemRemoved;
+    public static InventoryError? InventoryErrored;
     #endregion
 
 }

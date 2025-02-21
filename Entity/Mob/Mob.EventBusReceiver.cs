@@ -7,49 +7,18 @@ using ChessLike.Shared.Storage;
 
 namespace ChessLike.Entity;
 
-public partial class Mob
+public partial class Mob : IEventBusMember
 {
-    public void EventBusSetup()
+    public void SetupEventBus()
     {
-        EventBus.MobActionAdded += OnMobActionAdded;   
-        EventBus.MobActionRemoved += OnMobActionRemoved;
-
-        EventBus.MobEquipmentAdded += OnMobEquipmentAdded;
-        EventBus.MobEquipmentRemoved += OnMobEquipmentRemoved;
+        EventBus.InventoryChanged += OnInventoryChanged;
     }
 
-
-    private void OnMobActionRemoved(Mob mob, ActionEvent action)
+    private void OnInventoryChanged(Inventory obj)
     {
-        if (mob == this && action is Ability abil)
-        {
-            RemoveAbility(abil.Identifier);
-        }
-
-    }
-
-    private void OnMobActionAdded(Mob mob, ActionEvent action)
-    {
-        if (mob == this && action is Ability abil)
-        {
-            AddAbility(abil);
-        }
-    }
-
-    private void OnMobEquipmentAdded(Mob mob, Item item, Inventory.Slot slot)
-    {
-        if (mob == this)
-        {
-            EquipmentAdd(item, slot);
-        }
-    }
-    
-    private void OnMobEquipmentRemoved(Mob mob, Item item, Inventory.Slot slot)
-    {
-        if (mob == this)
-        {
-            EquipmentRemove(item);
-            
-        }
+        if (obj != MobInventory) return;
+        
+        Stats.BoostAdd(MobInventory, true);
+        UpdateActions();
     }
 }
