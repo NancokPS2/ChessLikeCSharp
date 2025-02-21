@@ -16,8 +16,7 @@ public partial class Mob
 {
     public string DisplayedName = "UNNAMED";
     private List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
-    private List<Ability> Actions = new();
-    private List<Passive> Passives = new();
+    private List<ActionEvent> Actions = new();
     public ERace Race = ERace.HUMAN;
     public EFaction Faction = EFaction.NEUTRAL;
     public Inventory MobInventory = new();
@@ -64,7 +63,7 @@ public partial class Mob
     public void AddJob(List<Job> jobs, bool replace)
     {
         if (replace) ClearJobs();
-        
+
         foreach (var item in jobs)
         {
             Jobs.Add(item);
@@ -76,7 +75,12 @@ public partial class Mob
 
     public void RemoveJob(List<Job> jobs)
     {
-        jobs.ForEach(x => RemoveJob(x));
+        List<Job> to_delete = new(jobs);
+        foreach (var item in to_delete)
+        {
+            Jobs.Remove(item);
+        }
+        UpdateJobs();
     }
 
     public void RemoveJob(Job job) => RemoveJob(new List<Job>(){job});
@@ -88,17 +92,13 @@ public partial class Mob
 
     private void UpdateJobs()
     {
-        if (Jobs.Count == 0)
-        {
-            throw new Exception("No jobs defined.");
-        }
         //Reset job modifiers
         Stats.BoostRemove(Job.BOOST_SOURCE);
 
-        
         MobStatSet.StatBoost total_boost = new(Job.BOOST_SOURCE); 
+
         //TODO: Jobs should not be able to be null in the first place.
-        foreach (Job job in Jobs.Where(x => x is not null))
+        foreach (Job job in Jobs)//.Where(x => x is not null))
         {
             //Average the stats from the job's.
             Stats.BoostAdd(job, false);
@@ -150,16 +150,16 @@ public partial class Mob
 
     private void UpdateActions()
     {
-        ClearAbility();
+        ClearAction();
 
         foreach (IActionProvider job in Jobs)
         {
-            AddAbility(job.GetActionEvents());
+            AddAction(job.GetActionEvents());
         }
 
         foreach (IActionProvider item in MobInventory.GetItems())
         {
-            AddAbility(item.GetActionEvents());
+            AddAction(item.GetActionEvents());
         }
     }
 
@@ -167,47 +167,52 @@ public partial class Mob
     {
         Actions.Remove(_movement);
         _movement = new AbilityMove(EMovementMode.WALK);
-        AddAbility(_movement);
+        AddAction(_movement);
         movementMode = mode;
     }
 
-    public void AddAbility(List<ActionEvent> actions) => actions.ForEach(x => AddAbility(x));
-    public void AddAbility(ActionEvent action)
-    {
-        if (action is Ability abil) Actions.Add(abil);
-        else if (action is Passive pas) Passives.Add(pas);
-        
-        action.Owner = this;
-        UpdateActions();
-        EventBus.MobActionAdded?.Invoke(this, action);
-    }
+    public void AddAction(ActionEvent action) => AddAction(new List<ActionEvent>(){action});
 
-    public void RemoveAbility(ActionEvent action)
+    public void AddAction(List<ActionEvent> actions)
     {
-        if (action is Ability abil) Actions.Remove(abil);
-        else if (action is Passive pas) Passives.Remove(pas);
-
-        UpdateActions();
-        EventBus.MobActionRemoved?.Invoke(this, action);
-    }
-
-    public void ClearAbility()
-    {
-        List<EAbility> identifiers = new(from abil in Actions select abil.Identifier);
-        foreach (var item in Actions.Where(x => x is Ability))
+        foreach (var action in actions)
         {
-            RemoveAbility(item);
+            Actions.Add(action);
+            action.Owner = this;
+            EventBus.MobActionAdded?.Invoke(this, action);
         }
+    }
+
+    public void RemoveAction(ActionEvent action) => RemoveAction(new List<ActionEvent>(){action});
+
+    public void RemoveAction(List<ActionEvent> actions)
+    {
+        List<ActionEvent> to_delete = new(actions);
+        foreach (var item in to_delete)
+        {
+            Actions.Remove(item);
+            EventBus.MobActionRemoved?.Invoke(this, item);
+        }
+
+    }
+
+    public void ClearAction()
+    {
+        RemoveAction(Actions);
     }
 
     public List<Ability> GetAbilities()
     {
-        return Actions;
+        List<Ability> output = new();
+        output.AddRange((IEnumerable<Ability>)Actions.Where(x => x is Ability));
+        return output;
     }
 
     public List<Passive> GetPassives()
     {
-        return Passives;
+        List<Passive> output = new();
+        output.AddRange((IEnumerable<Passive>)Actions.Where(x => x is Passive));
+        return output;
     }
     #endregion
 
@@ -226,8 +231,8 @@ public partial class Mob
     public string ToStringActions()
     {
         string output = "";
-        output += $"---\nAbilities: {Actions.ToStringList()}";
-        output += $"---\nPassives: {Passives.ToStringList()}";
+        output += $"---\nAbilities: {GetAbilities().ToStringList()}";
+        output += $"---\nPassives: {GetPassives().ToStringList()}";
         return output;
     }
     #endregion

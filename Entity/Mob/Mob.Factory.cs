@@ -69,9 +69,9 @@ public partial class Mob
         return this;
     }
 
-    public Mob ChainAction(Ability action)
+    public Mob ChainAction(ActionEvent action)
     {
-        AddAbility(action);
+        AddAction(action);
         return this;
     }
 
