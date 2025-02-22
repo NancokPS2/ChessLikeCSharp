@@ -26,7 +26,7 @@ public class BattleControllerStateActionRunning : BattleControllerState
     public override void StateOnExit()
     {
         BattleController.CompCombatUI.Show();
-        User.InputActionSelected = null;
+        User.ActionSelected = null;
         User.TurnUsageParameters.PositionsTargeted = new();
     }
 

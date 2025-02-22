@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Command;
 using ChessLike.Shared.Storage;
+using ChessLike.Turn;
+using ChessLike.World;
+using ChessLike.World.Encounter;
 using Godot;
 using Godot.WorldMap;
 using static ChessLike.Entity.Action.ActionEvent;
@@ -18,7 +21,8 @@ public partial class EventBus : Node
 {
     public static EventBus Instance;
     public delegate void Event();
-    public delegate void ObjectChanged<T>(T obj);
+    public delegate void ObjectChange<T>(T obj);
+    public delegate void ObjectChangeFrom<TFromTo>(TFromTo old_obj, TFromTo new_obj);
     public delegate void StringEvent(string text);
 
     public override void _Ready()
@@ -34,13 +38,24 @@ public partial class EventBus : Node
     //Save profile
     public static StringEvent? ProfileNameChanged;
 
+    #region Encounter
     //Encounter
+    public static ObjectChange<Grid>? GridLoaded;
+    public static ObjectChange<EncounterData>? EncounterLoaded;
     public static Event? RoundEnded;
+    public static ObjectChange<BattleControllerState>? BattleStateChanged;
+
+    #endregion
+
+    #region Turns
+    
+    #endregion
 
     #region Mobs
     public delegate void MobEvent(Mob mob);
-    public static MobEvent? MobTurnStarted;
-    public static MobEvent? MobTurnEnded;
+    public delegate void MobTurnChange(Mob mob, TurnManager manager);
+    public static MobTurnChange? MobTurnStarted;
+    public static MobTurnChange? MobTurnEnded;
 
     public delegate void MobStateChange(Mob mob, EMobState state);
     public static MobStateChange? MobStateChanged;
@@ -68,7 +83,7 @@ public partial class EventBus : Node
     public delegate void ActionUse(UsageParameters parameters);
     public delegate void MobActionChange(Mob mob, ChessLike.Entity.Action.ActionEvent action);
     public static ActionUse? AbilityUsed;
-    public static ObjectChanged<Mob>? MobActionChanged;
+    public static ObjectChange<Mob>? MobActionChanged;
     public static MobActionChange? MobActionAdded;
     public static MobActionChange? MobActionRemoved;
     #endregion
@@ -76,13 +91,13 @@ public partial class EventBus : Node
 
     //UI//
     public delegate void ActionEvent(ChessLike.Entity.Action.Ability action);
-    public static ActionEvent? ActionSelected;
-    public static Event? TurnEnded;
+    public static ActionEvent? InputActionSelected;
+    public static Event? InputTurnEnded;
 
     #region Storage
     public delegate void InventoryItemChange(Inventory inventory, Inventory.Slot slot, Item item);
     public delegate void InventoryError(Inventory inventory, Inventory.Error error);
-    public static ObjectChanged<Inventory>? InventoryChanged;
+    public static ObjectChange<Inventory>? InventoryChanged;
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;
     public static InventoryError? InventoryErrored;

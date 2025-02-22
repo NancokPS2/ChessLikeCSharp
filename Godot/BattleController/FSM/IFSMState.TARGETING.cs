@@ -47,7 +47,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         //If not about to run the action or to pause, also reset the targeting values.
         if (User.StateCurrent is not BattleControllerStateActionRunning && User.StateCurrent is not BattleControllerStatePaused)
         {
-            User.InputActionSelected = null;
+            User.ActionSelected = null;
             ResetTargetingSelections();
         }
         PositionsSelected.Clear();
@@ -62,7 +62,7 @@ public class BattleControllerStateTargeting : BattleControllerState
     {
         //Setup values
         ActionEvent.UsageParameters usage_params = User.TurnUsageParameters ?? throw new Exception("No UsageParametes set yet.");
-        Ability ability_selected = User.InputActionSelected ?? throw new Exception("No Ability was selected yet.");
+        Ability ability_selected = User.ActionSelected ?? throw new Exception("No Ability was selected yet.");
         Debug.Assert(GetSelectedAbility() == GetUsageParameters().ActionRef, "The UsageParameters should point to the selected action.");
 
         //Pause menu
@@ -203,7 +203,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         }
     }
 
-    public Ability GetSelectedAbility() => User.InputActionSelected ?? throw new Exception("No Ability was selected yet.");
+    public Ability GetSelectedAbility() => User.ActionSelected ?? throw new Exception("No Ability was selected yet.");
     public ActionEvent.UsageParameters GetUsageParameters() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
     public List<Vector3i> GetPositionsWithinRange() => _pos_valid_for_targeting;
 }

@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "UI should queue its update to next frame to avoid overlapping calls from causing slowdowns.",
+                    "id": "uzoz6siye7i7vw9h1d27fyyx"
+                },
+                {
                     "text": "EncounterData should have variants for different win conditions.",
                     "id": "uw3ay7ksqqgw4zk9e1z15nef"
                 },
@@ -125,5 +129,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1736604665613
+    "timestamp": 1740246297376
 }

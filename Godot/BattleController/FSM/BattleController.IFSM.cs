@@ -68,6 +68,11 @@ public partial class BattleController
                 not_null.StateOnExit();
             }
             StateCurrent.StateOnEnter();
+
+            //Emit the state change
+            if (StatePrevious is not null && StateCurrent is not null)
+                EventBus.BattleStateChanged?.Invoke(StateCurrent);
+
             StateTimeWithoutChange = 0;
         }
 

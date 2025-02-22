@@ -111,7 +111,7 @@ public partial class TurnManager
         }
         if (CurrentTaker is Mob mob)
         {
-            EventBus.MobTurnStarted?.Invoke(mob);
+            EventBus.MobTurnStarted?.Invoke(mob, this);
         }
 
         UpdateRoundEnder();
@@ -126,8 +126,8 @@ public partial class TurnManager
 
         if (CurrentTaker is Mob mob)
         {
-            EventBus.MobTurnEnded?.Invoke(mob);
-        }
+            EventBus.MobTurnEnded?.Invoke(mob, this);
+        }       
 
         //If the round ender just finished their turn, count that as the round ending.
         if (CurrentTaker == RoundEnder)
@@ -135,6 +135,7 @@ public partial class TurnManager
             RoundEnder = null;
             EventBus.RoundEnded?.Invoke();
         }
+
     }
 
     private void ResetDelay(ITurn turn)

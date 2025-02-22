@@ -39,12 +39,12 @@ public partial class CombatActionUI : Control, ISceneDependency
 
             button.Text = action.Name;
             Console.WriteLine(button.GetPath());
-            button.Pressed += () => EventBus.ActionSelected?.Invoke(action);
+            button.Pressed += () => EventBus.InputActionSelected?.Invoke(action);
         }
 
         //Button for ending turn.
         Button end_turn = new();
-        end_turn.Pressed += () => EventBus.TurnEnded?.Invoke();
+        end_turn.Pressed += () => EventBus.InputTurnEnded?.Invoke();
         end_turn.Text = "End Turn";
         container.AddChild(end_turn);
     }

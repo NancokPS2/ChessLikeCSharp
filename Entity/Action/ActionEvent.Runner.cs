@@ -23,37 +23,6 @@ public class ActionEventRunner : IDebugDisplay
 
     private List<QueuedAction> Queue = new();
 
-    private List<Passive> PassiveGetAll()
-    {
-        List<Passive> output = new();
-        foreach (var item in Global.ManagerMob.GetInCombat())
-        {
-            //Skip if out of combat
-            if (item.MobState != EMobState.COMBAT){continue;}
-
-            output.AddRange(PassiveGetFromMob(item));
-
-        } 
-        return output;
-    }
-
-    private List<Passive> PassiveGetFromMob(Mob mob)
-    {
-        List<Passive> output = new();
-        foreach (var passive in mob.GetPassives())
-        {
-            if (PassiveIsValid(passive)){output.Add(passive);}
-        }
-        return output;
-    }
-
-    private bool PassiveIsValid(Passive passive)
-    {
-        bool not_finished = !passive.DurationParams.IsFinished();
-        bool active = passive.Active;
-        return not_finished && active;
-    }
-
     public uint QueueAdd(ActionEvent action, Ability.UsageParameters parameters)
     {
         if(parameters.PositionsTargeted.Count == 0){throw new Exception("Invalid parameters.");}
@@ -101,7 +70,7 @@ public class ActionEventRunner : IDebugDisplay
     private float RunningTime = 0;
     private QueuedAction? RunningQueuedAction;
     private bool RunningReadyToSet;
-    private List<Passive> RunningConsideredPassives = new();
+
     public void RunStart()
     {
         if (Queue.Count == 0) {throw new Exception("Nothing to run.");}
@@ -109,7 +78,6 @@ public class ActionEventRunner : IDebugDisplay
         RunningEnabled = true;
         RunningIndex = 0;
         RunningTime = 0;
-        RunningConsideredPassives = PassiveGetAll();
         QueueStarted?.Invoke();
     }
 
@@ -136,13 +104,6 @@ public class ActionEventRunner : IDebugDisplay
             MessageQueue.AddMessage(action.GetUseText(parameters));
             ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
             
-            //Check if the action triggers any passive and add them to the queue if they do..
-            var triggered = RunningConsideredPassives.Where(x => x.IsTriggeredByUse(parameters));
-            foreach (Passive item in triggered)
-            {
-                QueueInsert(item, item.BaseParameters, RunningIndex + 1);
-            }
-            
             RunningReadyToSet = false;
         }
 
@@ -167,7 +128,6 @@ public class ActionEventRunner : IDebugDisplay
         RunningEnabled = false;
         RunningIndex = 0;
         RunningTime = 0;
-        RunningConsideredPassives.Clear();
         QueueEnded?.Invoke();
     }
 
@@ -183,20 +143,6 @@ public class ActionEventRunner : IDebugDisplay
             });
 
         return output;
-    }
-
-    public void OnTurnEnded(Mob who)
-    {
-        List<Passive> passives = PassiveGetFromMob(who);
-        foreach (var item in passives)
-        {
-            item.DurationParams.AdvanceTurns();
-            if (item.IsTriggeredByTurnEnd)
-            {
-                QueueAdd(item, item.BaseParameters);
-            }
-        }       
-
     }
 
     private class QueuedAction

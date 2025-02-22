@@ -12,7 +12,7 @@ public partial class MobMeshDisplay
 
     public MobMeshDisplay()
     {
-        EventBus.MobTurnStarted += OnTurnStarted;
+        EventBus.MobTurnStarted += OnMobTurnStarted;
         EventBus.MobStatChanged += OnMobStatValueChanged;
     }
 
@@ -43,7 +43,7 @@ public partial class MobMeshDisplay
         );
     }
 
-    public void OnTurnStarted(Mob who)
+    public void OnMobTurnStarted(Mob who, TurnManager manager)
     {
         MobDisplayComponent component = MobComponents[who];
         Vector3 global_pos = component.GetPositionGlobal();

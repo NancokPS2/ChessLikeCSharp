@@ -18,7 +18,7 @@ public partial class BattleController
 
     //Misc inputs
     public int InputEndTurnPressed;
-    public Ability? InputActionSelected;
+    public Ability? ActionSelected;
 
     //Components (static)
     public static MobMeshDisplay CompMobMeshDisplay = new();
@@ -26,17 +26,27 @@ public partial class BattleController
     public static GridNode CompDisplayGrid = new();
     public static Camera CompCamera = new(){mode = Camera.Mode.DELEGATED_PIVOT};
     public static TurnManager CompTurnManager = new();
-    public static Grid CompGrid;
+    public static Grid? CompGrid
+    {
+        get => compGrid;
+        set
+        {
+            compGrid = value;
+            if (compGrid is not null)
+            {
+                EventBus.GridLoaded?.Invoke(CompGrid);
+            }
+        }
+    }
+    private static Grid? compGrid;
     public static ActionEventRunner CompActionRunner = new();
 
     //Combat data
-    public static EncounterData Encounter;
+    public static EncounterData? Encounter;
     public Vector3i PositionHovered;
     public Vector3i PositionSelected = Vector3i.INVALID; //This should always return to INVALID when not in use.
-    public int RoundsPassed;
 
     //Current turn
     public Ability.UsageParameters? TurnUsageParameters;
 
-    //Misc
 }

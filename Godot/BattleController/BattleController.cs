@@ -68,7 +68,7 @@ public partial class BattleController : Node, IDebugDisplay
 			,
 			new object[]{
 				StateCurrent is not null ? StateCurrent.StateIdentifier : "null", 
-				InputActionSelected is not null ? InputActionSelected.Name : "null", 
+				ActionSelected is not null ? ActionSelected.Name : "null", 
 				CompGrid != null ? CompGrid.Boundary : "null",
 				CompTurnManager.GetCurrentTurnTaker() as Mob is Mob mob ? mob.DisplayedName : "null",
 				PositionHovered,

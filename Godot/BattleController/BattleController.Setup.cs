@@ -18,6 +18,7 @@ public partial class BattleController
         }
 
         CompGrid = to_load.Grid;
+
         Encounter = to_load;
 
         SetupComponents();
@@ -27,6 +28,8 @@ public partial class BattleController
         {
             SetupParticipant(item.Value, item.Key, true);
         }
+
+        EventBus.EncounterLoaded?.Invoke(to_load);
     }
 
     public void SetupComponents()
@@ -38,7 +41,6 @@ public partial class BattleController
 
         //Display grid setup
         AddChild(CompDisplayGrid);
-        CompDisplayGrid.SetGrid(CompGrid);
         CompDisplayGrid.Name = "GridDisplay";
 
         //Camera
@@ -47,15 +49,9 @@ public partial class BattleController
 
         //UI for combat inputs and display.
         UI.GetLayer(UI.ELayer.BASE_LAYER).AddChild(CompCombatUI);
-        EventBus.ActionSelected += (act) => InputActionSelected = act;
-        EventBus.TurnEnded += () => InputEndTurnPressed++;
-
-        //ActionRunner connections
-        EventBus.MobTurnEnded += CompActionRunner.OnTurnEnded;
         GetTree().ProcessFrame += CompActionRunner.Process;
 
-        //Round counter
-        EventBus.RoundEnded += () => RoundsPassed ++;
+        EventBus.InputActionSelected += (act) => ActionSelected = act;
 
         DebugDisplay.Add(CompTurnManager);
         DebugDisplay.Add(CompActionRunner);

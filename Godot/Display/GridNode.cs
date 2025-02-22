@@ -37,6 +37,11 @@ public partial class GridNode : Node3D
 
     private List<Vector3i> PosDirty = new();
 
+    public GridNode()
+    {
+        EventBus.GridLoaded += SetGrid;
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);

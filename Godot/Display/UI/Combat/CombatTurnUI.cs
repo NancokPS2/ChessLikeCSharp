@@ -14,6 +14,18 @@ public partial class CombatTurnUI : Control, ISceneDependency
     [Export]
     public Control? NodeTurnContainer;
 
+    public CombatTurnUI()
+    {
+        EventBus.MobTurnStarted += OnTurnChanged;
+        EventBus.MobTurnEnded += OnTurnChanged;
+    }
+
+    private void OnTurnChanged(Mob mob, TurnManager manager)
+    {
+        Update(manager);
+    }
+
+
     public override void _Ready()
     {
         base._Ready();
@@ -41,6 +53,7 @@ public partial class CombatTurnUI : Control, ISceneDependency
             }
         }
     }
+
 
     private partial class DelayContainer : TextureRect
     {

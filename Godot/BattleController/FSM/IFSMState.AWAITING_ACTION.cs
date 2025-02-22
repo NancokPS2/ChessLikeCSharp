@@ -9,8 +9,11 @@ using Godot.Display;
 
 namespace Godot;
 
+
 public class BattleControllerStateAwaitingAction : BattleControllerState
 {
+    private int endTurnPressed;
+
     private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
 
     public BattleControllerStateAwaitingAction(BattleController.State identifier) : base(identifier)
@@ -27,7 +30,15 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         mob_ui.Update(User);
         BattleController.CompCombatUI.NodeActionUI.EnableActionButtons(true);
 
+        EventBus.InputTurnEnded += () => OnTurnEnd();
+
     }
+
+    private int OnTurnEnd()
+    {
+        return endTurnPressed++;
+    }
+
 
     public override void StateOnExit()
     {
@@ -46,14 +57,14 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         User.UpdateCameraPosition(delta);
 
         //If an action was selected, pass to the TARGETING state.
-        if (User.InputActionSelected is not null)
+        if (User.ActionSelected is not null)
         {
             //
             //TODO: Owner cannot be null
             User.TurnUsageParameters = new Ability.UsageParameters(
                 BattleController.CompTurnManager.GetCurrentTurnTaker() as Mob, 
                 BattleController.CompGrid, 
-                User.InputActionSelected
+                User.ActionSelected
                 );
             User.FSMSetState(BattleController.State.TARGETING);
         }
