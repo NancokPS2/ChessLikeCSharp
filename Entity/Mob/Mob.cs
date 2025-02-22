@@ -204,14 +204,26 @@ public partial class Mob
     public List<Ability> GetAbilities()
     {
         List<Ability> output = new();
-        output.AddRange((IEnumerable<Ability>)Actions.Where(x => x is Ability));
+        foreach (var item in Actions)
+        {
+            if (item is Ability abil)
+            {
+                output.Add(abil);
+            }
+        }
         return output;
     }
 
     public List<Passive> GetPassives()
     {
         List<Passive> output = new();
-        output.AddRange((IEnumerable<Passive>)Actions.Where(x => x is Passive));
+        foreach (var item in Actions)
+        {
+            if (item is Passive pas)
+            {
+                output.Add(pas);
+            }
+        }
         return output;
     }
     #endregion
