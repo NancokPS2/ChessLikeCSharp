@@ -22,7 +22,7 @@ public class BattleControllerStatePaused : BattleControllerState
     {
         StatePrePause = User.StatePrevious;
 
-        _menu_reference = new Pause().GetInstantiatedScene<Pause>();
+        _menu_reference = Global.Readonly.SCENE_UI_PAUSE.Instantiate<Pause>();
         UI.GetLayer(UI.ELayer.PAUSE_MENU).AddChild(_menu_reference);
 
         if (User.StatePrevious is null)
