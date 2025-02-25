@@ -27,7 +27,7 @@ public class BattleControllerStateActionRunning : BattleControllerState
     {
         BattleController.CompCombatUI.Show();
         User.ActionSelected = null;
-        User.TurnUsageParameters.PositionsTargeted = new();
+        (User.TurnUsageParameters ?? throw new Exception()).PositionsTargeted = new();
     }
 
     public override void StateProcess(double delta)

@@ -9,15 +9,6 @@ using Godot;
 
 public partial class UI: Node2D, IDebugDisplay
 {
-    public enum ELayer {
-        BASE_LAYER,
-        PAUSE_MENU,
-        MSG_QUEUE,
-        CHEAT_INPUT,
-        GLOBAL_DRAW,
-        TOOLTIP,
-        DEBUG_DRAW,
-    }
 
     public static UI Instance;
 
@@ -46,21 +37,17 @@ public partial class UI: Node2D, IDebugDisplay
     public static Node2D GetLayerDrawTarget(ELayer layer) => GetLayer(layer).DrawTarget;
 
     public static int GetLayerCount() => Instance.CanvasLayers.Values.Count;
-
+/* 
+    public static IPopup<TEnum> ShowEnum<TEnum>()
+    {
+        IPopup popup = new();
+        AddToParent(GetLayer(ELayer.POPUP));
+    }
+ */
     public static List<CanvasWithTarget> GetCanvasLayers => Instance.CanvasLayers.Values.ToList();
 
     public string GetText()
     {
         return CanvasLayers.ToStringList();
-    }
-
-    public partial class CanvasWithTarget: CanvasLayer
-    {
-        public Node2D DrawTarget = new();
-        public override void _Ready()
-        {
-            base._Ready();
-            AddChild(DrawTarget);
-        }
     }
 }

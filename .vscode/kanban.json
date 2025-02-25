@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "BattleController IFSM should switch states on events.",
+                    "id": "berzltnffszxyc6aiwjy9zi5"
+                },
+                {
                     "text": "UI should queue its update to next frame to avoid overlapping calls from causing slowdowns.",
                     "id": "uzoz6siye7i7vw9h1d27fyyx"
                 },
@@ -129,5 +133,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1740246297376
+    "timestamp": 1740489964824
 }

@@ -12,6 +12,25 @@ public partial class CombatActionUI : Control, ISceneDependency
 
 	private Mob? MobCurrent;
 
+    public CombatActionUI()
+    {
+        EventBus.BattleStateChanged += OnBattleStateChanged;
+    }
+
+    private void OnBattleStateChanged(BattleControllerState obj)
+    {
+        switch(obj.StateIdentifier)
+        {
+            case BattleController.State.AWAITING_ACTION:
+                EnableActionButtons(true);
+                break;
+
+            default:
+                EnableActionButtons(false);
+                break;
+        }
+    }
+
     public override void _Ready()
     {
         base._Ready();
@@ -49,7 +68,7 @@ public partial class CombatActionUI : Control, ISceneDependency
         container.AddChild(end_turn);
     }
 
-    public void EnableActionButtons(bool enable)
+    private void EnableActionButtons(bool enable)
     {
 		if(NodeActionContainer is null) {throw new Exception("Null NodeActionContainer");}
 

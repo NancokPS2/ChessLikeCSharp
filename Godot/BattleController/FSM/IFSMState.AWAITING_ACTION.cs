@@ -22,17 +22,23 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
     public override void StateOnEnter()
     {
-        CombatGeneralUI mob_ui = BattleController.CompCombatUI;
-        //TurnManager turn_manager = BattleController.CompTurnManager;
+        EventBus.InputTurnEnded += OnInputTurnEnded;
 
-        //Mob taking_turn = turn_manager.GetCurrentTurnTaker() as Mob;
+        CombatGeneralUI mob_ui = BattleController.CompCombatUI;
 
         mob_ui.Update(User);
-        BattleController.CompCombatUI.NodeActionUI.EnableActionButtons(true);
 
         EventBus.InputTurnEnded += () => OnTurnEnd();
 
     }
+
+    public override void StateOnExit()
+    {
+        EventBus.InputTurnEnded -= OnInputTurnEnded;
+    }
+
+    private void OnInputTurnEnded() => endTurnPressed ++;
+
 
     private int OnTurnEnd()
     {
@@ -40,10 +46,6 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
     }
 
 
-    public override void StateOnExit()
-    {
-        BattleController.CompCombatUI.NodeActionUI.EnableActionButtons(false);
-    }
 
     public override void StateProcess(double delta)
     {
