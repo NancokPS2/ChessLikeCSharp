@@ -16,6 +16,7 @@ public class BattleControllerStateEndCombat : BattleControllerState
     {
     }
 
+    //TODO: Make this event based
     public override void StateOnEnter()
     {
         MessageQueue.AddMessage("VICTORY");

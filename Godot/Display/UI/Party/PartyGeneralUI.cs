@@ -4,11 +4,10 @@ using System;
 using System.Collections;
 
 [GlobalClass]
-public partial class PartyGeneralUI : Control, ISceneDependency
+public partial class PartyGeneralUI : Control
 {
 	private const int DEBUG_ACTION_SAVE_JOBS = 0;
 	private const int DEBUG_ACTION_SAVE_UNIT = 1;
-	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Party/PartyGeneralUI.tscn";
 
 	[Export]
 	public PartyMobListUI? NodePartyListUI;

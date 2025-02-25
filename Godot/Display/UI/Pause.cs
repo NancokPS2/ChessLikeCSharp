@@ -4,9 +4,8 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class Pause : Control, ISceneDependency
+public partial class Pause : Control
 {
-    string ISceneDependency.SCENE_PATH { get; } = "res://Godot/Display/UI/Pause.tscn";
 
 	private enum MenuOption {RESUME, PARTY}
 
@@ -19,7 +18,7 @@ public partial class Pause : Control, ISceneDependency
 
 	public Pause()
 	{
-		_party_scene = new PartyGeneralUI().GetInstantiatedScene<PartyGeneralUI>();
+		_party_scene = Global.Readonly.SCENE_UI_PARTY.Instantiate<PartyGeneralUI>();
 		_party_scene.Activate(false);
 	}
 

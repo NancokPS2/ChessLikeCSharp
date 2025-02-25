@@ -22,8 +22,6 @@ public class BattleControllerStatePaused : BattleControllerState
     {
         StatePrePause = User.StatePrevious;
 
-        BattleController.CompCamera.SetControl(false);
-
         _menu_reference = new Pause().GetInstantiatedScene<Pause>();
         UI.GetLayer(UI.ELayer.PAUSE_MENU).AddChild(_menu_reference);
 
@@ -35,8 +33,8 @@ public class BattleControllerStatePaused : BattleControllerState
 
     public override void StateOnExit()
     {
+        //TODO: Make it QueueFree()
         _menu_reference?.RemoveSelf();
-        BattleController.CompCamera.SetControl(true);
     }
 
     public override void StateProcess(double delta)

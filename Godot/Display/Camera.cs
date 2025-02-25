@@ -54,7 +54,23 @@ public partial class Camera : Camera3D
 
     public Camera()
     {
+        EventBus.BattleStateChanged += OnBattleStateChanged;
     }
+
+    private void OnBattleStateChanged(BattleControllerState obj)
+    {
+        switch (obj.StateIdentifier)
+        {
+            case BattleController.State.PAUSED:
+                SetControl(false);
+                break;
+                
+            default:
+                SetControl(true);
+                break;
+        }
+    }
+
 
     public override void _Input(InputEvent @event)
     {

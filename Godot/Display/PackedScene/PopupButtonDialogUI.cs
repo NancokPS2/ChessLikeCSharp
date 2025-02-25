@@ -2,10 +2,9 @@ using Godot;
 using System;
 using System.Runtime.CompilerServices;
 
-public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
+public partial class PopupButtonDialogUI : CanvasLayer
 {
 	public const int NO_INDEX = -1;
-    public string SCENE_PATH { get; } = "res://Godot/Display/PackedScene/PopupButtonDialogUI.tscn";
 
 	public enum EConfirmCancel {CONFIRM, CANCEL}
 
