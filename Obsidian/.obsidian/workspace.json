@@ -98,6 +98,21 @@
             }
           },
           {
+            "id": "8281d1fa92fbfd86",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Magic in every day life.md",
+                "mode": "source",
+                "backlinks": true,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Magic in every day life"
+            }
+          },
+          {
             "id": "d591125305e13f8c",
             "type": "leaf",
             "state": {
@@ -113,7 +128,7 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 6
       }
     ],
     "direction": "vertical"
@@ -144,7 +159,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:character",
+                "query": "tag:#location",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -175,7 +190,8 @@
               "title": "Tag Folder"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -265,9 +281,15 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "6cba32fbd7e5c473",
+  "active": "58a5df14686a66a9",
   "lastOpenFiles": [
+    "Continent.md",
+    "World Map/Region.md",
+    "World Map/Sub Region.md",
+    "World Map/General map layout.canvas",
+    "Magic in every day life.md",
     "Local Rangers.md",
+    "Phoenix Warrior.md",
     "Main Character.md",
     "Race/Vojiklo.md",
     "Race/Aperion.md",
@@ -293,12 +315,6 @@
     "Language/Dushki.md",
     "World Map/Dushe.md",
     "templates/CombatJob.md",
-    "Mechanics/Combat Job.md",
-    "Mechanics/Character Stats.md",
-    "World Map/Dead Jungle.md",
-    "World Map/The barrens.md",
-    "World Map/Underworld.md",
-    "World Map/General map layout.canvas",
     "Untitled.canvas",
     "Language",
     "Mechanics",

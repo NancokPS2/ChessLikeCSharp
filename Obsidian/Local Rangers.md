@@ -1,5 +1,6 @@
 ---
 tags:
+  - general
 ---
 A world wide organization focused on training volunteers for public service.
 The organization lives on mostly trough tradition. As rangers will often embark on missions to setup new training centers around the world.
