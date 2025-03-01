@@ -103,13 +103,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Magic in every day life.md",
+                "file": "How magic works.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Magic in every day life"
+              "title": "How magic works"
             }
           },
           {
@@ -281,14 +281,16 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "58a5df14686a66a9",
+  "active": "8281d1fa92fbfd86",
   "lastOpenFiles": [
+    "Mundane magic.md",
+    "How magic works.md",
+    "Magic in every day life.md",
+    "Local Rangers.md",
     "Continent.md",
     "World Map/Region.md",
     "World Map/Sub Region.md",
     "World Map/General map layout.canvas",
-    "Magic in every day life.md",
-    "Local Rangers.md",
     "Phoenix Warrior.md",
     "Main Character.md",
     "Race/Vojiklo.md",
@@ -313,8 +315,6 @@
     "Language.md",
     "Race",
     "Language/Dushki.md",
-    "World Map/Dushe.md",
-    "templates/CombatJob.md",
     "Untitled.canvas",
     "Language",
     "Mechanics",
