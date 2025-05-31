@@ -20,10 +20,10 @@ public class MobCommandTakeDamage : Command
     public override void UseCommand(Mob mob)
     {
         base.UseCommand(mob);
-        float defense = mob.Stats.GetValue(StatName.DEFENSE) * DefenseRatioAccounted - DefenseIgnoreFlat;
+        float defense = mob.Stats.GetValue(EStatName.DEFENSE) * DefenseRatioAccounted - DefenseIgnoreFlat;
         float health_loss = Damage - defense;
-        float change = mob.Stats.ChangeValue(StatName.HEALTH, Math.Min(-health_loss, 0));
+        float change = mob.Stats.ChangeValue(EStatName.HEALTH, Math.Min(-health_loss, 0));
 
-        EventBus.MobStatChanged?.Invoke(mob, StatName.HEALTH, change);
+        EventBus.MobStatChanged?.Invoke(mob, EStatName.HEALTH, change);
     }
 }

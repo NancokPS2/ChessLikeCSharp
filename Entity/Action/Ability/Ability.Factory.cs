@@ -17,7 +17,7 @@ public partial class Ability
         {
             EAbility.PUNCH => output
                 .ChainName("Punch")
-                .ChainEffectDamageHealth(StatName.STRENGTH, 0.5f),
+                .ChainEffectDamageHealth(EStatName.STRENGTH, 0.5f),
             EAbility.HEAL => output
                 .ChainName("Heal")
                 .ChainHealHealth(25),
@@ -51,11 +51,11 @@ public partial class Ability
 
   
 
-    public Ability ChainEffectDamageHealth(StatName stat_based, float damage)
+    public Ability ChainEffectDamageHealth(EStatName stat_based, float damage)
     {
         //Effect
         EffectStatChange effect = new();
-        effect.SetOwnerAddingBoost(StatName.STRENGTH, 1);
+        effect.SetOwnerAddingBoost(EStatName.STRENGTH, 1);
 
         //Targeting
         TargetParams.TargetingRange = 1;
@@ -78,13 +78,13 @@ public partial class Ability
     public Ability ChainEffectMove()
     {
         //TargetParams
-        TargetParams.TargetingRangeStatBonus = StatName.MOVEMENT;
+        TargetParams.TargetingRangeStatBonus = EStatName.MOVEMENT;
         TargetParams.TargetingRange = 0;
         TargetParams.TargetingUsesPathing = true;
         return this;
     }
 
-    public Ability ChainTargetBoostRangeByStat( StatName stat)
+    public Ability ChainTargetBoostRangeByStat( EStatName stat)
     {
         TargetParams.TargetingRangeStatBonus = stat;
         return this;

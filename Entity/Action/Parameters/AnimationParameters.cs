@@ -6,11 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
-public partial class ActionEvent : Resource
+public partial class AnimationParameters : Resource
 {
-    public class AnimationParameters
-    {
-        public float Duration = 1f;
-    }
-    
+    public float Duration = 1f;
 }

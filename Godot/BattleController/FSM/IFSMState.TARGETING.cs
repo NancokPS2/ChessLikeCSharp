@@ -61,7 +61,7 @@ public class BattleControllerStateTargeting : BattleControllerState
     public override void StateProcess(double delta)
     {
         //Setup values
-        ActionEvent.UsageParameters usage_params = User.TurnUsageParameters ?? throw new Exception("No UsageParametes set yet.");
+        UsageParameters usage_params = User.TurnUsageParameters ?? throw new Exception("No UsageParametes set yet.");
         Ability ability_selected = User.ActionSelected ?? throw new Exception("No Ability was selected yet.");
         Debug.Assert(GetSelectedAbility() == GetUsageParameters().ActionRef, "The UsageParameters should point to the selected action.");
 
@@ -204,6 +204,6 @@ public class BattleControllerStateTargeting : BattleControllerState
     }
 
     public Ability GetSelectedAbility() => User.ActionSelected ?? throw new Exception("No Ability was selected yet.");
-    public ActionEvent.UsageParameters GetUsageParameters() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
+    public UsageParameters GetUsageParameters() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
     public List<Vector3i> GetPositionsWithinRange() => _pos_valid_for_targeting;
 }

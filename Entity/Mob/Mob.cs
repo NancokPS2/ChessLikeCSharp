@@ -114,14 +114,14 @@ public partial class Mob
     public static MobStatSet GetDefaultStats()
     {
         MobStatSet output = new();
-        output.SetStat(StatName.HEALTH, 100);
-        output.SetStat(StatName.ENERGY, 30);
-        output.SetStat(StatName.AGILITY, 100);
-        output.SetStat(StatName.STRENGTH, 100);
-        output.SetStat(StatName.INTELLIGENCE, 100);
-        output.SetStat(StatName.MOVEMENT, 3);
-        output.SetStat(StatName.JUMP, 2);
-        output.SetStat(StatName.DELAY, 100);
+        output.SetStat(EStatName.HEALTH, 100);
+        output.SetStat(EStatName.ENERGY, 30);
+        output.SetStat(EStatName.AGILITY, 100);
+        output.SetStat(EStatName.STRENGTH, 100);
+        output.SetStat(EStatName.INTELLIGENCE, 100);
+        output.SetStat(EStatName.MOVEMENT, 3);
+        output.SetStat(EStatName.JUMP, 2);
+        output.SetStat(EStatName.DELAY, 100);
         return output;
     }
     #endregion

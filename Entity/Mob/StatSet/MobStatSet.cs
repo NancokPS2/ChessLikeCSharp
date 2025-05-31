@@ -7,14 +7,18 @@ using ExtendedXmlSerializer.ExtensionModel.Content;
 
 namespace ChessLike.Entity;
 
-public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatSet, MobStatSetResource>
+public partial class MobStatSet : StatSet<EStatName>, IResourceSerialize<MobStatSet, MobStatSetResource>
 {
     public MobStatSet() : base()
     {
 
     }
 
-    public  MobStatSet(StatSet<StatName> stats) : this()
+    protected override bool IsValidStat(EStatName stat)
+        => stat != EStatName.NONE;
+
+
+    public MobStatSet(StatSet<EStatName> stats) : this()
     {
         MaxDict = stats.MaxDict;
     }
@@ -43,7 +47,7 @@ public partial class MobStatSet : StatSet<StatName>, IResourceSerialize<MobStatS
     public override string ToString()
     {
         string output = "";
-        foreach (StatName item in MaxDict.Keys)
+        foreach (EStatName item in MaxDict.Keys)
         {
             output += item.ToString() + ": " 
             + GetValue(item).ToString() + "/" 

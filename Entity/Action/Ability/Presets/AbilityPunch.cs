@@ -43,7 +43,7 @@ public class AbilityPunch : Ability
 
 
     public float GetDamage(UsageParameters usage)
-        => usage.OwnerRef.Stats.GetValue(StatName.STRENGTH) / 2;
+        => usage.OwnerRef.Stats.GetValue(EStatName.STRENGTH) / 2;
 
     public override string GetUseText(UsageParameters parameters)
     {
@@ -53,6 +53,6 @@ public class AbilityPunch : Ability
 
     public override string GetDescription()
     {
-        return $"Attack a target with your weapon, dealing {Owner.Stats.GetValue(StatName.STRENGTH) / 2} damage. (50% {StatName.STRENGTH})";
+        return $"Attack a target with your weapon, dealing {Owner.Stats.GetValue(EStatName.STRENGTH) / 2} damage. (50% {EStatName.STRENGTH})";
     }
 }

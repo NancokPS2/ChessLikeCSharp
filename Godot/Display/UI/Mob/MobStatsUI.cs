@@ -42,9 +42,9 @@ public partial class MobStatsUI : Control, ISceneDependency
     private partial class StatsLabel : Label, ITooltip
     {
 		public MobStatSet StatSet;
-		public StatName Stat;
+		public EStatName Stat;
 
-		public StatsLabel(MobStatSet stat_set, StatName stat)
+		public StatsLabel(MobStatSet stat_set, EStatName stat)
 		{
 			StatSet = stat_set;
 			Stat = stat;

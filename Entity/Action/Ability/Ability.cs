@@ -5,6 +5,7 @@ using ChessLike.Entity;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Shared.Identification;
 using ChessLike.World;
+using Godot;
 
 namespace ChessLike.Entity.Action;
 
@@ -23,7 +24,10 @@ public partial class Ability : ActionEvent
 {
     public EAbility Identifier = EAbility.NULL;
 
+    [Export]
     public MobFilterParameters FilterParams = new();
+    
+    [Export]
     public TargetingParameters TargetParams = new();
 
     public override void Use(UsageParameters usage_params)

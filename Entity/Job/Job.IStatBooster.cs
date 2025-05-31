@@ -21,7 +21,7 @@ public partial class Job : MobStatSet.IStatBooster
         MobStatSet.StatBoost output = new(GetBoostSource());
         foreach (var stat in StatMultiplicativeBoostDict)
         {
-            StatName stat_name = stat.Key;
+            EStatName stat_name = stat.Key;
             float stat_value = stat.Value;
             output.SetMultiplicativeMax(stat_name, stat_value);
         }

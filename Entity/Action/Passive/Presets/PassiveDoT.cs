@@ -22,7 +22,7 @@ public class PassiveDoT : Passive
     public override void Use(UsageParameters usage_params)
     {
         base.Use(usage_params);
-        float health_to_loose = usage_params.OwnerRef.Stats.GetMax(StatName.HEALTH) * Percentage;
+        float health_to_loose = usage_params.OwnerRef.Stats.GetMax(EStatName.HEALTH) * Percentage;
         MobCommand.Command command = new MobCommandTakeDamage(health_to_loose) { DefenseRatioAccounted = 100};
         usage_params.OwnerRef.CommandProcess(command);
     }

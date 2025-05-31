@@ -1,7 +1,8 @@
 namespace ChessLike.Entity;
 
-public enum StatName
+public enum EStatName
 {
+    NONE = -1,
     HEALTH,     //0
     ENERGY,     //1
     MOVEMENT,   //2

@@ -38,14 +38,14 @@ public partial class AbilityResource : Godot.Resource
     [Export]
     public uint TargetingRange = 4;
     [Export]
-    public StatName TargetingRangeStatBonus = (StatName)(-1);
+    public EStatName TargetingRangeStatBonus = (EStatName)(-1);
     [Export]
     public int MaxTargetedPositions = 1;
     [Export]
     public bool RespectsOwnerPathing = false;
 
     [Export]
-    public Ability.TargetingParameters.AoEMode AoeShape = Ability.TargetingParameters.AoEMode.SINGLE;
+    public TargetingParameters.AoEMode AoeShape = TargetingParameters.AoEMode.SINGLE;
     [Export]
     //Area when in SINGLE mode.
     public uint AoERange = 0;

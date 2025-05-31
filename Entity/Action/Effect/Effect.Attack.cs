@@ -2,12 +2,12 @@ namespace ChessLike.Entity.Action;
 
 public class EffectAttack : Effect
 {
-    public Dictionary<StatName, float> AttackStatBoost = new(){
-        {StatName.STRENGTH, 1},
+    public Dictionary<EStatName, float> AttackStatBoost = new(){
+        {EStatName.STRENGTH, 1},
     };
     public float FlatDamage = 0;
 
-    public override void CustomUse(Ability.UsageParameters usage_params)
+    public override void CustomUse(UsageParameters usage_params)
     {
         float damage = FlatDamage;
         foreach (var item in AttackStatBoost)
@@ -17,13 +17,13 @@ public class EffectAttack : Effect
 
         foreach (Mob target in usage_params.MobsTargeted)
         {
-            float defense = target.Stats.GetValue(StatName.DEFENSE);
+            float defense = target.Stats.GetValue(EStatName.DEFENSE);
             float total = Math.Clamp(damage - defense, 0, float.MaxValue);
-            target.Stats.ChangeValue(StatName.HEALTH, total);
+            target.Stats.ChangeValue(EStatName.HEALTH, total);
         }
     }
 
-    public EffectAttack SetDamageStat(StatName stat, float modifier)
+    public EffectAttack SetDamageStat(EStatName stat, float modifier)
     {
         AttackStatBoost[stat] = modifier;
         return this;

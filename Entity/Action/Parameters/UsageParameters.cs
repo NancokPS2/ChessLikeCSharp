@@ -12,7 +12,7 @@ namespace ChessLike.Entity.Action;
 /// <summary>
 /// Variables for Effect usage. Must be filled in the order of the variables.
 /// </summary>
-public partial class UsageParameters : Resource
+public partial class UsageParameters
 {
     public Mob OwnerRef;
     public Grid GridRef;

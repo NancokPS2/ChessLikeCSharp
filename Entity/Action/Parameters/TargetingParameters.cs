@@ -13,13 +13,21 @@ public partial class TargetingParameters : Resource
 {
     //Targeting
     //Distance from the user at which this can be used.
+    [Export]
     public uint TargetingRange = 4;
-    public StatName? TargetingRangeStatBonus = null;
+
+    [Export]
+    public EStatName TargetingRangeStatBonus = EStatName.NONE;
+
+    [Export]
     public int TargetingMaxPositions = 1;
+
+    [Export]
     //Only works if the filter deems the position as valid.
     public bool TargetingNeedsValidMob = true;
-    public bool TargetingUsesPathing = false;
 
+    [Export]
+    public bool TargetingUsesPathing = false;
 
     //AoE
     public enum AoEMode
@@ -30,15 +38,20 @@ public partial class TargetingParameters : Resource
         PERPENDICULAR_LINE, //Line covering the front of the character + left and right. RangeMax is treated as 1.
         FLOOD_FILL_NO_SOLID
     }
+    [Export]
     public AoEMode AoeShape = AoEMode.SINGLE;
+
+    [Export]
     //Area when in SINGLE mode.
     public uint AoERange = 0;
+
+    [Export]
     public bool AoENeedsValidMob = false;
 
     public uint GetTotalRange(Mob owner)
     {
         uint output = TargetingRange;
-        if (TargetingRangeStatBonus is StatName stat)
+        if (TargetingRangeStatBonus is EStatName stat)
         {
             output += (uint)owner.Stats.GetValue(stat);
         }

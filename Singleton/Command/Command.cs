@@ -65,7 +65,7 @@ public partial class Command: Node
             case "notded":
                 if (GetHoveredUnit() is Mob mob_to_heal)
                 {
-                    mob_to_heal.Stats.SetValue(StatName.HEALTH, 99999);
+                    mob_to_heal.Stats.SetValue(EStatName.HEALTH, 99999);
                 }
                 label.Text += "Good day.";
                 break;
@@ -73,7 +73,7 @@ public partial class Command: Node
             case "ivefallen":
                 if (GetHoveredUnit() is Mob mob_to_hurt)
                 {
-                    mob_to_hurt.Stats.SetValue(StatName.HEALTH, 1);
+                    mob_to_hurt.Stats.SetValue(EStatName.HEALTH, 1);
                 }
                 label.Text += "And don't get up!";
                 break;
@@ -102,7 +102,7 @@ public partial class Command: Node
     private void AllCombatUnitsSetHP(float amount)
     {
         Global.ManagerMob.GetInCombat().ForEach(
-            x => x.Stats.SetValue(ChessLike.Entity.StatName.HEALTH, amount)            
+            x => x.Stats.SetValue(ChessLike.Entity.EStatName.HEALTH, amount)            
             );
     }
 

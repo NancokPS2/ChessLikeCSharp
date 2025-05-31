@@ -8,7 +8,7 @@ public partial class Job
 {
     private string displayedName = "";
     public EJob Identifier = EJob.DEFAULT;
-    public Dictionary<StatName, float> StatMultiplicativeBoostDict = new();
+    public Dictionary<EStatName, float> StatMultiplicativeBoostDict = new();
     public List<Ability> Abilities = new();
     public List<Passive> Passives = new();
     public EMovementMode MovementMode = EMovementMode.WALK;

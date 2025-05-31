@@ -14,7 +14,7 @@ public partial class MobStatSetResource : Resource
     /// </summary>
     //[Export] public Godot.Collections.Dictionary<StatName, float> Stats {get => Contents; set => Contents = value;}
     [Export]
-    public Godot.Collections.Dictionary<StatName, float> Contents = new();
+    public Godot.Collections.Dictionary<EStatName, float> Contents = new();
 
     public MobStatSetResource()
     {

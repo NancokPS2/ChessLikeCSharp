@@ -53,17 +53,17 @@ public class AbilityWeaponAttack : Ability
     public float GetDamage(UsageParameters usage, AbilityVariant variant) => variant switch
     {
         AbilityVariant.HEAVY_BLUNT =>
-            (usage.OwnerRef.Stats.GetValue(StatName.STRENGTH) * 0.9f) 
+            (usage.OwnerRef.Stats.GetValue(EStatName.STRENGTH) * 0.9f) 
             + WeaponDamage,
 
         AbilityVariant.LIGHT_BLADE => 
-            (usage.OwnerRef.Stats.GetValue(StatName.AGILITY) * 0.6f) 
-            + (usage.OwnerRef.Stats.GetValue(StatName.AGILITY) * 0.2f)
+            (usage.OwnerRef.Stats.GetValue(EStatName.AGILITY) * 0.6f) 
+            + (usage.OwnerRef.Stats.GetValue(EStatName.AGILITY) * 0.2f)
             + WeaponDamage,
 
         AbilityVariant.BOW =>
-            (usage.OwnerRef.Stats.GetValue(StatName.AGILITY) * 0.2f)
-            + (usage.OwnerRef.Stats.GetValue(StatName.INTELLIGENCE) * 0.15f) 
+            (usage.OwnerRef.Stats.GetValue(EStatName.AGILITY) * 0.2f)
+            + (usage.OwnerRef.Stats.GetValue(EStatName.INTELLIGENCE) * 0.15f) 
             + WeaponDamage,
 
         AbilityVariant.SPEAR => GetDamage(usage, Variant),

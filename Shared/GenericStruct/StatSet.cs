@@ -9,6 +9,8 @@ using Godot;
 namespace ChessLike.Shared;
 public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 {
+    public readonly TStatEnum[] AllStats;
+
     public const string INVALID_BOOST_SOURCE = "__INVALID__";
     public delegate void StatChange(TStatEnum name, float amount);
     public event StatChange? StatValueChanged;
@@ -25,8 +27,12 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         }
     }
 
+    protected virtual bool IsValidStat(TStatEnum stat) => true;
+
     public StatSet(Dictionary<TStatEnum, float> values) : base()
     {
+        AllStats = ((TStatEnum[])Enum.GetValues(typeof(TStatEnum))).Where(x => IsValidStat(x)).ToArray();
+
         foreach (TStatEnum stat_name in values.Keys)
         {
             SetStat(stat_name, values[stat_name]);
@@ -64,7 +70,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public void ChangeMax(TStatEnum stat, float value)
     {
-        MaxDict[stat] = MaxDict[stat] + value;
+        SetMax(stat, GetMax(stat) + value);
     }
 
     public void SetMax(TStatEnum stat, float value)

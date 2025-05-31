@@ -23,7 +23,7 @@ public class ActionEventRunner : IDebugDisplay
 
     private List<QueuedAction> Queue = new();
 
-    public uint QueueAdd(ActionEvent action, Ability.UsageParameters parameters)
+    public uint QueueAdd(ActionEvent action, UsageParameters parameters)
     {
         if(parameters.PositionsTargeted.Count == 0){throw new Exception("Invalid parameters.");}
         uint id = QueueGetAvailableId();
@@ -31,7 +31,7 @@ public class ActionEventRunner : IDebugDisplay
         return QueueInsert(action, parameters, index);
     }
 
-    private uint QueueInsert(ActionEvent action, Ability.UsageParameters parameters, int index)
+    private uint QueueInsert(ActionEvent action, UsageParameters parameters, int index)
     {
         uint id = QueueGetAvailableId();
         Queue.Insert(index, new QueuedAction(action, parameters, id));
@@ -98,7 +98,7 @@ public class ActionEventRunner : IDebugDisplay
         {
             RunningQueuedAction = Queue[RunningIndex];
             ActionEvent action = RunningQueuedAction.action;
-            Ability.UsageParameters parameters = RunningQueuedAction.usage_params;
+            UsageParameters parameters = RunningQueuedAction.usage_params;
 
             action.Use(parameters);
             MessageQueue.AddMessage(action.GetUseText(parameters));
@@ -148,10 +148,10 @@ public class ActionEventRunner : IDebugDisplay
     private class QueuedAction
     {
         public ActionEvent action;
-        public Ability.UsageParameters usage_params;
+        public UsageParameters usage_params;
         public uint id;
 
-        public QueuedAction(ActionEvent action, Ability.UsageParameters usage_params, uint id)
+        public QueuedAction(ActionEvent action, UsageParameters usage_params, uint id)
         {
             this.action = action;
             this.usage_params = usage_params;

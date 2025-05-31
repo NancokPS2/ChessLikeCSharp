@@ -18,7 +18,7 @@ public partial class AbilityMove : Ability
             TargetingRange = 0,
             TargetingMaxPositions = 1,
             TargetingUsesPathing = true,
-            TargetingRangeStatBonus = StatName.MOVEMENT,
+            TargetingRangeStatBonus = EStatName.MOVEMENT,
         };
 
         FilterParams = new MobFilterParameters()

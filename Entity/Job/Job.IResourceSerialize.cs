@@ -26,7 +26,7 @@ public partial class Job : IResourceSerialize<Job, JobResource>
             Job output = new();
 
             output.Identifier = resource.Identifier;
-            Godot.Collections.Dictionary<StatName, float> from = resource.StatMultiplicativeBoostDict;
+            Godot.Collections.Dictionary<EStatName, float> from = resource.StatMultiplicativeBoostDict;
             output.StatMultiplicativeBoostDict = from.ToDictionary(
                 x => x.Key, y => y.Value
                 );

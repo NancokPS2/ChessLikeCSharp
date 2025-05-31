@@ -21,14 +21,14 @@ public partial class Mob : IGridObject
             case EMovementMode.WALK:
                 distance = from.DistanceManhattanWithToleranceTo(
                         to, 
-                        new(0, (int)Stats.GetValue(StatName.JUMP), 0)
+                        new(0, (int)Stats.GetValue(EStatName.JUMP), 0)
                     );
                 return distance <= 1;
             
             default:
                 distance = from.DistanceManhattanWithToleranceTo(
                         to, 
-                        new(0, (int)Stats.GetValue(StatName.MOVEMENT), 0)
+                        new(0, (int)Stats.GetValue(EStatName.MOVEMENT), 0)
                     );
                 return distance <= 1;
         }
@@ -59,12 +59,12 @@ public partial class Mob : IGridObject
 
     public int PathingGetHorizontalRange()
     {
-        return (int)Stats.GetValue(StatName.MOVEMENT);
+        return (int)Stats.GetValue(EStatName.MOVEMENT);
     }
 
     public int PathingGetVerticalRange()
     {
-        return (int)Stats.GetValue(StatName.JUMP);
+        return (int)Stats.GetValue(EStatName.JUMP);
     }
 
     public bool PathingIsInRange(Grid grid, Vector3i position)

@@ -27,8 +27,8 @@ public partial class TestGridDisplay : Node
         Display.SetGrid(grid);
         MobTest = Mob.CreatePrototype(EMobPrototype.HUMAN);
         MobTest.Position = new(2,1,2);
-        MobTest.Stats.SetStat(StatName.MOVEMENT, 2);
-        MobTest.Stats.SetStat(StatName.JUMP, 2);
+        MobTest.Stats.SetStat(EStatName.MOVEMENT, 2);
+        MobTest.Stats.SetStat(EStatName.JUMP, 2);
     }
 
     public override void _Ready()

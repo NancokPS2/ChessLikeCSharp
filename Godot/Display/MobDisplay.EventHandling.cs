@@ -16,7 +16,7 @@ public partial class MobMeshDisplay
         EventBus.MobStatChanged += OnMobStatValueChanged;
     }
 
-    public void OnMobStatValueChanged(Mob mob, StatName stat, float amount)
+    public void OnMobStatValueChanged(Mob mob, EStatName stat, float amount)
     {
         MobDisplayComponent comp = GetComponent(mob);
         Vector3 global_pos = comp.GetPositionGlobal();

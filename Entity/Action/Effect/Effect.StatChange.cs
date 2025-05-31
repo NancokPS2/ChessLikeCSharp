@@ -16,30 +16,30 @@ public class EffectStatChange : Effect
     public bool InvertResult;
 
     //Which stat to change.
-    public StatName StatToChange;
+    public EStatName StatToChange;
 
     //Which stat of the target to change.
     //Sum this stat from the owner to the value.
-    public Dictionary<StatName, float> StatsAddingFromOwner = new(){
-        {StatName.STRENGTH, 1},
+    public Dictionary<EStatName, float> StatsAddingFromOwner = new(){
+        {EStatName.STRENGTH, 1},
     };
 
-    public Dictionary<StatName, float> StatsAddingFromTarget = new(){
-        {StatName.STRENGTH, 1},
+    public Dictionary<EStatName, float> StatsAddingFromTarget = new(){
+        {EStatName.STRENGTH, 1},
     };
 
-    public Dictionary<StatName, float> StatsReducingFromOwner = new(){
-        {StatName.STRENGTH, 1},
+    public Dictionary<EStatName, float> StatsReducingFromOwner = new(){
+        {EStatName.STRENGTH, 1},
     };
 
-    public Dictionary<StatName, float> StatsReducingFromTarget = new(){
-        {StatName.STRENGTH, 1},
+    public Dictionary<EStatName, float> StatsReducingFromTarget = new(){
+        {EStatName.STRENGTH, 1},
     };
 
     //How much to change it as a base.
     public float FlatAmount = 0;
 
-    public override void CustomUse(Ability.UsageParameters usage_params)
+    public override void CustomUse(UsageParameters usage_params)
     {
         Mob owner = usage_params.OwnerRef;
 
@@ -73,7 +73,7 @@ public class EffectStatChange : Effect
         }
     }
 
-    protected static float GetEffectFromStats(MobStatSet stats, Dictionary<StatName, float> stat_dict)
+    protected static float GetEffectFromStats(MobStatSet stats, Dictionary<EStatName, float> stat_dict)
     {
         float output = 0;
         foreach (var item in stat_dict)
@@ -85,22 +85,22 @@ public class EffectStatChange : Effect
         return output;
     }
 
-    public EffectStatChange SetOwnerAddingBoost(StatName stat, float modifier)
+    public EffectStatChange SetOwnerAddingBoost(EStatName stat, float modifier)
     {
         StatsAddingFromOwner[stat] = modifier;
         return this;
     }
-    public EffectStatChange SetOwnerReducingBoost(StatName stat, float modifier)
+    public EffectStatChange SetOwnerReducingBoost(EStatName stat, float modifier)
     {
         StatsReducingFromOwner[stat] = modifier;
         return this;
     }
-    public EffectStatChange SetTargetAddingBoost(StatName stat, float modifier)
+    public EffectStatChange SetTargetAddingBoost(EStatName stat, float modifier)
     {
         StatsAddingFromTarget[stat] = modifier;
         return this;
     }
-    public EffectStatChange SetTargetReducingBoost(StatName stat, float modifier)
+    public EffectStatChange SetTargetReducingBoost(EStatName stat, float modifier)
     {
         StatsReducingFromTarget[stat] = modifier;
         return this;
