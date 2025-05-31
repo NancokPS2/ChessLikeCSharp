@@ -16,10 +16,19 @@ public abstract partial class ActionEvent : Resource
     public string Name = "Undefined Action";
 
     [Export]
+    public MobFilterParameters FilterParams = new();
+
+    [Export]
+    public TargetingParameters TargetParams = new();
+
+    [Export]
     public AnimationParameters AnimationParams = new();
 
     [Export]
     public MobFilterParameters MobFilterParams = new();
+
+    [Export]
+    public DurationParameters DurationParams = new();
 
     [Export]
     public Godot.Collections.Array<EActionFlag> Flags = new();

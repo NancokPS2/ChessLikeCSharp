@@ -52,7 +52,7 @@ public partial class MessageQueue: Node
         NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
 
-        EventBus.MobCommandUsed += AddMessageFromCommand;
+        EventBus.MobCommandBroadcasted += AddMessageFromCommand;
     }
 
     private void AddMessageFromCommand(Dictionary<EInfo, string> dictionary)

@@ -24,12 +24,6 @@ public partial class Ability : ActionEvent
 {
     public EAbility Identifier = EAbility.NULL;
 
-    [Export]
-    public MobFilterParameters FilterParams = new();
-    
-    [Export]
-    public TargetingParameters TargetParams = new();
-
     public override void Use(UsageParameters usage_params)
     {
         EventBus.AbilityUsed?.Invoke(usage_params);

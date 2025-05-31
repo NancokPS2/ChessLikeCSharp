@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "DurationParameters",
+                    "id": "i97ac4agicx0543y8ou4hjqk"
+                },
+                {
                     "text": "BattleController IFSM should switch states on events.",
                     "id": "berzltnffszxyc6aiwjy9zi5"
                 },
@@ -133,5 +137,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1740489964824
+    "timestamp": 1748708047324
 }
