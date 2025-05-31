@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity.Action.Preset;
 
-public class AbilityMove : Ability
+public partial class AbilityMove : Ability
 { 
     //TODO: implement variants
 

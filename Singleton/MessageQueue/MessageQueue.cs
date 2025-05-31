@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
-using ChessLike.Entity.Command;
+using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
 using Godot;
 
@@ -57,7 +57,7 @@ public partial class MessageQueue: Node
 
     private void AddMessageFromCommand(Dictionary<EInfo, string> dictionary)
     {
-        string message = MobCommand.ParseInfo(dictionary);
+        string message = ChessLike.Entity.MobCommand.Command.ParseInfo(dictionary);
         AddMessage(message, message.Length/6);
     }
 

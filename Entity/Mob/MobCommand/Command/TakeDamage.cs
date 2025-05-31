@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Entity.Command;
+namespace ChessLike.Entity.MobCommand;
 
-public class MobCommandTakeDamage : MobCommand
+public class MobCommandTakeDamage : Command
 {
     public float DefenseRatioAccounted = 1;
     public float DefenseIgnoreFlat = 0;

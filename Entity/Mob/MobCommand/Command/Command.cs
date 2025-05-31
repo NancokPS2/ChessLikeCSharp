@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Extension;
 
-namespace ChessLike.Entity.Command;
+namespace ChessLike.Entity.MobCommand;
 
-public abstract class MobCommand
+public abstract class Command
 {
     private bool Used = false;
 
     public List<ECommandFlag> Flags = new();
-    
+
 
     public virtual void UseCommand(Mob mob)
     {
@@ -21,6 +21,8 @@ public abstract class MobCommand
             throw new Exception("Commands are single-use.");
         }
         Used = true;
+
+        EventBus.MobCommandUsed?.Invoke(this, mob);
     }
 
     public static string ParseInfo(Dictionary<EInfo, string> dictionary)
@@ -29,7 +31,7 @@ public abstract class MobCommand
 
         foreach (KeyValuePair<EInfo, string> item in dictionary)
         {
-            switch(item.Key)
+            switch (item.Key)
             {
                 case EInfo.DAMAGE_DEALT:
                     output += "Dealt " + item.Value.ToString() + " damage.";
@@ -43,5 +45,6 @@ public abstract class MobCommand
 
         return output;
     }
+
 }
 

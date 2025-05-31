@@ -4,7 +4,7 @@ using System.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
-using ChessLike.Entity.Command;
+using ChessLike.Entity.MobCommand;
 using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
@@ -23,7 +23,7 @@ public class PassiveDoT : Passive
     {
         base.Use(usage_params);
         float health_to_loose = usage_params.OwnerRef.Stats.GetMax(StatName.HEALTH) * Percentage;
-        MobCommand command = new MobCommandTakeDamage(health_to_loose){DefenseRatioAccounted = 100};
+        MobCommand.Command command = new MobCommandTakeDamage(health_to_loose) { DefenseRatioAccounted = 100};
         usage_params.OwnerRef.CommandProcess(command);
     }
 

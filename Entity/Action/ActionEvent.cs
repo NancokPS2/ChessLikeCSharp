@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Extension;
+using Godot;
 
 namespace ChessLike.Entity.Action;
 
-public abstract partial class ActionEvent
+public abstract partial class ActionEvent : Resource
 {
     private Mob? owner;
     public Mob Owner { get => owner ?? throw new Exception("Owner should be set before usage."); set => owner = value; }
@@ -17,8 +18,6 @@ public abstract partial class ActionEvent
     public MobFilterParameters MobFilterParams = new();
 
     public List<EActionFlag> Flags = new();
-
-
 
     public abstract void Use(UsageParameters usage_params);
     public virtual string GetDescription()

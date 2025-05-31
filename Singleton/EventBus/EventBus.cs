@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using ChessLike.Entity;
-using ChessLike.Entity.Command;
+using ChessLike.Entity.Action;
+using ChessLike.Entity.MobCommand;
 using ChessLike.Shared.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
@@ -70,9 +71,13 @@ public partial class EventBus : Node
     public static MobMovement? MobMoved;
     public static MobMovementPath? MobFinishedMoving;
 
+    #region Mob Command
     //Mob commands
-    public delegate void MobCommandEvent(Dictionary<EInfo, string> dict);
+    public delegate void MobCommandBroadcast(Dictionary<EInfo, string> dict);
+    public delegate void MobCommandEvent(ChessLike.Entity.MobCommand.Command command, Mob onWho);
+    public static MobCommandBroadcast? MobCommandBroadcasted;
     public static MobCommandEvent? MobCommandUsed;
+    #endregion
 
     //Equipment
     public delegate void MobEquip(Mob mob, Item item, Inventory.Slot slot);

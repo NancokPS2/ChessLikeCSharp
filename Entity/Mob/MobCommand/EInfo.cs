@@ -1,4 +1,4 @@
-namespace ChessLike.Entity.Command;
+namespace ChessLike.Entity.MobCommand;
 
 public enum EInfo
 {

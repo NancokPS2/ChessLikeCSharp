@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Tracing;
 using System.Security.Cryptography.X509Certificates;
 using ChessLike.Entity;
-using ChessLike.Entity.Command;
+using ChessLike.Entity.MobCommand;
 using ChessLike.Shared.Identification;
 using ChessLike.World;
 

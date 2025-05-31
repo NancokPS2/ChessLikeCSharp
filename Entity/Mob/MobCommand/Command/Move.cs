@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Entity.Command;
+namespace ChessLike.Entity.MobCommand;
 
-public class MobCommandMove : MobCommand
+public class MobCommandMove : Command
 {
     Vector3i TargetLocation;
     public MobCommandMove(Vector3i target)

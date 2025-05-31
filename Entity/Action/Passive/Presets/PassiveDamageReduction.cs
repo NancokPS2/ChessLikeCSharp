@@ -4,7 +4,7 @@ using System.Linq;
 using System.Resources;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
-using ChessLike.Entity.Command;
+using ChessLike.Entity.MobCommand;
 using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
