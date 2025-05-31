@@ -9,7 +9,7 @@ using ChessLike.Shared.Storage;
 
 namespace ChessLike.Entity.Action.Preset;
 
-public class AbilityWeaponAttack : Ability
+public partial class AbilityWeaponAttack : Ability
 {
     public enum AbilityVariant {LIGHT_BLADE, SPEAR, HEAVY_BLUNT, BOW}
     public AbilityVariant Variant;

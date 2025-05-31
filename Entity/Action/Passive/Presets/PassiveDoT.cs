@@ -9,7 +9,7 @@ using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
 
-public class PassiveDoT : Passive
+public partial class PassiveDoT : Passive
 {
     public float Percentage = 0.15f;
 

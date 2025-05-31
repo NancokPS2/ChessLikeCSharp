@@ -9,7 +9,7 @@ using ChessLike.World;
 
 namespace ChessLike.Entity.Action;
 
-public class PassiveDamageReduction : Passive
+public partial class PassiveDamageReduction : Passive
 {
     public float Percentage = 0.15f;
     private IncomingDamageModifier? _command_interceptor_ref;

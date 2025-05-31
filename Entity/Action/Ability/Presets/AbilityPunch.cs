@@ -8,7 +8,7 @@ using ChessLike.Extension;
 
 namespace ChessLike.Entity.Action.Preset;
 
-public class AbilityPunch : Ability
+public partial class AbilityPunch : Ability
 {
     public AbilityPunch() : base()
     {
