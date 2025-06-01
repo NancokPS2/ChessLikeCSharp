@@ -35,6 +35,8 @@ public partial class Mob
 
     }
 
+    public bool IsInCombat() => mobState == EMobState.COMBAT;
+
     public MobStatSet Stats = GetDefaultStats();
 
     public Vector3i Position;

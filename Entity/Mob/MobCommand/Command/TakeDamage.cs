@@ -6,7 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
-public class MobCommandTakeDamage : Command
+public partial class MobCommandTakeDamage : Command
 {
     public float DefenseRatioAccounted = 1;
     public float DefenseIgnoreFlat = 0;

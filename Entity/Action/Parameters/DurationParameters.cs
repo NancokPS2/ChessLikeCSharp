@@ -7,6 +7,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
+[Obsolete("Replaced by AutoActivationParameters")]
 public partial class DurationParameters : Resource
 {
 

@@ -118,7 +118,6 @@ public class BattleControllerStateTargeting : BattleControllerState
                 AddTargetedToUsageParameters();
                 //Add action to the queue
                 BattleController.CompActionRunner.QueueAdd(
-                    GetSelectedAbility(), 
                     GetUsageParameters()
                     );
                 User.FSMSetState(BattleController.State.ACTION_RUNNING);

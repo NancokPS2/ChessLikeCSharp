@@ -14,28 +14,29 @@ public class ActionEventRunner : IDebugDisplay
 {
     public delegate void ActionQueue(ActionEvent action, UsageParameters parameters);
     public delegate void Delegate();
-    private event ActionQueue? ActionQueued;
-    private event ActionQueue? ActionStarted;
-    private event ActionQueue? ActionEnded;
 
-    private event Delegate? QueueStarted;
-    private event Delegate? QueueEnded;
-
+    #region Queue
     private List<QueuedAction> Queue = new();
 
-    public uint QueueAdd(ActionEvent action, UsageParameters parameters)
+    public uint QueueAdd(UsageParameters parameters)
     {
-        if(parameters.PositionsTargeted.Count == 0){throw new Exception("Invalid parameters.");}
-        uint id = QueueGetAvailableId();
+        //Make sure it is valid first.
+        if (!parameters.IsValid()) { throw new Exception("Invalid parameters."); }
+
+
+        //Actually try to queue it.
         int index = Queue.Count;
-        return QueueInsert(action, parameters, index);
+        return QueueInsert(parameters, index);
     }
 
-    private uint QueueInsert(ActionEvent action, UsageParameters parameters, int index)
+    private uint QueueInsert(UsageParameters parameters, int index)
     {
+        //Warn other actions about this one, so they can queue first.
+        EventBus.ActionAboutToBeQueued?.Invoke(parameters);
+
         uint id = QueueGetAvailableId();
-        Queue.Insert(index, new QueuedAction(action, parameters, id));
-        ActionQueued?.Invoke(action, parameters);
+        Queue.Insert(index, new QueuedAction(parameters.ActionRef, parameters, id));
+        EventBus.ActionQueued?.Invoke(parameters);
         return id;
     }
 
@@ -49,9 +50,9 @@ public class ActionEventRunner : IDebugDisplay
     private uint QueueGetAvailableId()
     {
         uint id = 0;
-        while (Queue.Any( x => x.id == id))
+        while (Queue.Any(x => x.id == id))
         {
-            id ++;
+            id++;
         }
         return id;
     }
@@ -60,8 +61,9 @@ public class ActionEventRunner : IDebugDisplay
     {
         Queue.Clear();
     }
+    #endregion
 
-    
+    #region Run Logic
     // RUN LOGIC
 
     private bool RunningEnabled;
@@ -73,18 +75,17 @@ public class ActionEventRunner : IDebugDisplay
 
     public void RunStart()
     {
-        if (Queue.Count == 0) {throw new Exception("Nothing to run.");}
+        if (Queue.Count == 0) { throw new Exception("Nothing to run."); }
         RunningReadyToSet = true;
         RunningEnabled = true;
         RunningIndex = 0;
         RunningTime = 0;
-        QueueStarted?.Invoke();
     }
 
     public void Process()
     {
         //If not allowed to run, stop.
-        if (!RunningEnabled){return;}
+        if (!RunningEnabled) { return; }
 
         //If it reached the end, stop.
         if (RunningIndex >= Queue.Count)
@@ -96,14 +97,16 @@ public class ActionEventRunner : IDebugDisplay
         //If no action is running, select one and use it to start.
         if (RunningReadyToSet == true)
         {
+            //Select the action to run.
             RunningQueuedAction = Queue[RunningIndex];
+            //Setup the usage
             ActionEvent action = RunningQueuedAction.action;
             UsageParameters parameters = RunningQueuedAction.usage_params;
 
+            EventBus.ActionAboutToBeUsed?.Invoke(parameters);
             action.Use(parameters);
             MessageQueue.AddMessage(action.GetUseText(parameters));
-            ActionStarted?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
-            
+
             RunningReadyToSet = false;
         }
 
@@ -114,8 +117,7 @@ public class ActionEventRunner : IDebugDisplay
         {
             RunningReadyToSet = true;
             RunningTime = 0;
-            RunningIndex ++;
-            ActionEnded?.Invoke(RunningQueuedAction.action, RunningQueuedAction.usage_params);
+            RunningIndex++;
         }
 
         //TODO: Maybe don't rely on this random node for timing.
@@ -128,15 +130,16 @@ public class ActionEventRunner : IDebugDisplay
         RunningEnabled = false;
         RunningIndex = 0;
         RunningTime = 0;
-        QueueEnded?.Invoke();
     }
+    #endregion
 
+    #region Misc
     public string GetText()
     {
         string output = string.Format(
             "Running ability: {0} \nRunning time: {1} \nRunning index: {2} \nQueue count: {3}",
             new object?[]{
-                RunningQueuedAction is not null ? RunningQueuedAction.action.Name : "null", 
+                RunningQueuedAction is not null ? RunningQueuedAction.action.Name : "null",
                 "Disabled",//RunningTime.ToString(),
                 RunningIndex.ToString(),
                 Queue.Count.ToString(),
@@ -144,7 +147,9 @@ public class ActionEventRunner : IDebugDisplay
 
         return output;
     }
+    #endregion
 
+    #region QueuedAction Class
     private class QueuedAction
     {
         public ActionEvent action;
@@ -158,4 +163,5 @@ public class ActionEventRunner : IDebugDisplay
             this.id = id;
         }
     }
+    #endregion
 }

@@ -6,7 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
-public class MobCommandMove : Command
+public partial class MobCommandMove : Command
 {
     Vector3i TargetLocation;
     public MobCommandMove(Vector3i target)

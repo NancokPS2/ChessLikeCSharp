@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Extension;
+using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
-public abstract class Command
+public abstract partial class Command : Resource
 {
     private bool Used = false;
 

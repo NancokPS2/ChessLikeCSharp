@@ -25,6 +25,8 @@ public partial class EventBus : Node
     public delegate void ObjectChange<T>(T obj);
     public delegate void ObjectChangeFrom<TFromTo>(TFromTo old_obj, TFromTo new_obj);
     public delegate void StringEvent(string text);
+    public delegate void FloatEvent(float floating);
+    public delegate void IntEvent(int integer);
 
     public override void _Ready()
     {
@@ -48,56 +50,75 @@ public partial class EventBus : Node
 
     #endregion
 
-    #region Turns
-    
+    #region Turn
+    public delegate void TurnChange(Mob who, bool started);
+    public static FloatEvent? TurnTimePassed;
+    public static TurnChange? TurnChanged;
+
     #endregion
 
-    #region Mobs
+    #region Mob
     public delegate void MobEvent(Mob mob);
-    public delegate void MobTurnChange(Mob mob, TurnManager manager);
-    public static MobTurnChange? MobTurnStarted;
-    public static MobTurnChange? MobTurnEnded;
 
+    #region Mob - Turn
+    public static MobEvent? MobTurnStarted;
+    public static MobEvent? MobTurnEnded;
+    #endregion
+
+    #region Mob - State
     public delegate void MobStateChange(Mob mob, EMobState state);
     public static MobStateChange? MobStateChanged;
+    #endregion
 
-    //Mob stats
+    #region Mob - Stats
     public delegate void MobEventStat(Mob mob, EStatName stat, float new_value);
     public static MobEventStat? MobStatChanged;
+    #endregion
 
-    //Movement
+    #region Mob - Movement
     public delegate void MobMovement(Mob mob, Vector3i from, Vector3i to);
     public delegate void MobMovementPath(Mob mob, List<Vector3i> path);
     public static MobMovement? MobMoved;
     public static MobMovementPath? MobFinishedMoving;
+    #endregion
 
-    #region Mob Command
-    //Mob commands
+    #region Mob - Command
     public delegate void MobCommandBroadcast(Dictionary<EInfo, string> dict);
     public delegate void MobCommandEvent(ChessLike.Entity.MobCommand.Command command, Mob onWho);
     public static MobCommandBroadcast? MobCommandBroadcasted;
     public static MobCommandEvent? MobCommandUsed;
     #endregion
 
-    //Equipment
+    #region Mob - Equipment
     public delegate void MobEquip(Mob mob, Item item, Inventory.Slot slot);
     public static MobEquip? MobEquipmentAdded;
     public static MobEquip? MobEquipmentRemoved;
+    #endregion
 
-    //Actions
-    public delegate void ActionUse(UsageParameters parameters);
+    #endregion
+
+    #region ActionEvent
+    public delegate void ActionUsageParametersEvent(UsageParameters parameters);
     public delegate void MobActionChange(Mob mob, ChessLike.Entity.Action.ActionEvent action);
-    public static ActionUse? AbilityUsed;
+    public static ActionUsageParametersEvent? ActionAboutToBeQueued;
+    public static ActionUsageParametersEvent? ActionQueued;
+
+    public static ActionUsageParametersEvent? ActionEventQueueRequested;
+
+    public static ActionUsageParametersEvent? ActionAboutToBeUsed;
+    public static ActionUsageParametersEvent? ActionUsed;
+
     public static ObjectChange<Mob>? MobActionChanged;
     public static MobActionChange? MobActionAdded;
     public static MobActionChange? MobActionRemoved;
     #endregion
 
 
-    //UI//
+    #region UI
     public delegate void ActionEvent(ChessLike.Entity.Action.Ability action);
     public static ActionEvent? InputActionSelected;
     public static Event? InputTurnEnded;
+    #endregion
 
     #region Storage
     public delegate void InventoryItemChange(Inventory inventory, Inventory.Slot slot, Item item);
@@ -107,5 +128,6 @@ public partial class EventBus : Node
     public static InventoryItemChange? InventoryItemRemoved;
     public static InventoryError? InventoryErrored;
     #endregion
+
 
 }

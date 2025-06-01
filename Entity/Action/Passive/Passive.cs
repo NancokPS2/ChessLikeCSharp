@@ -29,7 +29,7 @@ public partial class Passive : ActionEvent
     public Passive() : base()
     {
         BaseParameters = new(Owner, BattleController.CompGrid, this);
-        EventBus.AbilityUsed += OnAbilityUsed;
+        EventBus.ActionUsed += OnAbilityUsed;
     }
 
     private void OnAbilityUsed(UsageParameters parameters)
@@ -45,7 +45,7 @@ public partial class Passive : ActionEvent
     public override void Use(UsageParameters usage_params)
     {
         DurationParams.AdvanceUses();
-        EventBus.AbilityUsed?.Invoke(usage_params);
+        EventBus.ActionUsed?.Invoke(usage_params);
     }
 
     public override string GetDescription() => "\n" + GetDurationDescription();

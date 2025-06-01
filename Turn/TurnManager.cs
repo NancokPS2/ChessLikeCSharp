@@ -22,7 +22,7 @@ public partial class TurnManager
 
     public ITurn? RoundEnder { get => _round_ender; set => _round_ender = value; }
 
-
+    #region Handle Participants
     public void Add(List<ITurn> participants)
     {
         foreach (var item in participants)
@@ -41,6 +41,8 @@ public partial class TurnManager
     {
         Participants.Remove(participant);
     }
+
+    #endregion
 
     public List<ITurn> GetParticipants()
     {
@@ -98,11 +100,15 @@ public partial class TurnManager
         CurrentTaker = GetWithLowestDelay();
 
         float initial_delay = CurrentTaker.DelayCurrent;
+
         //Reduce everyone's delay by until the taker's 0.
         foreach (var item in Participants)
         {
             item.DelayCurrent -= initial_delay;
         }
+
+        //Emit that time has passed.
+        EventBus.TurnTimePassed?.Invoke(initial_delay);
 
         //Make sure the taker is at 0.
         if (CurrentTaker.DelayCurrent != 0)
@@ -111,7 +117,7 @@ public partial class TurnManager
         }
         if (CurrentTaker is Mob mob)
         {
-            EventBus.MobTurnStarted?.Invoke(mob, this);
+            EventBus.MobTurnStarted?.Invoke(mob);
         }
 
         UpdateRoundEnder();
@@ -126,7 +132,7 @@ public partial class TurnManager
 
         if (CurrentTaker is Mob mob)
         {
-            EventBus.MobTurnEnded?.Invoke(mob, this);
+            EventBus.MobTurnEnded?.Invoke(mob);
         }       
 
         //If the round ender just finished their turn, count that as the round ending.

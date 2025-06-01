@@ -20,9 +20,9 @@ public partial class CombatTurnUI : Control, ISceneDependency
         EventBus.MobTurnEnded += OnTurnChanged;
     }
 
-    private void OnTurnChanged(Mob mob, TurnManager manager)
+    private void OnTurnChanged(Mob mob)
     {
-        Update(manager);
+        Update(BattleController.CompTurnManager);
     }
 
 

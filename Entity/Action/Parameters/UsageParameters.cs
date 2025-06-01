@@ -34,7 +34,10 @@ public partial class UsageParameters
     {
         this.OwnerRef = owner;
         this.GridRef = grid;
-        this.ActionRef = action_reference;;
+        this.ActionRef = action_reference; ;
     }
+
+    public bool IsValid()
+        => OwnerRef is not null && GridRef is not null && ActionRef is not null && PositionsTargeted.Count > 0;
 }
 
