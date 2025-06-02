@@ -37,7 +37,8 @@ public abstract partial class ActionEvent : Resource
 
     public ActionEvent()
     {
-        EventBus.ActionAboutToBeQueued += AutoActivationProcessReaction;
+        EventBus.ActionAboutToBeQueued += (x) => AutoActivationProcessReaction(x, false);
+        EventBus.ActionQueued += (x) => AutoActivationProcessReaction(x, true);
         EventBus.TurnTimePassed += AutoActivationProcessTimePassed;
         EventBus.TurnChanged += AutoActivationProcessTurn;
     }
@@ -72,13 +73,16 @@ public abstract partial class ActionEvent : Resource
     }
 
     #region Auto Activation - Reaction
-    private void AutoActivationProcessReaction(UsageParameters parameters)
+    private void AutoActivationProcessReaction(UsageParameters parameters, bool afterAction)
     {
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.ACTION_REACTION) return;
 
         //The owner must be in combat.
         if (!Owner.IsInCombat()) return;
+
+        //Must be the right timing
+        if (AutoActivationParams.ActivatedAfterAction != afterAction) return;
 
         //Must have the right flags.
         if (!AutoActivationParams.IsActionWithValidFlags(parameters.ActionRef)) return;

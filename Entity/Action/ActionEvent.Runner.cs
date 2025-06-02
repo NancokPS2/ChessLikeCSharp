@@ -43,9 +43,10 @@ public class ActionEventRunner : IDebugDisplay
     public bool QueueIsEmpty() => Queue.Count == 0;
 
     private QueuedAction? GetById(uint id)
-    {
-        return Queue.First(x => x.id == id);
-    }
+        => Queue.First(x => x.id == id);
+
+    private int GetIdOfUsageParameters(UsageParameters parameters)
+        => Queue.FindIndex(x => x.usage_params == parameters);
 
     private uint QueueGetAvailableId()
     {

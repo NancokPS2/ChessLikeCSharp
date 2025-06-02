@@ -17,6 +17,9 @@ public partial class AutoActivationParameters : Resource
 
     [ExportGroup("Reaction Activation")]
     [Export]
+    public bool ActivatedAfterAction = false;
+
+    [Export]
     public bool ActivatedOnlyIfTargetsMe = true;
 
     [Export]
