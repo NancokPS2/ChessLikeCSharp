@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://d1bfi2s6408s0"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ygalq"]
-[ext_resource type="Script" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="2_nqci6"]
+[ext_resource type="Script" uid="uid://jr84t2tc43ko" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="2_nqci6"]
 
 [node name="Equipment" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3

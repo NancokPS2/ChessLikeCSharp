@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://ia3s65kbmt7u"]
 
 [ext_resource type="PackedScene" uid="uid://c8upch6etpftr" path="res://assets/Model/humanoid/Dummy.glb" id="1_02yx5"]
-[ext_resource type="Script" path="res://Godot/Particle/PopupText.cs" id="1_kba0t"]
+[ext_resource type="Script" uid="uid://c6lxdpe373yfb" path="res://Godot/Particle/PopupText.cs" id="1_kba0t"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uawnm"]
 transparency = 1

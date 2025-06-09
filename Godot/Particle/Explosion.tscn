@@ -24,7 +24,7 @@ size = Vector2(0.1, 0.1)
 colors = PackedColorArray(1, 0.313726, 0.156863, 1, 1, 1, 0, 1)
 
 [sub_resource type="Curve" id="Curve_n47by"]
-max_value = 2.0
+_limits = [0.0, 2.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.600981, 0, 1, Vector2(0.731405, 0.43956), 1.74957, 1.74957, 0, 0, Vector2(1, 1), 2.08656, 0.0, 1, 0]
 point_count = 3
 

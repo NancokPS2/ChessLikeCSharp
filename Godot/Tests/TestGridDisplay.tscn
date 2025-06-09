@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://ch0k4n1g8fgjv"]
 
-[ext_resource type="Script" path="res://Godot/Tests/TestGridDisplay.cs" id="1_n8eek"]
-[ext_resource type="Script" path="res://Godot/Display/Camera.cs" id="2_iogb2"]
+[ext_resource type="Script" uid="uid://b75at5bsho1g4" path="res://Godot/Tests/TestGridDisplay.cs" id="1_n8eek"]
+[ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="2_iogb2"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_p0u2d"]
 points = PackedVector3Array(0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0)

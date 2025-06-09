@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b1e6jdci5byww"]
 
-[ext_resource type="Script" path="res://Godot/Display/UI/Mob/MobStatsUI.cs" id="1_1wlbk"]
+[ext_resource type="Script" uid="uid://s5x3n74afdil" path="res://Godot/Display/UI/Mob/MobStatsUI.cs" id="1_1wlbk"]
 
 [node name="MobStatsUI" type="Control" node_paths=PackedStringArray("NodeStatContainer")]
 layout_mode = 3

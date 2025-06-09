@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://byh0x8syok53h"]
 
-[ext_resource type="Script" path="res://Godot/Display/UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
+[ext_resource type="Script" uid="uid://ds3ltw517h8gd" path="res://Godot/Display/UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
 [ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://Godot/Display/UI/Party/PartyMobListUI.tscn" id="2_ospk4"]
 [ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://Godot/Display/UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]

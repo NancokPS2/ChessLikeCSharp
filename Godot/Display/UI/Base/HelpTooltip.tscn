@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://1o62s57ghh6r"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_1gflf"]
-[ext_resource type="Script" path="res://Godot/Display/UI/Base/HelpTooltip.cs" id="1_j71vv"]
+[ext_resource type="Script" uid="uid://dlrcosq1dyd15" path="res://Godot/Display/UI/Base/HelpTooltip.cs" id="1_j71vv"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r4js5"]
 

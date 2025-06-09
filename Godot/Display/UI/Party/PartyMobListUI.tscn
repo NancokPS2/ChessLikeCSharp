@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ce7s8n4563cyy"]
 
-[ext_resource type="Script" path="res://Godot/Display/UI/Party/PartyMobListUI.cs" id="1_la5gv"]
+[ext_resource type="Script" uid="uid://khyr66d6toln" path="res://Godot/Display/UI/Party/PartyMobListUI.cs" id="1_la5gv"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_nk17s"]
 
 [node name="PartyUnitListUI" type="Control" node_paths=PackedStringArray("NodeFactionNameLabel", "Container")]

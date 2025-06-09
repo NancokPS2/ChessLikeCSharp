@@ -1,5 +1,5 @@
 [gd_scene load_steps=2 format=3 uid="uid://3keq3d6j44e"]
 
-[ext_resource type="PackedScene" uid="uid://c8upch6etpftr" path="res://assets/Model/character/humanoid/Dummy.glb" id="1_n4i56"]
+[ext_resource type="PackedScene" uid="uid://c8upch6etpftr" path="res://assets/Model/humanoid/Dummy.glb" id="1_n4i56"]
 
 [node name="Human" instance=ExtResource("1_n4i56")]
