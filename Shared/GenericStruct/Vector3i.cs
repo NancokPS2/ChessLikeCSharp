@@ -24,6 +24,15 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		X,Y,Z
 	}
 
+	public enum Rotation
+	{
+		UNROTATED,
+		Z_90_CW, Z_90_CCW, Z_180,
+		X_90_CW, X_90_CCW, X_180,
+		Y_90_CW, Y_90_CCW, Y_180
+		
+	}
+
 	public Vector3i()
 	{
 		this.X = 0;
@@ -173,6 +182,31 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		output[longest_index] += Math.Sign(vector[longest_index]);
 		return output;
 		
+	}
+
+	public Vector3i Rotated(Rotation rotation)
+	{
+		switch (rotation)
+		{
+			case Rotation.UNROTATED: return this;
+
+			//Z Axis
+			case Rotation.Z_90_CW: return new(Y, -X, Z);
+			case Rotation.Z_90_CCW: return new(-Y, X, Z);
+			case Rotation.Z_180: return new(-X, -Y, Z);
+
+			//X Axis
+			case Rotation.X_90_CW: return new(X, -Z, Y);
+			case Rotation.X_90_CCW: return new(X, Z, -Y);
+			case Rotation.X_180: return new(X, -Y, -Z);
+
+			//Y Axis
+			case Rotation.Y_90_CW: return new(Z, Y, -X);
+			case Rotation.Y_90_CCW: return new(-Z, Y, X);
+			case Rotation.Y_180: return new(-X, Y, -Z);
+
+			default: throw new Exception("Invalid");
+		}
 	}
 
 	public bool IsNormalized()

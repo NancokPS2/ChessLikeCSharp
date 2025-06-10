@@ -36,17 +36,55 @@ public partial class TargetingParameters : Resource
         STRAIGHT_LINE, //A line to the target point. Only works if the target coordinate shares at least 2 axis. RangeMax is treated as 1. Size is controlled by AoESize.
         CONE, //A cone towards the given position, similar to STRAIGHT_LINE. RangeMax is treated as 1. Size is controlled by AoESize.
         PERPENDICULAR_LINE, //Line covering the front of the character + left and right. RangeMax is treated as 1.
-        FLOOD_FILL_NO_SOLID
     }
     [Export]
-    public AoEMode AoeShape = AoEMode.SINGLE;
+    public AoEMode AoEShape = AoEMode.SINGLE;
 
     [Export]
     //Area when in SINGLE mode.
-    public uint AoERange = 0;
+    public uint AoESize = 0;
 
-    [Export]
-    public bool AoENeedsValidMob = false;
+    public List<Vector3i> GetTargetingShape(Vector3i.Rotation direction)
+    {
+        List<Vector3i> output = new();
+
+        switch (AoEShape)
+        {
+            case AoEMode.SINGLE:
+                output.Append(Vector3i.ZERO);
+                break;
+
+            case AoEMode.STRAIGHT_LINE:
+                for (int i = 0; i < AoESize; i++)
+                {
+                    output.Append(Vector3i.FORWARD * i);
+                }
+                break;
+
+            case AoEMode.PERPENDICULAR_LINE:
+                output.Append(Vector3i.ZERO);
+
+                //Skip if the size is 0
+                if (AoESize == 0) break;
+
+                for (int distance = 1; distance <= AoESize; distance++)
+                {
+                    output.Append(Vector3i.LEFT * (distance + 1));
+                    output.Append(Vector3i.RIGHT * (distance + 1));
+                }
+                break;
+
+            default: throw new Exception($"Invalid or unimplemented mode ({AoEShape})");
+        }
+
+        List<Vector3i> rotatedOutput = new();
+        foreach (var item in output)
+        {
+            rotatedOutput.Append( item.Rotated(direction) );
+        }
+
+        return rotatedOutput;
+    }
 
     public uint GetTotalRange(Mob owner)
     {
@@ -97,7 +135,7 @@ public partial class TargetingParameters : Resource
             Grid grid = usage_params.GridRef;
 
             //Range is dictated by AoERange
-            uint max_range = AoERange;
+            uint max_range = AoESize;
 
             List<Vector3i> cube = grid.GetShapeCube(origin, max_range);
             cube = cube.Where(x => x.DistanceManhattanTo(item) <= max_range).ToList();
