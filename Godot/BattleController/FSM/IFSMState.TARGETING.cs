@@ -28,8 +28,8 @@ public class BattleControllerStateTargeting : BattleControllerState
     public override void StateOnEnter()
     {
         ResetTargetingSelections();
-        _pos_valid_for_targeting = GetSelectedAbility().TargetParams
-            .GetTargetedPositions(GetUsageParameters());
+        _pos_valid_for_targeting =
+            GetUsageParams().ActionRef.GetTargetAblePositions(GetUsageParams());
 
         BattleController.CompDisplayGrid.MeshSet(
             GetPositionsWithinRange(), 
@@ -60,11 +60,6 @@ public class BattleControllerStateTargeting : BattleControllerState
 
     public override void StateProcess(double delta)
     {
-        //Setup values
-        UsageParameters usage_params = User.TurnUsageParameters ?? throw new Exception("No UsageParametes set yet.");
-        Ability ability_selected = User.ActionSelected ?? throw new Exception("No Ability was selected yet.");
-        Debug.Assert(GetSelectedAbility() == GetUsageParameters().ActionRef, "The UsageParameters should point to the selected action.");
-
         //Pause menu
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
@@ -72,10 +67,11 @@ public class BattleControllerStateTargeting : BattleControllerState
         }
 
         //Handle AoE displaying when changing the hovered positions.
-        if (usage_params.PositionsTargeted.Count != 0 && usage_params.PositionsTargeted != _last_param_positions)
+        if (GetUsageParams().PositionsTargeted.Count != 0 && GetUsageParams().PositionsTargeted != _last_param_positions)
         {
             UpdateTargetedVisuals();
-            _last_param_positions = usage_params.PositionsTargeted;
+            _last_param_positions = GetUsageParams().PositionsTargeted;
+
         }
 
         User.UpdateCursorMovement();
@@ -91,12 +87,13 @@ public class BattleControllerStateTargeting : BattleControllerState
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.ACCEPT))
         {
             //If can still select positions, add it to the list.
-            if (HasTargetPositionsRemaining() 
+            if (HasTargetPositionsRemaining()
                 && GetPositionsWithinRange().Contains(User.PositionHovered)
                 )
             {
                 //Add the position selected to the List.
                 PositionsSelected.Add(User.PositionHovered);
+                EventBus.TargetPositionsSelected?.Invoke(PositionsSelected);
             }
         }
 
@@ -118,7 +115,7 @@ public class BattleControllerStateTargeting : BattleControllerState
                 AddTargetedToUsageParameters();
                 //Add action to the queue
                 BattleController.CompActionRunner.QueueAdd(
-                    GetUsageParameters()
+                    GetUsageParams()
                     );
                 User.FSMSetState(BattleController.State.ACTION_RUNNING);
                 UpdateTargetedVisuals(true);
@@ -143,52 +140,54 @@ public class BattleControllerStateTargeting : BattleControllerState
         //Add the AoE positions steming from SELECTED ones.
         UniqueList<Vector3i> positions_to_add = new(){Safe = false};
         positions_to_add.AddRange(
-            GetSelectedAbility().TargetParams.GetAoEPositions(
-                GetUsageParameters(), PositionsSelected
+            GetUsageParams().ActionRef.TargetParams.GetAoEPositions(
+                GetUsageParams(), PositionsSelected
                 )
             );
-        GetUsageParameters().PositionsTargeted = positions_to_add;
+        GetUsageParams().PositionsTargeted = positions_to_add;
 
         //If mobs cannot be considered, stop here.
         if (!GetSelectedAbility().MobFilterParams.PickMobInTargetPos){return;}   
 
         //Add the targeted mobs to the UsageParameters if valid.
         List<Mob> mobs_found = new();
-        foreach (var pos in GetUsageParameters().PositionsTargeted)
-        {      
-                //Get the mobs at this position.
-                List<Mob> mobs_here = Global.ManagerMob
-                    .GetInCombat()
-                    .FilterFromPosition(pos);
-                
-                List<Mob> mobs_filtered = new();
-                foreach (var mob in mobs_here)
-                {
-                    if (GetSelectedAbility().MobFilterParams.IsMobValid(GetUsageParameters(), mob))
-                    {
-                        mobs_filtered.Add(mob);            
-                    }
-                }
+        foreach (var pos in GetUsageParams().PositionsTargeted)
+        {
+            //Get the mobs at this position.
+            List<Mob> mobs_here = Global.ManagerMob
+                .GetInCombat()
+                .FilterFromPosition(pos);
 
-                //Add filtered mobs to the MobsTargeted list for the action to use.
-                GetUsageParameters().MobsTargeted.AddRange(mobs_filtered);
+            List<Mob> mobs_filtered = new();
+            foreach (var mob in mobs_here)
+            {
+                if (GetSelectedAbility().MobFilterParams.IsMobValid(GetUsageParams(), mob))
+                {
+                    mobs_filtered.Add(mob);
+                }
+            }
+
+            //Add filtered mobs to the MobsTargeted list for the action to use.
+            GetUsageParams().MobsTargeted.AddRange(mobs_filtered);
+            EventBus.SelectedUsageParametersChanged?.Invoke(GetUsageParams());
         }
     }
 
     public void ResetTargetingSelections()
     {
-        GetUsageParameters().PositionsTargeted.Clear();   
-        GetUsageParameters().MobsTargeted.Clear();   
+        GetUsageParams().PositionsTargeted.Clear();
+        GetUsageParams().MobsTargeted.Clear();
         PositionsSelected.Clear();
+        EventBus.SelectedUsageParametersChanged?.Invoke(GetUsageParams());
     }
 
     private bool HasTargetPositionsRemaining() => PositionsSelected.Count < GetSelectedAbility().TargetParams.TargetingMaxPositions;
 
     private void UpdateTargetedVisuals(bool force_clear = false)
     {
-        if (GetUsageParameters().PositionsTargeted.Count != 0 && !force_clear)
+        if (GetUsageParams().PositionsTargeted.Count != 0 && !force_clear)
         {
-            List<Vector3i> targeted_marks = GetUsageParameters().PositionsTargeted;
+            List<Vector3i> targeted_marks = GetUsageParams().PositionsTargeted;
 
             BattleController.CompDisplayGrid.MeshSet(
                 targeted_marks, 
@@ -201,8 +200,7 @@ public class BattleControllerStateTargeting : BattleControllerState
             BattleController.CompDisplayGrid.MeshRemove(GridNode.Layer.AOE);
         }
     }
-
-    public Ability GetSelectedAbility() => User.ActionSelected ?? throw new Exception("No Ability was selected yet.");
-    public UsageParameters GetUsageParameters() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
+    
+    public UsageParameters GetUsageParams() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
     public List<Vector3i> GetPositionsWithinRange() => _pos_valid_for_targeting;
 }

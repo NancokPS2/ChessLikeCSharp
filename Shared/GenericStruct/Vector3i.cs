@@ -160,10 +160,20 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return X + Y + Z;
 	}
 
+	public Rotation GetRotationToFace(Vector3i target)
+	{
+		Vector3i normalized = GetDirectionNormalizedTo(target);
+
+        if (GetLong)
+		{
+			int longestIndex = GetLongestIndex();
+		}
+	}
+
     public bool Equals(Vector3i other)
-    {
-        return X == other.X && Y == other.Y && Z == other.Z;
-    }
+	{
+		return X == other.X && Y == other.Y && Z == other.Z;
+	}
 
     public override string ToString()
     {
@@ -256,23 +266,23 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return value - other_value;
     }
 
-	public int this[int index]
+	public int this[Axis index]
 	{
-		get => index switch{ 0 => X, 1 => Y, 2 => Z, _ => throw new Exception()};
-		set => IndexSet(index, value);
+		get => index switch{ Axis.X => X, Axis.Y => Y, Axis.Z => Z, _ => throw new Exception()};
+		set => AxisSet(index, value);
 	}
 
-	private void IndexSet(int index, int value)
+	private void AxisSet(Axis axis, int value)
 	{
-		switch(index)
+		switch(axis)
 		{
-			case 0: 
+			case Axis.X: 
 				X = value;
 				break;
-			case 1: 
+			case Axis.Y: 
 				Y = value;
 				break;
-			case 2: 
+			case Axis.Z: 
 				Z = value;
 				break;
 			default: 

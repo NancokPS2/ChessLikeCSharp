@@ -86,43 +86,6 @@ public partial class TargetingParameters : Resource
         return rotatedOutput;
     }
 
-    public uint GetTotalRange(Mob owner)
-    {
-        uint output = TargetingRange;
-        if (TargetingRangeStatBonus is EStatName stat)
-        {
-            output += (uint)owner.Stats.GetValue(stat);
-        }
-        return output;
-    }
-
-    public List<Vector3i> GetTargetedPositions(UsageParameters usage_params)
-    {
-        //if (usage_params.PositionsTargeted.Count != 0 || usage_params.MobsTargeted.Count != 0){throw new Exception("This should be called BEFORE locations have been chosen.");}
-
-        Vector3i origin = usage_params.OwnerRef.GetPosition();
-        Grid grid = usage_params.GridRef;
-        List<Vector3i> output = new();
-        Mob owner = usage_params.OwnerRef;
-
-        //If it uses pathing, just query that directly and move on.
-        if (TargetingUsesPathing)
-        {
-            output = grid.NavGetPathablePositions(owner);
-            return output;
-        }
-
-        uint max_range = GetTotalRange(owner);
-
-        //Get general area for performance reasons.
-        output = grid.GetShapeCube(origin, max_range);
-
-        //Select positions within range.
-        output = output.Where(x => x.DistanceManhattanTo(origin) <= max_range).ToList();
-
-        return output;
-    }
-
     public List<Vector3i> GetAoEPositions(UsageParameters usage_params, List<Vector3i> targets)
     {
         if (targets.Count == 0) {throw new Exception("No position to use AoE in.");}

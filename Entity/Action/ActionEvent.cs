@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Extension;
+using ChessLike.World;
 using Godot;
 
 namespace ChessLike.Entity.Action;
@@ -43,6 +44,67 @@ public abstract partial class ActionEvent : Resource
         EventBus.TurnChanged += AutoActivationProcessTurn;
     }
 
+    #region Targeting
+    public uint GetTotalRange(Mob owner)
+    {
+        uint output = TargetParams.TargetingRange;
+        if (TargetParams.TargetingRangeStatBonus is EStatName stat)
+        {
+            output += (uint)owner.Stats.GetValue(stat);
+        }
+        return output;
+    }
+
+    public List<Vector3i> GetTargetAblePositions(UsageParameters usage_params)
+    {
+        //if (usage_params.PositionsTargeted.Count != 0 || usage_params.MobsTargeted.Count != 0){throw new Exception("This should be called BEFORE locations have been chosen.");}
+
+        Vector3i origin = usage_params.OwnerRef.GetPosition();
+        Grid grid = usage_params.GridRef;
+        List<Vector3i> output = new();
+        Mob owner = usage_params.OwnerRef;
+
+        //If it uses pathing, just query that directly and move on.
+        if (TargetParams.TargetingUsesPathing)
+        {
+            output = grid.NavGetPathablePositions(owner);
+            return output;
+        }
+
+        uint maxRange = GetTotalRange(owner);
+
+        //Get general area for performance reasons.
+        output = grid.GetShapeCube(origin, maxRange);
+
+        //Select positions within range.
+        output = output.Where(x => x.DistanceManhattanTo(origin) <= maxRange).ToList();
+
+        return output;
+    }
+
+    [Obsolete("WIP")]
+    public List<Vector3i> GetAoEPositions(UsageParameters usage_params, List<Vector3i> targets)
+    {
+        if (targets.Count == 0) { throw new Exception("No position to use AoE in."); }
+
+        List<Vector3i> output = new();
+
+        foreach (Vector3i item in targets)
+        {
+            Vector3i origin = item;
+            Grid grid = usage_params.GridRef;
+            Vector3i.Rotation rotation = Vector3i.Rotation.UNROTATED;
+
+            output.AddRange(TargetParams.GetTargetingShape(rotation));
+        }
+
+        if (output.Count == 0) { GD.PushWarning("Action's AoE is empty. Could not target here. Maybe tweak its TargetingParams."); }//throw new Exception("Nothing to select?");}
+
+        return output;
+    }
+
+    #endregion
+
     #region  Auto Activation
     [Export]
     public AutoActivationParameters AutoActivationParams
@@ -55,6 +117,7 @@ public abstract partial class ActionEvent : Resource
             TimeSinceLastActivation = 0;
         }
     }
+
     private AutoActivationParameters autoActivationParams = new();
 
     protected int AutoActivationTriggersLeft;
@@ -73,7 +136,7 @@ public abstract partial class ActionEvent : Resource
     }
 
     #region Auto Activation - Reaction
-    private void AutoActivationProcessReaction(UsageParameters parameters, bool afterAction)
+    protected void AutoActivationProcessReaction(UsageParameters parameters, bool afterAction)
     {
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.ACTION_REACTION) return;
@@ -100,8 +163,8 @@ public abstract partial class ActionEvent : Resource
 
     #region Auto Activation - Timing
 
-    private float TimeSinceLastActivation;
-    private void AutoActivationProcessTimePassed(float number)
+    protected float TimeSinceLastActivation;
+    protected void AutoActivationProcessTimePassed(float number)
     {
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
@@ -121,7 +184,7 @@ public abstract partial class ActionEvent : Resource
     #endregion
 
     #region Auto Activation - Turn
-    public void AutoActivationProcessTurn(Mob who, bool started)
+    protected void AutoActivationProcessTurn(Mob who, bool started)
     {
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
@@ -142,6 +205,7 @@ public abstract partial class ActionEvent : Resource
 
     #endregion
 
+    #region General
     public virtual string GetDescription()
     {
         return "Undefined action description.";
@@ -157,5 +221,5 @@ public abstract partial class ActionEvent : Resource
     }
 
     public override string ToString() => Name;
-
+    #endregion
 }

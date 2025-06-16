@@ -35,18 +35,26 @@ public partial class EventBus : Node
     }
 
     //World map
+    #region World Map
     public delegate void MapMarkerEvent(MapMarker3D marker);
     public static MapMarkerEvent? MarkerSelected;
 
     //Save profile
     public static StringEvent? ProfileNameChanged;
+    #endregion
 
-    #region Encounter
+    #region Battle Encounter
     //Encounter
     public static ObjectChange<Grid>? GridLoaded;
     public static ObjectChange<EncounterData>? EncounterLoaded;
     public static Event? RoundEnded;
     public static ObjectChange<BattleControllerState>? BattleStateChanged;
+    public static ObjectChange<UsageParameters>? SelectedUsageParametersChanged;
+
+    #region TARGETING State
+    public static ObjectChange<List<Vector3i>>? TargetPositionsSelected;
+
+    #endregion
 
     #endregion
 
@@ -100,6 +108,8 @@ public partial class EventBus : Node
     #region ActionEvent
     public delegate void ActionUsageParametersEvent(UsageParameters parameters);
     public delegate void MobActionChange(Mob mob, ChessLike.Entity.Action.ActionEvent action);
+
+    #region ActionEvent Queue
     public static ActionUsageParametersEvent? ActionAboutToBeQueued;
     public static ActionUsageParametersEvent? ActionQueued;
 
@@ -107,10 +117,13 @@ public partial class EventBus : Node
 
     public static ActionUsageParametersEvent? ActionAboutToBeUsed;
     public static ActionUsageParametersEvent? ActionUsed;
+    #endregion
 
+    #region ActionEvent Mob Action
     public static ObjectChange<Mob>? MobActionChanged;
     public static MobActionChange? MobActionAdded;
     public static MobActionChange? MobActionRemoved;
+    #endregion
     #endregion
 
 
