@@ -28,31 +28,6 @@ public partial class MobFilterParameters : Resource
     [Export]
     public float MaximumHealthPercent = 1.0f;
 
-    public bool IsMobValid(UsageParameters usageParams, Mob mob)
-    {
-        //Faction target_fac = Global.ManagerFaction.GetFromEnum(mob.Faction);
-        Faction owner_fac = Global.ManagerFaction.GetFromEnum(usageParams.OwnerRef.Faction);
-        //Must be the owner?
-        if (mob != usageParams.OwnerRef && OnlyAffectOwner)
-        {
-            return false;
-        }
-        //If health is above the max percent, fail.
-        else if (mob.Stats.GetValuePrecent(EStatName.HEALTH) > MaximumHealthPercent)
-        {
-            return false;
-        }
-        else if (owner_fac.IsAlly(mob.Faction) && CannotAffectAlly)
-        {
-            return false;
-        }
-        else if(owner_fac.IsEnemy(mob.Faction) && CannotAffectEnemy)
-        {
-            return false;
-        }
-        return true;
-    }
-
     public override string ToString()
     {
         return this.GetFieldValuesAsDict().ToStringList();

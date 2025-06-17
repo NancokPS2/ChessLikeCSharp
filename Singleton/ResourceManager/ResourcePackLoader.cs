@@ -8,10 +8,15 @@ using ChessLike.Entity.Action;
 namespace Godot;
 public partial class ResourcePackLoader : Node
 {
+    public static ResourcePackLoader Instance { get => instance ?? throw new Exception(); set => instance = value; }
+    private static ResourcePackLoader? instance;
     public ResourcePack<ActionEvent> ActionEvents = new();
+
 
     public ResourcePackLoader()
     {
+        Instance = Instance is null ? this : Instance;
+
         PrepareDir(ActionEvents);
     }
 

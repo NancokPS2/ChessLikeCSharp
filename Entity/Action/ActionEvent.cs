@@ -82,18 +82,15 @@ public abstract partial class ActionEvent : Resource
         return output;
     }
 
-    [Obsolete("WIP")]
-    public List<Vector3i> GetAoEPositions(UsageParameters usage_params, List<Vector3i> targets)
+    public List<Vector3i> GetAoEPositions(UsageParameters usageParams, List<Vector3i> targets)
     {
-        if (targets.Count == 0) { throw new Exception("No position to use AoE in."); }
+        if (targets.Count == 0) throw new Exception("No position to use AoE in.");
 
         List<Vector3i> output = new();
 
-        foreach (Vector3i item in targets)
+        foreach (Vector3i target in targets)
         {
-            Vector3i origin = item;
-            Grid grid = usage_params.GridRef;
-            Vector3i.Rotation rotation = Vector3i.Rotation.UNROTATED;
+            Vector3i.Rotation rotation = usageParams.OwnerRef.Position.NormalizedToRotation(target);
 
             output.AddRange(TargetParams.GetTargetingShape(rotation));
         }
@@ -103,6 +100,34 @@ public abstract partial class ActionEvent : Resource
         return output;
     }
 
+    #endregion
+
+    #region Mob Filter
+    public bool IsMobValid(Mob mob)
+    {
+        Faction owner_fac = Global.ManagerFaction.GetFromEnum(Owner.Faction);
+        
+        //Must be the owner?
+        if (mob != Owner && MobFilterParams.OnlyAffectOwner)
+        {
+            return false;
+        }
+        //If health is above the max percent, fail.
+        else if (mob.Stats.GetValuePrecent(EStatName.HEALTH) > MobFilterParams.MaximumHealthPercent)
+        {
+            return false;
+        }
+        //Check for faction
+        else if (owner_fac.IsAlly(mob.Faction) && MobFilterParams.CannotAffectAlly)
+        {
+            return false;
+        }
+        else if(owner_fac.IsEnemy(mob.Faction) && MobFilterParams.CannotAffectEnemy)
+        {
+            return false;
+        }
+        return true;
+    }
     #endregion
 
     #region  Auto Activation

@@ -7,7 +7,9 @@ public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
 	public const int NO_INDEX = -1;
     public string SCENE_PATH { get; } = "res://Godot/Display/PackedScene/PopupButtonDialogUI.tscn";
 
-	public enum EConfirmCancel {CONFIRM, CANCEL}
+	public string Context;
+
+	public enum EConfirmCancel { CONFIRM, CANCEL }
 
 	public delegate void ActionIndex(int index);
 	public event ActionIndex? IndexPressed;
@@ -36,7 +38,15 @@ public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
     public override void _Ready()
 	{
 		Reload();
-	}	
+	}
+
+	public override void _EnterTree()
+	{
+		base._EnterTree();
+		if (new GodotObject?[] { ButtonScene, ButtonContainer, MessageLabel }.Any(x => x is null))
+			throw new Exception();
+    }
+
 
 	public void Reload()
 	{
@@ -53,14 +63,16 @@ public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
 
 			ButtonContainer = (Control?)(ButtonContainer ?? FindChild(nameof(ButtonContainer)));
 
-			MessageLabel = (Label?)(MessageLabel ?? FindChild(nameof(MessageLabel)));	
+			MessageLabel = (Label?)(MessageLabel ?? FindChild(nameof(MessageLabel)));
 
-			MessageLabel.Text = Message;
+			MessageLabel?.Text = Message;
 		}
 	}
 
 	private void CreateButtons(string[] names)
 	{
+		if (ButtonContainer is null) throw new NullReferenceException();
+
 		ButtonContainer.FreeChildren();
 
         for (int i = 0; i < names.Length; i++)
@@ -107,11 +119,12 @@ public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
 		return this;
 	}
 
-	public void Setup(SceneTree tree, string[] action_names)
+	public void Setup(SceneTree tree, string[] action_names, string context)
 	{
 		Reload();
 		tree.Root.AddChild(this);
 		CreateButtons(action_names);
+		Context = context;
 	}
 
 	public void Setup(Node node_in_tree, string[] action_names)
@@ -120,16 +133,16 @@ public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
 	}
 
 
-	public void Setup<TEnum>(SceneTree tree) where TEnum : notnull, Enum
+	public void Setup<TEnum>(SceneTree tree, string context) where TEnum : notnull, Enum
 	{
-		Setup(tree, Enum.GetNames(typeof(TEnum)));
+		Setup(tree, Enum.GetNames(typeof(TEnum)), context);
 	}
 
-	public void Setup<TEnum>(Node node_in_tree) where TEnum : notnull, Enum
+	public void Setup<TEnum>(Node node_in_tree, string context) where TEnum : notnull, Enum
 	{
 		SceneTree tree = node_in_tree.GetTree();
 		if (tree is null){throw new ArgumentException("Node must be in the tree.");}
-		Setup(tree, Enum.GetNames(typeof(TEnum)));
+		Setup(tree, Enum.GetNames(typeof(TEnum)), context);
 	}
 
 	public void Remove()

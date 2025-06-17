@@ -20,6 +20,8 @@ public class BattleControllerStateTargeting : BattleControllerState
     private List<Vector3i> _pos_valid_for_targeting = new();
     private UniqueList<Vector3i> PositionsSelected = new();
 
+    public const string TARGETING_CONTEXT = "_TARGETING_CONTEXT";
+
     public BattleControllerStateTargeting(BattleController.State identifier) : base(identifier)
     {
     }
@@ -105,7 +107,7 @@ public class BattleControllerStateTargeting : BattleControllerState
             {
                 _popup
                     .SetMessage("Confirm action?")
-                    .Setup<PopupButtonDialogUI.EConfirmCancel>(User);
+                    .Setup<PopupButtonDialogUI.EConfirmCancel>(User, TARGETING_CONTEXT);
             }
 
             //If confirmed, change the state.
@@ -133,9 +135,11 @@ public class BattleControllerStateTargeting : BattleControllerState
     }
 
     /// <summary>
+    /// Adds all currently targeted positions to the UsageParameters 
+    /// so they are used in the trigger of the action.
     /// Should be called before proceeding to use the action.
     /// </summary>
-    public void AddTargetedToUsageParameters()
+    private void AddTargetedToUsageParameters()
     {
         //Add the AoE positions steming from SELECTED ones.
         UniqueList<Vector3i> positions_to_add = new(){Safe = false};
@@ -147,7 +151,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         GetUsageParams().PositionsTargeted = positions_to_add;
 
         //If mobs cannot be considered, stop here.
-        if (!GetSelectedAbility().MobFilterParams.PickMobInTargetPos){return;}   
+        if (!GetUsageParams().ActionRef.MobFilterParams.PickMobInTargetPos){return;}   
 
         //Add the targeted mobs to the UsageParameters if valid.
         List<Mob> mobs_found = new();
@@ -158,10 +162,11 @@ public class BattleControllerStateTargeting : BattleControllerState
                 .GetInCombat()
                 .FilterFromPosition(pos);
 
+            //Validate mobs
             List<Mob> mobs_filtered = new();
             foreach (var mob in mobs_here)
             {
-                if (GetSelectedAbility().MobFilterParams.IsMobValid(GetUsageParams(), mob))
+                if (GetUsageParams().ActionRef.IsMobValid(mob))
                 {
                     mobs_filtered.Add(mob);
                 }
@@ -173,7 +178,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         }
     }
 
-    public void ResetTargetingSelections()
+    private void ResetTargetingSelections()
     {
         GetUsageParams().PositionsTargeted.Clear();
         GetUsageParams().MobsTargeted.Clear();
@@ -181,7 +186,8 @@ public class BattleControllerStateTargeting : BattleControllerState
         EventBus.SelectedUsageParametersChanged?.Invoke(GetUsageParams());
     }
 
-    private bool HasTargetPositionsRemaining() => PositionsSelected.Count < GetSelectedAbility().TargetParams.TargetingMaxPositions;
+    private bool HasTargetPositionsRemaining()
+        => PositionsSelected.Count < GetUsageParams().ActionRef.TargetParams.TargetingMaxPositions;
 
     private void UpdateTargetedVisuals(bool force_clear = false)
     {
@@ -201,6 +207,6 @@ public class BattleControllerStateTargeting : BattleControllerState
         }
     }
     
-    public UsageParameters GetUsageParams() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
-    public List<Vector3i> GetPositionsWithinRange() => _pos_valid_for_targeting;
+    private UsageParameters GetUsageParams() => User.TurnUsageParameters ?? throw new Exception("No Ability was selected yet.");
+    private List<Vector3i> GetPositionsWithinRange() => _pos_valid_for_targeting;
 }

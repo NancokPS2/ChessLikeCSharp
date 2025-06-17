@@ -133,26 +133,25 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return output;
 	}
 
-	public int GetLongestIndex()
+	public Axis? GetLongestAxis()
 	{
-		int highest_index = -1;
+		Axis? longestAxis = null;
 		int highest_value = 0;
-		foreach (int index in new int[]{0,1,2})
+		foreach (Axis axis in new[]{Axis.X,Axis.Y,Axis.Z})
 		{
-			int value = this[index];
+			int value = this[axis];
 
 			if (Math.Abs(value)> highest_value)
 			{
-				highest_index = index;
+				longestAxis = axis;
 				highest_value = Math.Abs(value);
 			}
 		}
-		if (highest_index == -1)
+		if (longestAxis is null)
 		{
 			throw new Exception("No value was higher than the minimum value.");
 		}
-
-		return highest_index;
+		else return longestAxis;
 	}
 
 	public int GetLength()
@@ -160,14 +159,29 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return X + Y + Z;
 	}
 
-	public Rotation GetRotationToFace(Vector3i target)
+	[Obsolete("WIP")]
+	public Rotation NormalizedToRotation(Vector3i target, Axis[]? ignored = null)
 	{
 		Vector3i normalized = GetDirectionNormalizedTo(target);
 
-        if (GetLong)
-		{
-			int longestIndex = GetLongestIndex();
-		}
+		if (ignored?.Contains(Axis.Y) ?? false) goto xAxis;
+
+		if (normalized == RIGHT) return Rotation.Y_90_CW;
+
+		else if (normalized == LEFT) return Rotation.Y_90_CCW;
+
+		else if (normalized == BACK) return Rotation.Y_180;
+
+
+		xAxis:
+		if (ignored?.Contains(Axis.X) ?? false) goto zAxis;
+
+
+		zAxis:
+		if (ignored?.Contains(Axis.Z) ?? false) goto end;
+
+		end:
+		throw new Exception();
 	}
 
     public bool Equals(Vector3i other)
@@ -187,11 +201,16 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 
 	public static Vector3i Normalized(Vector3i vector)
 	{
-		int longest_index = vector.GetLongestIndex();
 		Vector3i output = new Vector3i(0);
-		output[longest_index] += Math.Sign(vector[longest_index]);
-		return output;
-		
+		Axis? longestAxis =  vector.GetLongestAxis();
+
+		if (longestAxis is Axis axis)
+		{
+			int axisLength = vector[axis];
+			output[axis] += Math.Sign(axisLength);
+		}
+
+		return output;		
 	}
 
 	public Vector3i Rotated(Rotation rotation)

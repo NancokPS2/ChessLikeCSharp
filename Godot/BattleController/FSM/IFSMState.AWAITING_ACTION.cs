@@ -12,6 +12,7 @@ namespace Godot;
 
 public class BattleControllerStateAwaitingAction : BattleControllerState
 {
+    public const string CONTEXT_AWAITING_ACTION = "_CONTEXT_AWAITING_ACTION";
     private int endTurnPressed;
 
     private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
@@ -78,7 +79,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         {
             _popup
                 .SetMessage("Do you want to end the turn?")
-                .Setup<PopupButtonDialogUI.EConfirmCancel>(User);
+                .Setup<PopupButtonDialogUI.EConfirmCancel>(User, CONTEXT_AWAITING_ACTION);
             User.InputEndTurnPressed = 0;
         }
         
