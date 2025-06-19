@@ -24,16 +24,16 @@ public abstract partial class ActionEvent : Resource
 
     [ExportGroup("Parameters")]
     [Export]
-    public MobFilterParameters FilterParams = new();
+    protected MobFilterParameters FilterParams = new();
 
     [Export]
-    public TargetingParameters TargetParams = new();
+    protected TargetingParameters TargetParams = new();
 
     [Export]
-    public AnimationParameters AnimationParams = new();
+    protected AnimationParameters AnimationParams = new();
 
     [Export]
-    public MobFilterParameters MobFilterParams = new();
+    protected MobFilterParameters MobFilterParams = new();
 
 
     public ActionEvent()
@@ -45,6 +45,9 @@ public abstract partial class ActionEvent : Resource
     }
 
     #region Targeting
+    public int GetMaxTargetingSelections()
+        => TargetParams.TargetingMaxPositions;
+        
     public uint GetTotalRange(Mob owner)
     {
         uint output = TargetParams.TargetingRange;
@@ -55,7 +58,7 @@ public abstract partial class ActionEvent : Resource
         return output;
     }
 
-    public List<Vector3i> GetTargetAblePositions(UsageParameters usage_params)
+    public List<Vector3i> GetTargetVectors(UsageParameters usage_params)
     {
         //if (usage_params.PositionsTargeted.Count != 0 || usage_params.MobsTargeted.Count != 0){throw new Exception("This should be called BEFORE locations have been chosen.");}
 
@@ -71,18 +74,20 @@ public abstract partial class ActionEvent : Resource
             return output;
         }
 
+        //Get the shape.
+        output = TargetParams.GetTargetingShape();
+
+        //Select positions within range and filter them.
         uint maxRange = GetTotalRange(owner);
-
-        //Get general area for performance reasons.
-        output = grid.GetShapeCube(origin, maxRange);
-
-        //Select positions within range.
-        output = output.Where(x => x.DistanceManhattanTo(origin) <= maxRange).ToList();
+        output = output
+            .Where(x => x.DistanceManhattanTo(origin) <= maxRange)
+            .Where(x => grid.IsPositionInbounds(x))
+            .ToList();
 
         return output;
     }
 
-    public List<Vector3i> GetAoEPositions(UsageParameters usageParams, List<Vector3i> targets)
+    public List<Vector3i> GetAoEVectors(UsageParameters usageParams, List<Vector3i> targets)
     {
         if (targets.Count == 0) throw new Exception("No position to use AoE in.");
 
@@ -90,9 +95,9 @@ public abstract partial class ActionEvent : Resource
 
         foreach (Vector3i target in targets)
         {
-            Vector3i.Rotation rotation = usageParams.OwnerRef.Position.NormalizedToRotation(target);
+            Vector3i.Rotation rotation = usageParams.OwnerRef.Position.GetRotationToLookAt(target, true);
 
-            output.AddRange(TargetParams.GetTargetingShape(rotation));
+            output.AddRange(TargetParams.GetAoEShape(rotation));
         }
 
         if (output.Count == 0) { GD.PushWarning("Action's AoE is empty. Could not target here. Maybe tweak its TargetingParams."); }//throw new Exception("Nothing to select?");}
@@ -103,10 +108,13 @@ public abstract partial class ActionEvent : Resource
     #endregion
 
     #region Mob Filter
+    public List<Mob> GetValidMobs(List<Mob> mobPositions)
+        => mobPositions.Where(x => IsMobValid(x)).ToList();
+
     public bool IsMobValid(Mob mob)
     {
         Faction owner_fac = Global.ManagerFaction.GetFromEnum(Owner.Faction);
-        
+
         //Must be the owner?
         if (mob != Owner && MobFilterParams.OnlyAffectOwner)
         {
@@ -122,7 +130,7 @@ public abstract partial class ActionEvent : Resource
         {
             return false;
         }
-        else if(owner_fac.IsEnemy(mob.Faction) && MobFilterParams.CannotAffectEnemy)
+        else if (owner_fac.IsEnemy(mob.Faction) && MobFilterParams.CannotAffectEnemy)
         {
             return false;
         }

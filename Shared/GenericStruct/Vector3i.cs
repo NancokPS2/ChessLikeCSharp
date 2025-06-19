@@ -82,37 +82,19 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return output;
 	}
 
+	public Vector3i GetDirectionTo(Vector3i target)
+		=> target - this;
 
-	public Vector3i GetDirectionNormalizedTo(Vector3i target)
-	{
-		Vector3i pointing = target - this;
-		return pointing;
-	}
+    public Vector3i GetDirectionNormalizedTo(Vector3i target, bool ignoreY = false)
+    {
+		Vector3i output = GetDirectionTo(target);
 
-	public Vector3i GetDirectionNormalizedTo(Vector3i target, Vector3i[] allowed_dirs)
-	{
-		//Must have at least 1 direction and they must be one.
-		if (allowed_dirs.Count() < 1 || allowed_dirs.Any(x => x.GetLength() != 1))
-		{
-			throw new Exception("All elements must be directions.");
-		}
+		if (ignoreY) output.Y = 0;
 
-		Vector3i closest_pos = allowed_dirs[0] + this;
-		foreach (Vector3i direction in allowed_dirs)
-		{
-			//Change the closest position if it is closer.
-			if (
-				(this + direction).DistanceManhattanTo(target) <= closest_pos.DistanceManhattanTo(target)
-			)
-			{
-				closest_pos = this + direction;
-			}
-		}
+        return output.Normalized();
+    }
 
-		return closest_pos;
-	}
-
-	public List<Vector3i> GetStepsToReachVector(Vector3i location)
+    public List<Vector3i> GetStepsToReachVector(Vector3i location)
 	{
 		List<Vector3i> output = new();
 
@@ -159,12 +141,38 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return X + Y + Z;
 	}
 
-	[Obsolete("WIP")]
-	public Rotation NormalizedToRotation(Vector3i target, Axis[]? ignored = null)
+	public static List<Vector3i> CreateCube(uint size)
 	{
-		Vector3i normalized = GetDirectionNormalizedTo(target);
+		List<Vector3i> output = new();
+		int[] range = Enumerable.Range((int)-size, (int)size * 2 + 1).ToArray();
 
-		if (ignored?.Contains(Axis.Y) ?? false) goto xAxis;
+		foreach (var x in range)
+		{
+			foreach (var z in range)
+			{
+				foreach (var y in range)
+				{
+					Vector3i vector = new Vector3i(x, y, z);
+					if (vector.DistanceManhattanTo(Vector3i.ZERO) <= size)
+					{
+						output.Add(vector);
+					}
+				}
+			}
+		}
+
+		return output;
+	}
+
+	/// <summary>
+	/// Assumes this is pointing at FORWARD.
+	/// </summary>
+	/// <param name="target">What to look at.</param>
+	/// <returns>A Rotation required to make this Vector3i face the target.</returns>
+	/// <exception cref="Exception"></exception>
+	public Rotation GetRotationToLookAt(Vector3i target, bool ignoreY)
+	{
+		Vector3i normalized = GetDirectionNormalizedTo(target, ignoreY);
 
 		if (normalized == RIGHT) return Rotation.Y_90_CW;
 
@@ -172,16 +180,11 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 
 		else if (normalized == BACK) return Rotation.Y_180;
 
+		else if (normalized == UP) return Rotation.X_90_CCW;
 
-		xAxis:
-		if (ignored?.Contains(Axis.X) ?? false) goto zAxis;
+		else if (normalized == DOWN) return Rotation.X_90_CW;
 
-
-		zAxis:
-		if (ignored?.Contains(Axis.Z) ?? false) goto end;
-
-		end:
-		throw new Exception();
+		throw new Exception($"Invalid vector {this}");
 	}
 
     public bool Equals(Vector3i other)

@@ -44,7 +44,12 @@ public partial class TargetingParameters : Resource
     //Area when in SINGLE mode.
     public uint AoESize = 0;
 
-    public List<Vector3i> GetTargetingShape(Vector3i.Rotation direction)
+    public List<Vector3i> GetTargetingShape()
+        => Vector3i.CreateCube(TargetingRange)
+            .Where(x => x.DistanceManhattanTo(Vector3i.ZERO) <= TargetingRange)
+            .ToList();
+
+    public List<Vector3i> GetAoEShape(Vector3i.Rotation direction)
     {
         List<Vector3i> output = new();
 
@@ -80,34 +85,10 @@ public partial class TargetingParameters : Resource
         List<Vector3i> rotatedOutput = new();
         foreach (var item in output)
         {
-            rotatedOutput.Append( item.Rotated(direction) );
+            rotatedOutput.Append(item.Rotated(direction));
         }
 
         return rotatedOutput;
-    }
-
-    public List<Vector3i> GetAoEPositions(UsageParameters usage_params, List<Vector3i> targets)
-    {
-        if (targets.Count == 0) {throw new Exception("No position to use AoE in.");}
-
-        List<Vector3i> output = new();
-
-        foreach (Vector3i item in targets)
-        {    
-            Vector3i origin = item;
-            Grid grid = usage_params.GridRef;
-
-            //Range is dictated by AoERange
-            uint max_range = AoESize;
-
-            List<Vector3i> cube = grid.GetShapeCube(origin, max_range);
-            cube = cube.Where(x => x.DistanceManhattanTo(item) <= max_range).ToList();
-            output.AddRange(cube);
-        }
-
-        if (output.Count == 0) {GD.PushWarning("Action's AoE is empty. Could not target here. Maybe tweak its TargetingParams.");}//throw new Exception("Nothing to select?");}
-
-        return output;
     }
 
     public override string ToString()

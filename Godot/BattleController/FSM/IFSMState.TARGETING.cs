@@ -31,7 +31,7 @@ public class BattleControllerStateTargeting : BattleControllerState
     {
         ResetTargetingSelections();
         _pos_valid_for_targeting =
-            GetUsageParams().ActionRef.GetTargetAblePositions(GetUsageParams());
+            GetUsageParams().ActionRef.GetTargetVectors(GetUsageParams());
 
         BattleController.CompDisplayGrid.MeshSet(
             GetPositionsWithinRange(), 
@@ -144,33 +144,23 @@ public class BattleControllerStateTargeting : BattleControllerState
         //Add the AoE positions steming from SELECTED ones.
         UniqueList<Vector3i> positions_to_add = new(){Safe = false};
         positions_to_add.AddRange(
-            GetUsageParams().ActionRef.TargetParams.GetAoEPositions(
+            GetUsageParams().ActionRef.GetAoEVectors(
                 GetUsageParams(), PositionsSelected
                 )
             );
         GetUsageParams().PositionsTargeted = positions_to_add;
-
-        //If mobs cannot be considered, stop here.
-        if (!GetUsageParams().ActionRef.MobFilterParams.PickMobInTargetPos){return;}   
 
         //Add the targeted mobs to the UsageParameters if valid.
         List<Mob> mobs_found = new();
         foreach (var pos in GetUsageParams().PositionsTargeted)
         {
             //Get the mobs at this position.
-            List<Mob> mobs_here = Global.ManagerMob
+            List<Mob> mobsHere = Global.ManagerMob
                 .GetInCombat()
                 .FilterFromPosition(pos);
 
-            //Validate mobs
-            List<Mob> mobs_filtered = new();
-            foreach (var mob in mobs_here)
-            {
-                if (GetUsageParams().ActionRef.IsMobValid(mob))
-                {
-                    mobs_filtered.Add(mob);
-                }
-            }
+            //Filter mobs
+            List<Mob> mobs_filtered = GetUsageParams().ActionRef.GetValidMobs(mobsHere);
 
             //Add filtered mobs to the MobsTargeted list for the action to use.
             GetUsageParams().MobsTargeted.AddRange(mobs_filtered);
@@ -187,7 +177,7 @@ public class BattleControllerStateTargeting : BattleControllerState
     }
 
     private bool HasTargetPositionsRemaining()
-        => PositionsSelected.Count < GetUsageParams().ActionRef.TargetParams.TargetingMaxPositions;
+        => PositionsSelected.Count < GetUsageParams().ActionRef.GetMaxTargetingSelections();
 
     private void UpdateTargetedVisuals(bool force_clear = false)
     {
