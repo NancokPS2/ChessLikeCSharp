@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Shared.Storage;
+using Godot;
 
 public partial class Global
 {
-    public static Job.Manager ManagerJob;
-    public static Ability.Manager ManagerAbility;
-    public static Passive.Manager ManagerPassive;
-    public static Mob.Manager ManagerMob;
-    public static Faction.Manager ManagerFaction;
-    public static Item.Manager ManagerItem;
+    public static ResourcePack<Job> ManagerJob;
+    public static ResourcePack<Ability> ManagerAbility;
+    public static ResourcePack<Mob> ManagerMob;
+    public static ResourcePack<Faction> ManagerFaction;
+    public static ResourcePack<Inventory> ManagerInventory;
+    public static ResourcePack<Item> ManagerItem;
 
     public static void SetupManager()
     {
         ManagerJob = new();
         ManagerAbility = new();
-        ManagerPassive = new();
         ManagerMob = new();
         ManagerFaction = new();
         ManagerItem = new();

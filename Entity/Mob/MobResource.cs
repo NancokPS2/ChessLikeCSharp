@@ -21,7 +21,7 @@ public partial class MobResource : Godot.Resource
 	[Export]
 	public EFaction Faction;
 	[Export]    
-	public InventoryResource MobInventory = new();
+	public Inventory MobInventory = new();
 	//THIS BREAKS SHIT = Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT);
 	
 	//[Export]

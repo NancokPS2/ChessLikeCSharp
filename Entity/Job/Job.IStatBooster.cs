@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Shared;
 using ChessLike.Shared.Storage;
+using Godot;
 
 namespace ChessLike.Entity;
 
-   
 public partial class Job : MobStatSet.IStatBooster
 {
 

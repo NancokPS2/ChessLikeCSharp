@@ -4,6 +4,23 @@ public class ResourcePack<TRes> where TRes : Resource
 {
     public readonly string UNIQUE_STRING = GetUniqueString();
     private Dictionary<string, TRes> Contents = new();
+    private UniqueList<TRes> Pooled = new();
+
+    public ResourcePack()
+    {
+    }
+
+    public bool AddPooled(TRes res)
+        => Pooled.Add(res);
+
+    public void RemovePooled(TRes res)
+        => Pooled.Remove(res);
+
+    public List<TRes> GetPooled()
+        => Pooled;
+
+    public ResourcePack(string sourceFolder)
+        => LoadAllInFolder(sourceFolder);
 
     static string GetUniqueString()
     {
@@ -54,7 +71,7 @@ public class ResourcePack<TRes> where TRes : Resource
         return resource.ResourcePath.GetFile().GetBaseName();
     }
 
-    public void LoadFromFolder(string path)
+    public void LoadAllInFolder(string path)
     {
         foreach (var item in ResourceLoader.ListDirectory(path))
         {

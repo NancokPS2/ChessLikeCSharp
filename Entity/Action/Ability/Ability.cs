@@ -28,5 +28,6 @@ public partial class Ability : ActionEvent
     {
         EventBus.ActionUsed?.Invoke(usage_params);
     }
+
 }
 

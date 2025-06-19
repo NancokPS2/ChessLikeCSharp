@@ -15,8 +15,8 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     public delegate void StatChange(TStatEnum name, float amount);
     public event StatChange? StatValueChanged;
 
-    public Dictionary<TStatEnum, float> MaxDict {get; set;} = new();
-    public Dictionary<TStatEnum, float> CurrentDict {get; set;} = new();
+    public Dictionary<TStatEnum, float> MaxDict { get; set; } = new();
+    public Dictionary<TStatEnum, float> CurrentDict { get; set; } = new();
     public Dictionary<string, StatBoost> Boosts = new();
 
     public StatSet()
@@ -81,12 +81,12 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         var val = CurrentDict[stat];
         float additive = 0;
         float multiplicative = 1;
-/*      foreach (var item in Boosts.Values)
-        {
-            additive += item.GetAdditiveValue(stat);
-            multiplicative *= item.GetMultiplicativeValue(stat);
-        } 
-*/
+        /*      foreach (var item in Boosts.Values)
+                {
+                    additive += item.GetAdditiveValue(stat);
+                    multiplicative *= item.GetMultiplicativeValue(stat);
+                } 
+        */
         Debug.Assert(multiplicative != 0);
         return Mathf.Snapped(
             MathF.Min(
@@ -155,12 +155,12 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         }
     }
     #endregion
-   
+
     #region Boosts
     public string BoostGetListOfStatChanges(TStatEnum name)
     {
         string output = $"Base: {MaxDict[name]}\n";
-        
+
         foreach (StatBoost boost in Boosts.Values)
         {
             string source = boost.Source;
@@ -185,7 +185,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public void BoostAdd(IStatBooster booster, bool replace)
     {
-        if (booster.GetBoostSource() == INVALID_BOOST_SOURCE){throw new Exception("Invalid source.");}
+        if (booster.GetBoostSource() == INVALID_BOOST_SOURCE) { throw new Exception("Invalid source."); }
         StatBoost? boost = booster.GetStatBoost();
         if (boost is not null)
         {
@@ -211,7 +211,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
 
     public void BoostRemove(string source)
     {
-        if (source == INVALID_BOOST_SOURCE){throw new Exception("Invalid source.");}
+        if (source == INVALID_BOOST_SOURCE) { throw new Exception("Invalid source."); }
         if (Boosts.ContainsKey(source))
         {
             Boosts.Remove(source);
@@ -229,7 +229,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         foreach (TStatEnum name in Enum.GetValues(typeof(TStatEnum)))
         {
             output[index] = name;
-            index ++;
+            index++;
         }
         return output;
     }
@@ -267,30 +267,30 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         {
             this.Source = Source;
         }
-/* 
-        public float GetAdditiveValue(TStatEnum stat) => 
-            ValueAdditiveBonus.ContainsKey(stat) ? ValueAdditiveBonus[stat] : 0;
+        /* 
+                public float GetAdditiveValue(TStatEnum stat) => 
+                    ValueAdditiveBonus.ContainsKey(stat) ? ValueAdditiveBonus[stat] : 0;
 
-        public float GetMultiplicativeValue(TStatEnum stat) => 
-            ValueMultiplicativeBonus.ContainsKey(stat) ? ValueMultiplicativeBonus[stat] : 1;
- */
-        public float GetAdditiveMax(TStatEnum stat) => 
+                public float GetMultiplicativeValue(TStatEnum stat) => 
+                    ValueMultiplicativeBonus.ContainsKey(stat) ? ValueMultiplicativeBonus[stat] : 1;
+         */
+        public float GetAdditiveMax(TStatEnum stat) =>
             MaxAdditiveBonus.ContainsKey(stat) ? MaxAdditiveBonus[stat] : 0;
 
-        public float GetMultiplicativeMax(TStatEnum stat) => 
+        public float GetMultiplicativeMax(TStatEnum stat) =>
             MaxMultiplicativeBonus.ContainsKey(stat) ? MaxMultiplicativeBonus[stat] : 1;
-        
-/* 
-        public void SetAdditiveValue(TStatEnum stat, float value)
-        {
-            ValueAdditiveBonus[stat] = value;
-        }
 
-        public void SetMultiplicativeValue(TStatEnum stat, float value)
-        {
-            ValueMultiplicativeBonus[stat] = value;
-        }
- */
+        /* 
+                public void SetAdditiveValue(TStatEnum stat, float value)
+                {
+                    ValueAdditiveBonus[stat] = value;
+                }
+
+                public void SetMultiplicativeValue(TStatEnum stat, float value)
+                {
+                    ValueMultiplicativeBonus[stat] = value;
+                }
+         */
         public void SetAdditiveMax(TStatEnum stat, float value)
         {
             MaxAdditiveBonus[stat] = value;
@@ -301,7 +301,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
             MaxMultiplicativeBonus[stat] = value;
         }
 
-        public static StatBoost operator+(StatBoost sourcer, StatBoost added)
+        public static StatBoost operator +(StatBoost sourcer, StatBoost added)
         {
             StatBoost output = new(sourcer.Source);
             if (sourcer.Source != added.Source)

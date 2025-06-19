@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Godot;
 
 namespace ChessLike.Shared.Storage;
 
 public partial class Inventory
 {
-    public partial class Slot
+    public partial class Slot : Resource
     {
         public List<EItemFlag> FlagWhitelist = new();
         public List<EItemFlag> FlagBlacklist = new();

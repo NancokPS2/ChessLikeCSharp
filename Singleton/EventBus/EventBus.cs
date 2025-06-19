@@ -87,7 +87,7 @@ public partial class EventBus : Node
     public delegate void MobMovement(Mob mob, Vector3i from, Vector3i to);
     public delegate void MobMovementPath(Mob mob, List<Vector3i> path);
     public static MobMovement? MobMoved;
-    public static MobMovementPath? MobFinishedMoving;
+    public static MobMovementPath? MobFinishedPathMove;
     #endregion
 
     #region Mob - Command

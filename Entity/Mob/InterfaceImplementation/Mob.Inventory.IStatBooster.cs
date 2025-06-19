@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Shared;
 using ChessLike.Shared.Storage;
+using Godot;
 
 namespace ChessLike.Shared.Storage;
 
-   
-public partial class Inventory : MobStatSet.IStatBooster
+
+public partial class Inventory : Resource, MobStatSet.IStatBooster
 {
 
     public string GetBoostSource() => "EQUIPMENT";

@@ -8,15 +8,16 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
+[GlobalClass]
 public partial class Ability : IDescription
 {
     public string GetDescription(bool extended = false)
     {
         return String.Format("Identifier: {0} \nName: {1} \nFilter Parameters: \n{2} \nTarget Parameters: \n{3} \nFlags: {4}",
-            Enum.GetName(Identifier), 
-            Name, 
-            FilterParams.ToString().Indent(@"    "), 
-            TargetParams.ToString().Indent(@"    "), 
+            Enum.GetName(Identifier),
+            Name,
+            FilterParams.ToString().Indent(@"    "),
+            TargetParams.ToString().Indent(@"    "),
             Flags.ToStringList()
         );
     }

@@ -11,8 +11,8 @@ using Godot;
 
 namespace ChessLike.Entity;
 
-
-public partial class Mob
+[GlobalClass]
+public partial class Mob : Resource
 {
     public string DisplayedName = "UNNAMED";
     private List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
@@ -50,7 +50,7 @@ public partial class Mob
         Stats = GetDefaultStats();
 
         //Default inventory
-        Inventory inv = Inventory.FromResource(Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT));
+        Inventory inv = Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT);
         MobInventory = inv;
 
         SetupEventBus();

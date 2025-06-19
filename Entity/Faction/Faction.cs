@@ -6,10 +6,12 @@ using ChessLike.Shared.Serialization;
 using ExtendedXmlSerializer;
 using ISerializable = ChessLike.Shared.Serialization.ISerializable;
 using ChessLike.Shared.Storage;
+using Godot;
 namespace ChessLike.Entity;
 
 //Factions can store groups of Mobs, their inventories and grant allegiance between mobs.
-public partial class Faction : ISerializable
+[GlobalClass]
+public partial class Faction : Resource, ISerializable
 {
 
     public EFaction Identifier = EFaction.NEUTRAL;
@@ -37,20 +39,21 @@ public partial class Faction : ISerializable
     }
 
     public static bool operator ==(Faction a, Faction b)
-	{
-		return a.Identifier == b.Identifier;
-	}
+    {
+        return a.Identifier == b.Identifier;
+    }
 
-	public static bool operator !=(Faction a, Faction b)
-	{
-		return !(a == b);
-	}
+    public static bool operator !=(Faction a, Faction b)
+    {
+        return !(a == b);
+    }
     public override bool Equals(object? obj)
     {
         if (obj is Faction faction)
         {
             return faction.Identifier == this.Identifier;
-        }else
+        }
+        else
         {
             return false;
         }
