@@ -39,7 +39,7 @@ public partial class Mob
 
     public MobStatSet Stats = GetDefaultStats();
 
-    public Vector3i Position;
+    private Vector3i Position;
 
     public Mob()
     {
@@ -136,13 +136,13 @@ public partial class Mob
         EventBus.MobMoved?.Invoke(this, original_pos, Position);
     }
 
-    public void MovePath(List<Vector3i> path)
+    public void MoveTroughPath(List<Vector3i> path)
     {
         foreach (var item in path)
         {
             Move(item);
         }
-        EventBus.MobFinishedMoving?.Invoke(this, path);
+        EventBus.MobFinishedPathMove?.Invoke(this, path);
     }
 
     #endregion
@@ -216,12 +216,13 @@ public partial class Mob
         return output;
     }
 
-    public List<Passive> GetPassives()
+    public List<Ability> GetPassives()
     {
-        List<Passive> output = new();
+        throw new NotImplementedException();
+        List<Ability> output = new();
         foreach (var item in Actions)
         {
-            if (item is Passive pas)
+            if (item is Ability pas)
             {
                 output.Add(pas);
             }
@@ -246,7 +247,7 @@ public partial class Mob
     {
         string output = "";
         output += $"---\nAbilities: {GetAbilities().ToStringList()}";
-        output += $"---\nPassives: {GetPassives().ToStringList()}";
+        //output += $"---\nPassives: {GetPassives().ToStringList()}";
         return output;
     }
     #endregion

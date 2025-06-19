@@ -113,12 +113,12 @@ public class ActionEventRunner : IDebugDisplay
 
 
         //If the animation already played out, pass onto the next action.
-        float duration = RunningQueuedAction?.action.AnimationParams.Duration ?? throw new Exception("Could not get a duration.");
+        float duration = RunningQueuedAction?.action.GetAnimationDuration() ?? throw new Exception("Could not get a duration.");
         if (RunningTime > duration)
         {
             RunningReadyToSet = true;
             RunningTime = 0;
-            RunningIndex++;
+            RunningIndex ++;
         }
 
         //TODO: Maybe don't rely on this random node for timing.

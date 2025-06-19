@@ -6,17 +6,18 @@ using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
-public partial class MobCommandMove : Command
+public abstract partial class MobCommandWalk : Command
 {
-    Vector3i TargetLocation;
-    public MobCommandMove(Vector3i target)
+    List<Vector3i> Path;
+
+    public MobCommandWalk(List<Vector3i> path)
     {
-        TargetLocation = target;
+        Path = path;
     }
 
     public override void UseCommand(Mob mob)
     {
         base.UseCommand(mob);
-        mob.Position = TargetLocation;
+        mob.MoveTroughPath(Path);
     }
 }

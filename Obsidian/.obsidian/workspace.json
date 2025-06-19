@@ -103,13 +103,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "How magic works.md",
+                "file": "Phoenix Warrior.md",
                 "mode": "source",
                 "backlinks": true,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "How magic works"
+              "title": "Phoenix Warrior"
             }
           },
           {
@@ -283,8 +283,10 @@
   },
   "active": "8281d1fa92fbfd86",
   "lastOpenFiles": [
-    "Mundane magic.md",
+    "Mechanics/Combat Job.md",
+    "Mechanics/Unit.md",
     "How magic works.md",
+    "Mundane magic.md",
     "Magic in every day life.md",
     "Local Rangers.md",
     "Continent.md",
@@ -299,7 +301,6 @@
     "Race/Humans.md",
     "Race/Poxt.md",
     "Race/Race.md",
-    "Mechanics/Unit.md",
     "Mechanics/Combat flow.md",
     "Mechanics/UI/Ability Usage.md",
     "Mechanics/BattleController.md",
@@ -314,7 +315,6 @@
     "Mechanics/Untitled.md",
     "Language.md",
     "Race",
-    "Language/Dushki.md",
     "Untitled.canvas",
     "Language",
     "Mechanics",

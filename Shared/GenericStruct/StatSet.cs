@@ -43,7 +43,7 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     public float ChangeValue(TStatEnum stat, float amount)
     {
         float original_value = GetValue(stat);
-        CurrentDict[stat] = CurrentDict[stat] + amount;
+        SetValue(stat, GetValue(stat) + amount);
         float final_value = GetValue(stat);
         return final_value - original_value;
     }
@@ -55,8 +55,6 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         CurrentDict.TryGetValue(stat, out original_val);
         float max = GetMax(stat);
         CurrentDict[stat] = MathF.Min(value, max);
-
-        StatValueChanged?.Invoke(stat, value - original_val);
     }
 
     public void SetValuePercent(TStatEnum stat, float percent)

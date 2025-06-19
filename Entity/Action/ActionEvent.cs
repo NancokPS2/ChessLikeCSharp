@@ -43,11 +43,16 @@ public abstract partial class ActionEvent : Resource
         EventBus.TurnTimePassed += AutoActivationProcessTimePassed;
         EventBus.TurnChanged += AutoActivationProcessTurn;
     }
+    #region Animation
+    public float GetAnimationDuration()
+        => AnimationParams.Duration;
+
+    #endregion
 
     #region Targeting
     public int GetMaxTargetingSelections()
         => TargetParams.TargetingMaxPositions;
-        
+
     public uint GetTotalRange(Mob owner)
     {
         uint output = TargetParams.TargetingRange;
@@ -95,7 +100,7 @@ public abstract partial class ActionEvent : Resource
 
         foreach (Vector3i target in targets)
         {
-            Vector3i.Rotation rotation = usageParams.OwnerRef.Position.GetRotationToLookAt(target, true);
+            Vector3i.Rotation rotation = usageParams.OwnerRef.GetPosition().GetRotationToLookAt(target, true);
 
             output.AddRange(TargetParams.GetAoEShape(rotation));
         }

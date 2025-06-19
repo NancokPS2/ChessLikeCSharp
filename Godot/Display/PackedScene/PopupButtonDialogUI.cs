@@ -61,11 +61,11 @@ public partial class PopupButtonDialogUI : CanvasLayer, ISceneDependency
 			}
 			main.Modulate = Modulation;
 
-			ButtonContainer = (Control?)(ButtonContainer ?? FindChild(nameof(ButtonContainer)));
+			ButtonContainer = (Control)(ButtonContainer ?? FindChild(nameof(ButtonContainer)));
 
-			MessageLabel = (Label?)(MessageLabel ?? FindChild(nameof(MessageLabel)));
+			MessageLabel = (Label)(MessageLabel ?? FindChild(nameof(MessageLabel)));
 
-			MessageLabel?.Text = Message;
+			MessageLabel.Text = Message;
 		}
 	}
 
