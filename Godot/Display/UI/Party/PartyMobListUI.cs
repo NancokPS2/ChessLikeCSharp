@@ -28,7 +28,7 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 
 	public void Update(EFaction faction)
 	{
-		var list = Global.ManagerMob.GetFromFaction(faction);
+		var list = Global.ManagerMob.GetPooledInFaction(faction);
 		NodeFactionNameLabel.Text = $"Faction: {faction}";
 		Update(list);
 	}
@@ -38,7 +38,7 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 		List<Mob> list = new();
 		foreach (EFaction fac in factions)
 		{
-			list.AddRange(Global.ManagerMob.GetFromFaction(fac));
+			list.AddRange(Global.ManagerMob.GetPooledInFaction(fac));
 		}
 		NodeFactionNameLabel.Text = $"Factions: {factions.ToStringList()}";
 		Update(list);

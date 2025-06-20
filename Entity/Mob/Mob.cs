@@ -49,12 +49,18 @@ public partial class Mob : Resource
         //Default stats
         Stats = GetDefaultStats();
 
-        //Default inventory
-        Inventory inv = Inventory.LoadPreset(Inventory.EPreset.EQUIPMENT);
+        //TODO: Implement a default inventory
+        Inventory inv = new Inventory(15);
         MobInventory = inv;
 
         SetupEventBus();
     }
+
+    #region Faction
+    public Faction GetFaction()
+        => Global.ManagerFaction.GetPooledByEnum(Faction);
+
+    #endregion
 
     #region Jobs
     public List<Job> GetJobs()

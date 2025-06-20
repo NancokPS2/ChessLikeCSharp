@@ -42,8 +42,8 @@ public partial class MobMeshDisplay : Godot.Node3D
             MobDisplayComponent component = MobComponents[mob];
             //Invisible if not in combat.
             component.MeshInstance.Visible = mob.MobState == EMobState.COMBAT;
-            component.MeshInstance.Position = mob.Position.ToGVector3();
-            component.NameTag.Position = mob.Position.ToGVector3() + Vector3.Up;
+            component.MeshInstance.Position = mob.GetPosition().ToGVector3();
+            component.NameTag.Position = mob.GetPosition().ToGVector3() + Vector3.Up;
         }
     }
 

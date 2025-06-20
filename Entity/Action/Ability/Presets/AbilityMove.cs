@@ -32,7 +32,7 @@ public partial class AbilityMove : Ability
         base.Use(usage_params);
         Mob owner = usage_params.OwnerRef;
         Vector3i target = usage_params.PositionsTargeted[0];
-        owner.Position = target;
+        owner.Move(target);
     }
 
     public override string GetDescription()

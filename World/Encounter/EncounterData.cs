@@ -26,9 +26,9 @@ public partial class EncounterData
 
     public virtual bool IsFinished()
     {
-        bool no_hostiles_remaining = Global.ManagerMob.GetInCombat()
-            .FilterFromHostilesFaction(EFaction.PLAYER)
-            .Count == 0;
+        bool no_hostiles_remaining = !Global.ManagerMob
+            .GetPooledInCombat()
+            .Any( x => x.GetFaction().IsEnemy(EFaction.PLAYER) );
 
         bool turn_limit_reached = RoundLimit > 0 && RoundCount >= RoundLimit; 
 
@@ -45,24 +45,24 @@ public partial class EncounterData
 
         Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("PlayerFac")
-            .ChainFaction(EFaction.PLAYER)
-            .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
-            
+            .ChainFaction(EFaction.PLAYER);
+        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
+
         Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("PlayerFac2Warrior")
             .ChainFaction(EFaction.PLAYER)
-            .ChainJob(new List<Job>(){Job.CreatePrototype(EJob.WARRIOR)})
-            .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
+            .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WARRIOR) });
+        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
         Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("Civilian")
-            .ChainJob(new List<Job>(){Job.CreatePrototype(EJob.CIVILIAN)})
-            .ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
+            .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.CIVILIAN) });
+        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
         Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-            .ChainJob(new List<Job>(){Job.CreatePrototype(EJob.WIZARD)})
-            .ChainName("Neutral wizard")
-            .ChainEquipment(new WeaponSpear());
+            .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WIZARD) })
+            .ChainName("Neutral wizard");
+            //.ChainEquipment(new WeaponSpear());
 
         encounter.PresetMobSpawns = new()
         {

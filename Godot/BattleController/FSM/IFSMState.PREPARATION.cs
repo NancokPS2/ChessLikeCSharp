@@ -72,7 +72,7 @@ public class BattleControllerStatePreparation : BattleControllerState
 
             //Get all mobs of eligible factions at the given location.
             List<Mob> mobs_to_remove = 
-                Global.ManagerMob.GetInPosition(hovered_pos).Where(
+                Global.ManagerMob.GetPooledInPosition(hovered_pos).Where(
                     x => FactionsEligible.Contains(x.Faction)
                 ).ToList();
 
@@ -130,13 +130,13 @@ public class BattleControllerStatePreparation : BattleControllerState
         return is_valid_position && is_spawn_point;
     }
 
-    public bool IsPointOccupied(Vector3i position) => Global.ManagerMob.GetInPosition(position).Count != 0;
+    public bool IsPointOccupied(Vector3i position) => Global.ManagerMob.GetPooledInPosition(position).Count != 0;
     #endregion
 
     public void MobPlace(Mob mob, Vector3i where)
     {
         //Place mobs only if the location is empty.
-        if (Global.ManagerMob.GetInPosition(where).Count != 0)
+        if (Global.ManagerMob.GetPooledInPosition(where).Count != 0)
         {
             MessageQueue.AddMessage("Cannot place unit, the space is occupied.", 2);
             return;

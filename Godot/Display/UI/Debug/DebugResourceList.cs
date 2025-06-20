@@ -43,19 +43,19 @@ public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , 
 
         //Jobs
         List<IDescription> jobs = new();
-        jobs.AddRange(Global.ManagerJob.CreatePrototypes());
+        jobs.AddRange(Global.ManagerJob.GetAllPooled());
         Entries.Add(ID_JOB, jobs);
         NodeResourceTypeMenu?.GetPopup().AddItem("Jobs", ID_JOB);
 
         //Items
         List<IDescription> items = new();
-        items.AddRange(Global.ManagerItem.CreatePrototypes());
+        items.AddRange(Global.ManagerItem.GetAllPooled());
         Entries.Add(ID_ITEM, items);
         NodeResourceTypeMenu?.GetPopup().AddItem("Items", ID_ITEM);
 
         //Abilities
         List<IDescription> abilities = new();
-        abilities.AddRange(Global.ManagerAbility.CreatePrototypes());
+        abilities.AddRange(Global.ManagerAbility.GetAllPooled());
         Entries.Add(ID_ABILITY, abilities);
         NodeResourceTypeMenu?.GetPopup().AddItem("Abilities", ID_ABILITY);
     }

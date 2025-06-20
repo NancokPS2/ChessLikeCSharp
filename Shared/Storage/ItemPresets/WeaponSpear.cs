@@ -6,7 +6,7 @@ using ChessLike.Entity.Action.Preset;
 
 namespace ChessLike.Shared.Storage;
 
-public class WeaponSpear: Item
+public partial class WeaponSpear: Item
 {
     public WeaponSpear()
     {

@@ -101,14 +101,14 @@ public partial class Command: Node
 
     private void AllCombatUnitsSetHP(float amount)
     {
-        Global.ManagerMob.GetInCombat().ForEach(
+        Global.ManagerMob.GetPooledInCombat().ForEach(
             x => x.Stats.SetValue(ChessLike.Entity.EStatName.HEALTH, amount)            
             );
     }
 
     private Mob? GetHoveredUnit()
     {
-        if (Global.ManagerMob.GetInPosition(BattleController.Instance.PositionHovered) is List<Mob> list && list.Count > 0)
+        if (Global.ManagerMob.GetPooledInPosition(BattleController.Instance.PositionHovered) is List<Mob> list && list.Count > 0)
         {
             return list.First();
         }

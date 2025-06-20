@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Shared.Storage;
 
-public class Trinket : Item
+public partial class Trinket : Item
 {
     public Trinket()
     {

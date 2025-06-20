@@ -9,12 +9,12 @@ using Godot;
 
 public partial class Global
 {
-    public static ResourcePack<Job> ManagerJob;
+    public static JobResourcePack ManagerJob;
     public static ResourcePack<Ability> ManagerAbility;
-    public static ResourcePack<Mob> ManagerMob;
-    public static ResourcePack<Faction> ManagerFaction;
+    public static MobResourcePack ManagerMob;
+    public static FactionResourcePack ManagerFaction;
     public static ResourcePack<Inventory> ManagerInventory;
-    public static ResourcePack<Item> ManagerItem;
+    public static ItemResourcePack ManagerItem;
 
     public static void SetupManager()
     {

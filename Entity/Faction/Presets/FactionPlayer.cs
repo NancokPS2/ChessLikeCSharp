@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChessLike.Entity;
 
-public class FactionPlayer : Faction
+public partial class FactionPlayer : Faction
 {
     public FactionPlayer()
     {

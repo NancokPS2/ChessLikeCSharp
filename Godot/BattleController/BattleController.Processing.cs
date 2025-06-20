@@ -68,7 +68,7 @@ public partial class BattleController
     public void UpdateHoveredMobUI()
     {
         //TODO
-        List<Mob>? mob_list = Global.ManagerMob.GetInPosition(PositionHovered);
+        List<Mob>? mob_list = Global.ManagerMob.GetPooledInPosition(PositionHovered);
         if (mob_list.Count == 0) {return;}
         
         Mob mob = mob_list.First();

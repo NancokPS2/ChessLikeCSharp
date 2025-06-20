@@ -41,7 +41,7 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 	public void Update()
 	{
 		NodePartyListUI.Update(ChessLike.Entity.EFaction.PLAYER);
-		NodeFactionInventoryUI.Update(Global.ManagerFaction.GetFromEnum(ChessLike.Entity.EFaction.PLAYER));
+		NodeFactionInventoryUI.Update(Global.ManagerFaction.GetPooledByEnum(EFaction.PLAYER));
 	}
 
 	public void OnPartyListUIPressed(Button button, Mob mob)
@@ -54,21 +54,19 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 		SaveDialog saver = new SaveDialog(this);
 		switch (id)
 		{
-		case DEBUG_ACTION_SAVE_JOBS:
-			List<Resource> job_prototypes = (from job in Global.ManagerJob.CreatePrototypes() select job.ToResource()).ToList<Resource>();
-			saver.Use(job_prototypes);
-			break;
-		
-		case DEBUG_ACTION_SAVE_UNIT:
-			if (NodePartyListUI is not null && NodePartyListUI.MobSelected is not null)
-			{
-				saver.Use(NodePartyListUI.MobSelected.ToResource());
-				
-			} else
-			{
-				MessageQueue.AddMessage("No unit has been selected, cannot save.");
-			}
-			break;
+
+			case DEBUG_ACTION_SAVE_UNIT:
+				if (NodePartyListUI is not null && NodePartyListUI.MobSelected is not null)
+				{
+					saver.Use(NodePartyListUI.MobSelected);
+
+				}
+				else
+				{
+					MessageQueue.AddMessage("No unit has been selected, cannot save.");
+				}
+				break;
+		default: throw new Exception($"Invalid value {id}");
 		}
 	}
 }

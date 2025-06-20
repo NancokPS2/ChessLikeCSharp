@@ -16,7 +16,7 @@ public class ResourcePack<TRes> where TRes : Resource
     public void RemovePooled(TRes res)
         => Pooled.Remove(res);
 
-    public List<TRes> GetPooled()
+    public List<TRes> GetAllPooled()
         => Pooled;
 
     public ResourcePack(string sourceFolder)

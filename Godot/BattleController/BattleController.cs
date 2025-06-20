@@ -133,12 +133,12 @@ public partial class BattleController : Node, IDebugDisplay
         //If this mob was already set up, just update its position and state.
         if(CompMobMeshDisplay.HasMob(mob) && CompTurnManager.GetParticipants().Contains(mob))
         {
-            mob.Position = where;
+            mob.Move(where);
             if(add_to_combat){mob.MobState = EMobState.COMBAT;}
         }
         else
         {
-            mob.Position = where;
+            mob.Move(where);
             CompMobMeshDisplay.Add(mob);
             CompTurnManager.Add(mob);
             if(add_to_combat){mob.MobState = EMobState.COMBAT;}
@@ -148,7 +148,7 @@ public partial class BattleController : Node, IDebugDisplay
 
     public void RemoveParticipant(Mob mob)
     {
-        mob.Position = Vector3i.INVALID;
+        mob.Move(Vector3i.INVALID);
         CompMobMeshDisplay.Remove(mob);
         CompTurnManager.Remove(mob);
         mob.MobState = EMobState.BENCHED;

@@ -118,7 +118,7 @@ public abstract partial class ActionEvent : Resource
 
     public bool IsMobValid(Mob mob)
     {
-        Faction owner_fac = Global.ManagerFaction.GetFromEnum(Owner.Faction);
+        Faction owner_fac = Global.ManagerFaction.GetAllPooled().First(x => x.Identifier == Owner.Faction);
 
         //Must be the owner?
         if (mob != Owner && MobFilterParams.OnlyAffectOwner)
@@ -255,6 +255,13 @@ public abstract partial class ActionEvent : Resource
 
     public virtual void Use(UsageParameters usageParams)
     {
+        foreach (var command in Commands)
+        {
+            foreach (var mob in usageParams.MobsTargeted)
+            {
+                command.UseCommand(mob);
+            }
+        }
         EventBus.ActionUsed?.Invoke(usageParams);
     }
 

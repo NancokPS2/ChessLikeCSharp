@@ -24,9 +24,10 @@ public partial class Ability : ActionEvent
 {
     public EAbility Identifier = EAbility.NULL;
 
-    public override void Use(UsageParameters usage_params)
+    public override void Use(UsageParameters usageParams)
     {
-        EventBus.ActionUsed?.Invoke(usage_params);
+        base.Use(usageParams);
+        EventBus.ActionUsed?.Invoke(usageParams);
     }
 
 }
