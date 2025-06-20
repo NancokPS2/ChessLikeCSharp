@@ -6,10 +6,16 @@ namespace ChessLike.Shared.Storage;
 public partial class Item : Resource, IValuable
 {
 
+    [Export]
     public string Name = "";
-    public float Price = 0;
-    public List<EItemFlag> Flags = new();
 
+    [Export]
+    public float Price = 0;
+
+    [Export]
+    public Godot.Collections.Array<EItemFlag> Flags = new();
+
+    [Export]
     public float Value { get => Price; set => Price = value; }
 
     public void ClearFlags()
@@ -29,7 +35,7 @@ public partial class Item : Resource, IValuable
 
     public List<EItemFlag> GetFlags()
     {
-        return Flags;
+        return new(Flags);
     }
 
     public virtual string GetDescription() 

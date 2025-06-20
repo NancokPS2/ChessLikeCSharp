@@ -7,7 +7,7 @@ using ChessLike.Entity;
 using Godot;
 
 namespace ChessLike.Shared;
-public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
+public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, Enum
 {
     public readonly TStatEnum[] AllStats;
 
@@ -189,12 +189,13 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
         StatBoost? boost = booster.GetStatBoost();
         if (boost is not null)
         {
-            BoostAdd(booster.GetBoostSource(), boost);
+            BoostAdd(boost);
         }
     }
 
-    private void BoostAdd(string source, StatBoost boost, bool replace = true)
+    public void BoostAdd(StatBoost boost, bool replace = true)
     {
+        string source = boost.Source;
         //Replacing the boost with a new one. Force a replacement if there is no source in the first place.
         if (replace || !Boosts.ContainsKey(source))
         {
@@ -255,13 +256,15 @@ public partial class StatSet<TStatEnum> where TStatEnum : notnull, Enum
     }
 
 
-    public class StatBoost
+    public partial class StatBoost : Resource
     {
         public string Source;
         //public Dictionary<TStatEnum, float> ValueAdditiveBonus = new();
         //public Dictionary<TStatEnum, float> ValueMultiplicativeBonus = new();
-        private Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
-        private Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
+        [Export]
+        private Godot.Collections.Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
+        [Export]
+        private Godot.Collections.Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
 
         public StatBoost(string Source)
         {

@@ -56,6 +56,28 @@ public partial class Mob : Resource
         SetupEventBus();
     }
 
+    #region Inventory
+    private Inventory EquipmentInventory = new();
+    public void UpdateStatBoosts()
+    {
+        MobStatSet.StatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
+
+        foreach (Item item in EquipmentInventory.GetItems())
+        {
+            ItemEquipment equipment;
+
+            //Make sure it is equipment
+            if (item is ItemEquipment _equip) equipment = _equip;
+            else throw new Exception($"This inventory is for equipment only. Found {item}");
+
+            outputStatBoost += equipment.StatBoost;
+        }
+
+        Stats.BoostAdd(outputStatBoost, true);
+    }
+
+    #endregion
+
     #region Faction
     public Faction GetFaction()
         => Global.ManagerFaction.GetPooledByEnum(Faction);
@@ -222,9 +244,9 @@ public partial class Mob : Resource
         return output;
     }
 
+    [Obsolete("Placeholder WIP")]
     public List<Ability> GetPassives()
     {
-        throw new NotImplementedException();
         List<Ability> output = new();
         foreach (var item in Actions)
         {

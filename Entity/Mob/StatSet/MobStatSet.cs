@@ -7,7 +7,7 @@ using ExtendedXmlSerializer.ExtensionModel.Content;
 
 namespace ChessLike.Entity;
 
-public partial class MobStatSet : StatSet<EStatName>, IResourceSerialize<MobStatSet, MobStatSetResource>
+public partial class MobStatSet : StatSet<EStatName>
 {
     public MobStatSet() : base()
     {
