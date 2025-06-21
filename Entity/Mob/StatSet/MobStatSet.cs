@@ -22,28 +22,6 @@ public partial class MobStatSet : StatSet<EStatName>
     {
         MaxDict = stats.MaxDict;
     }
-    public new MobStatSetResource ToResource()
-    {
-        MobStatSetResource output = new();
-        foreach (var item in MaxDict)
-        {
-            output.Contents[item.Key] = GetMax(item.Key);
-        }
-        return output;
-    }
-
-    public static MobStatSet FromResource(MobStatSetResource resource)
-    {
-        MobStatSet output = new MobStatSet();
-        
-        foreach (var item in resource.Contents)
-        {
-            output.SetStat(item.Key, item.Value);
-        }
-
-        return output;
-    }
-
     public override string ToString()
     {
         string output = "";

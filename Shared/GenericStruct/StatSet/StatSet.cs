@@ -17,7 +17,7 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
 
     public Dictionary<TStatEnum, float> MaxDict { get; set; } = new();
     public Dictionary<TStatEnum, float> CurrentDict { get; set; } = new();
-    public Dictionary<string, StatBoost> Boosts = new();
+    public Dictionary<string, StatBoost<TStatEnum>> Boosts = new();
 
     public StatSet()
     {
@@ -161,7 +161,7 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
     {
         string output = $"Base: {MaxDict[name]}\n";
 
-        foreach (StatBoost boost in Boosts.Values)
+        foreach (StatBoost<TStatEnum> boost in Boosts.Values)
         {
             string source = boost.Source;
             float total_mult = boost.GetMultiplicativeMax(name);
@@ -171,7 +171,7 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
         return output;
     }
 
-    private StatBoost BoostGetFromSource(string source)
+    private StatBoost<TStatEnum> BoostGetFromSource(string source)
     {
         if (Boosts.ContainsKey(source))
         {
@@ -186,14 +186,14 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
     public void BoostAdd(IStatBooster booster, bool replace)
     {
         if (booster.GetBoostSource() == INVALID_BOOST_SOURCE) { throw new Exception("Invalid source."); }
-        StatBoost? boost = booster.GetStatBoost();
+        StatBoost<TStatEnum>? boost = booster.GetStatBoost();
         if (boost is not null)
         {
             BoostAdd(boost);
         }
     }
 
-    public void BoostAdd(StatBoost boost, bool replace = true)
+    public void BoostAdd(StatBoost<TStatEnum> boost, bool replace = true)
     {
         string source = boost.Source;
         //Replacing the boost with a new one. Force a replacement if there is no source in the first place.
@@ -256,83 +256,10 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
     }
 
 
-    public partial class StatBoost : Resource
-    {
-        public string Source;
-        //public Dictionary<TStatEnum, float> ValueAdditiveBonus = new();
-        //public Dictionary<TStatEnum, float> ValueMultiplicativeBonus = new();
-        [Export]
-        private Godot.Collections.Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
-        [Export]
-        private Godot.Collections.Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
-
-        public StatBoost(string Source)
-        {
-            this.Source = Source;
-        }
-        /* 
-                public float GetAdditiveValue(TStatEnum stat) => 
-                    ValueAdditiveBonus.ContainsKey(stat) ? ValueAdditiveBonus[stat] : 0;
-
-                public float GetMultiplicativeValue(TStatEnum stat) => 
-                    ValueMultiplicativeBonus.ContainsKey(stat) ? ValueMultiplicativeBonus[stat] : 1;
-         */
-        public float GetAdditiveMax(TStatEnum stat) =>
-            MaxAdditiveBonus.ContainsKey(stat) ? MaxAdditiveBonus[stat] : 0;
-
-        public float GetMultiplicativeMax(TStatEnum stat) =>
-            MaxMultiplicativeBonus.ContainsKey(stat) ? MaxMultiplicativeBonus[stat] : 1;
-
-        /* 
-                public void SetAdditiveValue(TStatEnum stat, float value)
-                {
-                    ValueAdditiveBonus[stat] = value;
-                }
-
-                public void SetMultiplicativeValue(TStatEnum stat, float value)
-                {
-                    ValueMultiplicativeBonus[stat] = value;
-                }
-         */
-        public void SetAdditiveMax(TStatEnum stat, float value)
-        {
-            MaxAdditiveBonus[stat] = value;
-        }
-
-        public void SetMultiplicativeMax(TStatEnum stat, float value)
-        {
-            MaxMultiplicativeBonus[stat] = value;
-        }
-
-        public static StatBoost operator +(StatBoost sourcer, StatBoost added)
-        {
-            StatBoost output = new(sourcer.Source);
-            if (sourcer.Source != added.Source)
-            {
-                throw new Exception("Differing Source properties, can't handle.");
-            }
-            foreach (TStatEnum item in Enum.GetValues(typeof(TStatEnum)))
-            {
-                float sourcer_max_add = sourcer.GetAdditiveMax(item);
-                float added_max_add = added.GetAdditiveMax(item);
-
-                float sourcer_max_mult = sourcer.GetMultiplicativeMax(item);
-                float added_max_mult = added.GetMultiplicativeMax(item);
-
-                output.SetAdditiveMax(item, sourcer_max_add + added_max_add);
-                output.SetMultiplicativeMax(item, sourcer_max_mult + added_max_mult);
-            }
-
-            return output;
-        }
-    }
-
-
-
     public interface IStatBooster
     {
         public string GetBoostSource();
-        public StatBoost? GetStatBoost();
+        public StatBoost<TStatEnum>? GetStatBoost();
     }
 }
 

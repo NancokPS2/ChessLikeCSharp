@@ -58,9 +58,9 @@ public partial class Mob : Resource
 
     #region Inventory
     private Inventory EquipmentInventory = new();
-    public void UpdateStatBoosts()
+    public void UpdateEquipmentStatBoosts()
     {
-        MobStatSet.StatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
+        MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
 
         foreach (Item item in EquipmentInventory.GetItems())
         {
@@ -74,6 +74,20 @@ public partial class Mob : Resource
         }
 
         Stats.BoostAdd(outputStatBoost, true);
+    }
+
+    public void UpdateJobStatBoosts()
+    {
+        MobStatBoost outputBoost = new(Job.BOOST_SOURCE); 
+
+        //TODO: Jobs should not be able to be null in the first place.
+        foreach (Job job in Jobs)//.Where(x => x is not null))
+        {
+            //Average the stats from the job's.
+            outputBoost += job.GetStatBoost();
+        }
+
+        Stats.BoostAdd(outputBoost, true);
     }
 
     #endregion
@@ -122,20 +136,15 @@ public partial class Mob : Resource
 
     private void UpdateJobs()
     {
-        //Reset job modifiers
-        Stats.BoostRemove(Job.BOOST_SOURCE);
-
-        MobStatSet.StatBoost total_boost = new(Job.BOOST_SOURCE); 
 
         //TODO: Jobs should not be able to be null in the first place.
         foreach (Job job in Jobs)//.Where(x => x is not null))
         {
-            //Average the stats from the job's.
-            Stats.BoostAdd(job, false);
-
             //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
             SetMovementMode(job.MovementMode);
         }
+        //Reset job modifiers
+        UpdateJobStatBoosts();
         
         UpdateActions();
         Stats.SetToMax();
