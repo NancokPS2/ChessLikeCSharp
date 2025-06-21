@@ -84,7 +84,7 @@ public partial class Mob : Resource
         foreach (Job job in Jobs)//.Where(x => x is not null))
         {
             //Average the stats from the job's.
-            outputBoost = (MobStatBoost)(outputBoost + job.GetStatBoost());
+            outputBoost = outputBoost + job.GetStatBoost();
         }
 
         Stats.BoostAdd(outputBoost, true);

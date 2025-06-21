@@ -25,14 +25,13 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
         {
             MaxDict[stat] = new();
         }
+        AllStats = ((TStatEnum[])Enum.GetValues(typeof(TStatEnum))).Where(x => IsValidStat(x)).ToArray();
     }
 
     protected virtual bool IsValidStat(TStatEnum stat) => true;
 
-    public StatSet(Dictionary<TStatEnum, float> values) : base()
+    public StatSet(Dictionary<TStatEnum, float> values) : this()
     {
-        AllStats = ((TStatEnum[])Enum.GetValues(typeof(TStatEnum))).Where(x => IsValidStat(x)).ToArray();
-
         foreach (TStatEnum stat_name in values.Keys)
         {
             SetStat(stat_name, values[stat_name]);
@@ -204,7 +203,7 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
         //Not replacing and there is an existing boost, add to it.
         else
         {
-            Boosts[source] = Boosts[source] + boost;
+            Boosts[source] = StatBoost<TStatEnum>.Combined(Boosts[source], boost);
         }
 
     }

@@ -15,7 +15,7 @@ public partial class ResourcePackLoader : Node
 
     public ResourcePackLoader()
     {
-        Instance = Instance is null ? this : Instance;
+        instance = instance is null ? this : instance;
 
         PrepareDir(ActionEvents);
     }
