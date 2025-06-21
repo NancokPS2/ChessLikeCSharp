@@ -20,6 +20,8 @@ namespace ChessLike.Entity.Action;
 /// Pass the result of GetTargetsAffected() to UsageParams.mob_targets
 /// 
 /// </summary>
+
+[GlobalClass]
 public partial class Ability : ActionEvent
 {
     public EAbility Identifier = EAbility.NULL;

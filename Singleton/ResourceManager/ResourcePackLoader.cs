@@ -6,6 +6,8 @@ using ChessLike.Entity;
 using ChessLike.Entity.Action;
 
 namespace Godot;
+
+[Obsolete("Unused")]
 public partial class ResourcePackLoader : Node
 {
     public static ResourcePackLoader Instance { get => instance ?? throw new Exception(); set => instance = value; }
@@ -22,8 +24,8 @@ public partial class ResourcePackLoader : Node
 
     public void PrepareDir<TRes>(ResourcePack<TRes> pack) where TRes : Resource
     {
-        DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + pack.UNIQUE_STRING);
-        DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + pack.UNIQUE_STRING);
+        DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + ResourcePack<TRes>.GetUniqueString());
+        DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + ResourcePack<TRes>.GetUniqueString());
     }
 
     public string GetBaseDirectory(bool user)

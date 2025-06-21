@@ -8,7 +8,8 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
-public abstract partial class ActionEvent : Resource
+[GlobalClass]
+public partial class ActionEvent : Resource
 {
     private Mob? owner;
     public Mob Owner { get => owner ?? throw new Exception("Owner should be set before usage."); set => owner = value; }

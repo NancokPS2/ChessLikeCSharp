@@ -2,12 +2,14 @@ namespace Godot;
 
 public class ResourcePack<TRes> where TRes : Resource
 {
-    public readonly string UNIQUE_STRING = GetUniqueString();
     private Dictionary<string, TRes> Contents = new();
     private UniqueList<TRes> Pooled = new();
+    public const string DEFAULT_DIR = "Resources";
+
 
     public ResourcePack()
     {
+        PrepareDirectories();
     }
 
     public bool AddPooled(TRes res)
@@ -22,7 +24,7 @@ public class ResourcePack<TRes> where TRes : Resource
     public ResourcePack(string sourceFolder)
         => LoadAllInFolder(sourceFolder);
 
-    static string GetUniqueString()
+    public static string GetUniqueString()
     {
         //Try to infer it from the type extension
         string output = typeof(TRes).ToString().GetExtension();
@@ -81,6 +83,25 @@ public class ResourcePack<TRes> where TRes : Resource
             if (identifier == "") throw new Exception("No identifier could be retrieved");
 
             AddResource(identifier, res);
+        }
+    }
+
+    public void PrepareDirectories()
+    {
+        string uniqueString = GetUniqueString();
+        DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + uniqueString);
+        DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + uniqueString);
+    }
+
+    public string GetBaseDirectory(bool user)
+    {
+        if (user)
+        {
+            return $"user://{DEFAULT_DIR}/";
+        }
+        else
+        {
+            return $"res://{DEFAULT_DIR}/";
         }
     }
     

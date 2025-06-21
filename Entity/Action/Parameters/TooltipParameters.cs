@@ -6,6 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
+[GlobalClass]
 public partial class TooltipParameters : Resource
 {
     public bool Visible;

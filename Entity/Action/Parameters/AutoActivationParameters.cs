@@ -7,6 +7,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
+[GlobalClass]
 public partial class AutoActivationParameters : Resource
 {
     [Export]

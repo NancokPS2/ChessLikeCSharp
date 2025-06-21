@@ -8,7 +8,6 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
-[GlobalClass]
 public partial class Ability : IDescription
 {
     public string GetDescription(bool extended = false)

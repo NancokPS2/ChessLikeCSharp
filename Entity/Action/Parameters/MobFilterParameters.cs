@@ -7,6 +7,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 //Defines what can be affected with this and how.
+[GlobalClass]
 public partial class MobFilterParameters : Resource
 {
     //If a mob is standing in a targeted location, they are included in the mob list of the UsageParameters.

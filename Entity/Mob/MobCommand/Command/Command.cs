@@ -8,6 +8,7 @@ using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
+[GlobalClass]
 public abstract partial class Command : Resource
 {
     private bool Used = false;

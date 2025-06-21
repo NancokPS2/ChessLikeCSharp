@@ -9,6 +9,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 //Properties used during the targeting phase to decide if the targets are valid.
+[GlobalClass]
 public partial class TargetingParameters : Resource
 {
     //Targeting

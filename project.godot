@@ -27,7 +27,6 @@ MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
 Command="*res://Singleton/Command/Command.cs"
-ResourecPackManager="*res://Singleton/ResourceManager/ResourcePackLoader.cs"
 
 [dotnet]
 

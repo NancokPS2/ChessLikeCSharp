@@ -6,12 +6,16 @@ using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
+[GlobalClass]
 public partial class MobCommandTakeDamage : Command
 {
+    [Export]
     public float DefenseRatioAccounted = 1;
+    [Export]
     public float DefenseIgnoreFlat = 0;
     private float _damage;
-    public float Damage {get => _damage; set => _damage = Mathf.Clamp(value, 0, float.MaxValue);}
+    [Export]
+    public float Damage { get => _damage; set => _damage = Mathf.Clamp(value, 0, float.MaxValue); }
     public MobCommandTakeDamage(float damage)
     {
         Damage = damage;

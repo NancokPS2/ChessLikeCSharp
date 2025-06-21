@@ -6,7 +6,8 @@ using Godot;
 
 namespace ChessLike.Entity.MobCommand;
 
-public abstract partial class MobCommandWalk : Command
+[GlobalClass]
+public partial class MobCommandWalk : Command
 {
     List<Vector3i> Path;
 
