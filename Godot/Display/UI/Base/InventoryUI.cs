@@ -8,7 +8,7 @@ using ChessLike.Shared.Storage;
 using ExtendedXmlSerializer.Core.Sources;
 using Godot;
 
-public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, ISceneDependency, ITooltip
+public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependency, ITooltip
 {
 
 	public static readonly Godot.Color MODULATE_SELECTED = new(0.5f,0.5f,0.5f);
@@ -58,14 +58,14 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		Update(InventorySelected.GetSlots());
 	}
 
-	protected override void OnButtonPressed(Button button, Inventory.Slot slot)
+	protected override void OnButtonPressed(Button button, Slot slot)
 	{
 		ButtonSelection(button, slot);
 
 		base.OnButtonPressed(button, slot);
 	}
 
-	public void ButtonSelection(Button button, Inventory.Slot slot)
+	public void ButtonSelection(Button button, Slot slot)
 	{
 		//Run the button's selection stuff.
 		if (slot is null){throw new Exception("ALL buttons should be paired with a slot.");}
@@ -94,13 +94,13 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 		return;
 	}
 
-	protected override void OnButtonHovered(Button button, Inventory.Slot slot, bool hovered)
+	protected override void OnButtonHovered(Button button, Slot slot, bool hovered)
 	{
 		base.OnButtonHovered(button, slot, hovered);
 		button.Modulate = hovered ? new Godot.Color(0.5f, 0.5f, 0.5f) : new Godot.Color(1, 1, 1);
 	}
 
-	protected override void OnButtonCreated(Button button, Inventory.Slot slot)
+	protected override void OnButtonCreated(Button button, Slot slot)
 	{
 		if(slot.Item is not null) {button.Text = slot.Item.Name;}
 		else if (slot.FlagWhitelist.Count != 0) {button.Text = slot.FlagWhitelist[0].ToString();}
@@ -109,7 +109,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	//TODO: handle deselecting slots once an operation happens.
 	//TODO: handle the bi-directional transfer of items (FIRST think of how it will work)
-	public void OnTransferUIPressed(Button transfer_ui_btn, Inventory.Slot transfer_ui_slot)
+	public void OnTransferUIPressed(Button transfer_ui_btn, Slot transfer_ui_slot)
 	{
 		//Must be able to transfer items
 		if (!CanTransferItems){return;}
@@ -148,7 +148,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Inventory.Slot>, IScen
 
 	}
 
-	public Inventory.Error TransferItemToInventory(Inventory source_inv, Inventory target_inv, Inventory.Slot source_slot, Inventory.Slot target_slot, Item item_to_transfer)
+	public Inventory.Error TransferItemToInventory(Inventory source_inv, Inventory target_inv, Slot source_slot, Slot target_slot, Item item_to_transfer)
 	{
 
 		Inventory.Error remove_err = source_inv.RemoveItem(source_slot);

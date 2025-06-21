@@ -5,6 +5,7 @@ using Godot;
 
 namespace ChessLike.Shared.Storage;
 
+[GlobalClass]
 public partial class ItemEquipment : Item
 {
     public const string BOOST_SOURCE = "EQUIPMENT_SOURCE";
@@ -12,5 +13,5 @@ public partial class ItemEquipment : Item
     [Export]
     public Godot.Collections.Array<Ability> AbilitiesGrantedToUser = new();
     [Export]
-    public MobStatSet.StatBoost StatBoost = new(BOOST_SOURCE);
+    public MobStatBoost StatBoost = new(BOOST_SOURCE);
 }

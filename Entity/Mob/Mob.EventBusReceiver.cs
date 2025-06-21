@@ -18,7 +18,7 @@ public partial class Mob : IEventBusMember
     {
         if (obj != MobInventory) return;
 
-        Stats.BoostAdd(MobInventory, true);
+        UpdateEquipmentStatBoosts();
         UpdateActions();
     }
 }

@@ -5,32 +5,34 @@ using Godot;
 
 namespace ChessLike.World.Encounter;
 
-public partial class EncounterData
+[GlobalClass]
+public partial class EncounterData : Resource
 {
     public Grid Grid = new();
-    public Dictionary<Vector3i, List<EFaction>> FactionSpawns = new();
-    public Dictionary<Vector3i, Mob> PresetMobSpawns = new();
+    [Export]
+    public Godot.Collections.Dictionary<Vector3I, Godot.Collections.Array<EFaction>> FactionSpawns = new();
+    public Godot.Collections.Dictionary<Vector3I, Mob> PresetMobSpawns = new();
     public int RoundLimit = -1;
 
     int RoundCount;
 
     public EncounterData()
     {
-        EventBus.RoundEnded += () => RoundCount ++;
+        EventBus.RoundEnded += () => RoundCount++;
     }
 
     public virtual void EncounterProcess()
     {
-        
+
     }
 
     public virtual bool IsFinished()
     {
         bool no_hostiles_remaining = !Global.ManagerMob
             .GetPooledInCombat()
-            .Any( x => x.GetFaction().IsEnemy(EFaction.PLAYER) );
+            .Any(x => x.GetFaction().IsEnemy(EFaction.PLAYER));
 
-        bool turn_limit_reached = RoundLimit > 0 && RoundCount >= RoundLimit; 
+        bool turn_limit_reached = RoundLimit > 0 && RoundCount >= RoundLimit;
 
         return no_hostiles_remaining || turn_limit_reached;
     }
@@ -62,26 +64,26 @@ public partial class EncounterData
         Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WIZARD) })
             .ChainName("Neutral wizard");
-            //.ChainEquipment(new WeaponSpear());
+        //.ChainEquipment(new WeaponSpear());
 
         encounter.PresetMobSpawns = new()
         {
         {
-            Vector3i.UP, 
+            Vector3i.UP,
             def_mob1
         },
         {
-            Vector3i.ONE + Vector3i.RIGHT * 2, 
+            Vector3i.ONE + Vector3i.RIGHT * 2,
             def_mob2
         },
         {
-            Vector3i.UP + Vector3i.FORWARD * 2, 
+            Vector3i.UP + Vector3i.FORWARD * 2,
             def_mob3
         },
         {
-            Vector3i.UP + (Vector3i.RIGHT * 2) + (Vector3i.FORWARD * 2), 
+            Vector3i.UP + (Vector3i.RIGHT * 2) + (Vector3i.FORWARD * 2),
             def_mob4
-        }, 
+        },
         };
 
         return encounter;

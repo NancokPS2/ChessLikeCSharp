@@ -352,6 +352,11 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return new Vector3(v1.X, v1.Y, v1.Z);
 	}
 
+	public static implicit operator Godot.Vector3I(Vector3i v1)
+	{
+		return v1.ToGVector3I();
+	}
+
 	public static bool operator ==(Vector3i a, Vector3i b)
 	{
 		return a.X == b.X && a.Y == b.Y && a.Z == b.Z;

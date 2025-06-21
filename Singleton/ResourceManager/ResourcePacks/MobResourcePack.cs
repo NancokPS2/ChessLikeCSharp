@@ -5,20 +5,13 @@ using Godot;
 public class MobResourcePack : ResourcePack<Mob>
 {
     public List<Mob> GetPooledInCombat()
-        => GetAllPooled()
-        .Where(x => x.MobState == EMobState.COMBAT)
-        .ToList();
+        => GetAllPooled().FilterInCombat();
 
     public List<Mob> GetPooledInPosition(Vector3i position)
-        => GetAllPooled()
-        .Where(x => x.GetPosition() == position)
-        .ToList();
+        => GetAllPooled().FilterInPosition(position);
 
     public List<Mob> GetPooledInFaction(EFaction faction)
-        => GetAllPooled()
-        .Where(x => x.Faction == faction)
-        .ToList();
-
+        => GetAllPooled().FilterInFaction(faction);
 
     public List<Mob> FilterFromHostilesFaction(List<Mob> mobList, EFaction main_faction_key)
     {
@@ -36,4 +29,17 @@ public class MobResourcePack : ResourcePack<Mob>
 
         return output;
     }
+
+}
+
+public static class ListMobExtension
+{
+    public static List<Mob> FilterInCombat(this List<Mob> mobs)
+        => mobs.Where(x => x.MobState == EMobState.COMBAT).ToList();
+
+    public static List<Mob> FilterInPosition(this List<Mob> mobs, Vector3i position)
+        => mobs.Where(x => x.GetPosition() == position).ToList();
+
+    public static List<Mob> FilterInFaction(this List<Mob> mobs, EFaction faction)
+        => mobs.Where(x => x.Faction == faction).ToList();
 }

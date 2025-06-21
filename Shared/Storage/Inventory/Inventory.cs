@@ -3,7 +3,8 @@ using Godot;
 
 namespace ChessLike.Shared.Storage;
 
-public partial class Inventory
+[GlobalClass]
+public partial class Inventory : Resource
 {
     public enum Error
     {
@@ -79,28 +80,28 @@ public partial class Inventory
         {
             return null;
         }
-        
-        return Slots.First( x => x.Item == item);
+
+        return Slots.First(x => x.Item == item);
     }
-    
-    public int GetFreeSlots() => Slots.Count( x => x.Item is null);
+
+    public int GetFreeSlots() => Slots.Count(x => x.Item is null);
 
     public bool IsSlotEmpty(int slot)
     {
         return GetItem(slot) == null;
     }
     #endregion
-    
+
     #region Item
     public Item? GetItem(int slot)
     {
         return Slots[slot].Item;
     }
 
-    public List<Item> GetItems() 
+    public List<Item> GetItems()
         => (
-            from slot 
-            in GetSlots().Where(x => x.Item != null) 
+            from slot
+            in GetSlots().Where(x => x.Item != null)
             select slot.Item
             ).ToList();
 
@@ -111,7 +112,7 @@ public partial class Inventory
         {
             throw new Exception("This function is meant to be used in one of this inventory's slots.");
         }
-        
+
         //The lost must be able to hold it
         if (!slot.IsItemValid(item_to_add))
         {
@@ -121,7 +122,7 @@ public partial class Inventory
         }
 
         //Fail if there's not enough slots.
-        if(GetFreeSlots() <= 0)
+        if (GetFreeSlots() <= 0)
         {
             err = Error.ADD_NO_SPACE;
             EventBus.InventoryErrored?.Invoke(this, err);
@@ -174,28 +175,28 @@ public partial class Inventory
 
     public Error RemoveItem(Slot slot)
     {
-        if (slot.Item is null){return Error.REMOVE_SLOT_ALREADY_EMPTY;}
+        if (slot.Item is null) { return Error.REMOVE_SLOT_ALREADY_EMPTY; }
         else
         {
             Item item = slot.Item;
-            slot.Item = null; 
+            slot.Item = null;
             EventBus.InventoryChanged?.Invoke(this);
             EventBus.InventoryItemRemoved?.Invoke(this, slot, item);
             return Error.NONE;
         }
     }
 
-    public bool ContainsItem(Item item) => Slots.Any( x => x.Item == item);
+    public bool ContainsItem(Item item) => Slots.Any(x => x.Item == item);
     #endregion
 
 
     #region Transfer
-    private enum TransferMode {EXCHANGE, SEND_TO_TARGET, TAKE_FROM_TARGET }
+    private enum TransferMode { EXCHANGE, SEND_TO_TARGET, TAKE_FROM_TARGET }
     public Error TransferItem(Slot source_slot, Inventory target_inv, Slot target_slot) => TransferItem(this, source_slot, target_inv, target_slot);
     public static Error TransferItem(Inventory source_inv, Slot source_slot, Inventory target_inv, Slot target_slot)
     {
-        if (!source_inv.ContainsSlot(source_slot)){throw new ArgumentException("The source slot must be inside the source inventory");}
-        if (!target_inv.ContainsSlot(target_slot)){throw new ArgumentException("The target slot must be inside the target inventory");}
+        if (!source_inv.ContainsSlot(source_slot)) { throw new ArgumentException("The source slot must be inside the source inventory"); }
+        if (!target_inv.ContainsSlot(target_slot)) { throw new ArgumentException("The target slot must be inside the target inventory"); }
 
         //Fetch items for transfer.
         Item? source_item = source_slot.Item;
@@ -205,16 +206,16 @@ public partial class Inventory
         TransferMode mode;
         if (source_item is not null && target_item is null
         && target_slot.IsItemValid(source_item))
-            {mode = TransferMode.SEND_TO_TARGET;}
+        { mode = TransferMode.SEND_TO_TARGET; }
         else if (source_item is null && target_item is not null
         && source_slot.IsItemValid(target_item)
         )
-            {mode = TransferMode.TAKE_FROM_TARGET;}
-        else if (source_item is not null && target_item is not null 
+        { mode = TransferMode.TAKE_FROM_TARGET; }
+        else if (source_item is not null && target_item is not null
         && source_slot.IsItemValid(target_item) && target_slot.IsItemValid(source_item))
-            {mode = TransferMode.EXCHANGE;}
-        else 
-            {return Error.ADD_INVALID_SLOT;}
+        { mode = TransferMode.EXCHANGE; }
+        else
+        { return Error.ADD_INVALID_SLOT; }
 
         switch (mode)
         {
@@ -241,7 +242,7 @@ public partial class Inventory
 
                 ThrowOnError(target_inv.AddItem(source_item, target_slot));
                 break;
-            
+
             case TransferMode.TAKE_FROM_TARGET:
                 ThrowOnError(target_inv.RemoveItem(target_slot));
 
@@ -260,7 +261,7 @@ public partial class Inventory
 
     private static void ThrowOnError(Error error, List<Error>? to_ignore = null)
     {
-        if(error != Error.NONE || (!to_ignore?.Contains(error) ?? false))
+        if (error != Error.NONE || (!to_ignore?.Contains(error) ?? false))
         {
             throw new Exception("Failed due to error " + error.ToString());
         }

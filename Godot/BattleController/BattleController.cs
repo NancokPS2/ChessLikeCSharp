@@ -97,7 +97,7 @@ public partial class BattleController : Node, IDebugDisplay
         //Add the mobs after setting their position.
         foreach (var item in Encounter.PresetMobSpawns)
         {
-            SetupParticipant(item.Value, item.Key, true);
+            SetupParticipant(item.Value, new(item.Key), true);
         }
 
         EventBus.EncounterLoaded?.Invoke(to_load);

@@ -9,16 +9,16 @@ using Godot;
 
 namespace ChessLike.Entity;
 
-public partial class Job : MobStatSet.IStatBooster
+public partial class Job
 {
 
     public const string BOOST_SOURCE = "JOB";
 
     public string GetBoostSource() => BOOST_SOURCE;
 
-    public MobStatSet.StatBoost GetStatBoost()
+    public MobStatBoost GetStatBoost()
     {
-        MobStatSet.StatBoost output = new(GetBoostSource());
+        MobStatBoost output = new(GetBoostSource());
         foreach (var stat in StatMultiplicativeBoostDict)
         {
             EStatName stat_name = stat.Key;

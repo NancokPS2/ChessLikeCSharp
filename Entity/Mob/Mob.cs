@@ -70,7 +70,7 @@ public partial class Mob : Resource
             if (item is ItemEquipment _equip) equipment = _equip;
             else throw new Exception($"This inventory is for equipment only. Found {item}");
 
-            outputStatBoost += equipment.StatBoost;
+            outputStatBoost = (MobStatBoost)(outputStatBoost + equipment.StatBoost);
         }
 
         Stats.BoostAdd(outputStatBoost, true);
@@ -84,7 +84,7 @@ public partial class Mob : Resource
         foreach (Job job in Jobs)//.Where(x => x is not null))
         {
             //Average the stats from the job's.
-            outputBoost += job.GetStatBoost();
+            outputBoost = (MobStatBoost)(outputBoost + job.GetStatBoost());
         }
 
         Stats.BoostAdd(outputBoost, true);

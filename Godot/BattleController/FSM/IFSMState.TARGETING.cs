@@ -156,8 +156,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         {
             //Get the mobs at this position.
             List<Mob> mobsHere = Global.ManagerMob
-                .GetPooledInCombat()
-                .FilterFromPosition(pos);
+                .GetPooledInCombat().FilterInPosition(pos);
 
             //Filter mobs
             List<Mob> mobs_filtered = GetUsageParams().ActionRef.GetValidMobs(mobsHere);
