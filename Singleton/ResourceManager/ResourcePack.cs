@@ -2,15 +2,23 @@ namespace Godot;
 
 public class ResourcePack<TRes> where TRes : Resource
 {
+    public const string DEFAULT_DIR = "Resources";
+    public const string INVALID_UNIQUE_STRING = "";
+
     private Dictionary<string, TRes> Contents = new();
     private UniqueList<TRes> Pooled = new();
-    public const string DEFAULT_DIR = "Resources";
-
+    public string UniqueString = "";
 
     public ResourcePack()
     {
         PrepareDirectories();
     }
+    public ResourcePack(string uniqueString)
+    {
+        UniqueString = uniqueString;
+        PrepareDirectories();
+    }
+
 
     public bool AddPooled(TRes res)
         => Pooled.Add(res);
@@ -21,11 +29,14 @@ public class ResourcePack<TRes> where TRes : Resource
     public List<TRes> GetAllPooled()
         => Pooled;
 
-    public ResourcePack(string sourceFolder)
-        => LoadAllInFolder(sourceFolder);
 
-    public static string GetUniqueString()
+    
+
+    public string GetUniqueString()
     {
+        //If an override was set, use that.
+        if (UniqueString != INVALID_UNIQUE_STRING) return UniqueString;
+
         //Try to infer it from the type extension
         string output = typeof(TRes).ToString().GetExtension();
 

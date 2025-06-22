@@ -6,54 +6,24 @@ using System;
 [GlobalClass]
 public partial class MobScene : Node3D
 {
+    public enum EPosition { HEAD, OVERHEAD, BODY, BASE }
     public Mob MobUsing;
 
     protected PackedScene FloatingIconScene = GD.Load<PackedScene>("uid://bmm3h2202bdkq");
 
-    public Node3D FloatingIconParent { get => floatingIconParent ?? throw new Exception(); set => floatingIconParent = value; }
+    public StatusEffectIcon StatusEffectIcon { get => statusEffectIcon ?? throw new Exception(); set => statusEffectIcon = value; }
     [Export]
-    private Node3D? floatingIconParent;
+    private StatusEffectIcon? statusEffectIcon;
 
-    public Node3D ModelParent { get => modelParent ?? throw new Exception(); set => modelParent = value; }
+    public Node3D MarkerOverhead { get => markerOverhead ?? throw new Exception(); set => markerOverhead = value; }
     [Export]
-    private Node3D? modelParent;
+    private Node3D? markerOverhead;
 
-    private List<FloatingIcon3D> FloatingIcons = new(){};
+    public Node3D MarkerCenterBody { get => markerCenterBody ?? throw new Exception(); set => markerCenterBody = value; }
+    [Export]
+    private Node3D? markerCenterBody;
 
-    public MobScene(Mob mobUsing)
-    {
-        MobUsing = mobUsing;
-        EventBus.ActionUsed += OnActionUsed;
-    }
-
-    private void OnActionUsed(UsageParameters parameters)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    protected void Update(List<ActionEvent> actionEvents)
-    {
-        FloatingIcons.ForEach(x => x.QueueFree());
-
-        foreach (var action in actionEvents)
-        {
-            if (!action.IsPassive()) continue;
-            
-            if (action.GetFloatingTexture() is Texture2D texture)
-            {
-                var floatingIcon = FloatingIconScene.Instantiate<FloatingIcon3D>();
-                FloatingIcons.Add(floatingIcon);
-
-                floatingIcon.SetTexture(texture);
-                floatingIcon.SetCount(action.GetActivationsLeft());
-            }
-            else continue;
-        }
-    }
-
-    protected void SetFloatingIconsAnimationSpeed(float fps)
-    {
-
-    }
+    public Node3D MarkerBase { get => markerBase ?? throw new Exception(); set => markerBase = value; }
+    [Export]
+    private Node3D? markerBase;
 }

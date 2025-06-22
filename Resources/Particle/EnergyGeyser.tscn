@@ -26,13 +26,14 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.88096, 1, 1, 1, 0.203922)
 
 [node name="EnergyGeyser" type="CPUParticles3D"]
 material_override = SubResource("StandardMaterial3D_x13g4")
+amount = 11
 mesh = SubResource("QuadMesh_okb15")
 particle_flag_align_y = true
 direction = Vector3(0, 1, 0)
 spread = 30.0
 gravity = Vector3(0, 4, 0)
-initial_velocity_min = 1.5
-initial_velocity_max = 2.5
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
 scale_amount_min = 4.0
 scale_amount_max = 5.0
 scale_amount_curve = SubResource("Curve_x13g4")

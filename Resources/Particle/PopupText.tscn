@@ -1,6 +1,5 @@
-[gd_scene load_steps=5 format=3 uid="uid://ia3s65kbmt7u"]
+[gd_scene load_steps=4 format=3 uid="uid://ia3s65kbmt7u"]
 
-[ext_resource type="PackedScene" uid="uid://c8upch6etpftr" path="res://assets/Model/humanoid/Dummy.glb" id="1_02yx5"]
 [ext_resource type="Script" uid="uid://c6lxdpe373yfb" path="res://Godot/Particle/PopupText.cs" id="1_kba0t"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uawnm"]
@@ -20,14 +19,10 @@ depth = 0.0
 
 [node name="PopupText" type="CPUParticles3D"]
 material_override = SubResource("StandardMaterial3D_uawnm")
-emitting = false
 amount = 1
 lifetime = 3.0
 one_shot = true
 mesh = SubResource("TextMesh_ogkte")
-emission_shape = 5
-emission_points = PackedVector3Array(0, 0.5, 0)
-emission_normals = PackedVector3Array()
 direction = Vector3(0, 1, 0)
 spread = 15.0
 gravity = Vector3(0, 0, 0)
@@ -35,7 +30,4 @@ initial_velocity_min = 0.5
 initial_velocity_max = 0.5
 damping_min = 1.0
 damping_max = 1.0
-scale_amount_max = 2.0
 script = ExtResource("1_kba0t")
-
-[node name="Human" parent="." instance=ExtResource("1_02yx5")]

@@ -24,8 +24,8 @@ public partial class ResourcePackLoader : Node
 
     public void PrepareDir<TRes>(ResourcePack<TRes> pack) where TRes : Resource
     {
-        DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + ResourcePack<TRes>.GetUniqueString());
-        DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + ResourcePack<TRes>.GetUniqueString());
+        //DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + GetUniqueString());
+        //DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + GetUniqueString());
     }
 
     public string GetBaseDirectory(bool user)

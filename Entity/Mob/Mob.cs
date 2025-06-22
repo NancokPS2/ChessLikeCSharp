@@ -253,19 +253,8 @@ public partial class Mob : Resource
         return output;
     }
 
-    [Obsolete("Placeholder WIP")]
     public List<Ability> GetPassives()
-    {
-        List<Ability> output = new();
-        foreach (var item in Actions)
-        {
-            if (item is Ability pas)
-            {
-                output.Add(pas);
-            }
-        }
-        return output;
-    }
+        => GetAbilities().Where(x => x.IsPassive()).ToList();
     #endregion
 
     #region Misc

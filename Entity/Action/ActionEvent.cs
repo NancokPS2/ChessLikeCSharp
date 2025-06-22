@@ -51,7 +51,7 @@ public partial class ActionEvent : Resource
     public float GetAnimationDuration()
         => AnimationParams.Duration;
 
-    public Texture2D? GetFloatingTexture() => AnimationParams.FloatingTexture;
+    public Texture2D? GetAnimationFloatingTexture() => AnimationParams.FloatingTexture;
 
     #endregion
 
@@ -165,7 +165,7 @@ public partial class ActionEvent : Resource
 
     protected int AutoActivationLeft;
 
-    public int GetActivationsLeft() => AutoActivationLeft;
+    public int GetAutoActivationsLeft() => AutoActivationLeft;
 
     public void AutoActivationReset()
     {

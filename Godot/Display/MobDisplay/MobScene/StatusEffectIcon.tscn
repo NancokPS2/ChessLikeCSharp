@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmm3h2202bdkq"]
+
+[ext_resource type="Script" uid="uid://8pjyvyfbdc4a" path="res://Godot/Display/MobDisplay/MobScene/StatusEffectIcon.cs" id="1_co0q2"]
+[ext_resource type="Texture2D" uid="uid://b4bjgaqnxfu7p" path="res://assets/Texture/status_effect/Template.png" id="2_co0q2"]
+[ext_resource type="FontFile" uid="uid://di382xhvoien2" path="res://assets/Font/joystixmonospace.otf" id="3_67w07"]
+
+[node name="FloatingStatusIcon" type="Node3D" node_paths=PackedStringArray("sprite", "text")]
+script = ExtResource("1_co0q2")
+sprite = NodePath("FloatingIcon")
+text = NodePath("PrimaryCounter")
+
+[node name="FloatingIcon" type="Sprite3D" parent="."]
+billboard = 1
+texture_filter = 0
+texture = ExtResource("2_co0q2")
+
+[node name="PrimaryCounter" type="Label3D" parent="."]
+offset = Vector2(22, 25)
+billboard = 1
+double_sided = false
+texture_filter = 2
+render_priority = 1
+outline_render_priority = 0
+text = "XXX"
+font = ExtResource("3_67w07")
+font_size = 16
+outline_size = 4
+horizontal_alignment = 2

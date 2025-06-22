@@ -15,6 +15,8 @@ public partial class Global
     public static FactionResourcePack ManagerFaction;
     public static ResourcePack<Inventory> ManagerInventory;
     public static ItemResourcePack ManagerItem;
+    public static ResourcePack<PackedScene> ManagerModel;
+    public static ResourcePack<PackedScene> ManagerParticle;
 
     public static void SetupManager()
     {
@@ -22,6 +24,9 @@ public partial class Global
         ManagerAbility = new();
         ManagerMob = new();
         ManagerFaction = new();
+        ManagerInventory = new();
         ManagerItem = new();
+        ManagerModel = new("Model");
+        ManagerParticle = new("Particle");
     }
 }
