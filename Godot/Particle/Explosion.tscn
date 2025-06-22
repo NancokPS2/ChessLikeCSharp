@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://coowne23kcbpa"]
+[gd_scene load_steps=7 format=3 uid="uid://coowne23kcbpa"]
 
-[ext_resource type="Texture2D" uid="uid://b77s6y02ay1d5" path="res://assets/Texture/particle/explosion.png" id="1_rvcgl"]
+[ext_resource type="Texture2D" uid="uid://cy7gwhrwirgfx" path="res://assets/Texture/particle/explosion.png" id="1_rvcgl"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fk0sw"]
 transparency = 1
@@ -16,25 +16,32 @@ particles_anim_h_frames = 4
 particles_anim_v_frames = 1
 particles_anim_loop = false
 grow_amount = 0.794
+proximity_fade_distance = 1286.35
 
 [sub_resource type="QuadMesh" id="QuadMesh_okb15"]
 size = Vector2(0.1, 0.1)
 
+[sub_resource type="Curve" id="Curve_1aw8a"]
+_limits = [0.0, 1.5, 0.0, 1.0]
+_data = [Vector2(0, 1.5), 0.0, 0.0, 0, 0, Vector2(0.995833, 0.247191), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Gradient" id="Gradient_p40xr"]
-colors = PackedColorArray(1, 0.313726, 0.156863, 1, 1, 1, 0, 1)
+offsets = PackedFloat32Array(0, 0.61215, 0.785047, 1)
+colors = PackedColorArray(1, 0.313726, 0.156863, 1, 0.8, 0.8, 0.176, 1, 0.23, 0.23, 0.1012, 1, 0.18, 0.18, 0.18, 1)
 
 [sub_resource type="Curve" id="Curve_n47by"]
-_limits = [0.0, 2.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.600981, 0, 1, Vector2(0.731405, 0.43956), 1.74957, 1.74957, 0, 0, Vector2(1, 1), 2.08656, 0.0, 1, 0]
+_data = [Vector2(0, 0), 0.0, 1.41782, 0, 1, Vector2(0.404167, 0.573034), 1.74957, 1.74957, 0, 0, Vector2(1, 1), 0.716587, 0.0, 1, 0]
 point_count = 3
 
 [node name="Explosion" type="CPUParticles3D"]
 material_override = SubResource("StandardMaterial3D_fk0sw")
 emitting = false
-amount = 16
+amount = 9
 lifetime = 0.6
 one_shot = true
-explosiveness = 1.0
+speed_scale = 1.2
+explosiveness = 0.98
 mesh = SubResource("QuadMesh_okb15")
 emission_shape = 5
 emission_points = PackedVector3Array(0, 0, 0)
@@ -47,7 +54,9 @@ initial_velocity_min = 5.0
 initial_velocity_max = 6.0
 damping_min = 8.0
 damping_max = 12.0
-scale_amount_max = 3.5
+scale_amount_min = 5.0
+scale_amount_max = 7.0
+scale_amount_curve = SubResource("Curve_1aw8a")
 color_ramp = SubResource("Gradient_p40xr")
 anim_speed_min = 1.0
 anim_speed_max = 1.0

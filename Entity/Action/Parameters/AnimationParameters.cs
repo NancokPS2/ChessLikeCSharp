@@ -10,4 +10,7 @@ namespace ChessLike.Entity.Action;
 public partial class AnimationParameters : Resource
 {
     public float Duration = 1f;
+
+    [Export]
+    public Texture2D? FloatingTexture;
 }

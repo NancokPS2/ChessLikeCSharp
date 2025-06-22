@@ -41,12 +41,17 @@ public partial class ActionEvent : Resource
     {
         EventBus.ActionAboutToBeQueued += (x) => AutoActivationProcessReaction(x, false);
         EventBus.ActionQueued += (x) => AutoActivationProcessReaction(x, true);
+
         EventBus.TurnTimePassed += AutoActivationProcessTimePassed;
-        EventBus.TurnChanged += AutoActivationProcessTurn;
+
+        EventBus.MobTurnStarted += AutoActivationProcessTurnStarted;
+        EventBus.MobTurnEnded += AutoActivationProcessTurnEnded;
     }
     #region Animation
     public float GetAnimationDuration()
         => AnimationParams.Duration;
+
+    public Texture2D? GetFloatingTexture() => AnimationParams.FloatingTexture;
 
     #endregion
 
@@ -152,26 +157,34 @@ public partial class ActionEvent : Resource
         set
         {
             autoActivationParams = value;
-            AutoActivationTriggersLeft = AutoActivationParams.AutoActivationMax;
-            TimeSinceLastActivation = 0;
+            AutoActivationReset();
         }
     }
 
     private AutoActivationParameters autoActivationParams = new();
 
-    protected int AutoActivationTriggersLeft;
+    protected int AutoActivationLeft;
+
+    public int GetActivationsLeft() => AutoActivationLeft;
+
+    public void AutoActivationReset()
+    {
+        AutoActivationLeft = AutoActivationParams.AutoActivationMax;
+        AutoActivationTimeSinceLast = 0;
+    }
+
 
     protected void AutoActivationRequest(UsageParameters parameters)
     {
         //Can't activate if it ran out.
-        if (AutoActivationTriggersLeft <= 0)
+        if (AutoActivationLeft <= 0)
         {
             return;
         }
 
         EventBus.ActionEventQueueRequested?.Invoke(parameters);
-        AutoActivationTriggersLeft -= 1;
-        TimeSinceLastActivation = 0;
+        AutoActivationLeft -= 1;
+        AutoActivationTimeSinceLast = 0;
     }
 
     #region Auto Activation - Reaction
@@ -202,7 +215,7 @@ public partial class ActionEvent : Resource
 
     #region Auto Activation - Timing
 
-    protected float TimeSinceLastActivation;
+    protected float AutoActivationTimeSinceLast;
     protected void AutoActivationProcessTimePassed(float number)
     {
         //Must be set to react to actions
@@ -212,10 +225,10 @@ public partial class ActionEvent : Resource
         if (!Owner.IsInCombat()) return;
 
         //Advance time.
-        TimeSinceLastActivation += number;
+        AutoActivationTimeSinceLast += number;
 
         //If enough time passed, trigger.
-        if (TimeSinceLastActivation > AutoActivationParams.ActivatedEveryXTime)
+        if (AutoActivationTimeSinceLast > AutoActivationParams.ActivatedEveryXTime)
             AutoActivationRequest(GetAutoActivationUsageParameters());
 
     }
@@ -223,8 +236,11 @@ public partial class ActionEvent : Resource
     #endregion
 
     #region Auto Activation - Turn
-    protected void AutoActivationProcessTurn(Mob who, bool started)
+    protected void AutoActivationProcessTurnStarted(Mob who)
     {
+        //Check if it activates on turn end or start.
+        if (!AutoActivationParams.ActivatedByTurnStart) return;
+
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
 
@@ -234,12 +250,27 @@ public partial class ActionEvent : Resource
         //If it is only when THIS unit's turn changes, do nothing if false.
         if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
 
-        //Check if it activates on turn end or start.
-        if ((AutoActivationParams.ActivatedByTurnEnd && !started) || (AutoActivationParams.ActivatedByTurnStart && started))
-        {
-            AutoActivationRequest(GetAutoActivationUsageParameters());
-        }
+
+        AutoActivationRequest(GetAutoActivationUsageParameters());
     }
+
+    protected void AutoActivationProcessTurnEnded(Mob who)
+    {
+        //Check if it activates on turn end or start.
+        if (!AutoActivationParams.ActivatedByTurnEnd) return;
+
+        //Must be set to react to actions
+        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
+
+        //The owner must be in combat.
+        if (!Owner.IsInCombat()) return;
+
+        //If it is only when THIS unit's turn changes, do nothing if false.
+        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
+
+        AutoActivationRequest(GetAutoActivationUsageParameters());
+    }
+
     #endregion
 
     #endregion
@@ -266,6 +297,8 @@ public partial class ActionEvent : Resource
         EventBus.ActionUsed?.Invoke(usageParams);
     }
 
+    public bool CanUse() => true;
+    public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
     public override string ToString() => Name;
     #endregion
 }

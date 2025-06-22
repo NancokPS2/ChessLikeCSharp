@@ -59,19 +59,13 @@ public partial class EventBus : Node
     #endregion
 
     #region Turn
-    public delegate void TurnChange(Mob who, bool started);
     public static FloatEvent? TurnTimePassed;
-    public static TurnChange? TurnChanged;
-
+    public static MobEvent? MobTurnStarted;
+    public static MobEvent? MobTurnEnded;
     #endregion
 
     #region Mob
     public delegate void MobEvent(Mob mob);
-
-    #region Mob - Turn
-    public static MobEvent? MobTurnStarted;
-    public static MobEvent? MobTurnEnded;
-    #endregion
 
     #region Mob - State
     public delegate void MobStateChange(Mob mob, EMobState state);
@@ -116,6 +110,7 @@ public partial class EventBus : Node
     public static ActionUsageParametersEvent? ActionEventQueueRequested;
 
     public static ActionUsageParametersEvent? ActionAboutToBeUsed;
+    public static ActionUsageParametersEvent? AbilityUsed;
     public static ActionUsageParametersEvent? ActionUsed;
     #endregion
 

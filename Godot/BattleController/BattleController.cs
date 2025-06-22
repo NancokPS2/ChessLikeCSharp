@@ -14,10 +14,12 @@ namespace Godot;
 [GlobalClass]
 public partial class BattleController : Node, IDebugDisplay
 {
-	public static BattleController Instance;
-	private bool _ready_for_debug;
+    public static BattleController Instance { get => instance ?? throw new Exception(); set => instance = value; }
+    private static BattleController? instance;
+    private bool _ready_for_debug;
 
-	public override void _Ready()
+
+    public override void _Ready()
 	{
 		base._Ready();
 		Instance = this;

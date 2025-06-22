@@ -2,6 +2,7 @@ namespace ChessLike.Entity.Action.Parameters;
 
 public enum EAutoActivationMode
 {
+    NONE,
     ACTION_REACTION,
     EVERY_X_TIME,
     TURN_CHANGE,

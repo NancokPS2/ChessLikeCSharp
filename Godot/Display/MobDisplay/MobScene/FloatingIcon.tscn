@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmm3h2202bdkq"]
+
+[ext_resource type="Texture2D" uid="uid://ipaqqgfvru3w" path="res://assets/Texture/status_effect/Confusion.png" id="1_4k6ls"]
+[ext_resource type="Script" uid="uid://cybwdxgdhqisv" path="res://Godot/Display/MobDisplay/MobScene/FloatingIcon.cs" id="1_6llb5"]
+[ext_resource type="FontFile" uid="uid://di382xhvoien2" path="res://assets/Font/joystixmonospace.otf" id="3_wlob7"]
+
+[node name="FloatingStatusIcon" type="Node3D"]
+script = ExtResource("1_6llb5")
+
+[node name="FloatingIcon" type="Sprite3D" parent="."]
+billboard = 1
+texture_filter = 0
+texture = ExtResource("1_4k6ls")
+
+[node name="PrimaryCounter" type="Label3D" parent="."]
+offset = Vector2(22, -6)
+billboard = 1
+double_sided = false
+texture_filter = 2
+render_priority = 1
+outline_modulate = Color(0, 0, 0, 0)
+font = ExtResource("3_wlob7")
+font_size = 16
+horizontal_alignment = 2

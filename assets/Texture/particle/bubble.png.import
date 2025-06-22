@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ipaqqgfvru3w"
-path.s3tc="res://.godot/imported/Confusion.png-e3c11593f7b5f4d9fdccd15f042a235d.s3tc.ctex"
+uid="uid://b77s6y02ay1d5"
+path.s3tc="res://.godot/imported/bubble.png-e183a424edda2d7347b7648c8aa2a449.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/Texture/status_effect/Confusion.png"
-dest_files=["res://.godot/imported/Confusion.png-e3c11593f7b5f4d9fdccd15f042a235d.s3tc.ctex"]
+source_file="res://assets/Texture/particle/bubble.png"
+dest_files=["res://.godot/imported/bubble.png-e183a424edda2d7347b7648c8aa2a449.s3tc.ctex"]
 
 [params]
 

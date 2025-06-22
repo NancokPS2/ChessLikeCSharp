@@ -116,9 +116,7 @@ public partial class TurnManager
             throw new Exception("Unexpected result.");
         }
         if (CurrentTaker is Mob mob)
-        {
             EventBus.MobTurnStarted?.Invoke(mob);
-        }
 
         UpdateRoundEnder();
     }

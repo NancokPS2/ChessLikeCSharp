@@ -1,3 +1,4 @@
 [gd_resource type="SystemFont" format=3 uid="uid://dns60v1rlh147"]
 
 [resource]
+font_names = PackedStringArray("Symbol")
