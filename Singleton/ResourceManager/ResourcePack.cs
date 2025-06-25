@@ -1,16 +1,17 @@
 namespace Godot;
 
-public class ResourcePack<TRes> where TRes : Resource
+public class ResourcePack<TRes> where TRes : Resource, new()
 {
     public const string DEFAULT_DIR = "Resources";
     public const string INVALID_UNIQUE_STRING = "";
 
     private Dictionary<string, TRes> Contents = new();
     private UniqueList<TRes> Pooled = new();
-    public string UniqueString = "";
+    public readonly string UniqueString = "";
 
     public ResourcePack()
     {
+        UniqueString = GetUniqueString();
         PrepareDirectories();
     }
     public ResourcePack(string uniqueString)
@@ -30,7 +31,7 @@ public class ResourcePack<TRes> where TRes : Resource
         => Pooled;
 
 
-    
+
 
     public string GetUniqueString()
     {
@@ -97,11 +98,24 @@ public class ResourcePack<TRes> where TRes : Resource
         }
     }
 
-    public void PrepareDirectories()
+    protected TRes GetDefaultResource()
     {
-        string uniqueString = GetUniqueString();
-        DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + uniqueString);
-        DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + uniqueString);
+        TRes output;
+
+        output = GD.Load<TRes>(GetDirectory(false) + "Default.tres");
+        if (output is null)
+        {
+            output = new TRes();
+            throw new Exception("Failed to load 'Default.tres'");
+        }
+
+        return (TRes)output.Duplicate(true);
+    }
+
+    protected void PrepareDirectories()
+    {
+        DirAccess.MakeDirAbsolute(GetDirectory(true));
+        DirAccess.MakeDirAbsolute(GetDirectory(false));
     }
 
     public string GetBaseDirectory(bool user)
@@ -114,6 +128,12 @@ public class ResourcePack<TRes> where TRes : Resource
         {
             return $"res://{DEFAULT_DIR}/";
         }
+    }
+
+    public string GetDirectory(bool user)
+    {
+        string uniqueString = GetUniqueString();
+        return GetBaseDirectory(user) + uniqueString;
     }
     
 }
