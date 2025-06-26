@@ -20,6 +20,7 @@ public partial class Faction : Resource, ISerializable
 
     public Inventory Inventory = new(999);
 
+    public Faction(): base() { }
 
     private float GetRelation(EFaction other)
     {

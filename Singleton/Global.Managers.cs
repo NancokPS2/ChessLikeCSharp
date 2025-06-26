@@ -28,5 +28,14 @@ public partial class Global
         ManagerItem = new();
         ManagerModel = new("Model");
         ManagerParticle = new("Particle");
+
+        ManagerJob.CreateDefault();
+        ManagerAbility.CreateDefault();
+        ManagerMob.CreateDefault();
+        ManagerFaction.CreateDefault();
+        ManagerInventory.CreateDefault();
+        ManagerItem.CreateDefault();
+        ManagerModel.CreateDefault();
+        ManagerParticle.CreateDefault();
     }
 }

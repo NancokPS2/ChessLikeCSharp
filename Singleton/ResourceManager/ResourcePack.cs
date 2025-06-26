@@ -20,7 +20,6 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         PrepareDirectories();
     }
 
-
     public bool AddPooled(TRes res)
         => Pooled.Add(res);
 
@@ -98,15 +97,16 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         }
     }
 
-    protected TRes GetDefaultResource()
+    protected TRes? GetDefaultResource()
     {
         TRes output;
 
-        output = GD.Load<TRes>(GetDirectory(false) + "Default.tres");
+        string path = $"{GetDirectory(false)}/Default.tres";
+
+        output = GD.Load<TRes>(path);
         if (output is null)
         {
-            output = new TRes();
-            throw new Exception("Failed to load 'Default.tres'");
+            return null;
         }
 
         return (TRes)output.Duplicate(true);
@@ -116,6 +116,25 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     {
         DirAccess.MakeDirAbsolute(GetDirectory(true));
         DirAccess.MakeDirAbsolute(GetDirectory(false));
+    }
+
+    public void CreateDefault()
+    {
+
+        if (GetDefaultResource() is not null) return;
+
+        if (OS.HasFeature("editor"))
+        {
+            string path = $"{GetDirectory(false)}/Default.tres";
+            Error result = ResourceSaver.Save(new TRes(), path);
+            GD.PushError($"Resource creation finished with code {result}");
+        }
+        else
+        {
+            GD.PushError("Cannot create a default Resource outside an editor build.");
+        }
+
+        if (GetDefaultResource() is null) throw new Exception("Could not load a default resource.");
     }
 
     public string GetBaseDirectory(bool user)

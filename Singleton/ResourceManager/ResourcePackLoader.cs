@@ -22,7 +22,7 @@ public partial class ResourcePackLoader : Node
         PrepareDir(ActionEvents);
     }
 
-    public void PrepareDir<TRes>(ResourcePack<TRes> pack) where TRes : Resource
+    public void PrepareDir<TRes>(ResourcePack<TRes> pack) where TRes : Resource, new()
     {
         //DirAccess.MakeDirAbsolute(GetBaseDirectory(true) + GetUniqueString());
         //DirAccess.MakeDirAbsolute(GetBaseDirectory(false) + GetUniqueString());
