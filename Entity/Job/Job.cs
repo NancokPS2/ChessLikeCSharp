@@ -5,16 +5,21 @@ using static ChessLike.Entity.Mob;
 
 namespace ChessLike.Entity;
 
-[GlobalClass]
+[GlobalClass, Obsolete("Incomplete resourcification")]
 public partial class Job : Resource
 {
-    private string displayedName = "";
+    [Export]
+    public string DisplayedName { get => displayedName != "" ? displayedName : Identifier.ToString(); set => displayedName = value; }
+    protected string displayedName = "";
+
+    [Export]
     public EJob Identifier = EJob.DEFAULT;
     public Dictionary<EStatName, float> StatMultiplicativeBoostDict = new();
     public List<Ability> Abilities = new();
+
+    [Export]
     public EMovementMode MovementMode = EMovementMode.WALK;
 
-    public string DisplayedName { get => displayedName != "" ? displayedName : Identifier.ToString(); set => displayedName = value; }
 
 
     public override string ToString() => displayedName;

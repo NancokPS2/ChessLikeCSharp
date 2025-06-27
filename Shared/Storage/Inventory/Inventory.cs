@@ -3,7 +3,7 @@ using Godot;
 
 namespace ChessLike.Shared.Storage;
 
-[GlobalClass]
+[GlobalClass, Obsolete("Needs RESOURCIFICATION")]
 public partial class Inventory : Resource
 {
     public enum Error
@@ -25,6 +25,7 @@ public partial class Inventory : Resource
     /// When this is used as a slot and StorageInventory is true, the item is added regardless of existing slots. Maybe don't give this slot an item.
     /// </summary>
     public Slot StorageInventoryUniversalSlot = new();
+
     protected List<Slot> Slots = new();
 
     public Inventory()

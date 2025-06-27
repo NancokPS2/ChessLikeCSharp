@@ -13,14 +13,19 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class Faction : Resource, ISerializable
 {
+    [Export]
+    public string DisplayedName = "Unnamed Faction";
 
+    [Export]
     public EFaction Identifier = EFaction.NEUTRAL;
 
-    public Dictionary<EFaction, float> RelationList { get; set; } = new();
+    [Export]
+    public Godot.Collections.Dictionary<EFaction, float> RelationList { get; set; } = new();
 
+    [Export]
     public Inventory Inventory = new(999);
 
-    public Faction(): base() { }
+    public Faction() : base() { }
 
     private float GetRelation(EFaction other)
     {
