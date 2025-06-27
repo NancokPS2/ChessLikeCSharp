@@ -101,7 +101,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     {
         TRes output;
 
-        string path = $"{GetDirectory(false)}/Default.tres";
+        string path = $"{GetDirectory(false)}/Default{GetExtension()}";
 
         output = GD.Load<TRes>(path);
         if (output is null)
@@ -125,7 +125,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
         if (OS.HasFeature("editor"))
         {
-            string path = $"{GetDirectory(false)}/Default.tres";
+            string path = $"{GetDirectory(false)}/Default{GetExtension()}";
             Error result = ResourceSaver.Save(new TRes(), path);
             GD.PushError($"Resource creation finished with code {result}");
         }
@@ -154,5 +154,12 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         string uniqueString = GetUniqueString();
         return GetBaseDirectory(user) + uniqueString;
     }
-    
+
+    public string GetExtension()
+    {
+        if (typeof(TRes) == typeof(PackedScene))
+            return ".tscn";
+        else
+            return ".tres";
+    }
 }
