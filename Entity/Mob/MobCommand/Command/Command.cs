@@ -15,6 +15,9 @@ public abstract partial class Command : Resource
 
     public List<ECommandFlag> Flags = new();
 
+    public Command()
+    {
+    }
 
     public virtual void UseCommand(Mob mob)
     {

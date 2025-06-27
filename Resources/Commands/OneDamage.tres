@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MobCommandTakeDamage" load_steps=2 format=3 uid="uid://7tv6tesqywqd"]
+
+[ext_resource type="Script" uid="uid://cj26wr61prcxh" path="res://Entity/Mob/MobCommand/Command/MobCommandTakeDamage.cs" id="1_g1gob"]
+
+[resource]
+script = ExtResource("1_g1gob")
+DefenseRatioAccounted = 0.0
+DefenseIgnoreFlat = 0.0
+Damage = 1.0
+metadata/_custom_type_script = "uid://cj26wr61prcxh"

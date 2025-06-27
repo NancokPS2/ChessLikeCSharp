@@ -17,6 +17,8 @@ public partial class Global
     public static ItemResourcePack ManagerItem;
     public static ResourcePack<PackedScene> ManagerModel;
     public static ResourcePack<PackedScene> ManagerParticle;
+    public static ResourcePack<Material> ManagerMaterial;
+    public static ResourcePack<FontFile> ManagerFont;
 
     public static void SetupManager()
     {
@@ -28,6 +30,8 @@ public partial class Global
         ManagerItem = new();
         ManagerModel = new("Model");
         ManagerParticle = new("Particle");
+        ManagerMaterial = new("Material");
+        ManagerFont = new("Font");
 
         ManagerJob.CreateDefault();
         ManagerAbility.CreateDefault();
@@ -37,5 +41,18 @@ public partial class Global
         ManagerItem.CreateDefault();
         ManagerModel.CreateDefault();
         ManagerParticle.CreateDefault();
+        ManagerMaterial.CreateDefault();
+        ManagerFont.CreateDefault();
+
+        ManagerJob.LoadAllInFolder();
+        ManagerAbility.LoadAllInFolder();
+        ManagerMob.LoadAllInFolder();
+        ManagerFaction.LoadAllInFolder();
+        ManagerInventory.LoadAllInFolder();
+        ManagerItem.LoadAllInFolder();
+        ManagerModel.LoadAllInFolder();
+        ManagerParticle.LoadAllInFolder();
+        ManagerMaterial.LoadAllInFolder();
+        ManagerFont.LoadAllInFolder();
     }
 }

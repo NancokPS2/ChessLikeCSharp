@@ -60,7 +60,9 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
         Contents[identifier] = resource;
     }
-
+    public bool HasResource(string identifier)
+        => Contents.ContainsKey(identifier);
+        
     public TRes GetResource(string identifier, bool getCached = false)
     {
         TRes? output;
@@ -84,11 +86,14 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         return resource.ResourcePath.GetFile().GetBaseName();
     }
 
+    public void LoadAllInFolder(bool user = false)
+        => LoadAllInFolder(GetDirectory(user));
+
     public void LoadAllInFolder(string path)
     {
         foreach (var item in ResourceLoader.ListDirectory(path))
         {
-            TRes res = GD.Load<TRes>(Path.Combine(path + item));
+            TRes res = GD.Load<TRes>(path +"/"+ item);
             string identifier = GetDefaultIdentifier(res);
 
             if (identifier == "") throw new Exception("No identifier could be retrieved");
@@ -101,7 +106,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     {
         TRes output;
 
-        string path = $"{GetDirectory(false)}/Default{GetExtension()}";
+        string path = GetDefaultResourcePath();
 
         output = GD.Load<TRes>(path);
         if (output is null)
@@ -112,6 +117,12 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         return (TRes)output.Duplicate(true);
     }
 
+    private string GetDefaultResourcePath()
+        => $"{GetDirectory(false)}/Default{GetExtension()}";
+
+
+    public bool DefaultResourceExists() => FileAccess.FileExists(GetDefaultResourcePath());
+
     protected void PrepareDirectories()
     {
         DirAccess.MakeDirAbsolute(GetDirectory(true));
@@ -121,19 +132,21 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     public void CreateDefault()
     {
 
-        if (GetDefaultResource() is not null) return;
+        if (DefaultResourceExists()) goto verify;
 
+        //Create a new one if there is not even a file there.
         if (OS.HasFeature("editor"))
         {
             string path = $"{GetDirectory(false)}/Default{GetExtension()}";
             Error result = ResourceSaver.Save(new TRes(), path);
-            GD.PushError($"Resource creation finished with code {result}");
+            GD.PushError($"Resource creation finished with code '{result}' at path '{path}' of category '{GetUniqueString()}");
         }
         else
         {
             GD.PushError("Cannot create a default Resource outside an editor build.");
         }
 
+        verify:
         if (GetDefaultResource() is null) throw new Exception("Could not load a default resource.");
     }
 
@@ -155,10 +168,12 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         return GetBaseDirectory(user) + uniqueString;
     }
 
-    public string GetExtension()
+    public virtual string GetExtension()
     {
         if (typeof(TRes) == typeof(PackedScene))
             return ".tscn";
+        else if (typeof(TRes) == typeof(FontFile))
+            return ".otf";
         else
             return ".tres";
     }

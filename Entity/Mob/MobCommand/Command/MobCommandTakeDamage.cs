@@ -16,10 +16,16 @@ public partial class MobCommandTakeDamage : Command
     private float _damage;
     [Export]
     public float Damage { get => _damage; set => _damage = Mathf.Clamp(value, 0, float.MaxValue); }
+
     public MobCommandTakeDamage(float damage)
     {
         Damage = damage;
     }
+
+    public MobCommandTakeDamage()
+    {
+    }
+
 
     public override void UseCommand(Mob mob)
     {

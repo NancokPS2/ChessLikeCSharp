@@ -6,8 +6,8 @@ namespace ChessLike.Entity;
 
 public partial class Job : IActionProvider
 {
-    public List<Ability> GetAbilities() => Abilities;
+    public List<Ability> GetAbilities() => [.. Abilities];
 
-    public List<Ability> GetPassives() => Abilities;
+    public List<Ability> GetPassives() => [.. Abilities];
 
 }

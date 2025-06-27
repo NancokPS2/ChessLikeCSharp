@@ -1,6 +1,11 @@
-[gd_resource type="Resource" script_class="Job" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Job" load_steps=2 format=3 uid="uid://ct6qtlbthfdfj"]
 
-[ext_resource type="Script" path="res://Entity/Job/Job.cs" id="1_jwxq2"]
+[ext_resource type="Script" uid="uid://ckk61wkjh67wo" path="res://Entity/Job/Job.cs" id="1_jwxq2"]
 
 [resource]
 script = ExtResource("1_jwxq2")
+DisplayedName = "Default"
+Identifier = 0
+StatMultiplicativeBoostDict = Dictionary[int, float]({})
+Abilities = []
+MovementMode = 0
