@@ -20,7 +20,12 @@ public partial class Faction : Resource, ISerializable
     public EFaction Identifier = EFaction.NEUTRAL;
 
     [Export]
-    public Godot.Collections.Dictionary<EFaction, float> RelationList { get; set; } = new();
+    private Godot.Collections.Dictionary<EFaction, float> relationList
+    {
+        set => RelationList = new(value);
+        get => new(RelationList);
+    }
+    public Dictionary<EFaction, float> RelationList = new();
 
     [Export]
     public Inventory Inventory = new(999);

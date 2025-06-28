@@ -1,11 +1,12 @@
-[gd_resource type="Resource" script_class="Job" load_steps=2 format=3 uid="uid://ct6qtlbthfdfj"]
+[gd_resource type="Resource" script_class="Job" load_steps=3 format=3 uid="uid://ct6qtlbthfdfj"]
 
+[ext_resource type="Resource" uid="uid://pbfni1ocfqog" path="res://Resources/Ability/Move.tres" id="1_8xytu"]
 [ext_resource type="Script" uid="uid://ckk61wkjh67wo" path="res://Entity/Job/Job.cs" id="1_jwxq2"]
 
 [resource]
 script = ExtResource("1_jwxq2")
 DisplayedName = "Default"
 Identifier = 0
-StatMultiplicativeBoostDict = Dictionary[int, float]({})
-Abilities = []
+statMultiplicativeBoostDict = null
+abilities = Array[Object]([ExtResource("1_8xytu")])
 MovementMode = 0

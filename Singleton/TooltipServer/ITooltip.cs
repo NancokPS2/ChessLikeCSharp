@@ -7,7 +7,7 @@ using Godot;
 public interface ITooltip
 {
     public string GetText();
-    public Godot.Font GetFont() => Global.Readonly.FONT_SMALL;
+    public Godot.Font GetFont() => Global.ManagerFont.GetResource("Regular");
     public int GetFontSize() => 16;
 
     public Godot.Vector2 GetRectSize() => new(140,80);

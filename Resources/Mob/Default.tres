@@ -1,6 +1,22 @@
-[gd_resource type="Resource" script_class="Mob" load_steps=2 format=3]
+[gd_resource type="Resource" load_steps=6 format=3 uid="uid://inoxops2jmxa"]
 
-[ext_resource type="Script" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
+[ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Shared/Storage/Inventory/Slot.cs" id="1_oa5xi"]
+[ext_resource type="Script" uid="uid://bodnw66lsmq04" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
+[ext_resource type="Script" uid="uid://dkbd2rugu0rr8" path="res://Shared/Storage/Inventory/Inventory.cs" id="2_oghla"]
+
+[sub_resource type="Resource" id="Resource_jfjfl"]
+script = ExtResource("1_oa5xi")
+Item = null
+
+[sub_resource type="Resource" id="Resource_qq2qs"]
+script = ExtResource("2_oghla")
+StorageInventoryUniversalSlot = SubResource("Resource_jfjfl")
 
 [resource]
 script = ExtResource("1_yrebf")
+DisplayedName = "UNNAMED"
+jobs = null
+actions = Array[Object]([])
+Race = 0
+Faction = 1
+MobInventory = SubResource("Resource_qq2qs")

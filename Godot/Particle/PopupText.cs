@@ -5,7 +5,7 @@ namespace Godot;
 
 public partial class PopupText : CpuParticles3D
 {
-	public Godot.Font Font = Global.Readonly.FONT_HEADING;
+	public Godot.Font Font = Global.ManagerFont.GetResource("Regular");
 	public string Text = "";
 
     public override void _Ready()

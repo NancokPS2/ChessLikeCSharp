@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=50 format=3 uid="uid://0vkdn3hdeppa"]
+[gd_resource type="Theme" load_steps=51 format=3 uid="uid://0vkdn3hdeppa"]
 
 [ext_resource type="StyleBox" uid="uid://w4fytsqtfjkk" path="res://assets/Theme/StyleBox/ButtonDisabled.tres" id="1_21pep"]
 [ext_resource type="StyleBox" uid="uid://bv0l7bnxqq2fv" path="res://assets/Theme/StyleBox/ButtonFocus.tres" id="2_wn8q5"]
@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bnom1ibyekebf" path="res://assets/Theme/Image/ScrollBarHorizontalGrabberHovered.png" id="12_f80rf"]
 [ext_resource type="Texture2D" uid="uid://5yoxhs7vhaon" path="res://assets/Theme/Image/ScrollBarHorizontalGrabberPressed.png" id="13_8csk1"]
 [ext_resource type="Texture2D" uid="uid://bxtq2h77hpu2l" path="res://assets/Theme/Image/ScrollBarHorizontal.png" id="14_54bqn"]
-[ext_resource type="SystemFont" uid="uid://delsb77vco1t7" path="res://assets/Theme/Font/HeadingFont.tres" id="15_j35h0"]
+[ext_resource type="FontFile" uid="uid://cjg0wgsqk120f" path="res://Resources/Font/Regular.otf" id="15_ubmr3"]
 [ext_resource type="Texture2D" uid="uid://dwy3l60rjeyka" path="res://assets/Theme/Image/LabelBG.png" id="16_iwgsx"]
 [ext_resource type="Texture2D" uid="uid://vj3euad2ledf" path="res://assets/Theme/Image/PanelBGSharp.png" id="17_27b6v"]
 [ext_resource type="Texture2D" uid="uid://bltmpqnv7xnpn" path="res://assets/Theme/Image/PanelBGRoundedRight.png" id="18_a6731"]
@@ -22,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://d2rsrkmor8kjw" path="res://assets/Theme/Image/ProgressBarOverlay.png" id="20_t57wy"]
 [ext_resource type="Texture2D" uid="uid://cal1wve3eixbj" path="res://assets/Theme/Image/ProgressBarFill.png" id="21_jynns"]
 [ext_resource type="Texture2D" uid="uid://cqlbp6uabyqv" path="res://assets/Theme/Image/Tab.png" id="22_0swlv"]
-[ext_resource type="SystemFont" uid="uid://cmw2geewoehmp" path="res://assets/Theme/Font/LongTextFont.tres" id="22_pvkwp"]
 [ext_resource type="Texture2D" uid="uid://4i86tu2xeal6" path="res://assets/Theme/Image/ScrollBarGrabber.png" id="23_xbu8e"]
 [ext_resource type="Texture2D" uid="uid://cg2yngowumgj5" path="res://assets/Theme/Image/ScrollBarGrabberHovered.png" id="24_sjw60"]
 [ext_resource type="Texture2D" uid="uid://coaagqfi0bvdk" path="res://assets/Theme/Image/ScrollBarGrabberPressed.png" id="25_5pcsx"]
@@ -152,6 +151,11 @@ texture_margin_top = 4.0
 texture_margin_right = 7.0
 texture_margin_bottom = 4.0
 
+[sub_resource type="SystemFont" id="SystemFont_8um0m"]
+font_names = PackedStringArray("Bell MT", "Centaur")
+font_weight = 999
+oversampling = 3.0
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r7muv"]
 texture = ExtResource("22_0swlv")
 texture_margin_left = 7.0
@@ -169,6 +173,9 @@ texture_margin_right = 5.0
 texture_margin_bottom = 3.0
 axis_stretch_horizontal = 2
 modulate_color = Color(1.78084e-06, 0.456547, 0.457459, 1)
+
+[sub_resource type="SystemFont" id="SystemFont_7cn42"]
+font_names = PackedStringArray("Candara", "Consolas", "Centaur")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_46ll1"]
 bg_color = Color(0.355675, 0.264418, 0.0936882, 0.607843)
@@ -207,7 +214,7 @@ texture_margin_top = 4.0
 texture_margin_bottom = 4.0
 
 [resource]
-default_font = ExtResource("22_pvkwp")
+default_font = ExtResource("15_ubmr3")
 Button/styles/disabled = ExtResource("1_21pep")
 Button/styles/focus = ExtResource("2_wn8q5")
 Button/styles/hover = ExtResource("3_f66lb")
@@ -225,7 +232,7 @@ HScrollBar/styles/grabber = SubResource("StyleBoxTexture_ntqe2")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_8v4yc")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxTexture_0jtf7")
 HScrollBar/styles/scroll = SubResource("StyleBoxTexture_2wbeh")
-Label/fonts/font = ExtResource("15_j35h0")
+Label/fonts/font = ExtResource("15_ubmr3")
 Label/styles/normal = SubResource("StyleBoxTexture_qbc3q")
 LabelHeader/base_type = &"Label"
 LabelHeader/colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -256,12 +263,12 @@ ProgressBar/styles/background = SubResource("StyleBoxTexture_46p7u")
 ProgressBar/styles/fill = SubResource("StyleBoxTexture_fwote")
 TabContainer/colors/font_selected_color = Color(1, 1, 1, 1)
 TabContainer/colors/font_unselected_color = Color(0, 0, 0, 1)
-TabContainer/fonts/font = ExtResource("15_j35h0")
+TabContainer/fonts/font = SubResource("SystemFont_8um0m")
 TabContainer/styles/tab_selected = SubResource("StyleBoxTexture_r7muv")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxTexture_jm4mi")
 TextEdit/constants/line_spacing = 0
 TextEdit/font_sizes/font_size = 18
-TextEdit/fonts/font = ExtResource("22_pvkwp")
+TextEdit/fonts/font = SubResource("SystemFont_7cn42")
 TextEdit/styles/normal = SubResource("StyleBoxFlat_46ll1")
 VScrollBar/styles/grabber = SubResource("StyleBoxTexture_hgee0")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_0ihlk")

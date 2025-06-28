@@ -173,7 +173,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependenc
 
 	public Godot.Font GetFont()
 	{
-		return Global.Readonly.FONT_SMALL;
+		return Global.ManagerFont.GetResource("Regular");
 	}
 
 	public bool IsShown()

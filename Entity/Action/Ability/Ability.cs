@@ -24,6 +24,7 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class Ability : ActionEvent
 {
+    [Export]
     public EAbility Identifier = EAbility.NULL;
 
     public override void Use(UsageParameters usageParams)

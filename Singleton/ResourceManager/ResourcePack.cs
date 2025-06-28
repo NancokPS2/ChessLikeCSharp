@@ -29,9 +29,6 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     public List<TRes> GetAllPooled()
         => Pooled;
 
-
-
-
     public string GetUniqueString()
     {
         //If an override was set, use that.
@@ -60,9 +57,10 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
         Contents[identifier] = resource;
     }
+
     public bool HasResource(string identifier)
         => Contents.ContainsKey(identifier);
-        
+
     public TRes GetResource(string identifier, bool getCached = false)
     {
         TRes? output;
@@ -93,12 +91,17 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     {
         foreach (var item in ResourceLoader.ListDirectory(path))
         {
-            TRes res = GD.Load<TRes>(path +"/"+ item);
+            TRes res = GD.Load<TRes>(path + "/" + item);
             string identifier = GetDefaultIdentifier(res);
 
             if (identifier == "") throw new Exception("No identifier could be retrieved");
 
             AddResource(identifier, res);
+        }
+
+        if (OS.HasFeature("editor"))
+        {
+            CreateEnums();
         }
     }
 
@@ -146,8 +149,30 @@ public class ResourcePack<TRes> where TRes : Resource, new()
             GD.PushError("Cannot create a default Resource outside an editor build.");
         }
 
-        verify:
+    verify:
         if (GetDefaultResource() is null) throw new Exception("Could not load a default resource.");
+    }
+
+    protected void CreateEnums()
+    {
+        string enumName = $"EPackID{GetUniqueString()}";
+        FileAccess file = FileAccess.Open(
+            $"{GetBaseDirectory(false)}/{enumName}.cs",
+            FileAccess.ModeFlags.WriteRead
+            );
+
+        string text =
+        $"public enum {enumName} \n"
+        + "{\n";
+        foreach (var item in Contents)
+        {
+            text += item.Key + ",\n";
+        }
+        text += "}";
+
+        file.StoreString(text);
+        file.Flush();
+        file.Close();
     }
 
     public string GetBaseDirectory(bool user)

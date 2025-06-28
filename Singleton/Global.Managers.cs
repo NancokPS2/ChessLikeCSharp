@@ -54,5 +54,9 @@ public partial class Global
         ManagerParticle.LoadAllInFolder();
         ManagerMaterial.LoadAllInFolder();
         ManagerFont.LoadAllInFolder();
+
+        Job testJob = new Job();
+        testJob.SetMeta("TEST", 94);
+        ResourceSaver.Save(testJob, "user://temp.tres");
     }
 }

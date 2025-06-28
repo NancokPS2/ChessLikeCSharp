@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=12 format=3]
+[gd_resource type="Resource" script_class="Ability" load_steps=11 format=3 uid="uid://bittf0xemmhpq"]
 
-[ext_resource type="Script" path="res://Entity/Action/Parameters/AnimationParameters.cs" id="1_i6bp7"]
-[ext_resource type="Script" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="2_vpcxa"]
-[ext_resource type="Script" path="res://Entity/Mob/MobCommand/Command/Command.cs" id="3_4nkub"]
-[ext_resource type="Script" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="4_otf84"]
-[ext_resource type="Script" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="5_nlmxh"]
-[ext_resource type="Script" path="res://Entity/Action/Ability/Ability.cs" id="6_ar72c"]
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/AnimationParameters.cs" id="1_i6bp7"]
+[ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="2_vpcxa"]
+[ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="4_otf84"]
+[ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="5_nlmxh"]
+[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="6_ar72c"]
 
 [sub_resource type="Resource" id="Resource_ryo0r"]
 script = ExtResource("1_i6bp7")
@@ -50,9 +49,10 @@ AoESize = 0
 
 [resource]
 script = ExtResource("6_ar72c")
+Identifier = 0
 Name = "Undefined Action"
-Flags = Array[int]([])
-Commands = Array[ExtResource("3_4nkub")]([])
+flags = null
+commands = null
 FilterParams = SubResource("Resource_lqjk8")
 TargetParams = SubResource("Resource_0qxi2")
 AnimationParams = SubResource("Resource_ryo0r")

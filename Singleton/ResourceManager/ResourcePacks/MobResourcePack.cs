@@ -4,6 +4,12 @@ using Godot;
 
 public class MobResourcePack : ResourcePack<Mob>
 {
+    public Mob GetResource(EPackIDMob enu)
+    {
+        string? output = Enum.GetName<EPackIDMob>(enu);
+        return GetResource(output ?? throw new Exception("Could not get name from enum."));
+    }
+
     public List<Mob> GetPooledInCombat()
         => GetAllPooled().FilterInCombat();
 

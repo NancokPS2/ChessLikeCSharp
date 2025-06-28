@@ -9,11 +9,6 @@ public partial class Global
     public static class Readonly
     {
 
-
-        //FONTS
-        public static readonly Godot.Font FONT_SMALL = new Godot.SystemFont();
-        public static readonly Godot.Font FONT_HEADING = LoadSafe<Godot.Font>("res://assets/Theme/Font/HeadingFont.tres");
-
         //SHADERS
         public static readonly Godot.ShaderMaterial SHADER_BORDER_CANVAS = LoadSafe<ShaderMaterial>("res://assets/Material/UIBorderColorShader.tres");
 

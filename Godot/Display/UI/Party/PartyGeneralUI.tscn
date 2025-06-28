@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://byh0x8syok53h"]
+[gd_scene load_steps=9 format=3 uid="uid://byh0x8syok53h"]
 
 [ext_resource type="Script" uid="uid://ds3ltw517h8gd" path="res://Godot/Display/UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
@@ -6,6 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://Godot/Display/UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
 [ext_resource type="PackedScene" uid="uid://bok0g3pnl5rri" path="res://Godot/Display/UI/Party/PartyFactionEquipmentUI.tscn" id="4_8cy5q"]
 [ext_resource type="PackedScene" uid="uid://c7lfcu2mi4uaj" path="res://Godot/Display/UI/Party/PartyJobChangeUI.tscn" id="6_rogee"]
+[ext_resource type="FontFile" uid="uid://di88txagx8110" path="res://Resources/Font/Zerove.ttf" id="7_jwnb4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8fxnr"]
+font = ExtResource("7_jwnb4")
 
 [node name="PartyGeneralUI" type="Control" node_paths=PackedStringArray("NodePartyListUI", "NodeMobEquipmentUI", "NodeFactionInventoryUI", "NodePartyJobChangeUI", "NodeDebugOptions")]
 layout_mode = 3
@@ -21,11 +25,15 @@ NodeMobEquipmentUI = NodePath("MobSelectedEquipment")
 NodeFactionInventoryUI = NodePath("PartyFactionEquipmentUi")
 NodePartyJobChangeUI = NodePath("MobJobChangeUI")
 NodeDebugOptions = NodePath("MenuButton")
+DebugButtons = null
 
 [node name="PartyUnitListUI" parent="." instance=ExtResource("2_ospk4")]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 0.197531
+ButtonHorizontalFlags = null
+ButtonVerticalFlags = null
+ButtonAnchors = null
 metadata/_edit_use_anchors_ = true
 
 [node name="MobSelectedEquipment" parent="." node_paths=PackedStringArray("TransferUI") instance=ExtResource("3_k8mmi")]
@@ -35,6 +43,9 @@ anchor_top = 0.197531
 anchor_right = 0.277778
 TransferUI = NodePath("../PartyFactionEquipmentUi")
 CanTransferItems = true
+ButtonHorizontalFlags = null
+ButtonVerticalFlags = null
+ButtonAnchors = null
 metadata/_edit_use_anchors_ = true
 
 [node name="PartyFactionEquipmentUi" parent="." instance=ExtResource("4_8cy5q")]
@@ -43,7 +54,10 @@ anchors_preset = -1
 anchor_left = 0.278646
 anchor_top = 0.197531
 anchor_right = 0.514757
-CanTransferItems = false
+CanTransferItems = null
+ButtonHorizontalFlags = null
+ButtonVerticalFlags = null
+ButtonAnchors = null
 metadata/_edit_use_anchors_ = true
 
 [node name="MobJobChangeUI" parent="." instance=ExtResource("6_rogee")]
@@ -53,6 +67,9 @@ anchors_preset = -1
 anchor_left = 0.777778
 anchor_top = 0.197531
 anchor_bottom = 0.91358
+AvailableJobs = null
+CanChangeJob = null
+MaxJobs = null
 metadata/_edit_use_anchors_ = true
 
 [node name="MenuButton" type="MenuButton" parent="."]
@@ -70,3 +87,10 @@ grow_vertical = 0
 text = "Debug"
 flat = false
 metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 285.0
+offset_bottom = 121.0
+text = "TEST A large sword"
+label_settings = SubResource("LabelSettings_8fxnr")

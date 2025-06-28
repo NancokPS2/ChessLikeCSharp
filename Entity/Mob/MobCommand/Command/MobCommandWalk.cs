@@ -11,6 +11,10 @@ public partial class MobCommandWalk : Command
 {
     List<Vector3i> Path;
 
+    public MobCommandWalk()
+    {
+    }
+
     public MobCommandWalk(List<Vector3i> path)
     {
         Path = path;

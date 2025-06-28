@@ -18,10 +18,20 @@ public partial class ActionEvent : Resource
     public string Name = "Undefined Action";
 
     [Export]
-    public Godot.Collections.Array<EActionFlag> Flags = new();
+    private Godot.Collections.Array<EActionFlag> flags
+    {
+        set => Flags = new(value);
+        get => new(Flags);
+    }
+    public List<EActionFlag> Flags = new();
 
     [Export]
-    public Godot.Collections.Array<MobCommand.Command> Commands = new();
+    private Godot.Collections.Array<MobCommand.Command> commands
+    {
+        set => Commands = new(value);
+        get => new(Commands);
+    }
+    public List<MobCommand.Command> Commands = new();
 
     [ExportGroup("Parameters")]
     [Export]

@@ -14,14 +14,36 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class Mob : Resource
 {
+    [Export]
     public string DisplayedName = "UNNAMED";
-    private List<Job> Jobs = new(){Job.CreatePrototype(EJob.DEFAULT)};
+    [Export]
+    private Godot.Collections.Array<Job> jobs
+    {
+        set => Jobs = new(value);
+        get => new(Jobs);
+    }
+    private List<Job> Jobs = new() { Job.CreatePrototype(EJob.DEFAULT) };
+
+    [Export]
+    private Godot.Collections.Array<ActionEvent> actions
+    {
+        set => Actions = new(value);
+        get => new(Actions);
+    }
     private List<ActionEvent> Actions = new();
+
+    [Export]
     public ERace Race = ERace.HUMAN;
+
+    [Export]
     public EFaction Faction = EFaction.NEUTRAL;
+
+    [Export]
     public Inventory MobInventory = new();
+
+    public EMovementMode MovementMode { set => SetMovementMode(value); get => movementMode; }
     private EMovementMode movementMode;
-    public EMovementMode MovementMode {set => SetMovementMode(value); get => movementMode;}
+
     private EMobState mobState = EMobState.BENCHED;
     public EMobState MobState
     {

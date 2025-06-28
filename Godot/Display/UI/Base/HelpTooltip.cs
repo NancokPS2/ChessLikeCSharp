@@ -3,9 +3,11 @@ using System;
 
 public partial class HelpTooltip : Panel, ITooltip
 {
+    public const string THEME_OBJECT = "TooltipLabel";
+
 	[Export(PropertyHint.MultilineText)]
 	public string Text = "";
-    public Godot.Font GetFont() => Global.Readonly.FONT_SMALL;
+    public Godot.Font GetFont() => Global.ManagerFont.GetResource("Regular");//GetThemeFont(THEME_OBJECT, "font");
 
     public int GetFontSize() => 16;
 
