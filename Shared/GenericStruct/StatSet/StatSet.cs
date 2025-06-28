@@ -170,6 +170,16 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
         return output;
     }
 
+    public string BoostGetListOfStatChanges()
+    {
+        string output = "";
+        foreach (var item in AllStats)
+        {
+            output += BoostGetListOfStatChanges(item) + "\n";
+        }
+        return output;
+    }
+
     private StatBoost<TStatEnum> BoostGetFromSource(string source)
     {
         if (Boosts.ContainsKey(source))

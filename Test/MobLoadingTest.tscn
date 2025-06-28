@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ck8ooo5k4genv"]
+
+[ext_resource type="Script" uid="uid://cguos5bwwvyd6" path="res://Test/MobLoadingTest.cs" id="1_a4eum"]
+
+[node name="MobLoadingTest" type="Node3D"]
+script = ExtResource("1_a4eum")

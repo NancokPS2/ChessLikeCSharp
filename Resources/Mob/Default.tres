@@ -1,8 +1,9 @@
-[gd_resource type="Resource" load_steps=6 format=3 uid="uid://inoxops2jmxa"]
+[gd_resource type="Resource" load_steps=7 format=3 uid="uid://inoxops2jmxa"]
 
 [ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Shared/Storage/Inventory/Slot.cs" id="1_oa5xi"]
 [ext_resource type="Script" uid="uid://bodnw66lsmq04" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
 [ext_resource type="Script" uid="uid://dkbd2rugu0rr8" path="res://Shared/Storage/Inventory/Inventory.cs" id="2_oghla"]
+[ext_resource type="Resource" uid="uid://ct6qtlbthfdfj" path="res://Resources/Job/Default.tres" id="3_oghla"]
 
 [sub_resource type="Resource" id="Resource_jfjfl"]
 script = ExtResource("1_oa5xi")
@@ -14,8 +15,8 @@ StorageInventoryUniversalSlot = SubResource("Resource_jfjfl")
 
 [resource]
 script = ExtResource("1_yrebf")
-DisplayedName = "UNNAMED"
-jobs = null
+DisplayedName = "Marquito Default"
+jobs = Array[Object]([ExtResource("3_oghla")])
 actions = Array[Object]([])
 Race = 0
 Faction = 1

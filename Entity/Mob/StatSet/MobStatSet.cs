@@ -25,7 +25,7 @@ public partial class MobStatSet : StatSet<EStatName>
     public override string ToString()
     {
         string output = "";
-        foreach (EStatName item in MaxDict.Keys)
+        foreach (EStatName item in AllStats)
         {
             output += item.ToString() + ": " 
             + GetValue(item).ToString() + "/" 

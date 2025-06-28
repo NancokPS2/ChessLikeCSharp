@@ -5,7 +5,7 @@ using static ChessLike.Entity.Mob;
 
 namespace ChessLike.Entity;
 
-[GlobalClass, Obsolete("Incomplete resourcification")]
+[GlobalClass]
 public partial class Job : Resource
 {
     [Export]

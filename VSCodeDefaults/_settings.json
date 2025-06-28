@@ -1,0 +1,11 @@
+{
+    "dotnet.defaultSolution": "RPG.sln",
+    "launch": {
+
+        "configurations": [],
+        "compounds": []
+    },
+    "dotnetAcquisitionExtension.enablePreviewFeatures": true,
+    "godotTools.editorPath.godot4": "C:\\Programs\\Godot\\Godot_v4.4.1-stable_mono_win64.exe"
+    
+}
