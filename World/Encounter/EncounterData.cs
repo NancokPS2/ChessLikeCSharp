@@ -40,7 +40,7 @@ public partial class EncounterData : Resource
     public static EncounterData GetDefault()
     {
         EncounterData encounter = new();
-        encounter.Grid = Grid.Generator.GenerateFlat(new(6));
+        encounter.Grid = GridTerrainGenerator.GenerateFlat(new(6));
         encounter.FactionSpawns = new(){
             {Vector3i.ONE, new(){EFaction.PLAYER}}
             };

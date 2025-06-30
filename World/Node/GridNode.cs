@@ -25,13 +25,12 @@ public partial class GridNode : Node3D
 
     private Grid grid;
     private Dictionary<Vector3i, CellComponent> CellComponents = new();
-    private Node2D DrawNode = new();
-    //private MeshInstance3D SelectedCursorInstance = new() { Mesh = new PrismMesh(){Size = new(1,-1,1)}};
 
-    public Vector3i PositionCollidedSelected;
-    public Vector3i PositionSelected {get => PositionCollidedSelected + Vector3i.UP;}
-    public Vector3i PositionCollidedHovered;
-    public Vector3i PositionHovered {get => PositionCollidedHovered + Vector3i.UP;}
+    public Vector3i PositionSelected { get => PositionCollidedSelected + Vector3i.UP; }
+    private Vector3i PositionCollidedSelected;
+
+    public Vector3i PositionHovered { get => PositionCollidedHovered + Vector3i.UP; }
+    private Vector3i PositionCollidedHovered;
 
     public bool InputEnabled = true;
 
@@ -41,6 +40,8 @@ public partial class GridNode : Node3D
     {
         EventBus.GridLoaded += SetGrid;
     }
+
+    #region Base
 
     public override void _Process(double delta)
     {
@@ -53,9 +54,9 @@ public partial class GridNode : Node3D
     }
 
     public void SetGrid(Grid grid)
-    {   
+    {
         this.grid = grid;
-        
+
         //Clean existing nodes.
         foreach (Node node in GetChildren())
         {
@@ -66,14 +67,14 @@ public partial class GridNode : Node3D
         CellComponents.Clear();
         foreach (Vector3i position in grid.CellDictionary.Keys)
         {
-            Cell cell = grid.CellDictionary[position];
+            GridCell cell = grid.CellDictionary[position];
             CellComponent component = new CellComponent(cell);
 
             CellComponents.Add(position, component);
-            
+
             MeshRefresh(position);
 
-            CollisionConnect(position, component.collision_body);
+            CollisionConnect(position, component.CollisionBody);
             CollisionEnable(position, cell.Flags.Contains(ECellFlag.SOLID));
 
             //Custom stuff.
@@ -87,11 +88,13 @@ public partial class GridNode : Node3D
             }
         }
     }
+    #endregion
 
-    public void CollisionEnable(Vector3i position, bool enable)
+    #region Collision
+    protected void CollisionEnable(Vector3i position, bool enable)
     {
         CellComponent component = CellComponents[position];
-        StaticBody3D body = component.collision_body;
+        StaticBody3D body = component.CollisionBody;
 
         body.Position = position.ToGVector3();
         if (enable)
@@ -99,40 +102,44 @@ public partial class GridNode : Node3D
             if (IsInstanceValid(body) && !body.IsInsideTree())
             {
                 AddChild(body);
-                body.AddChild(component.collision_shape);
+                body.AddChild(component.CollisionShape);
             }
             else
             {
                 throw new Exception("The collision is not valid?");
             }
         }
-        else if(body.GetParent() == this)
+        else if (body.GetParent() == this)
         {
             RemoveChild(body);
         }
     }
 
-    public void CollisionConnect(Vector3i position, StaticBody3D body)
+    protected void CollisionConnect(Vector3i position, StaticBody3D body)
     {
         body.InputEvent += (
             cam,
             input,
             pos,
             norm,
-            shape 
+            shape
             ) => OnCellInput(input, position);
     }
 
+    #endregion
+
+    #region Mesh
     public void MeshSet(Vector3i position, Layer layer, Mesh? new_mesh)
     {
-        if (new_mesh == null && CellComponents.ContainsKey(position) && CellComponents[position].mesh_instances.ContainsKey(layer))
+        if (new_mesh == null && CellComponents.ContainsKey(position) && CellComponents[position].MeshInstances.ContainsKey(layer))
         {
             MeshGetInstance(position, layer)?.QueueFree();
-            CellComponents[position].mesh_instances.Remove(layer);
-        }else
+            CellComponents[position].MeshInstances.Remove(layer);
+        }
+        else
         {
-            MeshInstance3D instance = new(){Mesh = new_mesh};
-            CellComponents[position].mesh_instances[layer] = instance;
+            MeshInstance3D instance = new() { Mesh = new_mesh };
+            CellComponents[position].MeshInstances[layer] = instance;
         }
         PosDirty.Add(position);
     }
@@ -147,8 +154,9 @@ public partial class GridNode : Node3D
 
     public MeshInstance3D? MeshGetInstance(Vector3i position, Layer layer)
     {
-        return CellComponents[position] is null || CellComponents[position].mesh_instances[layer] is null ? null 
-        : CellComponents[position].mesh_instances[layer];
+        if (CellComponents[position] is null) return null;
+        else if (CellComponents[position].MeshInstances[layer] is null) return null;
+        else return CellComponents[position].MeshInstances[layer];
     }
 
     public void MeshRemove(Vector3i position, Layer layer)
@@ -162,7 +170,7 @@ public partial class GridNode : Node3D
         {
             layers = ALL_LAYERS;
         }
-        
+
         foreach (Layer layer in layers)
         {
             MeshRemove(position, layer);
@@ -181,7 +189,7 @@ public partial class GridNode : Node3D
     {
         foreach (Layer layer in ALL_LAYERS)
         {
-            if(layer == Layer.BASE){continue;}
+            if (layer == Layer.BASE) { continue; }
 
             MeshRemove(position, layer);
         }
@@ -192,7 +200,7 @@ public partial class GridNode : Node3D
     {
         CellComponent component = CellComponents[position];
 
-        foreach (MeshInstance3D instance in component.mesh_instances.Values)
+        foreach (MeshInstance3D instance in component.MeshInstances.Values)
         {
             if (IsInstanceValid(instance) && !instance.IsInsideTree())
             {
@@ -201,21 +209,26 @@ public partial class GridNode : Node3D
             instance.Position = position.ToGVector3();
         }
     }
+    #endregion
 
+    #region Events
     public void OnCellInput(InputEvent input, Vector3i comp_position)
     {
-        if (!InputEnabled){return;}
+        if (!InputEnabled) { return; }
 
         if (input.IsPressed())
         {
             PositionCollidedSelected = comp_position;
             PositionCollidedHovered = comp_position;
+            EventBus.CellSelected?.Invoke(comp_position);
         }
-        else
+        else if (!(input.IsPressed() || input.IsReleased()))
         {
             PositionCollidedSelected = Vector3i.INVALID;
             PositionCollidedHovered = comp_position;
+            EventBus.CellHovered?.Invoke(comp_position);
         }
 
     }
+    #endregion
 }

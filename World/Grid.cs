@@ -7,36 +7,37 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace ChessLike.World;
 
-public partial class Grid
+public partial class Grid : Resource
 {
     public Vector3i Boundary = new(10,10,10);
     private AStarGridPathing AStarPathing;
 
-    public Dictionary<Vector3i, Cell> CellDictionary = new();
+    public Dictionary<Vector3i, GridCell> CellDictionary = new();
 
     public Grid()
     {
         AStarPathing = new(this);
     }
-
-    public void SetCell(Vector3i position, Cell cell)
+    #region Cells
+    public void SetCell(Vector3i position, GridCell cell)
     {
         CellDictionary[position] = cell;
     }
 
-    protected Cell GetCell(Vector3i position)
+    public GridCell GetCell(Vector3i position)
     {
-        Cell cell = Cell.Preset.Invalid;
+        GridCell cell = GridCell.Preset.Invalid;
         if (!CellDictionary.TryGetValue(position, out cell)){throw new Exception("Not found!");}
         return cell;
     }
 
-    protected ICollection<Cell> GetCells()
+    public ICollection<GridCell> GetCells()
     {
         return CellDictionary.Values.ToArray();
     }
+    #endregion
 
-
+    #region Positions
     public Vector3i[] GetUsedPositions()
     {
         return CellDictionary.Keys.ToArray();
@@ -62,42 +63,17 @@ public partial class Grid
         output = output.Where(x => IsPositionInbounds(x)).ToList();
         return output;   
     }
-
-/*     public Vector3i[] GetUsedPositionsInThisColumn(Vector3i pos_in_column)
-    {
-        List<Vector3i> output = new();
-        Vector3i[] used_positions = GetUsedPositions();
-        Vector3i position_curr = new(pos_in_column.X, 0, pos_in_column.Z);
-
-        if (!IsPositionInbounds(position_curr)){throw new Exception("The bottom should exist!");}
-
-        foreach (Vector3i item in cells_dictionary.Keys)
-        {
-            bool inbounds = IsPositionInbounds(position_curr);
-            bool used = used_positions.Contains(position_curr);
-            if (inbounds && used)
-            {
-                output.Add(position_curr);
-            }
-            else
-            {
-                Debug.Print("Cut off column at " + position_curr.ToString() + inbounds.ToString() + used.ToString());
-                break;
-            }
-            position_curr += Vector3i.UP;
-        }
-        
-        return output.ToArray();
-    } */
-
+    #endregion
+    
+    #region Checks
     public bool IsPositionInbounds(Vector3i position)
     {
-        
-        if(position.X < 0 || position.Y < 0 || position.Z < 0)
+
+        if (position.X < 0 || position.Y < 0 || position.Z < 0)
         {
             return false;
         }
-        if(position.X >= Boundary.X || position.Y >= Boundary.Y || position.Z >= Boundary.Z)
+        if (position.X >= Boundary.X || position.Y >= Boundary.Y || position.Z >= Boundary.Z)
         {
             return false;
         }
@@ -112,8 +88,8 @@ public partial class Grid
     /// <returns>If the flag qualifies as being in the position.</returns>
     public bool IsFlagInPosition(Vector3i position, ECellFlag flag)
     {
-        Cell cell = GetCell(position);
-        if(cell == Cell.Preset.Invalid)
+        GridCell cell = GetCell(position);
+        if(cell == GridCell.Preset.Invalid)
         {
             return false;
         }
@@ -132,14 +108,8 @@ public partial class Grid
         }
         return true;
     }
-
-    public static class StepFilterPresets
-    {
-        public static bool Always(Vector3i vector)
-        {
-            return true;
-        }
-    }
+    #endregion
+    
     public struct FloodFillParameters
     {
         public int VerticalTolerance;

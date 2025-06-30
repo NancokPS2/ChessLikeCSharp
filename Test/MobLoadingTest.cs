@@ -4,6 +4,7 @@ using Godot;
 using System;
 using System.Diagnostics;
 
+namespace Tests;
 public partial class MobLoadingTest : Node3D
 {
 

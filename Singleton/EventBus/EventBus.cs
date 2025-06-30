@@ -43,6 +43,13 @@ public partial class EventBus : Node
     public static StringEvent? ProfileNameChanged;
     #endregion
 
+    #region Grid
+    public delegate void GridCellPosition(Vector3i cellPos);
+    public static GridCellPosition? CellSelected;
+    public static GridCellPosition? CellHovered;
+
+    #endregion
+
     #region Battle Encounter
     //Encounter
     public static ObjectChange<Grid>? GridLoaded;

@@ -33,7 +33,7 @@ public partial class Grid : IResourceSerialize<Grid, GridResource>
         output.Boundary = new(res.Boundary);
         foreach (var item in res.CellNames.Keys)
         {
-            Cell new_cell = new(
+            GridCell new_cell = new(
                 res.CellNames[item],
                 new(res.CellFlags[item]),
                 res.CellSelectables[item]
