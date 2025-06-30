@@ -16,8 +16,8 @@ public partial class Global
     public static FactionResourcePack ManagerFaction;
     public static ResourcePack<Inventory> ManagerInventory;
     public static ItemResourcePack ManagerItem;
-    public static ResourcePack<PackedScene> ManagerModel;
-    public static ResourcePack<PackedScene> ManagerParticle;
+    public static SceneResourcePack<Node3D> ManagerModel;
+    public static SceneResourcePack<CpuParticles3D> ManagerParticle;
     public static ResourcePack<Material> ManagerMaterial;
     public static ResourcePack<FontFile> ManagerFont;
     public static ResourcePack<EncounterData> ManagerEncounter;

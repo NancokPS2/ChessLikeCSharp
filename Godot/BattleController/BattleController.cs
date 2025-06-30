@@ -40,47 +40,34 @@ public partial class BattleController : Node, IDebugDisplay
 
 		FSMProcess(delta);
 
-		Testing();
-
 	}
-
-	public void Testing()
-	{
-/* 
-		if (Input.IsActionJustPressed("debug_draw"))
-		{
-			Mob mob = Global.ManagerMob.GetAllPooled()[0];
-
-			mob.Stats.SetValue(StatName.HEALTH, mob.Stats.GetValue(StatName.HEALTH) + 5);
-		} */
-	}
-
+    
 	public string GetText()
-	{
-		if (!_ready_for_debug){return "";}
+    {
+        if (!_ready_for_debug) { return ""; }
 
-		string output = string.Format(
-			"State: {0}" + "\n" +
-			"Action selected: {1}" + "\n" +
-			"Grid size: {2}" + "\n" +
-			"Mob taking turn: {3}" + "\n" +
-			"Location selected: {4}" + "\n" + 
-			"Camera rotation: {5}" + "\n" +
-			"Usage parameters: {6}" + "\n" 
-			,
-			new object[]{
-				StateCurrent is not null ? StateCurrent.StateIdentifier : "null", 
-				ActionSelected is not null ? ActionSelected.Name : "null", 
-				CompGrid != null ? CompGrid.Boundary : "null",
-				CompTurnManager.GetCurrentTurnTaker() as Mob is Mob mob ? mob.DisplayedName : "null",
-				PositionHovered,
-				CompCamera != null ? CompCamera.Rotation : "???",
-				TurnUsageParameters is not null ? TurnUsageParameters.PositionsTargeted.ToArray().ToString()  ?? throw new Exception() : "???",
-				}
-			
-		);
-		return output;
-	}
+        string output = string.Format(
+            "State: {0}" + "\n" +
+            "Action selected: {1}" + "\n" +
+            "Grid size: {2}" + "\n" +
+            "Mob taking turn: {3}" + "\n" +
+            "Location selected: {4}" + "\n" +
+            "Camera rotation: {5}" + "\n" +
+            "Usage parameters: {6}" + "\n"
+            ,
+            new object[]{
+                StateCurrent is not null ? StateCurrent.StateIdentifier : "null",
+                ActionSelected is not null ? ActionSelected.Name : "null",
+                CompGrid != null ? CompGrid.Boundary : "null",
+                CompTurnManager.GetCurrentTurnTaker() as Mob is Mob mob ? mob.DisplayedName : "null",
+                PositionHovered,
+                CompCamera != null ? CompCamera.Rotation : "???",
+                TurnUsageParameters is not null ? TurnUsageParameters.PositionsTargeted.ToArray().ToString()  ?? throw new Exception() : "???",
+                }
+
+        );
+        return output;
+    }
 
 	#region Setup
 	public void SetupEncounter(EncounterData to_load)

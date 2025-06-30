@@ -11,12 +11,14 @@ namespace Tests;
 public partial class EncounterLoadingTest : Node3D
 {
     public Grid grid = new();
+    public GridNode gridNode = new();
     public EncounterData encounter = new();
 
     public override void _Ready()
     {
         base._Ready();
 
-        
+        encounter = Global.ManagerEncounter.GetResource("Default");
+        gridNode.SetGrid(grid);
     }
 }

@@ -11,6 +11,7 @@ public partial class EncounterData : Resource
     public Grid Grid = new();
     [Export]
     public Godot.Collections.Dictionary<Vector3I, Godot.Collections.Array<EFaction>> FactionSpawns = new();
+    [Export]
     public Godot.Collections.Dictionary<Vector3I, Mob> PresetMobSpawns = new();
     public int RoundLimit = -1;
 
