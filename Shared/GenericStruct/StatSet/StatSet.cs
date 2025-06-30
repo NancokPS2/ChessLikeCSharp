@@ -21,11 +21,13 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
 
     public StatSet()
     {
-        foreach (TStatEnum stat in Enum.GetValues(typeof(TStatEnum)))
+        AllStats = ((TStatEnum[])Enum.GetValues(typeof(TStatEnum))).Where(x => IsValidStat(x)).ToArray();
+
+        foreach (TStatEnum stat in AllStats)
         {
             MaxDict[stat] = new();
+            CurrentDict[stat] = new();
         }
-        AllStats = ((TStatEnum[])Enum.GetValues(typeof(TStatEnum))).Where(x => IsValidStat(x)).ToArray();
     }
 
     protected virtual bool IsValidStat(TStatEnum stat) => true;
@@ -158,7 +160,7 @@ public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, En
     #region Boosts
     public string BoostGetListOfStatChanges(TStatEnum name)
     {
-        string output = $"Base: {MaxDict[name]}\n";
+        string output = $"{name} Boost \nBase: {MaxDict[name]}\n";
 
         foreach (StatBoost<TStatEnum> boost in Boosts.Values)
         {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Shared.Storage;
+using ChessLike.World.Encounter;
 using Godot;
 
 public partial class Global
@@ -19,6 +20,7 @@ public partial class Global
     public static ResourcePack<PackedScene> ManagerParticle;
     public static ResourcePack<Material> ManagerMaterial;
     public static ResourcePack<FontFile> ManagerFont;
+    public static ResourcePack<EncounterData> ManagerEncounter;
 
     public static void SetupManager()
     {
@@ -32,6 +34,7 @@ public partial class Global
         ManagerParticle = new("Particle");
         ManagerMaterial = new("Material");
         ManagerFont = new("Font");
+        ManagerEncounter = new();
 
         ManagerJob.CreateDefault();
         ManagerAbility.CreateDefault();
@@ -43,6 +46,7 @@ public partial class Global
         ManagerParticle.CreateDefault();
         ManagerMaterial.CreateDefault();
         ManagerFont.CreateDefault();
+        ManagerEncounter.CreateDefault();
 
         ManagerJob.LoadAllInFolder();
         ManagerAbility.LoadAllInFolder();
@@ -54,6 +58,7 @@ public partial class Global
         ManagerParticle.LoadAllInFolder();
         ManagerMaterial.LoadAllInFolder();
         ManagerFont.LoadAllInFolder();
+        ManagerEncounter.LoadAllInFolder();
 
         Job testJob = new Job();
         testJob.SetMeta("TEST", 94);

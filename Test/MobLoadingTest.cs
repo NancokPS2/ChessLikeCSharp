@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using ChessLike.Entity.MobCommand;
 using Godot;
 using System;
 using System.Diagnostics;
@@ -11,6 +12,18 @@ public partial class MobLoadingTest : Node3D
     public MobLoadingTest()
     {
         mob = Global.ManagerMob.GetResource("Default");
+    }
+
+    public void TestChange(string name, bool start)
+    {
+        if (start)
+        {
+            Console.WriteLine($"--- Test start: {name}");
+        }
+        else
+        {
+            Console.WriteLine($"--- Test end: {name}");
+        }
     }
 
     public override void _Ready()
@@ -28,14 +41,16 @@ public partial class MobLoadingTest : Node3D
         //Test boosts
         TestStatBoost();
 
-        Console.WriteLine("Stats post health boost");
+        //Test movement
+        TestMovement();
 
+        TestMobCommands();
     }
 
     private void TestStatBoost()
     {
-
-        System.Console.WriteLine("--- Test start: Stat boosts\n" + mob.Stats.ToString());
+        TestChange("Stat boosts", true);
+        Console.WriteLine(mob.Stats.ToString());
 
         float preHealth = mob.Stats.GetMax(EStatName.HEALTH);
         float healthMult = 1.5f;
@@ -47,6 +62,45 @@ public partial class MobLoadingTest : Node3D
 
         Debug.Assert(mob.Stats.GetMax(EStatName.HEALTH) == preHealth * healthMult);
 
-        System.Console.WriteLine(mob.Stats.ToString() + "\n" + "--- Test end: Stat boosts");
+        Console.WriteLine(mob.Stats.ToString());
+        TestChange("Stat boosts", false);
+    }
+
+    public void TestMovement()
+    {
+        TestChange("Movement", true);
+
+        List<Vector3i> path = new() { Vector3i.FORWARD, Vector3i.FORWARD * 2, Vector3i.FORWARD, Vector3i.ZERO };
+        Console.WriteLine(path);
+
+        EventBus.MobMoved += TestMovementReportMove;
+        mob.MoveTroughPath(path);
+        EventBus.MobMoved -= TestMovementReportMove;
+
+        TestChange("Movement", false);
+    }
+
+    private void TestMovementReportMove(Mob mob, Vector3i from, Vector3i to)
+    {
+        Console.WriteLine($"Mob {mob.DisplayedName} moved from {from} to {to}");
+    }
+
+    public void TestMobCommands()
+    {
+        TestChange("Mob Commands", true);
+
+        float damageAmount = 10;
+        MobCommandTakeDamage damage = new(damageAmount);
+
+        float health = mob.Stats.GetValue(EStatName.HEALTH);
+        Console.WriteLine($"Health before damage: {health}");
+
+        mob.CommandProcess(damage);
+
+        float newHealth = mob.Stats.GetValue(EStatName.HEALTH);
+        Console.WriteLine($"Health after damage: {newHealth}");
+
+        Debug.Assert(health - damageAmount == newHealth);
+        TestChange("Mob Commands", false);
     }
 }
