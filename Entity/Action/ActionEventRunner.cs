@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -10,53 +11,45 @@ using static ChessLike.Entity.Action.ActionEvent;
 
 namespace ChessLike.Entity.Action;
 
-public class ActionEventRunner : IDebugDisplay
+public class ActionEventRunner
 {
     public delegate void ActionQueue(ActionEvent action, UsageParameters parameters);
     public delegate void Delegate();
 
     #region Queue
-    private List<QueuedAction> Queue = new();
+    private List<UsageParameters> Queue = new();
 
-    public uint QueueAdd(UsageParameters parameters)
+    public void QueueAdd(UsageParameters parameters)
+    {
+        //Actually try to queue it.
+        int index = Queue.Count;
+        QueueInsert(parameters, index);
+    }
+
+    public void QueueAddBefore(UsageParameters parametersToAdd, UsageParameters parametersToDisplace)
+    {
+        int index = Queue.IndexOf( parametersToDisplace );
+        Debug.Assert(index >= 0, "Index is invalid.");
+        Debug.Assert(Queue[index + 1] == parametersToDisplace, "The displaced parameter should end up AFTER the chosen index.");
+        QueueInsert(parametersToAdd, index);
+    }
+
+    private void QueueInsert(UsageParameters parameters, int index)
     {
         //Make sure it is valid first.
         if (!parameters.IsValid()) { throw new Exception("Invalid parameters."); }
 
-
-        //Actually try to queue it.
-        int index = Queue.Count;
-        return QueueInsert(parameters, index);
-    }
-
-    private uint QueueInsert(UsageParameters parameters, int index)
-    {
         //Warn other actions about this one, so they can queue first.
         EventBus.ActionAboutToBeQueued?.Invoke(parameters);
 
-        uint id = QueueGetAvailableId();
-        Queue.Insert(index, new QueuedAction(parameters.ActionRef, parameters, id));
+        Queue.Insert(
+            index,
+            parameters
+            );
         EventBus.ActionQueued?.Invoke(parameters);
-        return id;
     }
 
     public bool QueueIsEmpty() => Queue.Count == 0;
-
-    private QueuedAction? GetById(uint id)
-        => Queue.First(x => x.id == id);
-
-    private int GetIdOfUsageParameters(UsageParameters parameters)
-        => Queue.FindIndex(x => x.usage_params == parameters);
-
-    private uint QueueGetAvailableId()
-    {
-        uint id = 0;
-        while (Queue.Any(x => x.id == id))
-        {
-            id++;
-        }
-        return id;
-    }
 
     private void QueueClear()
     {
@@ -68,101 +61,26 @@ public class ActionEventRunner : IDebugDisplay
     // RUN LOGIC
 
     private bool RunningEnabled;
-    private int RunningIndex = 0;
-    //[Obsolete("Pending removal.")]
-    private float RunningTime = 0;
-    private QueuedAction? RunningQueuedAction;
-    private bool RunningReadyToSet;
 
     public void RunStart()
     {
         if (Queue.Count == 0) { throw new Exception("Nothing to run."); }
-        RunningReadyToSet = true;
-        RunningEnabled = true;
-        RunningIndex = 0;
-        RunningTime = 0;
-    }
 
-    public void Process()
-    {
-        //If not allowed to run, stop.
         if (!RunningEnabled) { return; }
 
-        //If it reached the end, stop.
-        if (RunningIndex >= Queue.Count)
-        {
-            RunEnd();
-            return;
-        }
-
-        //If no action is running, select one and use it to start.
-        if (RunningReadyToSet == true)
+        for (int queueIndex = 0; queueIndex < Queue.Count; queueIndex++)
         {
             //Select the action to run.
-            RunningQueuedAction = Queue[RunningIndex];
-            //Setup the usage
-            ActionEvent action = RunningQueuedAction.action;
-            UsageParameters parameters = RunningQueuedAction.usage_params;
+            UsageParameters parametersToUse = Queue[queueIndex];
 
-            EventBus.ActionAboutToBeUsed?.Invoke(parameters);
-            action.Use(parameters);
-            MessageQueue.AddMessage(action.GetUseText(parameters));
-
-            RunningReadyToSet = false;
+            EventBus.ActionAboutToBeUsed?.Invoke(parametersToUse);
+            parametersToUse.ActionRef.Use(parametersToUse);
+            MessageQueue.AddMessage(parametersToUse.ActionRef.GetUseText(parametersToUse));
         }
-
-
-        //If the animation already played out, pass onto the next action.
-        float duration = RunningQueuedAction?.action.GetAnimationDuration() ?? throw new Exception("Could not get a duration.");
-        if (RunningTime > duration)
-        {
-            RunningReadyToSet = true;
-            RunningTime = 0;
-            RunningIndex ++;
-        }
-
-        //TODO: Maybe don't rely on this random node for timing.
-        RunningTime += (float)BattleController.CompDisplayGrid.GetProcessDeltaTime();
-    }
-
-    private void RunEnd()
-    {
-        QueueClear();
-        RunningEnabled = false;
-        RunningIndex = 0;
-        RunningTime = 0;
     }
     #endregion
 
     #region Misc
-    public string GetText()
-    {
-        string output = string.Format(
-            "Running ability: {0} \nRunning time: {1} \nRunning index: {2} \nQueue count: {3}",
-            new object?[]{
-                RunningQueuedAction is not null ? RunningQueuedAction.action.Name : "null",
-                "Disabled",//RunningTime.ToString(),
-                RunningIndex.ToString(),
-                Queue.Count.ToString(),
-            });
-
-        return output;
-    }
-    #endregion
-
-    #region QueuedAction Class
-    private class QueuedAction
-    {
-        public ActionEvent action;
-        public UsageParameters usage_params;
-        public uint id;
-
-        public QueuedAction(ActionEvent action, UsageParameters usage_params, uint id)
-        {
-            this.action = action;
-            this.usage_params = usage_params;
-            this.id = id;
-        }
-    }
+    
     #endregion
 }

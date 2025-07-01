@@ -34,16 +34,11 @@ public partial class MobScene : Node3D
     {
         EventBus.MobFinishedPathMove += OnMobFinishedPathMove;
     }
-
-
-
     public override void _Ready()
     {
         base._Ready();
         if (MobUsing is null) throw new Exception("Lacks a MobUsing");
     }
-
-
     public void SetBodyModel(EMobSceneBodyModel body)
     {
         MarkerCenterBody.FreeChildren();
@@ -84,7 +79,7 @@ public partial class MobScene : Node3D
     private float GetMovementDuration()
     {
         float agility = Mathf.Clamp(MobUsing.Stats.GetValue(EStatName.AGILITY), 0, 200);
-        float agilityReduction = (agility / 500);
+        float agilityReduction = agility / 500;
         Debug.Assert(agilityReduction < 0.4 && agilityReduction > 0);
         return 0.5f - agilityReduction;
     }
