@@ -108,14 +108,27 @@ public partial class EventBus : Node
 
     #region ActionEvent
     public delegate void ActionUsageParametersEvent(UsageParameters parameters);
+    public delegate void ActionUsageParametersListEvent(List<UsageParameters> parameterList);
+    public delegate void ActionAutoActivation(UsageParameters activated, UsageParameters activatedBy);
     public delegate void MobActionChange(Mob mob, ChessLike.Entity.Action.ActionEvent action);
 
     #region ActionEvent Queue
-    public static ActionUsageParametersEvent? ActionAboutToBeQueued;
+    public static ActionUsageParametersEvent? ActionPreQueued;
     public static ActionUsageParametersEvent? ActionQueued;
 
-    public static ActionUsageParametersEvent? ActionEventQueueRequested;
+    /// <summary>
+    /// When the <c>ActionEventRunner</c> finishes its Queue
+    /// </summary>
+    public static ActionUsageParametersListEvent? ActionEventQueueFinished;
 
+    /// <summary>
+    /// Invoked by <c>ActionEvent</c>s reacting to another activating. This adds the one activating to the queue
+    /// </summary>
+    public static ActionAutoActivation? ActionEventAutoActivated;
+
+    /// <summary>
+    /// Whenever an action is about to be used by the <c>ActionEventRunner</c>
+    /// </summary>
     public static ActionUsageParametersEvent? ActionAboutToBeUsed;
     public static ActionUsageParametersEvent? AbilityUsed;
     public static ActionUsageParametersEvent? ActionUsed;

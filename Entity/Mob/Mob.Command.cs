@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.MobCommand;
+using ChessLike.World;
 
 namespace ChessLike.Entity;
 

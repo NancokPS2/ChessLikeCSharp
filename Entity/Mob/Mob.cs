@@ -5,6 +5,7 @@ using ChessLike.Extension;
 using ChessLike.Shared;
 using ChessLike.Shared.Storage;
 using ChessLike.Turn;
+using ChessLike.World;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
@@ -100,7 +101,7 @@ public partial class Mob : Resource
 
     public void UpdateJobStatBoosts()
     {
-        MobStatBoost outputBoost = new(Job.BOOST_SOURCE); 
+        MobStatBoost outputBoost = new(Job.BOOST_SOURCE);
 
         //TODO: Jobs should not be able to be null in the first place.
         foreach (Job job in Jobs)//.Where(x => x is not null))
@@ -137,7 +138,7 @@ public partial class Mob : Resource
         UpdateJobs();
     }
 
-    public void AddJob(Job job) => AddJob(new List<Job>(){job}, false);
+    public void AddJob(Job job) => AddJob(new List<Job>() { job }, false);
 
     public void RemoveJob(List<Job> jobs)
     {
@@ -149,7 +150,7 @@ public partial class Mob : Resource
         UpdateJobs();
     }
 
-    public void RemoveJob(Job job) => RemoveJob(new List<Job>(){job});
+    public void RemoveJob(Job job) => RemoveJob(new List<Job>() { job });
 
     private void ClearJobs()
     {
@@ -167,7 +168,7 @@ public partial class Mob : Resource
         }
         //Reset job modifiers
         UpdateJobStatBoosts();
-        
+
         UpdateActions();
         Stats.SetToMax();
     }
@@ -232,7 +233,7 @@ public partial class Mob : Resource
         movementMode = mode;
     }
 
-    public void AddAction(ActionEvent action) => AddAction(new List<ActionEvent>(){action});
+    public void AddAction(ActionEvent action) => AddAction(new List<ActionEvent>() { action });
 
     public void AddAction(List<ActionEvent> actions)
     {
@@ -244,7 +245,7 @@ public partial class Mob : Resource
         }
     }
 
-    public void RemoveAction(ActionEvent action) => RemoveAction(new List<ActionEvent>(){action});
+    public void RemoveAction(ActionEvent action) => RemoveAction(new List<ActionEvent>() { action });
 
     public void RemoveAction(List<ActionEvent> actions)
     {
@@ -297,6 +298,15 @@ public partial class Mob : Resource
         output += $"---\nAbilities: {GetAbilities().ToStringList()}";
         //output += $"---\nPassives: {GetPassives().ToStringList()}";
         return output;
+    }
+
+    public Grid GetGrid()
+    {
+        throw new NotImplementedException();
+    }
+    public MobScene GetNode()
+    {
+        throw new NotImplementedException();
     }
     #endregion
 }

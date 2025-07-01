@@ -108,13 +108,10 @@ public partial class BattleController : Node, IDebugDisplay
         CompCamera.Name = "Camera";
 
         //UI for combat inputs and display.
-        UI.GetLayer(UI.ELayer.BASE_LAYER).AddChild(CompCombatUI);
-        GetTree().ProcessFrame += CompActionRunner.Process;
 
         EventBus.InputActionSelected += (act) => ActionSelected = act;
 
         DebugDisplay.Add(CompTurnManager);
-        DebugDisplay.Add(CompActionRunner);
     }
 
     public void SetupParticipant(Mob mob, Vector3i where, bool add_to_combat)

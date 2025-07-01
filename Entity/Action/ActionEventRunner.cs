@@ -18,6 +18,13 @@ public class ActionEventRunner
 
     #region Queue
     private List<UsageParameters> Queue = new();
+    public bool RunningEnabled;
+
+    public ActionEventRunner()
+    {
+        EventBus.ActionEventAutoActivated += OneActionEventAutoActivated;
+    }
+
 
     public void QueueAdd(UsageParameters parameters)
     {
@@ -28,7 +35,7 @@ public class ActionEventRunner
 
     public void QueueAddBefore(UsageParameters parametersToAdd, UsageParameters parametersToDisplace)
     {
-        int index = Queue.IndexOf( parametersToDisplace );
+        int index = Queue.IndexOf(parametersToDisplace);
         Debug.Assert(index >= 0, "Index is invalid.");
         Debug.Assert(Queue[index + 1] == parametersToDisplace, "The displaced parameter should end up AFTER the chosen index.");
         QueueInsert(parametersToAdd, index);
@@ -40,7 +47,7 @@ public class ActionEventRunner
         if (!parameters.IsValid()) { throw new Exception("Invalid parameters."); }
 
         //Warn other actions about this one, so they can queue first.
-        EventBus.ActionAboutToBeQueued?.Invoke(parameters);
+        EventBus.ActionPreQueued?.Invoke(parameters);
 
         Queue.Insert(
             index,
@@ -60,7 +67,7 @@ public class ActionEventRunner
     #region Run Logic
     // RUN LOGIC
 
-    private bool RunningEnabled;
+
 
     public void RunStart()
     {
@@ -73,14 +80,23 @@ public class ActionEventRunner
             //Select the action to run.
             UsageParameters parametersToUse = Queue[queueIndex];
 
+            //Use it
             EventBus.ActionAboutToBeUsed?.Invoke(parametersToUse);
             parametersToUse.ActionRef.Use(parametersToUse);
             MessageQueue.AddMessage(parametersToUse.ActionRef.GetUseText(parametersToUse));
         }
+        EventBus.ActionEventQueueFinished?.Invoke(Queue);
+
+        QueueClear();
     }
     #endregion
 
-    #region Misc
+    #region Event Connection
+    
+    private void OneActionEventAutoActivated(UsageParameters activated, UsageParameters activatedBy)
+    {
+        QueueAddBefore(activated, activatedBy);
+    }
     
     #endregion
 }

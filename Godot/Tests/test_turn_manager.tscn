@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dx2cigl7iitjq"]
-
-[sub_resource type="Resource" id="Resource_cut4w"]
-metadata/__load_path__ = "res://Godot/Tests/TestTurnManager.cs"
-
-[node name="TestTurnManager" type="Node"]
-script = SubResource("Resource_cut4w")

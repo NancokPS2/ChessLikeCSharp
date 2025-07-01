@@ -41,7 +41,7 @@ public partial class ActionEvent : Resource
     protected TargetingParameters TargetParams = new();
 
     [Export]
-    protected AnimationParameters AnimationParams = new();
+    public AnimationParameters AnimationParams = new();
 
     [Export]
     protected MobFilterParameters MobFilterParams = new();
@@ -49,19 +49,22 @@ public partial class ActionEvent : Resource
 
     public ActionEvent()
     {
-        EventBus.ActionAboutToBeQueued += (x) => AutoActivationProcessReaction(x, false);
-        EventBus.ActionQueued += (x) => AutoActivationProcessReaction(x, true);
+        EventBus.ActionPreQueued += OnActionPreQueued;
+        EventBus.ActionQueued += OnActionQueued;
 
-        EventBus.TurnTimePassed += AutoActivationProcessTimePassed;
+        EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
 
-        EventBus.MobTurnStarted += AutoActivationProcessTurnStarted;
-        EventBus.MobTurnEnded += AutoActivationProcessTurnEnded;
+        EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
+        EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
     }
-    #region Animation
-    public float GetAnimationDuration()
-        => AnimationParams.Duration;
 
-    public Texture2D? GetAnimationFloatingTexture() => AnimationParams.FloatingTexture;
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+    }
+
+    #region Visual
+    public Texture2D GetAnimationFloatingTexture() => throw new NotImplementedException();
 
     #endregion
 
@@ -183,6 +186,10 @@ public partial class ActionEvent : Resource
         AutoActivationTimeSinceLast = 0;
     }
 
+    protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
+        => new(Owner, parameters.GridRef, this);
+    protected virtual UsageParameters GetAutoActivationUsageParameters()
+        => new(Owner, Owner.GetGrid(), this);
 
     protected void AutoActivationRequest(UsageParameters parameters)
     {
@@ -192,7 +199,10 @@ public partial class ActionEvent : Resource
             return;
         }
 
-        EventBus.ActionEventQueueRequested?.Invoke(parameters);
+        EventBus.ActionEventAutoActivated?.Invoke(
+            GetAutoActivationUsageParametersFromReaction(parameters),
+            parameters
+            );
         AutoActivationLeft -= 1;
         AutoActivationTimeSinceLast = 0;
     }
@@ -218,15 +228,23 @@ public partial class ActionEvent : Resource
         AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
     }
 
-    protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters) => throw new NotImplementedException();
-    protected virtual UsageParameters GetAutoActivationUsageParameters() => throw new NotImplementedException();
+    private void OnActionQueued(UsageParameters parameters)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    private void OnActionPreQueued(UsageParameters parameters)
+    {
+        throw new NotImplementedException();
+    }
 
     #endregion
 
     #region Auto Activation - Timing
 
     protected float AutoActivationTimeSinceLast;
-    protected void AutoActivationProcessTimePassed(float number)
+    protected void OnAutoActivationProcessTimePassed(float number)
     {
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
@@ -246,7 +264,7 @@ public partial class ActionEvent : Resource
     #endregion
 
     #region Auto Activation - Turn
-    protected void AutoActivationProcessTurnStarted(Mob who)
+    protected void OnAutoActivationProcessTurnStarted(Mob who)
     {
         //Check if it activates on turn end or start.
         if (!AutoActivationParams.ActivatedByTurnStart) return;
@@ -264,7 +282,7 @@ public partial class ActionEvent : Resource
         AutoActivationRequest(GetAutoActivationUsageParameters());
     }
 
-    protected void AutoActivationProcessTurnEnded(Mob who)
+    protected void OnAutoActivationProcessTurnEnded(Mob who)
     {
         //Check if it activates on turn end or start.
         if (!AutoActivationParams.ActivatedByTurnEnd) return;
