@@ -32,7 +32,7 @@ public partial class Job : Resource
     public List<Ability> Abilities = new();
 
     [Export]
-    public EMovementMode MovementMode = EMovementMode.WALK;
+    public EMobMovementMode MovementMode = EMobMovementMode.WALK;
 
 
 

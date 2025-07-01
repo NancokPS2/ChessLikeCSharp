@@ -9,7 +9,7 @@ public partial class AbilityMove : Ability
 { 
     //TODO: implement variants
 
-    public AbilityMove(EMovementMode variant) : base()
+    public AbilityMove(EMobMovementMode variant) : base()
     {
         ChainName("Move");
         ChainIdentifier(EAbility.MOVE);

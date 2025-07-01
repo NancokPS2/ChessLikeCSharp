@@ -41,8 +41,8 @@ public partial class Mob : Resource
     [Export]
     public Inventory MobInventory = new();
 
-    public EMovementMode MovementMode { set => SetMovementMode(value); get => movementMode; }
-    private EMovementMode movementMode;
+    public EMobMovementMode MovementMode { set => SetMovementMode(value); get => movementMode; }
+    private EMobMovementMode movementMode;
 
     private EMobState mobState = EMobState.BENCHED;
     public EMobState MobState
@@ -224,10 +224,10 @@ public partial class Mob : Resource
         }
     }
 
-    public void SetMovementMode(EMovementMode mode)
+    public void SetMovementMode(EMobMovementMode mode)
     {
         Actions.Remove(_movement);
-        _movement = new AbilityMove(EMovementMode.WALK);
+        _movement = new AbilityMove(EMobMovementMode.WALK);
         AddAction(_movement);
         movementMode = mode;
     }

@@ -36,7 +36,7 @@ public partial class Mob
         return this;
     }
 
-    public Mob ChainMovementMode(EMovementMode mode)
+    public Mob ChainMovementMode(EMobMovementMode mode)
     {
         MovementMode = mode;
         return this;

@@ -18,7 +18,7 @@ public partial class Mob : IGridObject
         int distance;
         switch (MovementMode)
         {
-            case EMovementMode.WALK:
+            case EMobMovementMode.WALK:
                 distance = from.DistanceManhattanWithToleranceTo(
                         to, 
                         new(0, (int)Stats.GetValue(EStatName.JUMP), 0)
@@ -41,7 +41,7 @@ public partial class Mob : IGridObject
         bool can_stand_on;
         switch (MovementMode)
         {
-            case EMovementMode.WALK:
+            case EMobMovementMode.WALK:
                 can_exist = grid.IsFlagInPosition(position, ECellFlag.AIR);
 
                 can_stand_on = grid.IsPositionInbounds(position + Vector3i.DOWN) 

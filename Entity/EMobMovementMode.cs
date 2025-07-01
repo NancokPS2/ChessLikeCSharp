@@ -1,6 +1,6 @@
 namespace ChessLike.Entity;
 
-public enum EMovementMode
+public enum EMobMovementMode
 {
     WALK,
     AMPHIBIOUS,
