@@ -27,7 +27,9 @@ public partial class MobSceneSpawner : Node3D
         }
         else if (instancesFound.Count == 0)
         {
-            return Readonly.Scenes.SCENE_MOB;
+            MobScene newInstance = Readonly.Scenes.SCENE_MOB;
+            newInstance.MobUsing = mob;
+            return newInstance;
         }
         else return instancesFound[0];
     }

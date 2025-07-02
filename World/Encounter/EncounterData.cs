@@ -22,11 +22,6 @@ public partial class EncounterData : Resource
         EventBus.RoundEnded += () => RoundCount++;
     }
 
-    public void Load()
-    {
-        EventBus.EncounterLoaded?.Invoke(this);
-    }
-
     public virtual void EncounterProcess()
     {
 

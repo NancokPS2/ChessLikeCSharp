@@ -31,6 +31,8 @@ public partial class StatusEffectIcon : FloatingIcon3D
         if (currentIndex >= StatusEffects.Count)
         {
             currentIndex = 0;
+
+            if (StatusEffects.Count == 0) return;
         }
 
         ActionEvent actionCurrent = StatusEffects[currentIndex];

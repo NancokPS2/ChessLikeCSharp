@@ -19,6 +19,13 @@ public partial class EncounterLoadingTest : Node3D
         base._Ready();
 
         encounter = EncounterData.GetDefault();
-        encounter.Load();
+
+        EventBus.EncounterLoaded?.Invoke(encounter);
+
+        foreach (var item in encounter.PresetMobSpawns)
+        {
+            item.Value.MobState = ChessLike.Entity.EMobState.COMBAT;
+            item.Value.Move(new(item.Key));
+        }
     }
 }

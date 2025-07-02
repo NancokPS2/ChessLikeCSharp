@@ -9,14 +9,13 @@ namespace ChessLike.World;
 
 public partial class Grid : Resource
 {
-    public Vector3i Boundary = new(10,10,10);
-    private AStarGridPathing AStarPathing;
+    public static Vector3 CellSize = new(1,1,1);
+    public Vector3i Boundary = new(10, 10, 10);
 
     public Dictionary<Vector3i, GridCell> CellDictionary = new();
 
     public Grid()
     {
-        AStarPathing = new(this);
     }
     #region Cells
     public void SetCell(Vector3i position, GridCell cell)
@@ -38,6 +37,8 @@ public partial class Grid : Resource
     #endregion
 
     #region Positions
+    public Vector3 MapToReal(Vector3i mapPos) => mapPos * CellSize;
+    
     public Vector3i[] GetUsedPositions()
     {
         return CellDictionary.Keys.ToArray();
@@ -64,7 +65,7 @@ public partial class Grid : Resource
         return output;   
     }
     #endregion
-    
+
     #region Checks
     public bool IsPositionInbounds(Vector3i position)
     {

@@ -12,9 +12,11 @@ global using ChessLike;
 using ChessLike.Entity;
 using Action = ChessLike.Entity.Action;
 using Godot;
+using ChessLike.World;
 
 public static partial class Global
 {
+    public static Grid MainGrid;
     private static Window RootNode = new Node().GetWindow();
     private static Debug debug = new();
     public static void ConnectToWindow(Window window)
@@ -44,4 +46,6 @@ public static partial class Global
     public static Node GetRoot() => RootNode;
 
     public static SceneTree GetTree() => GetRoot().GetTree();
+
+    public static Grid GetGrid() => MainGrid;
 }

@@ -337,7 +337,20 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return new Vector3i(v1.X * v2, v1.Y * v2, v1.Z * v2);
 	}
 
-	public static bool operator >(Vector3i v1, Vector3i v2 )
+	public static Vector3i operator *(Vector3i v1, Vector3i v2 )
+	{
+		return new Vector3i(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z);
+	}
+
+	public static Vector3 operator *(Vector3i v1, Vector3 v2 )
+	{
+		return new Vector3(
+			v1.X * v2.X,
+			v1.Y * v2.Y,
+			v1.Z * v2.Z);
+	}
+
+	public static bool operator >(Vector3i v1, Vector3i v2)
 	{
 		return v1.ToInt() > v2.ToInt();
 	}

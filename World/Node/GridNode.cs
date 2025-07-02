@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.World;
@@ -33,6 +34,8 @@ public partial class GridNode : Node3D
 
     public Vector3i PositionHovered { get => PositionCollidedHovered + Vector3i.UP; }
     private Vector3i PositionCollidedHovered;
+
+    public Vector3 CellSize = new(1, 1, 1);
 
     public bool InputEnabled = true;
 
@@ -259,5 +262,9 @@ public partial class GridNode : Node3D
         }
 
     }
+
+    public Vector3 MapToLocal(Vector3i mapCoordinate) => mapCoordinate.ToGVector3() * CellSize;
+
+    public Vector3i LocalToMap(Vector3 localCoordinate) => new(localCoordinate / CellSize);
     #endregion
 }

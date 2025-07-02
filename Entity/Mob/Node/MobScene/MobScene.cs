@@ -107,6 +107,12 @@ public partial class MobScene : Node3D
         return 0.5f - agilityReduction;
     }
 
+    public void UpdatePosition()
+    {
+        System.Numerics.Vector3 vector = Global.GetGrid().MapToReal(MobUsing.GetPosition());
+        GlobalPosition = vector;
+    }
+
     [Obsolete("get actual measurements")]
     private Godot.Vector3 GetGridCellSize() => new(1, 1, 1);
     #endregion
