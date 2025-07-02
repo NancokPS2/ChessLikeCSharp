@@ -1,5 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.World;
 using Godot;
 using System;
 using System.Diagnostics;
@@ -109,7 +110,7 @@ public partial class MobScene : Node3D
 
     public void UpdatePosition()
     {
-        System.Numerics.Vector3 vector = Global.GetGrid().MapToReal(MobUsing.GetPosition());
+        Godot.Vector3 vector = Grid.MapToReal(MobUsing.GetPosition());
         GlobalPosition = vector;
     }
 

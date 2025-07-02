@@ -36,9 +36,10 @@ public partial class MobSceneSpawner : Node3D
 
     private void AddInstance(Mob mob)
     {
-            MobScene instance = GetInstance(mob);
+        MobScene instance = GetInstance(mob);
 
-            AddChild(instance);
+        AddChild(instance);
+        instance.UpdatePosition();
     }
 
     public void RemoveInstance(Mob mob)

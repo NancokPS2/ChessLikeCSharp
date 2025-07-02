@@ -9,7 +9,7 @@ namespace ChessLike.World;
 
 public partial class Grid : Resource
 {
-    public static Vector3 CellSize = new(1,1,1);
+    public static Godot.Vector3 CellSize = new(1,1,1);
     public Vector3i Boundary = new(10, 10, 10);
 
     public Dictionary<Vector3i, GridCell> CellDictionary = new();
@@ -37,7 +37,7 @@ public partial class Grid : Resource
     #endregion
 
     #region Positions
-    public Vector3 MapToReal(Vector3i mapPos) => mapPos * CellSize;
+    public static Godot.Vector3 MapToReal(Vector3i mapPos) => mapPos * CellSize;
     
     public Vector3i[] GetUsedPositions()
     {

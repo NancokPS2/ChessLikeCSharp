@@ -342,9 +342,9 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return new Vector3i(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z);
 	}
 
-	public static Vector3 operator *(Vector3i v1, Vector3 v2 )
+	public static Godot.Vector3 operator *(Vector3i v1, Godot.Vector3 v2 )
 	{
-		return new Vector3(
+		return new Godot.Vector3(
 			v1.X * v2.X,
 			v1.Y * v2.Y,
 			v1.Z * v2.Z);
