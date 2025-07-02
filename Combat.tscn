@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1te4g7l74ot1"]
+[gd_scene load_steps=8 format=3 uid="uid://d1te4g7l74ot1"]
 
 [ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
 [ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="3_brs8u"]
 [ext_resource type="Script" uid="uid://lglrym3wvu8t" path="res://Entity/Action/ActionEventAnimator.cs" id="3_lnhn1"]
-[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Bundles/Environment.tscn" id="4_tppsp"]
+[ext_resource type="Script" uid="uid://c3fqdxefdb0tc" path="res://Entity/Mob/Node/MobSceneManager/MobSceneSpawner.cs" id="4_brs8u"]
+[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="4_tppsp"]
 [ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="5_lnhn1"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
@@ -23,6 +24,10 @@ metadata/_custom_type_script = "uid://lglrym3wvu8t"
 [node name="GridNode" type="Node3D" parent="Singletons"]
 script = ExtResource("3_brs8u")
 metadata/_custom_type_script = "uid://md7uxykgpoyx"
+
+[node name="MobSceneSpawner" type="Node3D" parent="Singletons"]
+script = ExtResource("4_brs8u")
+metadata/_custom_type_script = "uid://c3fqdxefdb0tc"
 
 [node name="Compass" type="MeshInstance3D" parent="."]
 transform = Transform3D(25, 0, 0, 0, -4.37114e-06, -1, 0, 100, -4.37114e-08, 0, -20, 0)

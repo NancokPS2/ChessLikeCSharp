@@ -3,6 +3,6 @@ public enum EPackIDParticle
 Default,
 EnergyGeyser,
 Explosion,
-PopupText,
+PopupText3D,
 ShineHalo,
 }

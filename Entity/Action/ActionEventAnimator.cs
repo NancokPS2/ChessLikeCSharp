@@ -36,7 +36,6 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
 
     protected void NextAnimation()
     {
-
         CurrentIndex++;
 
         EventBus.ActionAnimationEnded?.Invoke(
@@ -74,7 +73,6 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
         if (!IsValidAnimationIndex()) throw new Exception();
         StartAnimation(Queue[CurrentIndex]);
     }
-
 
     protected void StartAnimation(UsageParameters parameters)
     {

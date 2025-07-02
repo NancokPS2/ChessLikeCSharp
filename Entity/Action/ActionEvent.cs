@@ -49,7 +49,6 @@ public partial class ActionEvent : Resource
 
     public ActionEvent()
     {
-        EventBus.ActionPreQueued += OnActionPreQueued;
         EventBus.ActionQueued += OnActionQueued;
 
         EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
@@ -173,8 +172,9 @@ public partial class ActionEvent : Resource
             AutoActivationReset();
         }
     }
-
     private AutoActivationParameters autoActivationParams = new();
+
+    protected float AutoActivationTimeSinceLast;
 
     protected int AutoActivationLeft;
 
@@ -196,7 +196,7 @@ public partial class ActionEvent : Resource
         //Can't activate if it ran out.
         if (AutoActivationLeft <= 0)
         {
-            return;
+            throw new Exception("Should already be removed?");
         }
 
         EventBus.ActionEventAutoActivated?.Invoke(
@@ -207,99 +207,6 @@ public partial class ActionEvent : Resource
         AutoActivationTimeSinceLast = 0;
     }
 
-    #region Auto Activation - Reaction
-    protected void AutoActivationProcessReaction(UsageParameters parameters, bool afterAction)
-    {
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.ACTION_REACTION) return;
-
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
-
-        //Must be the right timing
-        if (AutoActivationParams.ActivatedAfterAction != afterAction) return;
-
-        //Must have the right flags.
-        if (!AutoActivationParams.IsActionWithValidFlags(parameters.ActionRef)) return;
-
-        //Must be targeting the owner if the condition is true
-        if (AutoActivationParams.ActivatedOnlyIfTargetsMe && !parameters.MobsTargeted.Contains(Owner)) return;
-
-        AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
-    }
-
-    private void OnActionQueued(UsageParameters parameters)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    private void OnActionPreQueued(UsageParameters parameters)
-    {
-        throw new NotImplementedException();
-    }
-
-    #endregion
-
-    #region Auto Activation - Timing
-
-    protected float AutoActivationTimeSinceLast;
-    protected void OnAutoActivationProcessTimePassed(float number)
-    {
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
-
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
-
-        //Advance time.
-        AutoActivationTimeSinceLast += number;
-
-        //If enough time passed, trigger.
-        if (AutoActivationTimeSinceLast > AutoActivationParams.ActivatedEveryXTime)
-            AutoActivationRequest(GetAutoActivationUsageParameters());
-
-    }
-
-    #endregion
-
-    #region Auto Activation - Turn
-    protected void OnAutoActivationProcessTurnStarted(Mob who)
-    {
-        //Check if it activates on turn end or start.
-        if (!AutoActivationParams.ActivatedByTurnStart) return;
-
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
-
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
-
-        //If it is only when THIS unit's turn changes, do nothing if false.
-        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
-
-
-        AutoActivationRequest(GetAutoActivationUsageParameters());
-    }
-
-    protected void OnAutoActivationProcessTurnEnded(Mob who)
-    {
-        //Check if it activates on turn end or start.
-        if (!AutoActivationParams.ActivatedByTurnEnd) return;
-
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
-
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
-
-        //If it is only when THIS unit's turn changes, do nothing if false.
-        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
-
-        AutoActivationRequest(GetAutoActivationUsageParameters());
-    }
-
-    #endregion
 
     #endregion
 
@@ -328,5 +235,76 @@ public partial class ActionEvent : Resource
     public bool CanUse() => true;
     public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
     public override string ToString() => Name;
+    #endregion
+
+    #region Event Connection
+
+    protected void OnAutoActivationProcessTurnStarted(Mob who)
+    {
+        //Check if it activates on turn end or start.
+        if (!AutoActivationParams.ActivatedByTurnStart) return;
+
+        //Must be set to react to actions
+        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
+
+        //The owner must be in combat.
+        if (!Owner.IsInCombat()) return;
+
+        //If it is only when THIS unit's turn changes, do nothing if false.
+        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
+
+        AutoActivationRequest(GetAutoActivationUsageParameters());
+    }
+
+    protected void OnAutoActivationProcessTurnEnded(Mob who)
+    {
+        //Check if it activates on turn end or start.
+        if (!AutoActivationParams.ActivatedByTurnEnd) return;
+
+        //Must be set to react to actions
+        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
+
+        //The owner must be in combat.
+        if (!Owner.IsInCombat()) return;
+
+        //If it is only when THIS unit's turn changes, do nothing if false.
+        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
+
+        AutoActivationRequest(GetAutoActivationUsageParameters());
+    }
+
+    protected void OnAutoActivationProcessTimePassed(float number)
+    {
+        //Must be set to react to actions
+        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
+
+        //The owner must be in combat.
+        if (!Owner.IsInCombat()) return;
+
+        //Advance time.
+        AutoActivationTimeSinceLast += number;
+
+        //If enough time passed, trigger.
+        if (AutoActivationTimeSinceLast > AutoActivationParams.ActivatedEveryXTime)
+            AutoActivationRequest(GetAutoActivationUsageParameters());
+
+    }
+
+    protected void OnActionQueued(UsageParameters parameters)
+    {
+        //Must be set to react to actions
+        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.ACTION_REACTION) return;
+
+        //The owner must be in combat.
+        if (!Owner.IsInCombat()) return;
+
+        //Must have the right flags.
+        if (!AutoActivationParams.IsActionWithValidFlags(parameters.ActionRef)) return;
+
+        //Must be targeting the owner if the condition is true
+        if (AutoActivationParams.ActivatedOnlyIfTargetsMe && !parameters.MobsTargeted.Contains(Owner)) return;
+
+        AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
+    }
     #endregion
 }
