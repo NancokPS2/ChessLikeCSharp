@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EncounterData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Entity/Mob/Mob.cs" id="1_7nmup"]
+[ext_resource type="Script" path="res://World/Encounter/EncounterData.cs" id="2_cca6x"]
+
+[resource]
+script = ExtResource("2_cca6x")
+FactionSpawns = Dictionary[Vector3i, Array]({})
+PresetMobSpawns = Dictionary[Vector3i, ExtResource("1_7nmup")]({})

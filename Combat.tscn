@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://d1te4g7l74ot1"]
+
+[ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
+[ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="3_brs8u"]
+[ext_resource type="Script" uid="uid://lglrym3wvu8t" path="res://Entity/Action/ActionEventAnimator.cs" id="3_lnhn1"]
+[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Bundles/Environment.tscn" id="4_tppsp"]
+[ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="5_lnhn1"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
+
+[node name="Combat" type="Node3D"]
+
+[node name="Singletons" type="Node3D" parent="."]
+
+[node name="ActionEventRunner" type="Node3D" parent="Singletons"]
+script = ExtResource("2_tppsp")
+metadata/_custom_type_script = "uid://bhoxiv0m5j3kk"
+
+[node name="ActionEventAnimator" type="Node3D" parent="Singletons"]
+script = ExtResource("3_lnhn1")
+metadata/_custom_type_script = "uid://lglrym3wvu8t"
+
+[node name="GridNode" type="Node3D" parent="Singletons"]
+script = ExtResource("3_brs8u")
+metadata/_custom_type_script = "uid://md7uxykgpoyx"
+
+[node name="Compass" type="MeshInstance3D" parent="."]
+transform = Transform3D(25, 0, 0, 0, -4.37114e-06, -1, 0, 100, -4.37114e-08, 0, -20, 0)
+mesh = SubResource("PrismMesh_1a52j")
+
+[node name="Outside" parent="." instance=ExtResource("4_tppsp")]
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(0.0409651, -0.445792, 0.894199, 0.0204012, 0.895137, 0.445325, -0.998952, 0, 0.045764, 42.5199, 12.0387, 0)
+script = ExtResource("5_lnhn1")
+metadata/_custom_type_script = "uid://cav6lcd1dy6th"

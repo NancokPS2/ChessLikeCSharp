@@ -92,6 +92,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "MobDisplay to its own event driven node",
+                    "id": "nzz8prnzb66v2husqxsxjk9w"
+                },
+                {
                     "text": "Improve PREPARATION state and PartyMobListUI scene.",
                     "id": "vq4jq6f1pweqsxdlxayu5y4s"
                 },
@@ -137,5 +141,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1750342511833
+    "timestamp": 1751419719373
 }

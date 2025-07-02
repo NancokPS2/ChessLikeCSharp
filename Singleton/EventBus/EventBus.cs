@@ -129,8 +129,7 @@ public partial class EventBus : Node
     /// <summary>
     /// Whenever an action is about to be used by the <c>ActionEventRunner</c>
     /// </summary>
-    public static ActionUsageParametersEvent? ActionAboutToBeUsed;
-    public static ActionUsageParametersEvent? AbilityUsed;
+    public static ActionUsageParametersEvent? ActionPreUsed;
     public static ActionUsageParametersEvent? ActionUsed;
     #endregion
 

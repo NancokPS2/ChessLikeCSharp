@@ -11,7 +11,8 @@ using static ChessLike.Entity.Action.ActionEvent;
 
 namespace ChessLike.Entity.Action;
 
-public class ActionEventRunner
+[GlobalClass]
+public partial class ActionEventRunner : Node3D
 {
     public delegate void ActionQueue(ActionEvent action, UsageParameters parameters);
     public delegate void Delegate();
@@ -81,7 +82,7 @@ public class ActionEventRunner
             UsageParameters parametersToUse = Queue[queueIndex];
 
             //Use it
-            EventBus.ActionAboutToBeUsed?.Invoke(parametersToUse);
+            EventBus.ActionPreUsed?.Invoke(parametersToUse);
             parametersToUse.ActionRef.Use(parametersToUse);
             MessageQueue.AddMessage(parametersToUse.ActionRef.GetUseText(parametersToUse));
         }
@@ -92,11 +93,11 @@ public class ActionEventRunner
     #endregion
 
     #region Event Connection
-    
+
     private void OneActionEventAutoActivated(UsageParameters activated, UsageParameters activatedBy)
     {
         QueueAddBefore(activated, activatedBy);
     }
-    
+
     #endregion
 }

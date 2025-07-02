@@ -42,7 +42,6 @@ public static partial class Global
     }
 
     public static Node GetRoot() => RootNode;
+
+    public static SceneTree GetTree() => GetRoot().GetTree();
 }
-
-
-

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.World;
+using ChessLike.World.Encounter;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 
 namespace Godot;
 
+[GlobalClass]
 public partial class GridNode : Node3D
 {
 
@@ -38,10 +40,11 @@ public partial class GridNode : Node3D
 
     public GridNode()
     {
-        EventBus.GridLoaded += SetGrid;
+        EventBus.EncounterLoaded += OnEncounterLoaded;
     }
 
     #region Base
+
 
     public override void _Process(double delta)
     {
@@ -211,7 +214,7 @@ public partial class GridNode : Node3D
     }
     #endregion
 
-    #region Events
+    #region Event Connection
     public void OnCellInput(InputEvent input, Vector3i comp_position)
     {
         if (!InputEnabled) { return; }
@@ -227,6 +230,32 @@ public partial class GridNode : Node3D
             PositionCollidedSelected = Vector3i.INVALID;
             PositionCollidedHovered = comp_position;
             EventBus.CellHovered?.Invoke(comp_position);
+        }
+    }
+
+    private void OnEncounterLoaded(EncounterData obj)
+    {
+        SetGrid(obj.Grid);
+    }
+
+
+    #endregion
+
+    #region Cell Component
+    protected class CellComponent
+    {
+        public Dictionary<Layer, MeshInstance3D> MeshInstances = new();
+        public StaticBody3D CollisionBody = new() { InputRayPickable = true };
+        public CollisionShape3D CollisionShape = new() { Shape = new BoxShape3D() };
+
+        public CellComponent(GridCell cell)
+        {
+            MeshInstances.Add(Layer.BASE, new MeshInstance3D());
+
+            if (cell.Flags.Contains(ECellFlag.SOLID))
+            {
+                MeshInstances[Layer.BASE].Mesh = Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL);
+            }
         }
 
     }

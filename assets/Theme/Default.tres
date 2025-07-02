@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bnom1ibyekebf" path="res://assets/Theme/Image/ScrollBarHorizontalGrabberHovered.png" id="12_f80rf"]
 [ext_resource type="Texture2D" uid="uid://5yoxhs7vhaon" path="res://assets/Theme/Image/ScrollBarHorizontalGrabberPressed.png" id="13_8csk1"]
 [ext_resource type="Texture2D" uid="uid://bxtq2h77hpu2l" path="res://assets/Theme/Image/ScrollBarHorizontal.png" id="14_54bqn"]
-[ext_resource type="FontFile" uid="uid://cjg0wgsqk120f" path="res://Resources/Font/Regular.otf" id="15_ubmr3"]
+[ext_resource type="FontFile" uid="uid://gn1fnquv7aix" path="res://Resources/Font/Regular.otf" id="15_ubmr3"]
 [ext_resource type="Texture2D" uid="uid://dwy3l60rjeyka" path="res://assets/Theme/Image/LabelBG.png" id="16_iwgsx"]
 [ext_resource type="Texture2D" uid="uid://vj3euad2ledf" path="res://assets/Theme/Image/PanelBGSharp.png" id="17_27b6v"]
 [ext_resource type="Texture2D" uid="uid://bltmpqnv7xnpn" path="res://assets/Theme/Image/PanelBGRoundedRight.png" id="18_a6731"]

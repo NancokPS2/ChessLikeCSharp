@@ -18,7 +18,7 @@ public partial class EncounterLoadingTest : Node3D
     {
         base._Ready();
 
-        encounter = Global.ManagerEncounter.GetResource("Default");
-        gridNode.SetGrid(grid);
+        encounter = EncounterData.GetDefault();
+        encounter.Load();
     }
 }

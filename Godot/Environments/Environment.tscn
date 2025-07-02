@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuaf4ikwj8s2t"]
+
+[sub_resource type="Environment" id="Environment_wnu7r"]
+background_energy_multiplier = 0.5
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.1
+ambient_light_energy = 0.2
+
+[node name="Outside" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wnu7r")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, 0, 176, 0)
