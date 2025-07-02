@@ -7,7 +7,7 @@ namespace Godot.Display;
 /// <summary>
 /// Add Mobs with AddMob() to make them appear in the scene.
 /// </summary>
-[GlobalClass]
+[Obsolete("MobScene should take care of itself")]
 public partial class MobMeshDisplay : Godot.Node3D
 {
     UniqueList<Mob> mobs = new();

@@ -126,11 +126,12 @@ public partial class EventBus : Node
     /// </summary>
     public static ActionAutoActivation? ActionEventAutoActivated;
 
-    /// <summary>
-    /// Whenever an action is about to be used by the <c>ActionEventRunner</c>
-    /// </summary>
+    //Action usage
     public static ActionUsageParametersEvent? ActionPreUsed;
     public static ActionUsageParametersEvent? ActionUsed;
+
+    public static ActionUsageParametersEvent? ActionAnimationStarted;
+    public static ActionUsageParametersEvent? ActionAnimationEnded;
     #endregion
 
     #region ActionEvent Mob Action

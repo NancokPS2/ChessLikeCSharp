@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 using ChessLike.Turn;
 using Godot;
 using static ChessLike.Entity.Action.ActionEvent;
@@ -23,9 +24,8 @@ public partial class ActionEventRunner : Node3D
 
     public ActionEventRunner()
     {
-        EventBus.ActionEventAutoActivated += OneActionEventAutoActivated;
+        EventBus.ActionEventAutoActivated += OnActionEventAutoActivated;
     }
-
 
     public void QueueAdd(UsageParameters parameters)
     {
@@ -38,8 +38,10 @@ public partial class ActionEventRunner : Node3D
     {
         int index = Queue.IndexOf(parametersToDisplace);
         Debug.Assert(index >= 0, "Index is invalid.");
-        Debug.Assert(Queue[index + 1] == parametersToDisplace, "The displaced parameter should end up AFTER the chosen index.");
         QueueInsert(parametersToAdd, index);
+        Debug.Assert(Queue[index + 1] == parametersToDisplace, "The displaced parameter should end up AFTER the chosen index.");
+
+        Console.WriteLine($"{parametersToAdd} added before {parametersToDisplace}");
     }
 
     private void QueueInsert(UsageParameters parameters, int index)
@@ -54,6 +56,7 @@ public partial class ActionEventRunner : Node3D
             index,
             parameters
             );
+            
         EventBus.ActionQueued?.Invoke(parameters);
     }
 
@@ -67,8 +70,6 @@ public partial class ActionEventRunner : Node3D
 
     #region Run Logic
     // RUN LOGIC
-
-
 
     public void RunStart()
     {
@@ -88,13 +89,15 @@ public partial class ActionEventRunner : Node3D
         }
         EventBus.ActionEventQueueFinished?.Invoke(Queue);
 
+        Console.WriteLine($"Ran queued actions: {Queue.ToStringList()}");
+
         QueueClear();
     }
     #endregion
 
     #region Event Connection
 
-    private void OneActionEventAutoActivated(UsageParameters activated, UsageParameters activatedBy)
+    private void OnActionEventAutoActivated(UsageParameters activated, UsageParameters activatedBy)
     {
         QueueAddBefore(activated, activatedBy);
     }

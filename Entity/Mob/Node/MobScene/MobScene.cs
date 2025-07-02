@@ -33,12 +33,30 @@ public partial class MobScene : Node3D
     public MobScene()
     {
         EventBus.MobFinishedPathMove += OnMobFinishedPathMove;
+        EventBus.MobStatChanged += OnMobStatChanged;
+        EventBus.MobTurnStarted += OnMobTurnStarted;
     }
+
     public override void _Ready()
     {
         base._Ready();
         if (MobUsing is null) throw new Exception("Lacks a MobUsing");
     }
+
+    public void AnimatePopupText(string text, Godot.Color? color = null, Godot.Gradient? gradient = null)
+    {
+        PopupText3D popupText = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
+        popupText.SetText(text);
+        popupText.Color = color ?? Colors.White;
+        popupText.ColorRamp = gradient;
+        popupText.Emitting = true;
+        popupText.Finished += popupText.QueueFree;
+
+        GetTree().Root.AddChild(popupText);
+
+        popupText.GlobalPosition = GlobalPosition;
+    }
+
     public void SetBodyModel(EMobSceneBodyModel body)
     {
         MarkerCenterBody.FreeChildren();
@@ -67,7 +85,12 @@ public partial class MobScene : Node3D
 
                 foreach (var point in path)
                 {
-                    tween.TweenProperty(this, "position", point.ToGVector3() * GetGridCellSize(), GetMovementDuration());
+                    tween.TweenProperty(
+                        this,
+                        "position",
+                        point.ToGVector3() * GetGridCellSize(),
+                        GetMovementDuration()
+                        );
                 }
                 break;
 
@@ -83,7 +106,7 @@ public partial class MobScene : Node3D
         Debug.Assert(agilityReduction < 0.4 && agilityReduction > 0);
         return 0.5f - agilityReduction;
     }
-    
+
     [Obsolete("get actual measurements")]
     private Godot.Vector3 GetGridCellSize() => new(1, 1, 1);
     #endregion
@@ -94,6 +117,18 @@ public partial class MobScene : Node3D
         if (mob != MobUsing) return;
 
         AnimateMovement(path, MobUsing.MovementMode);
+    }
+
+    private void OnMobStatChanged(Mob mob, EStatName stat, float new_value)
+    {
+        if (mob != MobUsing) return;
+        AnimatePopupText($"{stat}: {new_value}", Colors.Red);
+    }
+
+    private void OnMobTurnStarted(Mob mob)
+    {
+        if (mob != MobUsing) return;
+        AnimatePopupText("READY");
     }
     #endregion
 

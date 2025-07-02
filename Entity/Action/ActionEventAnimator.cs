@@ -36,8 +36,14 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
 
     protected void NextAnimation()
     {
+
         CurrentIndex++;
- 
+
+        EventBus.ActionAnimationEnded?.Invoke(
+            CurrentParameters
+            ?? throw new Exception("How did it continue if it was not playing one already?")
+            );
+
         if (!IsValidAnimationIndex())
         {
             EndAnimationQueue();
@@ -79,12 +85,7 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
         ActionEvent action = parameters.ActionRef;
         Mob owner = parameters.OwnerRef;
 
-        if (animationParams.FloatingText != "")
-        {
-            Godot.PopupText3D text = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
-            Global.GetRoot().AddChild(text);
-            text.GlobalPosition = owner.GetNode().MarkerOverhead.GlobalPosition;
-        }
+        EventBus.ActionAnimationStarted?.Invoke(CurrentParameters);
     }
 
     public override void _Process(double delta)
@@ -97,8 +98,6 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
 
         CurrentAnimationTime += (float)delta;
     }
-
-
     #endregion
 
     #region Misc
