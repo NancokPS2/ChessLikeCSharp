@@ -12,7 +12,7 @@ namespace Godot;
 
 public class BattleControllerStateEndCombat : BattleControllerState
 {
-    public BattleControllerStateEndCombat(BattleController.State identifier) : base(identifier)
+    public BattleControllerStateEndCombat(BattleController.EBattleState identifier) : base(identifier)
     {
     }
 

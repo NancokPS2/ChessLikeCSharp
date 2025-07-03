@@ -16,7 +16,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         DepthDrawMode = BaseMaterial3D.DepthDrawModeEnum.Always,
         AlbedoColor = new(1,1,1,0.5f)
         };
-    public BattleControllerStatePreparation(BattleController.State identifier) : base(identifier)
+    public BattleControllerStatePreparation(BattleController.EBattleState identifier) : base(identifier)
     {
 
     }
@@ -47,7 +47,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         //TODO: Ask for confirmation.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
-            User.FSMSetState(BattleController.State.TAKING_TURN);
+            User.FSMSetState(BattleController.EBattleState.TAKING_TURN);
         }
 
         //If accepted.

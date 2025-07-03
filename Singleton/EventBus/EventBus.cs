@@ -55,7 +55,7 @@ public partial class EventBus : Node
     public static ObjectChange<Grid>? GridLoaded;
     public static ObjectChange<EncounterData>? EncounterLoaded;
     public static Event? RoundEnded;
-    public static ObjectChange<BattleControllerState>? BattleStateChanged;
+    public static ObjectChange<BattleController.EBattleState>? BattleStateChanged;
     public static ObjectChange<UsageParameters>? SelectedUsageParametersChanged;
 
     #region TARGETING State
@@ -146,6 +146,7 @@ public partial class EventBus : Node
     public delegate void ActionEvent(ChessLike.Entity.Action.Ability action);
     public static ActionEvent? InputActionSelected;
     public static Event? InputTurnEnded;
+    public static ObjectChange<Mob>? MobSelected;
     #endregion
 
     #region Storage

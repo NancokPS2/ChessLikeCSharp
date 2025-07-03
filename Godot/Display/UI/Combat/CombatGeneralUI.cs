@@ -28,17 +28,4 @@ public partial class CombatGeneralUI : Control, ISceneDependency
 		NodeMobUI ??= (MobGeneralUI)FindChild("MobGeneralUI");
 	}
 
-	public void Update(BattleController controller)
-	{
-		BattleControllerCurrent = controller;
-	
-		if (controller is null) {throw new Exception("Null controller!???");}
-
-		Mob taking_turn = BattleController.CompTurnManager.GetCurrentTurnTaker() as Mob;
-
-		NodeTurnUI.Update(BattleController.CompTurnManager);
-		NodeActionUI.Update(taking_turn);
-		NodeMobUI.Update(taking_turn);
-	}
-
 }

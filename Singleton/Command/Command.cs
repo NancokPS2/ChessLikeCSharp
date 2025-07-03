@@ -79,7 +79,7 @@ public partial class Command: Node
                 break;
 
             case "fuckyou":
-                BattleController.Instance.FSMSetState(BattleController.State.END_COMBAT);
+                BattleController.Instance.FSMSetState(BattleController.EBattleState.END_COMBAT);
                 label.Text += "Because i say so.";
                 break;
 

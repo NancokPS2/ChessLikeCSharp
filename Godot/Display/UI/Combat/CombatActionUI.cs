@@ -3,54 +3,43 @@ using ChessLike.Entity.Action;
 using Godot;
 using System;
 
+[GlobalClass]
 public partial class CombatActionUI : Control, ISceneDependency
 {
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatActionUI.tscn";
 
-	[Export]
-	public Control? NodeActionContainer;
+    [Export]
+    public Control? NodeActionContainer;
 
-	private Mob? MobCurrent;
+    private Mob? MobCurrent;
 
     public CombatActionUI()
     {
         EventBus.BattleStateChanged += OnBattleStateChanged;
-    }
-
-    private void OnBattleStateChanged(BattleControllerState obj)
-    {
-        switch(obj.StateIdentifier)
-        {
-            case BattleController.State.AWAITING_ACTION:
-                EnableActionButtons(true);
-                break;
-
-            default:
-                EnableActionButtons(false);
-                break;
-        }
+        EventBus.MobTurnStarted += OnMobTurnStarted;
+        EventBus.MobSelected += OnMobSelected;
     }
 
     public override void _Ready()
     {
         base._Ready();
-		NodeActionContainer ??= (Control)FindChild("ActionContainer");
+        NodeActionContainer ??= (Control)FindChild("ActionContainer");
     }
 
     public void Update(Mob mob)
-	{
-		MobCurrent = mob;
+    {
+        MobCurrent = mob;
 
-		UpdateActionButtons(mob);
-	}
+        UpdateActionButtons(mob);
+    }
 
     public void UpdateActionButtons(Mob mob)
     {
-		if(NodeActionContainer is null) {throw new Exception("Null NodeActionContainer");}
+        if (NodeActionContainer is null) { throw new Exception("Null NodeActionContainer"); }
 
         Control container = NodeActionContainer;
         container.FreeChildren();
-        
+
         foreach (Ability action in mob.GetAbilities())
         {
             ActionButton button = new(action);
@@ -70,7 +59,7 @@ public partial class CombatActionUI : Control, ISceneDependency
 
     private void EnableActionButtons(bool enable)
     {
-		if(NodeActionContainer is null) {throw new Exception("Null NodeActionContainer");}
+        if (NodeActionContainer is null) { throw new Exception("Null NodeActionContainer"); }
 
         foreach (Node node in NodeActionContainer.GetChildren())
         {
@@ -80,6 +69,32 @@ public partial class CombatActionUI : Control, ISceneDependency
             }
         }
     }
+
+    #region Event Connection
+    private void OnBattleStateChanged(BattleController.EBattleState state)
+    {
+        switch (state)
+        {
+            case BattleController.EBattleState.AWAITING_ACTION:
+                EnableActionButtons(true);
+                break;
+
+            default:
+                EnableActionButtons(false);
+                break;
+        }
+    }
+
+    private void OnMobTurnStarted(Mob mob)
+    {
+        Update(mob);
+    }
+
+    private void OnMobSelected(Mob obj)
+    {
+        Visible = obj == MobCurrent;
+    }
+    #endregion
 
     private partial class ActionButton : Button
     {

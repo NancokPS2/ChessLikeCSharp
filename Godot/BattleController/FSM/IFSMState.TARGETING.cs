@@ -22,7 +22,7 @@ public class BattleControllerStateTargeting : BattleControllerState
 
     public const string TARGETING_CONTEXT = "_TARGETING_CONTEXT";
 
-    public BattleControllerStateTargeting(BattleController.State identifier) : base(identifier)
+    public BattleControllerStateTargeting(BattleController.EBattleState identifier) : base(identifier)
     {
     }
 
@@ -65,7 +65,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         //Pause menu
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
-            User.FSMSetState(BattleController.State.PAUSED);
+            User.FSMSetState(BattleController.EBattleState.PAUSED);
         }
 
         //Handle AoE displaying when changing the hovered positions.
@@ -83,7 +83,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         //If CANCEL pressed, return to AWAITING_ACTION.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.CANCEL))
         {
-            User.FSMSetState(BattleController.State.AWAITING_ACTION);
+            User.FSMSetState(BattleController.EBattleState.AWAITING_ACTION);
         }
         //If ACCEPT pressed, select the position.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.ACCEPT))
@@ -119,7 +119,7 @@ public class BattleControllerStateTargeting : BattleControllerState
                 BattleController.CompActionRunner.QueueAdd(
                     GetUsageParams()
                     );
-                User.FSMSetState(BattleController.State.ACTION_RUNNING);
+                User.FSMSetState(BattleController.EBattleState.ACTION_RUNNING);
                 UpdateTargetedVisuals(true);
                 _popup.Reload();
             }

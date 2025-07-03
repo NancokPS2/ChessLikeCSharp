@@ -11,15 +11,15 @@ namespace Godot;
 
 public class BattleControllerStateTakingTurn : BattleControllerState
 {
-    public BattleControllerStateTakingTurn(BattleController.State identifier) : base(identifier)
+    public BattleControllerStateTakingTurn(BattleController.EBattleState identifier) : base(identifier)
     {
     }
 
     public override void StateOnEnter()
     {
         BattleController.CompTurnManager.StartTurn();
-        BattleController.CompCombatUI.Update(User);
-        User.FSMSetState(BattleController.State.AWAITING_ACTION);
+        //BattleController.CompCombatUI.Update(User);
+        User.FSMSetState(BattleController.EBattleState.AWAITING_ACTION);
     }
 
     public override void StateOnExit()

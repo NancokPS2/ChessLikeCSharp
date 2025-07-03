@@ -7,29 +7,17 @@ namespace Godot;
 
 public partial class BattleController
 {
-    public enum State
-    {
-        INVALID,
-        PAUSED,
-        TAKING_TURN,
-        ENDING_TURN,
-        AWAITING_ACTION,
-        TARGETING,
-        ACTION_RUNNING,
-        PREPARATION,
-        END_COMBAT,
-    }
 
     public List<BattleControllerState> StateList { get; set; } = new()
     {
-        new BattleControllerStatePaused(State.PAUSED),
-        new BattleControllerStateTakingTurn(State.TAKING_TURN),
-        new BattleControllerStateEndingTurn(State.ENDING_TURN),
-        new BattleControllerStateTargeting(State.TARGETING),
-        new BattleControllerStateAwaitingAction(State.AWAITING_ACTION),
-        new BattleControllerStateActionRunning(State.ACTION_RUNNING),
-        new BattleControllerStatePreparation(State.PREPARATION),
-        new BattleControllerStateEndCombat(State.END_COMBAT),
+        new BattleControllerStatePaused(EBattleState.PAUSED),
+        new BattleControllerStateTakingTurn(EBattleState.TAKING_TURN),
+        new BattleControllerStateEndingTurn(EBattleState.ENDING_TURN),
+        new BattleControllerStateTargeting(EBattleState.TARGETING),
+        new BattleControllerStateAwaitingAction(EBattleState.AWAITING_ACTION),
+        new BattleControllerStateActionRunning(EBattleState.ACTION_RUNNING),
+        new BattleControllerStatePreparation(EBattleState.PREPARATION),
+        new BattleControllerStateEndCombat(EBattleState.END_COMBAT),
     };
 
     private BattleControllerState _queued_state;
@@ -42,14 +30,14 @@ public partial class BattleController
         {
             item.User = this;
         }
-        FSMSetState(State.PREPARATION);
+        FSMSetState(EBattleState.PREPARATION);
     }
 
     public void FSMSetState(BattleControllerState state)
     {
         _queued_state = state;
     }
-    public void FSMSetState(State state)
+    public void FSMSetState(EBattleState state)
     {
         FSMSetState(StateList.First(x => x.StateIdentifier == state));
     }
@@ -71,7 +59,7 @@ public partial class BattleController
 
             //Emit the state change
             if (StatePrevious is not null && StateCurrent is not null)
-                EventBus.BattleStateChanged?.Invoke(StateCurrent);
+                EventBus.BattleStateChanged?.Invoke(StateCurrent.StateIdentifier);
 
             StateTimeWithoutChange = 0;
         }

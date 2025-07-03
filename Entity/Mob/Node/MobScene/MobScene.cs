@@ -104,6 +104,7 @@ public partial class MobScene : Node3D
         {
             MovementCurrentIndex = 0;
             MovementStored.Clear();
+            MovementVerifyPosition();
             return;
         }
 
@@ -145,6 +146,14 @@ public partial class MobScene : Node3D
         {
             item.Kill();
             MovementTweens.Clear();
+        }
+    }
+
+    public void MovementVerifyPosition()
+    {
+        if (!Mathf.IsZeroApprox(Grid.MapToReal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
+        {
+            throw new Exception($"Position mismatch. Node:{GlobalPosition} | Mob:{MobUsing.GetPosition()}");
         }
     }
     #endregion

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d1te4g7l74ot1"]
+[gd_scene load_steps=9 format=3 uid="uid://d1te4g7l74ot1"]
 
 [ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
 [ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="3_brs8u"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c3fqdxefdb0tc" path="res://Entity/Mob/Node/MobSceneManager/MobSceneSpawner.cs" id="4_brs8u"]
 [ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="4_tppsp"]
 [ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="5_lnhn1"]
+[ext_resource type="PackedScene" uid="uid://dslo3iy2wc5fx" path="res://Godot/Display/UI/Combat/CombatGeneralUI.tscn" id="7_e5xpt"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
@@ -39,3 +40,5 @@ mesh = SubResource("PrismMesh_1a52j")
 transform = Transform3D(0.0409651, -0.445792, 0.894199, 0.0204012, 0.895137, 0.445325, -0.998952, 0, 0.045764, 42.5199, 12.0387, 0)
 script = ExtResource("5_lnhn1")
 metadata/_custom_type_script = "uid://cav6lcd1dy6th"
+
+[node name="CombatGeneralUI" parent="." instance=ExtResource("7_e5xpt")]

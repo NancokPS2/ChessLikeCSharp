@@ -17,7 +17,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
     private PopupButtonDialogUI _popup = new PopupButtonDialogUI().GetInstantiatedScene<PopupButtonDialogUI>();
 
-    public BattleControllerStateAwaitingAction(BattleController.State identifier) : base(identifier)
+    public BattleControllerStateAwaitingAction(BattleController.EBattleState identifier) : base(identifier)
     {
     }
 
@@ -27,7 +27,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
 
         CombatGeneralUI mob_ui = BattleController.CompCombatUI;
 
-        mob_ui.Update(User);
+        //mob_ui.Update(User);
 
         EventBus.InputTurnEnded += () => OnTurnEnd();
 
@@ -53,7 +53,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
         //Can switch to PAUSE state from here.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
-            User.FSMSetState(BattleController.State.PAUSED);
+            User.FSMSetState(BattleController.EBattleState.PAUSED);
         }
 
         User.UpdateCursorMovement();
@@ -69,7 +69,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
                 BattleController.CompGrid, 
                 User.ActionSelected
                 );
-            User.FSMSetState(BattleController.State.TARGETING);
+            User.FSMSetState(BattleController.EBattleState.TARGETING);
         }
 
         User.UpdateHoveredMobUI();
@@ -89,7 +89,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
             if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
             {
                 //Swap to ENDING_TURN
-                User.FSMSetState(BattleController.State.ENDING_TURN); 
+                User.FSMSetState(BattleController.EBattleState.ENDING_TURN); 
             }
             //else if (_popup.IndexLastPressed == (int)PopupUI.OPTION_CONFIRM_CANCEL.CANCEL)
 
