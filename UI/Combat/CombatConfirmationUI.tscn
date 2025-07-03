@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d3406ij1go4n0"]
 
-[ext_resource type="Script" uid="uid://isw7vsr5vlf3" path="res://Godot/Display/UI/Combat/CombatConfirmationUI.cs" id="1_b5n3d"]
+[ext_resource type="Script" uid="uid://isw7vsr5vlf3" path="res://UI/Combat/CombatConfirmationUI.cs" id="1_b5n3d"]
 
 [sub_resource type="Gradient" id="Gradient_xkqts"]
 colors = PackedColorArray(0, 0, 0, 0, 0.34902, 0.34902, 0.34902, 0.580392)

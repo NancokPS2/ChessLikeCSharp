@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cet44dt4p4srd"]
 
-[ext_resource type="Script" uid="uid://d7wnoug6teta" path="res://Godot/Display/UI/Combat/CombatTurnUI.cs" id="1_4qqtp"]
+[ext_resource type="Script" uid="uid://d7wnoug6teta" path="res://UI/Combat/CombatTurnUI.cs" id="1_4qqtp"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

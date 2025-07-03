@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://b3msvq7mc7i1q"]
 
-[ext_resource type="Script" uid="uid://ua5b0ju47xo8" path="res://Godot/Display/UI/Mob/MobGeneralUI.cs" id="1_6t8gc"]
-[ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://Godot/Display/UI/Mob/MobEquipmentUI.tscn" id="2_7qjr4"]
-[ext_resource type="PackedScene" uid="uid://b1e6jdci5byww" path="res://Godot/Display/UI/Mob/MobStatsUI.tscn" id="3_lmckx"]
-[ext_resource type="PackedScene" uid="uid://ctsopt37vmsh1" path="res://Godot/Display/UI/Mob/MobActionUI.tscn" id="4_m8yx4"]
+[ext_resource type="Script" uid="uid://ua5b0ju47xo8" path="res://UI/Mob/MobGeneralUI.cs" id="1_6t8gc"]
+[ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://UI/Mob/MobEquipmentUI.tscn" id="2_7qjr4"]
+[ext_resource type="PackedScene" uid="uid://b1e6jdci5byww" path="res://UI/Mob/MobStatsUI.tscn" id="3_lmckx"]
+[ext_resource type="PackedScene" uid="uid://ctsopt37vmsh1" path="res://UI/Mob/MobActionUI.tscn" id="4_m8yx4"]
 
 [node name="MobGeneralUI" type="Control" node_paths=PackedStringArray("NodeTabContainer", "NodeEquipmentUI", "NodeActionUI", "NodeStatsUI")]
 layout_mode = 3

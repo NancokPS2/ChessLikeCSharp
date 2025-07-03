@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c8akfo35olah2"]
 
-[ext_resource type="Script" uid="uid://bwwhkbc35jeus" path="res://Godot/Display/UI/Combat/CombatActionUI.cs" id="1_uuyc0"]
+[ext_resource type="Script" uid="uid://bwwhkbc35jeus" path="res://UI/Combat/CombatActionUI.cs" id="1_uuyc0"]
 
 [node name="CombatActionUI" type="Control" node_paths=PackedStringArray("NodeActionContainer")]
 layout_mode = 3

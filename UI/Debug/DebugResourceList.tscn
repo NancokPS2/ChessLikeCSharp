@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cmp77hfgttxuj"]
 
-[ext_resource type="Script" uid="uid://dhkmqt7nmmngq" path="res://Godot/Display/UI/Debug/DebugResourceList.cs" id="1_0lxtq"]
+[ext_resource type="Script" uid="uid://dhkmqt7nmmngq" path="res://UI/Debug/DebugResourceList.cs" id="1_0lxtq"]
 
 [node name="DebugResourceList" type="Control" node_paths=PackedStringArray("NodeDescription", "NodeResourceTypeMenu", "Container")]
 layout_mode = 3

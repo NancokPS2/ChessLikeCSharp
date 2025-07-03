@@ -1,12 +1,12 @@
 [gd_scene load_steps=9 format=3 uid="uid://byh0x8syok53h"]
 
-[ext_resource type="Script" uid="uid://ds3ltw517h8gd" path="res://Godot/Display/UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
+[ext_resource type="Script" uid="uid://ds3ltw517h8gd" path="res://UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
-[ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://Godot/Display/UI/Party/PartyMobListUI.tscn" id="2_ospk4"]
-[ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://Godot/Display/UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
-[ext_resource type="PackedScene" uid="uid://bok0g3pnl5rri" path="res://Godot/Display/UI/Party/PartyFactionEquipmentUI.tscn" id="4_8cy5q"]
-[ext_resource type="PackedScene" uid="uid://c7lfcu2mi4uaj" path="res://Godot/Display/UI/Party/PartyJobChangeUI.tscn" id="6_rogee"]
-[ext_resource type="FontFile" uid="uid://di88txagx8110" path="res://Resources/Font/Zerove.ttf" id="7_jwnb4"]
+[ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://UI/Party/PartyMobListUI.tscn" id="2_ospk4"]
+[ext_resource type="PackedScene" uid="uid://d1bfi2s6408s0" path="res://UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
+[ext_resource type="PackedScene" uid="uid://bok0g3pnl5rri" path="res://UI/Party/PartyFactionEquipmentUI.tscn" id="4_8cy5q"]
+[ext_resource type="PackedScene" uid="uid://c7lfcu2mi4uaj" path="res://UI/Party/PartyJobChangeUI.tscn" id="6_rogee"]
+[ext_resource type="FontFile" path="res://Resources/Font/Zerove.ttf" id="7_jwnb4"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8fxnr"]
 font = ExtResource("7_jwnb4")

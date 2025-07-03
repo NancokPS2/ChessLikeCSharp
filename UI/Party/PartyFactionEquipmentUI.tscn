@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bok0g3pnl5rri"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_m8yvf"]
-[ext_resource type="Script" uid="uid://jr84t2tc43ko" path="res://Godot/Display/UI/Base/InventoryUI.cs" id="1_yb17j"]
-[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://Godot/Display/UI/Base/HelpTooltip.tscn" id="3_ue5iu"]
+[ext_resource type="Script" uid="uid://jr84t2tc43ko" path="res://UI/Base/InventoryUI.cs" id="1_yb17j"]
+[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://UI/Base/HelpTooltip.tscn" id="3_ue5iu"]
 
 [node name="PartyFactionEquipmentUi" type="Control" node_paths=PackedStringArray("Container")]
 layout_mode = 3

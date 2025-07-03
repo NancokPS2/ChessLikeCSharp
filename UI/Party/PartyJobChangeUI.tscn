@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7lfcu2mi4uaj"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_lvy4g"]
-[ext_resource type="Script" uid="uid://ctfbck3mdpc1i" path="res://Godot/Display/UI/Party/PartyJobChangeUI.cs" id="1_r36bb"]
-[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://Godot/Display/UI/Base/HelpTooltip.tscn" id="3_svj7g"]
+[ext_resource type="Script" uid="uid://ctfbck3mdpc1i" path="res://UI/Party/PartyJobChangeUI.cs" id="1_r36bb"]
+[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://UI/Base/HelpTooltip.tscn" id="3_svj7g"]
 
 [node name="MobJobChangeUI" type="Control" node_paths=PackedStringArray("NodeUsedJobs", "NodeAvailableJobs")]
 layout_mode = 3

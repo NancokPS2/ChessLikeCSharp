@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://dslo3iy2wc5fx"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ygt2u"]
-[ext_resource type="PackedScene" uid="uid://cet44dt4p4srd" path="res://Godot/Display/UI/Combat/CombatTurnUI.tscn" id="2_h8ftk"]
-[ext_resource type="PackedScene" uid="uid://b3msvq7mc7i1q" path="res://Godot/Display/UI/Mob/MobGeneralUI.tscn" id="4_dpm2i"]
-[ext_resource type="PackedScene" uid="uid://c8akfo35olah2" path="res://Godot/Display/UI/Combat/CombatActionUI.tscn" id="5_yxc47"]
-[ext_resource type="PackedScene" uid="uid://d3406ij1go4n0" path="res://Godot/Display/UI/Combat/CombatConfirmationUI.tscn" id="6_v4hac"]
+[ext_resource type="PackedScene" uid="uid://cet44dt4p4srd" path="res://UI/Combat/CombatTurnUI.tscn" id="2_h8ftk"]
+[ext_resource type="PackedScene" uid="uid://b3msvq7mc7i1q" path="res://UI/Mob/MobGeneralUI.tscn" id="4_dpm2i"]
+[ext_resource type="PackedScene" uid="uid://c8akfo35olah2" path="res://UI/Combat/CombatActionUI.tscn" id="5_yxc47"]
+[ext_resource type="PackedScene" uid="uid://d3406ij1go4n0" path="res://UI/Combat/CombatConfirmationUI.tscn" id="6_v4hac"]
 
 [node name="CombatGeneralUI" type="Control"]
 layout_mode = 3
