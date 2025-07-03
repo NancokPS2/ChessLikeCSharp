@@ -29,11 +29,11 @@ public partial class GridNode : Node3D
     private Grid grid;
     private Dictionary<Vector3i, CellComponent> CellComponents = new();
 
-    public Vector3i PositionSelected { get => PositionCollidedSelected + Vector3i.UP; }
-    private Vector3i PositionCollidedSelected;
+    //public Vector3i PositionSelected { get => PositionCollidedSelected + Vector3i.UP; }
+    //private Vector3i PositionCollidedSelected;
 
-    public Vector3i PositionHovered { get => PositionCollidedHovered + Vector3i.UP; }
-    private Vector3i PositionCollidedHovered;
+    //public Vector3i PositionHovered { get => PositionCollidedHovered + Vector3i.UP; }
+    //private Vector3i PositionCollidedHovered;
 
     public Vector3 CellSize = new(1, 1, 1);
 
@@ -218,22 +218,24 @@ public partial class GridNode : Node3D
     #endregion
 
     #region Event Connection
-    public void OnCellInput(InputEvent input, Vector3i comp_position)
+    public void OnCellInput(InputEvent input, Vector3i componentPos)
     {
         if (!InputEnabled) { return; }
 
         if (input.IsPressed())
         {
-            PositionCollidedSelected = comp_position;
-            PositionCollidedHovered = comp_position;
-            EventBus.CellSelected?.Invoke(comp_position);
+            EventBus.CellSelected?.Invoke(componentPos + Vector3i.UP);
         }
         else if (!(input.IsPressed() || input.IsReleased()))
         {
-            PositionCollidedSelected = Vector3i.INVALID;
-            PositionCollidedHovered = comp_position;
-            EventBus.CellHovered?.Invoke(comp_position);
+            EventBus.CellHovered?.Invoke(componentPos + Vector3i.UP);
         }
+        MeshRemove(Layer.CURSOR);
+        MeshSet(
+            componentPos,
+            GridNode.Layer.CURSOR,
+            Global.Resources.GetMesh(Global.Resources.MeshIdent.CURSOR)
+            );
     }
 
     private void OnEncounterLoaded(EncounterData obj)
@@ -263,8 +265,10 @@ public partial class GridNode : Node3D
 
     }
 
+    [Obsolete("Using Grid.MapToLocal()")]
     public Vector3 MapToLocal(Vector3i mapCoordinate) => mapCoordinate.ToGVector3() * CellSize;
 
+    [Obsolete("Using Grid.MapToLocal()")]
     public Vector3i LocalToMap(Vector3 localCoordinate) => new(localCoordinate / CellSize);
     #endregion
 }

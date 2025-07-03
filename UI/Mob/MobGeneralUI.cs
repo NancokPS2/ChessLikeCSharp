@@ -16,7 +16,12 @@ public partial class MobGeneralUI : Control, ISceneDependency
 	[Export]
 	public MobStatsUI? NodeStatsUI;
 
-    public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobGeneralUI.tscn";
+	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobGeneralUI.tscn";
+
+	public MobGeneralUI()
+	{
+		EventBus.MobSelected += OnMobSelected;
+	}
 
 	public override void _Ready()
 	{
@@ -31,6 +36,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
 	}
 
 	private Mob? MobCurrent;
+
 
 	public void Update(Mob mob)
 	{
@@ -56,11 +62,18 @@ public partial class MobGeneralUI : Control, ISceneDependency
 		}
 	}
 
-    private void DisplayDummy()
+	private void DisplayDummy()
+	{
+		Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
+		mob.MobInventory.AddItem(new Trinket());
+		Update(mob);
+	}
+
+	#region Event Connection
+	private void OnMobSelected(Mob obj)
     {
-        Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
-        mob.MobInventory.AddItem(new Trinket());
-        Update(mob);
+		Update(obj);
     }
+	#endregion
 
 }

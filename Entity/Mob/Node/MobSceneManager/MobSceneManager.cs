@@ -7,12 +7,13 @@ using Godot;
 namespace ChessLike.Entity;
 
 [GlobalClass]
-public partial class MobSceneSpawner : Node3D
+public partial class MobSceneManager : Node3D
 {
     public List<MobScene> InstancedMobs = new();
-    public MobSceneSpawner()
+    public MobSceneManager()
     {
         EventBus.MobStateChanged += OnMobStatChanged;
+        EventBus.CellSelected += OnCellSelected;
     }
 
     private bool HasInstance(Mob mob)
@@ -37,6 +38,8 @@ public partial class MobSceneSpawner : Node3D
     private void AddInstance(Mob mob)
     {
         MobScene instance = GetInstance(mob);
+        
+        InstancedMobs.Add(instance);
 
         AddChild(instance);
         instance.MovementResetPosition();
@@ -45,9 +48,14 @@ public partial class MobSceneSpawner : Node3D
     public void RemoveInstance(Mob mob)
     {
         if (!HasInstance(mob)) return;
-        else InstancedMobs.Remove(GetInstance(mob));
+        MobScene instance = GetInstance(mob);
+
+        RemoveChild(instance);
+        InstancedMobs.Remove(instance);
     }
 
+
+    #region Event Connection
     private void OnMobStatChanged(Mob mob, EMobState state)
     {
         if (state == EMobState.COMBAT)
@@ -65,4 +73,17 @@ public partial class MobSceneSpawner : Node3D
             else RemoveInstance(mob);
         }
     }
+
+    private void OnCellSelected(Vector3i cellPos)
+    {
+        foreach (var item in InstancedMobs)
+        {
+            if (item.MobUsing.GetPosition() == cellPos)
+            {
+                EventBus.MobSelected?.Invoke(item.MobUsing);
+                return;
+            }            
+        }
+    }
+    #endregion
 }

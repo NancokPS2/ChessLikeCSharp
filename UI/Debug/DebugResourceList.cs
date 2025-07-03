@@ -11,7 +11,7 @@ public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , 
     const int ID_JOB = 0;
     const int ID_ITEM = 1;
     const int ID_ABILITY = 2;
-    public string SCENE_PATH { get; } = "res://Godot/Display/UI/Debug/DebugResourceList.tscn";
+    public string SCENE_PATH { get; } = "uid://cmp77hfgttxuj";
 
     [Export]
     public RichTextLabel? NodeDescription;
