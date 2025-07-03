@@ -7,14 +7,17 @@ public partial class SpawnSlot : Resource
 {
     public Vector3i Location;
     [Export]
-    private Vector3I location;
-    [Export]
-    public EFaction FactionAllowed;
-    public SpawnSlot(Vector3i location, EFaction faction)
+    private Vector3I location
     {
-        Location = location;
-        FactionAllowed = faction;
-    }   
+        set => Location = new(value);
+        get => Location.ToGVector3I();
+    }
+
+    [Export]
+    public EFaction FactionAllowed = EFaction.PLAYER;
+
+    [Export]
+    public Mob? PresetMob;
 }
 
 

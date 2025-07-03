@@ -196,6 +196,11 @@ public partial class Mob : Resource
         EventBus.MobMoved?.Invoke(this, original_pos, Position);
     }
 
+    public void MoveRelative(Vector3i to)
+    {
+        Move(GetPosition() + to);
+    }
+
     public void MoveTroughPath(List<Vector3i> path)
     {
         foreach (var item in path)

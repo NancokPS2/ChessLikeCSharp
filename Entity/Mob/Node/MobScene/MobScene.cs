@@ -31,9 +31,13 @@ public partial class MobScene : Node3D
     private Node3D? ModelScene;
     private AnimationPlayer? AnimationPlayer;
 
+    private List<Vector3i> MovementStored = new();
+    private int MovementCurrentIndex;
+    private List<Tween> MovementTweens = new();
+
     public MobScene()
     {
-        EventBus.MobFinishedPathMove += OnMobFinishedPathMove;
+        EventBus.MobMoved += OnMobMoved;
         EventBus.MobStatChanged += OnMobStatChanged;
         EventBus.MobTurnStarted += OnMobTurnStarted;
     }
@@ -43,6 +47,14 @@ public partial class MobScene : Node3D
         base._Ready();
         if (MobUsing is null) throw new Exception("Lacks a MobUsing");
     }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        MovementProcess();
+    }
+
+    #region Particles
 
     public void AnimatePopupText(string text, Godot.Color? color = null, Godot.Gradient? gradient = null)
     {
@@ -58,6 +70,9 @@ public partial class MobScene : Node3D
         popupText.GlobalPosition = GlobalPosition;
     }
 
+    #endregion
+
+    #region Model
     public void SetBodyModel(EMobSceneBodyModel body)
     {
         MarkerCenterBody.FreeChildren();
@@ -76,54 +91,70 @@ public partial class MobScene : Node3D
         MarkerCenterBody.AddChild(ModelScene);
     }
 
-    public void AnimateMovement(List<Vector3i> path, EMobMovementMode movementType)
+    #endregion
+
+    #region Movement
+    public void MovementProcess()
     {
-        Tween tween = CreateTween().Chain();
-        switch (movementType)
+        //If empty, skip.
+        if (MovementStored.Count == 0) return;
+
+        //Reached the end of the list, we are done.
+        if (MovementCurrentIndex >= MovementStored.Count)
+        {
+            MovementCurrentIndex = 0;
+            MovementStored.Clear();
+            return;
+        }
+
+        Vector3i currentGoal = MovementStored[MovementCurrentIndex];
+
+        Godot.Vector3 currentGoalReal;
+        switch (MobUsing.MovementMode)
         {
             case EMobMovementMode.WALK:
-                AnimationPlayer?.Play("Walk");
-
-                foreach (var point in path)
-                {
-                    tween.TweenProperty(
-                        this,
-                        "position",
-                        point.ToGVector3() * GetGridCellSize(),
-                        GetMovementDuration()
-                        );
-                }
+                currentGoalReal = Grid.MapToReal(currentGoal);
                 break;
 
-            default: throw new Exception();
+            default:
+                throw new NotImplementedException($"Movement for {MobUsing.MovementMode} not implemented yet.");
         }
+
+        GlobalPosition = GlobalPosition.MoveToward(currentGoalReal, MovementGetSpeed());
+
+        //If close enough, advance the index.
+        if (Mathf.IsZeroApprox(GlobalPosition.DistanceTo(currentGoalReal)))
+            MovementCurrentIndex++;
     }
 
-    #region Private
-    private float GetMovementDuration()
+    private float MovementGetSpeed()
     {
         float agility = Mathf.Clamp(MobUsing.Stats.GetValue(EStatName.AGILITY), 0, 200);
-        float agilityReduction = agility / 500;
-        Debug.Assert(agilityReduction < 0.4 && agilityReduction > 0);
-        return 0.5f - agilityReduction;
+        return 2f * (agility / 100);
     }
 
-    public void UpdatePosition()
+    public void MovementResetPosition()
     {
         Godot.Vector3 vector = Grid.MapToReal(MobUsing.GetPosition());
         GlobalPosition = vector;
     }
 
-    [Obsolete("get actual measurements")]
-    private Godot.Vector3 GetGridCellSize() => new(1, 1, 1);
+    public void MovementResetTweens()
+    {
+        foreach (var item in MovementTweens)
+        {
+            item.Kill();
+            MovementTweens.Clear();
+        }
+    }
     #endregion
 
     #region Event Connection
-    private void OnMobFinishedPathMove(Mob mob, List<Vector3i> path)
+    private void OnMobMoved(Mob mob, Vector3i from, Vector3i to)
     {
         if (mob != MobUsing) return;
-
-        AnimateMovement(path, MobUsing.MovementMode);
+        MovementResetTweens();
+        MovementStored.Add(to);
     }
 
     private void OnMobStatChanged(Mob mob, EStatName stat, float new_value)
