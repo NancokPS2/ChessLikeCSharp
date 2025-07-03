@@ -226,7 +226,7 @@ public partial class GridNode : Node3D
         {
             EventBus.CellSelected?.Invoke(componentPos + Vector3i.UP);
         }
-        else if (!(input.IsPressed() || input.IsReleased()))
+        else if (!input.IsPressed())
         {
             EventBus.CellHovered?.Invoke(componentPos + Vector3i.UP);
         }

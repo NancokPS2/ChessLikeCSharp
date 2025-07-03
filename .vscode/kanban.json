@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Make MobUI also display its name",
+                    "id": "md1zkmxgjym9rlsf7xfzuy1t"
+                },
+                {
+                    "text": "Implement mob templates to automatically give gear, actions and stats to mobs.",
+                    "id": "epeuepz1rolnx21z2ikz6i2d"
+                },
+                {
                     "text": "DurationParameters",
                     "id": "i97ac4agicx0543y8ou4hjqk"
                 },
@@ -137,5 +145,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1751556064626
+    "timestamp": 1751567060830
 }

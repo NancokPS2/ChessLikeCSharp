@@ -4,5 +4,6 @@ Default,
 EnergyGeyser,
 Explosion,
 PopupText3D,
+SelectionGroundHalo,
 ShineHalo,
 }

@@ -147,6 +147,7 @@ public partial class EventBus : Node
     public static ActionEvent? InputActionSelected;
     public static Event? InputTurnEnded;
     public static ObjectChange<Mob>? MobSelected;
+    public static ObjectChange<Mob>? MobHovered;
     #endregion
 
     #region Storage

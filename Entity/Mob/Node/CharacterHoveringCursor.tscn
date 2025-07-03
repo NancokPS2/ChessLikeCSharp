@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cu1nlfq5x61rn"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_50ukr"]
+rings = 8
+ring_segments = 3
+
+[node name="CharacterHoveringCursor" type="Node3D"]
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.4, 0, 0, 0, 0.8, 0, 0, 0)
+mesh = SubResource("TorusMesh_50ukr")

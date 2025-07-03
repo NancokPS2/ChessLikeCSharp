@@ -9,12 +9,24 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobSceneManager : Node3D
 {
+    public Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
+    public Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
+
     public List<MobScene> InstancedMobs = new();
     public MobSceneManager()
     {
         EventBus.MobStateChanged += OnMobStatChanged;
         EventBus.CellSelected += OnCellSelected;
+        EventBus.CellHovered += OnCellHovered;
     }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        AddChild(NodeSelectionCursor);
+        AddChild(NodeHoveringCursor);
+    }
+
 
     private bool HasInstance(Mob mob)
         => InstancedMobs.Any(x => x.MobUsing == mob);
@@ -38,7 +50,7 @@ public partial class MobSceneManager : Node3D
     private void AddInstance(Mob mob)
     {
         MobScene instance = GetInstance(mob);
-        
+
         InstancedMobs.Add(instance);
 
         AddChild(instance);
@@ -80,10 +92,29 @@ public partial class MobSceneManager : Node3D
         {
             if (item.MobUsing.GetPosition() == cellPos)
             {
+                NodeSelectionCursor.GlobalPosition = item.MarkerOverhead.GlobalPosition;
+                NodeSelectionCursor.Show();
                 EventBus.MobSelected?.Invoke(item.MobUsing);
                 return;
-            }            
+            }
         }
     }
+
+    private void OnCellHovered(Vector3i cellPos)
+    {
+        foreach (var item in InstancedMobs)
+        {
+            if (item.MobUsing.GetPosition() == cellPos)
+            {
+                NodeHoveringCursor.GlobalPosition = item.MarkerOverhead.GlobalPosition;
+                NodeHoveringCursor.Show();
+                EventBus.MobHovered?.Invoke(item.MobUsing);
+                return;
+            }
+        }
+        //Fell out of the foreach, none was found.
+        NodeHoveringCursor.Hide();
+    }
+
     #endregion
 }

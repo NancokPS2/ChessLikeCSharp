@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://clut34oyjehkh"]
+
+[ext_resource type="Texture2D" uid="uid://bqpx6od8kivp3" path="res://assets/Texture/particle/shine.png" id="1_v2p1i"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cg3qv"]
+transparency = 1
+albedo_texture = ExtResource("1_v2p1i")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 2.0
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_2w225"]
+size = Vector2(0.15, 0.15)
+
+[node name="SelectionGroundHalo" type="CPUParticles3D"]
+material_override = SubResource("StandardMaterial3D_cg3qv")
+amount = 36
+explosiveness = 0.8
+local_coords = true
+mesh = SubResource("QuadMesh_2w225")
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 1.0
+emission_ring_cone_angle = 90.0
+gravity = Vector3(0, 0, 0)
