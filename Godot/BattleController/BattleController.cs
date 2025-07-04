@@ -110,7 +110,7 @@ public partial class BattleController : Node, IDebugDisplay
 
         //UI for combat inputs and display.
 
-        EventBus.InputActionSelected += (act) => ActionSelected = act;
+        //EventBus.InputActionSelected += (act) => ActionSelected = act;
 
         DebugDisplay.Add(CompTurnManager);
     }

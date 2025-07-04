@@ -191,7 +191,7 @@ public partial class ActionEvent : Resource
     protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
         => new(Owner, parameters.GridRef, this);
     protected virtual UsageParameters GetAutoActivationUsageParameters()
-        => new(Owner, Owner.GetGrid(), this);
+        => new(Owner, CombatScene.GridNode.GetGrid(), this);
 
     protected void AutoActivationRequest(UsageParameters parameters)
     {
@@ -314,7 +314,7 @@ public partial class ActionEvent : Resource
         if (obj != this) return;
 
         EventBus.TargetingUsageParametersGenerated?.Invoke(
-            new(Owner, Owner.GetGrid(), this)
+            new(Owner, CombatScene.GridNode.GetGrid(), this)
         );
 	}
     #endregion

@@ -16,8 +16,8 @@ public partial class MobSceneManager : Node3D
     public MobSceneManager()
     {
         EventBus.MobStateChanged += OnMobStatChanged;
-        EventBus.CellSelected += OnCellSelected;
-        EventBus.CellHovered += OnCellHovered;
+        EventBus.CellPositionSelected += OnCellSelected;
+        EventBus.CellPositionHovered += OnCellHovered;
     }
 
     public override void _Ready()

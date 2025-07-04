@@ -44,9 +44,13 @@ public partial class EventBus : Node
     #endregion
 
     #region Grid
+    public delegate void GridCellPositionInput(Vector3i cellPos, ECellInput input);
     public delegate void GridCellPosition(Vector3i cellPos);
-    public static GridCellPosition? CellSelected;
-    public static GridCellPosition? CellHovered;
+    public delegate void GridCellInput(Vector3i cellPos, GridCell cell, ECellInput input);
+    public static GridCellPosition? CellPositionSelected;
+    public static GridCellPosition? CellPositionHovered;
+    public static GridCellInput? CellPositionInputReceived;
+    public static GridCellInput? CellInputReceived;
 
     #endregion
 

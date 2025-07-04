@@ -12,29 +12,12 @@ namespace Tests;
 
 public partial class EncounterLoadingTest : Node3D
 {
-    public Grid grid = new();
-    public GridNode gridNode = new();
-    public EncounterData encounter = new();
-
     public override void _Ready()
     {
         base._Ready();
-
-        encounter = EncounterData.GetDefault();
-
-        EventBus.EncounterLoading?.Invoke(encounter);
-
-        foreach (var item in encounter.MobPlacement)
-        {
-            if (item.PresetMob is null) return;
-
-            item.PresetMob.MobState = ChessLike.Entity.EMobState.COMBAT;
-            //WIP This should be used automatically
-            item.PresetMob.Move(new(item.Location));
-        }
-
-        //Everything must be loaded by now.
-        EventBus.CombatStarted?.Invoke();
+        CombatScene scene = Readonly.Scenes.MAIN_COMBAT;
+        AddChild(scene);
+        scene.Setup(EncounterData.GetDefault());
     }
 
     public override void _Input(InputEvent @event)

@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://d1te4g7l74ot1"]
+[gd_scene load_steps=12 format=3 uid="uid://b60n65v58uy2o"]
 
+[ext_resource type="Script" uid="uid://chob4wygp866s" path="res://Godot/MainScenes/CombatScene.cs" id="1_polnf"]
 [ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
 [ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="3_brs8u"]
 [ext_resource type="Script" uid="uid://lglrym3wvu8t" path="res://Entity/Action/ActionEventAnimator.cs" id="3_lnhn1"]
@@ -12,7 +13,10 @@
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
-[node name="Combat" type="Node3D"]
+[node name="Combat" type="Node3D" node_paths=PackedStringArray("gridNode")]
+script = ExtResource("1_polnf")
+gridNode = NodePath("Singletons/GridNode")
+metadata/_custom_type_script = "uid://chob4wygp866s"
 
 [node name="Singletons" type="Node3D" parent="."]
 
@@ -48,6 +52,7 @@ mesh = SubResource("PrismMesh_1a52j")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(0.0409651, -0.445792, 0.894199, 0.0204012, 0.895137, 0.445325, -0.998952, 0, 0.045764, 42.5199, 12.0387, 0)
+current = true
 script = ExtResource("5_lnhn1")
 metadata/_custom_type_script = "uid://cav6lcd1dy6th"
 

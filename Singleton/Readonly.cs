@@ -18,6 +18,11 @@ public partial class Readonly
         {
             get => GD.Load<PackedScene>("uid://ia3s65kbmt7u").Instantiate<PopupText3D>();
         }
+
+        public static CombatScene MAIN_COMBAT
+        {
+            get => GD.Load<PackedScene>("uid://b60n65v58uy2o").Instantiate<CombatScene>();
+        }
     }
     
 }

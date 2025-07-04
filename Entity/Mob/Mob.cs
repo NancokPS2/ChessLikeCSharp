@@ -306,10 +306,5 @@ public partial class Mob : Resource
         //output += $"---\nPassives: {GetPassives().ToStringList()}";
         return output;
     }
-
-    public Grid GetGrid()
-    {
-        return Global.GetEncounterGrid();
-    }
     #endregion
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.World;
@@ -58,6 +59,8 @@ public partial class GridNode : Node3D
         }
         PosDirty.Clear();
     }
+
+    public Grid GetGrid() => grid;
 
     public void SetGrid(Grid grid)
     {
@@ -224,11 +227,25 @@ public partial class GridNode : Node3D
 
         if (input.IsPressed())
         {
-            EventBus.CellSelected?.Invoke(componentPos + Vector3i.UP);
+            ECellInput cellInput;
+            if (input.IsActionPressed("accept"))
+            {
+                cellInput = ECellInput.PRIMARY;
+                EventBus.CellPositionSelected?.Invoke(componentPos + Vector3i.UP);
+            }
+            else if (input.IsActionPressed("cancel"))
+            {
+                cellInput = ECellInput.SECONDARY;
+            }
+            else
+            {
+                cellInput = ECellInput.PRIMARY;
+            }
+            EventBus.CellPositionInputReceived?.Invoke(componentPos, grid.GetCell(componentPos), cellInput);
         }
         else if (!input.IsPressed())
         {
-            EventBus.CellHovered?.Invoke(componentPos + Vector3i.UP);
+            EventBus.CellPositionHovered?.Invoke(componentPos + Vector3i.UP);
         }
         MeshRemove(Layer.CURSOR);
         MeshSet(

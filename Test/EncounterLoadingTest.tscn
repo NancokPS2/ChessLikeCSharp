@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://wt4nag7flq2h"]
 
 [ext_resource type="Script" uid="uid://cpv61phq15nvb" path="res://Test/EncounterLoadingTest.cs" id="1_nm2kf"]
-[ext_resource type="PackedScene" uid="uid://d1te4g7l74ot1" path="res://Combat.tscn" id="2_e1j8c"]
+[ext_resource type="PackedScene" uid="uid://d1te4g7l74ot1" path="res://Godot/MainScenes/Combat.tscn" id="2_e1j8c"]
 
 [node name="EncounterLoadingText" type="Node3D"]
 script = ExtResource("1_nm2kf")
