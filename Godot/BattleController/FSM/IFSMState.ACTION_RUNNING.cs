@@ -11,7 +11,7 @@ namespace Godot;
 
 public class BattleControllerStateActionRunning : BattleControllerState
 {
-    public BattleControllerStateActionRunning(BattleController.EBattleState identifier) : base(identifier)
+    public BattleControllerStateActionRunning(EBattleState identifier) : base(identifier)
     {
     }
 
@@ -34,7 +34,7 @@ public class BattleControllerStateActionRunning : BattleControllerState
     {
         if (BattleController.CompActionRunner.QueueIsEmpty())
         {
-            User.FSMSetState(BattleController.EBattleState.AWAITING_ACTION);
+            User.FSMSetState(EBattleState.AWAITING_ACTION);
         }
     }
 }

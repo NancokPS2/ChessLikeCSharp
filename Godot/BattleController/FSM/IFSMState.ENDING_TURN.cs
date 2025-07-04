@@ -11,7 +11,7 @@ namespace Godot;
 
 public class BattleControllerStateEndingTurn : BattleControllerState
 {
-    public BattleControllerStateEndingTurn(BattleController.EBattleState identifier) : base(identifier)
+    public BattleControllerStateEndingTurn(EBattleState identifier) : base(identifier)
     {
     }
 
@@ -35,9 +35,9 @@ public class BattleControllerStateEndingTurn : BattleControllerState
         //Finish combat
         if (BattleController.Encounter.IsFinished())
         {
-            User.FSMSetState(BattleController.EBattleState.END_COMBAT);
+            User.FSMSetState(EBattleState.END_COMBAT);
         }
 
-        User.FSMSetState(BattleController.EBattleState.TAKING_TURN);
+        User.FSMSetState(EBattleState.TAKING_TURN);
     }
 }

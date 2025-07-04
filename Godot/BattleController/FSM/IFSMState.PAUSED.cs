@@ -14,7 +14,7 @@ public class BattleControllerStatePaused : BattleControllerState
 
     private Pause? _menu_reference;
     private BattleControllerState? StatePrePause;
-    public BattleControllerStatePaused(BattleController.EBattleState identifier) : base(identifier)
+    public BattleControllerStatePaused(EBattleState identifier) : base(identifier)
     {
     }
 

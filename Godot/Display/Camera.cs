@@ -57,11 +57,11 @@ public partial class Camera : Camera3D
         EventBus.BattleStateChanged += OnBattleStateChanged;
     }
 
-    private void OnBattleStateChanged(BattleController.EBattleState state)
+    private void OnBattleStateChanged(EBattleState state)
     {
         switch (state)
         {
-            case BattleController.EBattleState.PAUSED:
+            case EBattleState.PAUSED:
                 SetControl(false);
                 break;
                 

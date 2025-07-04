@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b1e6jdci5byww" path="res://UI/Mob/MobStatsUI.tscn" id="3_lmckx"]
 [ext_resource type="PackedScene" uid="uid://ctsopt37vmsh1" path="res://UI/Mob/MobActionUI.tscn" id="4_m8yx4"]
 
-[node name="MobGeneralUI" type="Control" node_paths=PackedStringArray("NodeTabContainer", "NodeEquipmentUI", "NodeActionUI", "NodeStatsUI")]
+[node name="MobGeneralUI" type="Control" node_paths=PackedStringArray("NodeTabContainer", "NodeEquipmentUI", "NodeActionUI", "NodeStatsUI", "NodeNameUI")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,6 +17,7 @@ NodeTabContainer = NodePath("TabContainer")
 NodeEquipmentUI = NodePath("TabContainer/Equipment")
 NodeActionUI = NodePath("TabContainer/Action")
 NodeStatsUI = NodePath("TabContainer/Stats")
+NodeNameUI = NodePath("Label")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 1
@@ -40,3 +41,13 @@ metadata/_tab_index = 1
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "NAME"

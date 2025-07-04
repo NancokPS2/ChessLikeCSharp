@@ -16,6 +16,9 @@ public partial class MobGeneralUI : Control, ISceneDependency
 	[Export]
 	public MobStatsUI? NodeStatsUI;
 
+	[Export]
+	public Label? NodeNameUI;
+
 	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobGeneralUI.tscn";
 
 	public MobGeneralUI()
@@ -26,10 +29,10 @@ public partial class MobGeneralUI : Control, ISceneDependency
 	public override void _Ready()
 	{
 		base._Ready();
-		NodeEquipmentUI ??= (InventoryUI?)FindChild("Equipment");
+/* 		NodeEquipmentUI ??= (InventoryUI?)FindChild("Equipment");
 		NodeStatsUI ??= (MobStatsUI?)FindChild("Stats");
 		NodeActionUI ??= (MobActionUI?)FindChild("Action");
-		NodeTabContainer ??= this.GetChild<TabContainer>();
+		NodeTabContainer ??= this.GetChild<TabContainer>(); */
 
 		NodeTabContainer.TabChanged += (x) => Update(MobCurrent);
 		DisplayDummy();
@@ -41,10 +44,11 @@ public partial class MobGeneralUI : Control, ISceneDependency
 	public void Update(Mob mob)
 	{
 		if (NodeTabContainer is null) { throw new Exception("Null TabContainer"); }
+		if (mob is null) { return; }
 
 		MobCurrent = mob;
 
-		if (mob is null) { return; }
+		NodeNameUI.Text = mob.DisplayedName;
 
 		Node current_ui = NodeTabContainer.GetChild<Control>(NodeTabContainer.CurrentTab);
 
@@ -60,6 +64,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
 		{
 			action.Update(mob);
 		}
+		
 	}
 
 	private void DisplayDummy()

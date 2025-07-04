@@ -9,9 +9,9 @@ namespace Godot;
 public abstract class BattleControllerState
 {
     public BattleController User { get; set; }
-    public BattleController.EBattleState StateIdentifier = BattleController.EBattleState.INVALID;
+    public EBattleState StateIdentifier = EBattleState.INVALID;
 
-    public BattleControllerState(BattleController.EBattleState identifier)
+    public BattleControllerState(EBattleState identifier)
     {
         StateIdentifier = identifier;
     }

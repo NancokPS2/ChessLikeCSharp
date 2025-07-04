@@ -71,11 +71,11 @@ public partial class CombatActionUI : Control, ISceneDependency
     }
 
     #region Event Connection
-    private void OnBattleStateChanged(BattleController.EBattleState state)
+    private void OnBattleStateChanged(EBattleState state)
     {
         switch (state)
         {
-            case BattleController.EBattleState.AWAITING_ACTION:
+            case EBattleState.AWAITING_ACTION:
                 EnableActionButtons(true);
                 break;
 
@@ -96,6 +96,7 @@ public partial class CombatActionUI : Control, ISceneDependency
     }
     #endregion
 
+    #region ActionButton subclass
     private partial class ActionButton : Button
     {
         public Ability action;
@@ -106,4 +107,5 @@ public partial class CombatActionUI : Control, ISceneDependency
             Text = action.Name;
         }
     }
+    #endregion
 }
