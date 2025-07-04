@@ -22,7 +22,7 @@ public partial class EncounterLoadingTest : Node3D
 
         encounter = EncounterData.GetDefault();
 
-        EventBus.EncounterLoaded?.Invoke(encounter);
+        EventBus.EncounterLoading?.Invoke(encounter);
 
         foreach (var item in encounter.MobPlacement)
         {
@@ -32,6 +32,8 @@ public partial class EncounterLoadingTest : Node3D
             //WIP This should be used automatically
             item.PresetMob.Move(new(item.Location));
         }
+
+        EventBus.CombatStarted?.Invoke();
     }
 
     public override void _Input(InputEvent @event)

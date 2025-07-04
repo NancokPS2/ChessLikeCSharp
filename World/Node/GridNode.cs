@@ -43,7 +43,7 @@ public partial class GridNode : Node3D
 
     public GridNode()
     {
-        EventBus.EncounterLoaded += OnEncounterLoaded;
+        EventBus.EncounterLoading += OnEncounterLoaded;
     }
 
     #region Base

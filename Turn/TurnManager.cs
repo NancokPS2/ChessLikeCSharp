@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using Godot;
 namespace ChessLike.Turn;
 
 //TODO: add a log of the latest turns, so in case of continuous ties, the same ITurn is not selected repeatedly.
-public partial class TurnManager
+[GlobalClass]
+public partial class TurnManager : Node3D
 {
     //public delegate void TurnChangeHandler(ITurn who);
     //public event TurnChangeHandler? TurnEnded;
@@ -22,12 +24,18 @@ public partial class TurnManager
 
     public ITurn? RoundEnder { get => _round_ender; set => _round_ender = value; }
 
+    public TurnManager()
+    {
+        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.MobStateChanged += OnMobStateChanged;
+    }
+
     #region Handle Participants
     public void Add(List<ITurn> participants)
     {
         foreach (var item in participants)
         {
-            Add(item);        
+            Add(item);
         }
     }
 
@@ -59,12 +67,12 @@ public partial class TurnManager
     }
 
     private ITurn GetWithLowestDelay() => GetByDelay(true);
-    
+
     public ITurn GetWithHighestDelay() => GetByDelay(false);
-    
+
     private ITurn GetByDelay(bool lowest)
     {
-        if (Participants.Count == 0) {throw new Exception("No participants to iterate over.");}
+        if (Participants.Count == 0) { throw new Exception("No participants to iterate over."); }
 
         ITurn output = Participants.First();
 
@@ -76,8 +84,9 @@ public partial class TurnManager
                 {
                     output = item;
                 }
-                
-            } else
+
+            }
+            else
             {
                 if (item.DelayCurrent > output.DelayCurrent)
                 {
@@ -123,7 +132,7 @@ public partial class TurnManager
 
     public void EndTurn()
     {
-        if (CurrentTaker is null) {throw new Exception("No one is taking a turn at this moment.");}
+        if (CurrentTaker is null) { throw new Exception("No one is taking a turn at this moment."); }
 
         //Reset the delay, the CurrentTaker should end up with a high delay.
         ResetDelay(CurrentTaker);
@@ -131,7 +140,7 @@ public partial class TurnManager
         if (CurrentTaker is Mob mob)
         {
             EventBus.MobTurnEnded?.Invoke(mob);
-        }       
+        }
 
         //If the round ender just finished their turn, count that as the round ending.
         if (CurrentTaker == RoundEnder)
@@ -167,4 +176,25 @@ public partial class TurnManager
         }
     }
 
+    #region Event Connection
+    private void OnBattleStateChanged(EBattleState state)
+    {
+        if (state == EBattleState.AWAITING_TURN)
+        {
+            StartTurn();
+        }
+    }
+
+    private void OnMobStateChanged(Mob mob, EMobState state)
+    {
+        if (state == EMobState.COMBAT)
+        {
+            Add(mob);
+        }
+        else if (state == EMobState.BENCHED)
+        {
+            Remove(mob);
+        }
+    }
+    #endregion
 }

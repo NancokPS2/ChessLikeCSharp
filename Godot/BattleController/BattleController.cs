@@ -90,7 +90,7 @@ public partial class BattleController : Node, IDebugDisplay
             SetupParticipant(item.PresetMob, new(item.Location), true);
         }
 
-        EventBus.EncounterLoaded?.Invoke(to_load);
+        EventBus.EncounterLoading?.Invoke(to_load);
     }
 
     public void SetupComponents()

@@ -11,7 +11,7 @@ public partial class BattleController
     public List<BattleControllerState> StateList { get; set; } = new()
     {
         new BattleControllerStatePaused(EBattleState.PAUSED),
-        new BattleControllerStateTakingTurn(EBattleState.TAKING_TURN),
+        new BattleControllerStateTakingTurn(EBattleState.AWAITING_TURN),
         new BattleControllerStateEndingTurn(EBattleState.ENDING_TURN),
         new BattleControllerStateTargeting(EBattleState.TARGETING),
         new BattleControllerStateAwaitingAction(EBattleState.AWAITING_ACTION),

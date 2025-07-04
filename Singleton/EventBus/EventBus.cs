@@ -53,8 +53,19 @@ public partial class EventBus : Node
     #region Battle Encounter
     //Encounter
     public static ObjectChange<Grid>? GridLoaded;
-    public static ObjectChange<EncounterData>? EncounterLoaded;
+    public static ObjectChange<EncounterData>? EncounterLoading;
+
+    //Combat start and end
+    public static Event? CombatStarted;
+    public static Event? CombatEnded;
+
+    //Round start and end
+    //This is handled by starting a turn already: public static Event? RoundStarted;
+    /// <summary>
+    /// Emitted when all current participants have had a turn.
+    /// </summary>
     public static Event? RoundEnded;
+
     public static ObjectChange<EBattleState>? BattleStateChanged;
     public static ObjectChange<UsageParameters>? SelectedUsageParametersChanged;
 

@@ -1,5 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.World.Encounter;
 using Godot;
 using System;
 
@@ -25,11 +26,15 @@ public partial class CombatStateController : Node3D
         EventBus.MobTurnStarted += OnMobTurnStarted;
         EventBus.InputActionSelected += OnInputActionSelected;
         EventBus.InputBack += OnInputBack;
+        EventBus.CombatStarted += OnCombatStarted;
     }
 
-
-
     #region Event Connection
+    private void OnCombatStarted()
+    {
+        StateCurrent = EBattleState.AWAITING_TURN;
+    }
+    
     private void OnInputBack()
     {
         switch (StateCurrent)
@@ -40,7 +45,7 @@ public partial class CombatStateController : Node3D
 
                 StateCurrent = StatePrevious;
                 break;
-            
+
             case EBattleState.TARGETING:
                 StateCurrent = EBattleState.AWAITING_ACTION;
                 break;
