@@ -33,6 +33,7 @@ public partial class EncounterLoadingTest : Node3D
             item.PresetMob.Move(new(item.Location));
         }
 
+        //Everything must be loaded by now.
         EventBus.CombatStarted?.Invoke();
     }
 

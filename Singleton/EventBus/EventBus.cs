@@ -143,6 +143,8 @@ public partial class EventBus : Node
 
     public static ActionUsageParametersEvent? ActionAnimationStarted;
     public static ActionUsageParametersEvent? ActionAnimationEnded;
+
+    public static ActionUsageParametersEvent? TargetingUsageParametersGenerated;
     #endregion
 
     #region ActionEvent Mob Action
@@ -154,8 +156,7 @@ public partial class EventBus : Node
 
 
     #region UI
-    public delegate void ActionEvent(ChessLike.Entity.Action.Ability action);
-    public static ActionEvent? InputActionSelected;
+    public static ObjectChange<ActionEvent>? InputActionSelected;
     public static Event? InputTurnEnded;
     public static Event? InputBack;
     public static ObjectChange<Mob>? MobSelected;

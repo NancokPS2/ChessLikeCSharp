@@ -1,5 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.World.Encounter;
 using Godot;
 using System;
 
@@ -20,7 +21,7 @@ public partial class CombatActionUI : Control, ISceneDependency
         EventBus.MobSelected += OnMobSelected;
     }
 
-    public override void _Ready()
+	public override void _Ready()
     {
         base._Ready();
         NodeActionContainer ??= (Control)FindChild("ActionContainer");

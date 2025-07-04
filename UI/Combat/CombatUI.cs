@@ -5,9 +5,9 @@ using Godot.Display;
 using System;
 
 [GlobalClass]
-public partial class CombatGeneralUI : Control, ISceneDependency
+public partial class CombatUI : Control, ISceneDependency
 {
-	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatGeneralUI.tscn";
+	public string SCENE_PATH { get; } = "res://UI/Combat/CombatUI.tscn";
 
 	[Export]
 	public CombatTurnUI? NodeTurnUI;
@@ -16,7 +16,7 @@ public partial class CombatGeneralUI : Control, ISceneDependency
 	[Export]
 	public CombatConfirmationUI? NodeConfirmationUI;
 	[Export]
-	public MobGeneralUI? NodeMobUI;
+	public MobUI? NodeMobUI;
 
 	private BattleController? BattleControllerCurrent;
 	
@@ -25,7 +25,7 @@ public partial class CombatGeneralUI : Control, ISceneDependency
 		NodeTurnUI ??= (CombatTurnUI?)FindChild("CombatTurnUI");
 		NodeActionUI ??= (CombatActionUI?)FindChild("CombatActionUI");
 		NodeConfirmationUI ??= (CombatConfirmationUI)FindChild("CombatConfirmationUI");
-		NodeMobUI ??= (MobGeneralUI)FindChild("MobGeneralUI");
+		NodeMobUI ??= (MobUI)FindChild("MobGeneralUI");
 	}
 
 }

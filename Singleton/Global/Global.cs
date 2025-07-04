@@ -13,10 +13,11 @@ using ChessLike.Entity;
 using Action = ChessLike.Entity.Action;
 using Godot;
 using ChessLike.World;
+using ChessLike.World.Encounter;
 
 public static partial class Global
 {
-    public static Grid MainGrid;
+    public static Grid EncounterGrid;
     private static Window RootNode = new Node().GetWindow();
     private static Debug debug = new();
     public static void ConnectToWindow(Window window)
@@ -41,11 +42,20 @@ public static partial class Global
         Console.WriteLine(Directory.GetContentDir(EDirectory.USER_CONTENT));
         SetupManager();
 
+        EventBus.EncounterLoading += OnEncounterLoading;
     }
+
 
     public static Node GetRoot() => RootNode;
 
     public static SceneTree GetTree() => GetRoot().GetTree();
 
-    public static Grid GetGrid() => MainGrid;
+    public static Grid GetEncounterGrid() => EncounterGrid;
+
+    #region Event Connection
+    private static void OnEncounterLoading(EncounterData obj)
+    {
+        EncounterGrid = obj.Grid;
+    }
+    #endregion
 }

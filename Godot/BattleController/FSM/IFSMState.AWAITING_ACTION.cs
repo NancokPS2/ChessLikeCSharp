@@ -25,7 +25,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
     {
         EventBus.InputTurnEnded += OnInputTurnEnded;
 
-        CombatGeneralUI mob_ui = BattleController.CompCombatUI;
+        CombatUI mob_ui = BattleController.CompCombatUI;
 
         //mob_ui.Update(User);
 

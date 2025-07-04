@@ -24,11 +24,23 @@ public partial class TurnManager : Node3D
 
     public ITurn? RoundEnder { get => _round_ender; set => _round_ender = value; }
 
+    bool ReadyToStartTurn;
+
     public TurnManager()
     {
         EventBus.BattleStateChanged += OnBattleStateChanged;
         EventBus.MobStateChanged += OnMobStateChanged;
     }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        if (ReadyToStartTurn)
+        {
+            StartTurn();
+        }
+	}
+
 
     #region Handle Participants
     public void Add(List<ITurn> participants)
@@ -105,6 +117,8 @@ public partial class TurnManager : Node3D
 
     public void StartTurn()
     {
+        ReadyToStartTurn = false;
+
         //Whoever has the lowest delay takes it.
         CurrentTaker = GetWithLowestDelay();
 
@@ -148,7 +162,6 @@ public partial class TurnManager : Node3D
             RoundEnder = null;
             EventBus.RoundEnded?.Invoke();
         }
-
     }
 
     private void ResetDelay(ITurn turn)
@@ -181,7 +194,11 @@ public partial class TurnManager : Node3D
     {
         if (state == EBattleState.AWAITING_TURN)
         {
-            StartTurn();
+            ReadyToStartTurn = true;
+        }
+        else
+        {
+            ReadyToStartTurn = false;
         }
     }
 

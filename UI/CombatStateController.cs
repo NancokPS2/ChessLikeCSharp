@@ -24,7 +24,7 @@ public partial class CombatStateController : Node3D
     public CombatStateController()
     {
         EventBus.MobTurnStarted += OnMobTurnStarted;
-        EventBus.InputActionSelected += OnInputActionSelected;
+        EventBus.TargetingUsageParametersGenerated += OnActionUsageParametersGenerated;
         EventBus.InputBack += OnInputBack;
         EventBus.CombatStarted += OnCombatStarted;
     }
@@ -54,8 +54,7 @@ public partial class CombatStateController : Node3D
         }
     }
 
-    [Obsolete("Something should confirm the action to THEN trigger this, no?")]
-    private void OnInputActionSelected(Ability action)
+    private void OnActionUsageParametersGenerated(UsageParameters parameters)
     {
         if (StateCurrent != EBattleState.AWAITING_ACTION) throw new Exception("How did it choose an action outside the state?");
         StateCurrent = EBattleState.TARGETING;

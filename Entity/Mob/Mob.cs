@@ -15,6 +15,8 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class Mob : Resource
 {
+    private Grid CurrentGrid;
+
     [Export]
     public string DisplayedName = "UNNAMED";
     [Export]
@@ -307,11 +309,7 @@ public partial class Mob : Resource
 
     public Grid GetGrid()
     {
-        throw new NotImplementedException();
-    }
-    public MobScene GetNode()
-    {
-        throw new NotImplementedException();
+        return Global.GetEncounterGrid();
     }
     #endregion
 }

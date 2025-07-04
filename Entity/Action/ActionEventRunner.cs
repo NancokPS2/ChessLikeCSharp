@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ChessLike.Extension;
 using ChessLike.Turn;
+using ChessLike.World;
+using ChessLike.World.Encounter;
 using Godot;
 using static ChessLike.Entity.Action.ActionEvent;
 
@@ -56,7 +58,7 @@ public partial class ActionEventRunner : Node3D
             index,
             parameters
             );
-            
+
         EventBus.ActionQueued?.Invoke(parameters);
     }
 

@@ -55,6 +55,8 @@ public partial class ActionEvent : Resource
 
         EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
         EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
+
+        EventBus.InputActionSelected += OnInputActionSelected;
     }
 
     protected override void Dispose(bool disposing)
@@ -306,5 +308,14 @@ public partial class ActionEvent : Resource
 
         AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
     }
+
+    private void OnInputActionSelected(ActionEvent obj)
+    {
+        if (obj != this) return;
+
+        EventBus.TargetingUsageParametersGenerated?.Invoke(
+            new(Owner, Owner.GetGrid(), this)
+        );
+	}
     #endregion
 }

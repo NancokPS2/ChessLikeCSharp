@@ -4,7 +4,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class MobGeneralUI : Control, ISceneDependency
+public partial class MobUI : Control, ISceneDependency
 {
 	[Export]
 	public TabContainer? NodeTabContainer;
@@ -21,7 +21,7 @@ public partial class MobGeneralUI : Control, ISceneDependency
 
 	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobGeneralUI.tscn";
 
-	public MobGeneralUI()
+	public MobUI()
 	{
 		EventBus.MobSelected += OnMobSelected;
 	}

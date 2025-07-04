@@ -242,8 +242,6 @@ public partial class GridNode : Node3D
     {
         SetGrid(obj.Grid);
     }
-
-
     #endregion
 
     #region Cell Component

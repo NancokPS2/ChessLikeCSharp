@@ -3,6 +3,7 @@ using System;
 
 namespace Godot;
 
+[GlobalClass]
 public partial class PopupText3D : CpuParticles3D
 {
 	private Godot.Font Font = Global.ManagerFont.GetResource("Regular");

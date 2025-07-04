@@ -24,9 +24,14 @@ public partial class MessageQueue: Node
     public MessageQueue()
     {
         Instance = this;
+
+        EventBus.MobTurnStarted += OnMobTurnStarted;
+        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.MobStateChanged += OnMobStateChanged;
+        EventBus.CombatStarted += OnCombatStarted;
     }
 
-    public override void _Process(double delta)
+	public override void _Process(double delta)
     {
         base._Process(delta);
         for (int i = 0; i < Queue.Count; i++)
@@ -76,8 +81,31 @@ public partial class MessageQueue: Node
         new_label.Duration = duration;
         NodeContainer.AddChild(new_label);
         Queue.Add(new_label);
+        Console.WriteLine("Game: " + text);
         return new_label;
     }
+
+    #region Event Connection
+	private void OnBattleStateChanged(EBattleState state)
+	{
+        AddMessage($"State entered {state}");
+	}
+
+	private void OnMobTurnStarted(Mob mob)
+	{
+        AddMessage($"{mob.DisplayedName}'s turn started.");
+	}
+
+	private void OnMobStateChanged(Mob mob, EMobState state)
+	{
+		AddMessage($"{mob.DisplayedName} entered combat.");
+	}
+
+    private void OnCombatStarted()
+	{
+        AddMessage("Combat starts.");
+	}
+    #endregion
 
     public partial class TemporaryLabel : Label
     {
@@ -89,7 +117,7 @@ public partial class MessageQueue: Node
             SizeFlagsVertical = SizeFlags.ShrinkEnd;
             FocusMode = Control.FocusModeEnum.None;
             MouseFilter = Control.MouseFilterEnum.Ignore;
-            AddThemeStyleboxOverride("normal", new StyleBoxFlat(){BgColor = new(0,0,0,0.1f)});
+            AddThemeStyleboxOverride("normal", new StyleBoxFlat() { BgColor = new(0, 0, 0, 0.1f) });
         }
     }
 }

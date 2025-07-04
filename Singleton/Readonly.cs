@@ -16,7 +16,7 @@ public partial class Readonly
 
         public static PopupText3D SCENE_PARTICLE_POPUP_TEXT
         {
-            get => GD.Load<PackedScene>("uid://c6lxdpe373yfb").Instantiate<PopupText3D>();
+            get => GD.Load<PackedScene>("uid://ia3s65kbmt7u").Instantiate<PopupText3D>();
         }
     }
     
