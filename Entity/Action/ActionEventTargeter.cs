@@ -11,9 +11,35 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class ActionEventTargeter : Node3D
 {
-	protected Grid CurrentGrid;
+	const string TARGETING_NODE_GROUP = "ActionEventTargeterTARGETING_NODE_GROUP";
+	const string AoE_NODE_GROUP = "ActionEventTargeterAoE_NODE_GROUP";
+	[Export]
+	protected PackedScene SceneTargeting;
+	public Node3D NodeTargeting
+	{
+		get
+		{
 
-	protected UsageParameters? UsageParametersCurrent;
+			var node = SceneTargeting.Instantiate<Node3D>();
+			node.AddToGroup(TARGETING_NODE_GROUP);
+			return node;
+		}
+	}
+
+	[Export]
+	protected PackedScene SceneAoE;
+	public Node3D NodeAoE
+	{
+		get
+		{
+
+			var node = SceneAoE.Instantiate<Node3D>();
+			node.AddToGroup(AoE_NODE_GROUP);
+			return node;
+		}
+	}
+
+	protected Grid CurrentGrid;
 
 	bool DisplayTargetingRange;
 
@@ -21,7 +47,6 @@ public partial class ActionEventTargeter : Node3D
 	{
 		EventBus.BattleStateChanged += OnBattleStateChanged;
 		EventBus.EncounterLoading += OnEncounterLoading;
-		EventBus.TargetingUsageParametersGenerated += OnTargetingUsageParametersGenerated;
 		EventBus.CellInputReceived += OnCellInputReceived;
 	}
 
@@ -42,20 +67,50 @@ public partial class ActionEventTargeter : Node3D
 		DisplayTargetingRange = state == EBattleState.TARGETING;
 		if (state == EBattleState.TARGETING)
 		{
+			if (CombatScene.UsageParameters is null) throw new Exception();
 
+			ActionEvent action = CombatScene.UsageParameters.ActionRef;
+			List<Vector3i> targets = action.GetTargetVectors(CombatScene.UsageParameters);
+
+			foreach (var item in targets)
+			{
+				AddChild(NodeTargeting);
+				NodeTargeting.GlobalPosition = Grid.MapToReal(item);
+			}
 		}
-		else UsageParametersCurrent = null;
+		else
+		{
+			ClearTargeting();
+			ClearAoE();
+		}
 	}
 
-	private void OnTargetingUsageParametersGenerated(UsageParameters parameters)
+	public void ClearAoE()
 	{
-		UsageParametersCurrent = parameters;
+		Godot.Collections.Array<Node> nodes = GetTree().GetNodesInGroup(AoE_NODE_GROUP);
+		foreach (var item in nodes)
+		{
+			item.QueueFree();
+		}
+	}
+
+	public void ClearTargeting()
+	{
+		Godot.Collections.Array<Node> nodes = GetTree().GetNodesInGroup(TARGETING_NODE_GROUP);
+		foreach (var item in nodes)
+		{
+			item.QueueFree();
+		}
 	}
 
 	private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
 	{
-		if (UsageParametersCurrent is null) return;
-		ActionEvent action = UsageParametersCurrent.ActionRef;
+		if (CombatScene.GetState() != EBattleState.TARGETING) return;
+		if (CombatScene.UsageParameters is null) throw new Exception();
+
+		ActionEvent action = CombatScene.UsageParameters.ActionRef;
+		Mob owner = CombatScene.UsageParameters.OwnerRef;
+		Grid grid = CombatScene.Grid;
 
 		switch (input)
 		{

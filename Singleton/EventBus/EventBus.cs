@@ -44,6 +44,7 @@ public partial class EventBus : Node
     #endregion
 
     #region Grid
+    public delegate void GridPositionsLayered(List<Vector3i> positions, GridNode.Layer layer);
     public delegate void GridCellPositionInput(Vector3i cellPos, ECellInput input);
     public delegate void GridCellPosition(Vector3i cellPos);
     public delegate void GridCellInput(Vector3i cellPos, GridCell cell, ECellInput input);
@@ -51,7 +52,7 @@ public partial class EventBus : Node
     public static GridCellPosition? CellPositionHovered;
     public static GridCellInput? CellPositionInputReceived;
     public static GridCellInput? CellInputReceived;
-
+    public static GridPositionsLayered? GridMeshRequested;
     #endregion
 
     #region Battle Encounter
@@ -149,6 +150,7 @@ public partial class EventBus : Node
     public static ActionUsageParametersEvent? ActionAnimationEnded;
 
     public static ActionUsageParametersEvent? TargetingUsageParametersGenerated;
+
     #endregion
 
     #region ActionEvent Mob Action
@@ -174,7 +176,8 @@ public partial class EventBus : Node
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;
     public static InventoryError? InventoryErrored;
-    #endregion
+	#endregion
+
 
 
 }
