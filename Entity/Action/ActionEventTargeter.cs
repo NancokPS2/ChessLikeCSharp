@@ -76,7 +76,7 @@ public partial class ActionEventTargeter : Node3D
 			foreach (var item in targets)
 			{
 				AddChild(NodeTargeting);
-				NodeTargeting.GlobalPosition = Grid.MapToReal(item);
+				NodeTargeting.GlobalPosition = CombatScene.GridNode.MapToGlobal(item);
 			}
 		}
 		else

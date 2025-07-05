@@ -13,6 +13,8 @@ namespace Godot;
 [GlobalClass]
 public partial class GridNode : Node3D
 {
+    [Export]
+    protected Mesh ModelCellHover;
 
     public enum Layer
     {
@@ -48,7 +50,6 @@ public partial class GridNode : Node3D
     }
 
     #region Base
-
 
     public override void _Process(double delta)
     {
@@ -97,7 +98,23 @@ public partial class GridNode : Node3D
             }
         }
     }
+
+    public Vector3 MapToLocal(Vector3i mapCoordinate, bool centered = false)
+    {
+        Vector3 pos = mapCoordinate.ToGVector3() * CellSize;
+        if (centered) pos += CellSize / 2;
+        return pos;
+    }
+
+    public Vector3 MapToGlobal(Vector3i mapCoordinate, bool centered = false)
+        => ToGlobal(MapToLocal(mapCoordinate, centered));
+
+    public Vector3i LocalToMap(Vector3 localCoordinate)
+    {
+        return new(localCoordinate / CellSize);
+    }
     #endregion
+
 
     #region Collision
     protected void CollisionEnable(Vector3i position, bool enable)
@@ -138,6 +155,13 @@ public partial class GridNode : Node3D
     #endregion
 
     #region Mesh
+    public void ModelSet(Vector3i position, Layer layer, Node3D? newModel)
+    {
+        if (newModel == null && CellComponents.ContainsKey(position) && CellComponents[position].MeshInstances.ContainsKey(layer))
+        {
+            MeshGetInstance(position, layer)?.QueueFree();
+        }
+    }
     public void MeshSet(Vector3i position, Layer layer, Mesh? new_mesh)
     {
         if (new_mesh == null && CellComponents.ContainsKey(position) && CellComponents[position].MeshInstances.ContainsKey(layer))
@@ -243,16 +267,16 @@ public partial class GridNode : Node3D
             }
             EventBus.CellPositionInputReceived?.Invoke(componentPos, grid.GetCell(componentPos), cellInput);
         }
-        else if (!input.IsPressed())
+        else if (input is InputEventMouseMotion)
         {
             EventBus.CellPositionHovered?.Invoke(componentPos + Vector3i.UP);
+            MeshRemove(Layer.CURSOR);
+            MeshSet(
+                componentPos,
+                GridNode.Layer.CURSOR,
+                ModelCellHover
+                );
         }
-        MeshRemove(Layer.CURSOR);
-        MeshSet(
-            componentPos,
-            GridNode.Layer.CURSOR,
-            Global.Resources.GetMesh(Global.Resources.MeshIdent.CURSOR)
-            );
     }
 
     private void OnEncounterLoaded(EncounterData obj)
@@ -280,10 +304,5 @@ public partial class GridNode : Node3D
 
     }
 
-    [Obsolete("Using Grid.MapToLocal()")]
-    public Vector3 MapToLocal(Vector3i mapCoordinate) => mapCoordinate.ToGVector3() * CellSize;
-
-    [Obsolete("Using Grid.MapToLocal()")]
-    public Vector3i LocalToMap(Vector3 localCoordinate) => new(localCoordinate / CellSize);
     #endregion
 }

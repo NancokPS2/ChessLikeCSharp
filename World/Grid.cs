@@ -37,7 +37,7 @@ public partial class Grid : Resource
     #endregion
 
     #region Positions
-    public static Godot.Vector3 MapToReal(Vector3i mapPos) => mapPos * CellSize;
+    //public static Godot.Vector3 MapToReal(Vector3i mapPos) => mapPos * CellSize;
     
     public Vector3i[] GetUsedPositions()
     {

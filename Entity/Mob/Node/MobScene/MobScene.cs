@@ -110,21 +110,21 @@ public partial class MobScene : Node3D
 
         Vector3i currentGoal = MovementStored[MovementCurrentIndex];
 
-        Godot.Vector3 currentGoalReal;
+        Godot.Vector3 currentGoalGlobal;
         switch (MobUsing.MovementMode)
         {
             case EMobMovementMode.WALK:
-                currentGoalReal = Grid.MapToReal(currentGoal);
+                currentGoalGlobal = CombatScene.GridNode.MapToGlobal(currentGoal);
                 break;
 
             default:
                 throw new NotImplementedException($"Movement for {MobUsing.MovementMode} not implemented yet.");
         }
 
-        GlobalPosition = GlobalPosition.MoveToward(currentGoalReal, MovementGetSpeed());
+        GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
 
         //If close enough, advance the index.
-        if (Mathf.IsZeroApprox(GlobalPosition.DistanceTo(currentGoalReal)))
+        if (Mathf.IsZeroApprox(GlobalPosition.DistanceTo(currentGoalGlobal)))
             MovementCurrentIndex++;
     }
 
@@ -136,7 +136,7 @@ public partial class MobScene : Node3D
 
     public void MovementResetPosition()
     {
-        Godot.Vector3 vector = Grid.MapToReal(MobUsing.GetPosition());
+        Godot.Vector3 vector = CombatScene.GridNode.MapToGlobal(MobUsing.GetPosition());
         GlobalPosition = vector;
     }
 
@@ -151,7 +151,7 @@ public partial class MobScene : Node3D
 
     public void MovementVerifyPosition()
     {
-        if (!Mathf.IsZeroApprox(Grid.MapToReal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
+        if (!Mathf.IsZeroApprox(CombatScene.GridNode.MapToGlobal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
         {
             throw new Exception($"Position mismatch. Node:{GlobalPosition} | Mob:{MobUsing.GetPosition()}");
         }
