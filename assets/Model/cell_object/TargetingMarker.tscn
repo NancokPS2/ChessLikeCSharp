@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://n0rvkr8sjqge"]
+
+[ext_resource type="ArrayMesh" uid="uid://bbqnuw0bhcyaw" path="res://assets/Model/cell_object/targeting_Targetable.res" id="1_us428"]
+
+[node name="TargetingMarker" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_us428")

@@ -1,14 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://b60n65v58uy2o"]
+[gd_scene load_steps=14 format=3 uid="uid://b60n65v58uy2o"]
 
 [ext_resource type="Script" uid="uid://chob4wygp866s" path="res://Godot/MainScenes/CombatScene.cs" id="1_polnf"]
 [ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
 [ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="3_brs8u"]
 [ext_resource type="Script" uid="uid://lglrym3wvu8t" path="res://Entity/Action/ActionEventAnimator.cs" id="3_lnhn1"]
 [ext_resource type="Script" uid="uid://c3fqdxefdb0tc" path="res://Entity/Mob/Node/MobSceneManager/MobSceneManager.cs" id="4_e5xpt"]
+[ext_resource type="Script" uid="uid://cbukun27q6n85" path="res://Entity/Action/ActionEventTargeter.cs" id="4_polnf"]
 [ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="4_tppsp"]
-[ext_resource type="Script" uid="uid://d4ii05w7e3cli" path="res://UI/CombatStateController.cs" id="5_58mxa"]
+[ext_resource type="PackedScene" uid="uid://n0rvkr8sjqge" path="res://assets/Model/cell_object/TargetingMarker.tscn" id="5_csriv"]
 [ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="5_lnhn1"]
 [ext_resource type="Script" uid="uid://cs0et8n4nl2xx" path="res://Turn/TurnManager.cs" id="6_a0jkw"]
+[ext_resource type="PackedScene" uid="uid://cg45vppi3yf5h" path="res://assets/Model/cell_object/AoEMarker.tscn" id="6_wmbcu"]
 [ext_resource type="PackedScene" uid="uid://dslo3iy2wc5fx" path="res://UI/Combat/CombatUI.tscn" id="7_e5xpt"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
@@ -28,6 +30,12 @@ metadata/_custom_type_script = "uid://bhoxiv0m5j3kk"
 script = ExtResource("3_lnhn1")
 metadata/_custom_type_script = "uid://lglrym3wvu8t"
 
+[node name="ActionEventTargeter" type="Node3D" parent="Singletons"]
+script = ExtResource("4_polnf")
+SceneTargeting = ExtResource("5_csriv")
+SceneAoE = ExtResource("6_wmbcu")
+metadata/_custom_type_script = "uid://cbukun27q6n85"
+
 [node name="GridNode" type="Node3D" parent="Singletons"]
 script = ExtResource("3_brs8u")
 metadata/_custom_type_script = "uid://md7uxykgpoyx"
@@ -35,10 +43,6 @@ metadata/_custom_type_script = "uid://md7uxykgpoyx"
 [node name="MobSceneManager" type="Node3D" parent="Singletons"]
 script = ExtResource("4_e5xpt")
 metadata/_custom_type_script = "uid://c3fqdxefdb0tc"
-
-[node name="CombatStateController" type="Node3D" parent="Singletons"]
-script = ExtResource("5_58mxa")
-metadata/_custom_type_script = "uid://d4ii05w7e3cli"
 
 [node name="TurnManager" type="Node3D" parent="Singletons"]
 script = ExtResource("6_a0jkw")

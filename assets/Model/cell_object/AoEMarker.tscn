@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cg45vppi3yf5h"]
+
+[ext_resource type="ArrayMesh" uid="uid://do7b0wbr1ss58" path="res://assets/Model/cell_object/targeting_AoE.res" id="1_3hixk"]
+
+[node name="AoEMarker" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_3hixk")

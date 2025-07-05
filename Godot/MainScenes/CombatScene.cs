@@ -55,6 +55,14 @@ public partial class CombatScene : Node3D
         EventBus.CombatStarted += OnCombatStarted;
 	}
 
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		base._UnhandledInput(@event);
+		if (@event.IsActionPressed("cancel"))
+		{
+			EventBus.InputBack?.Invoke();
+		}
+	}
 
 	public void Setup(EncounterData encounterToLoad)
 	{
@@ -98,14 +106,8 @@ public partial class CombatScene : Node3D
                 StateCurrent = EBattleState.AWAITING_ACTION;
                 break;
 
-            default: throw new Exception("Unsupported state.");
+            default: break;
         }
-    }
-
-    private void OnActionUsageParametersGenerated(UsageParameters parameters)
-    {
-        if (StateCurrent != EBattleState.AWAITING_ACTION) throw new Exception("How did it choose an action outside the state?");
-        StateCurrent = EBattleState.TARGETING;
     }
 
     private void OnMobTurnStarted(Mob mob)

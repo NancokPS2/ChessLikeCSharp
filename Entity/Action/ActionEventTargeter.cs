@@ -72,6 +72,7 @@ public partial class ActionEventTargeter : Node3D
 			ActionEvent action = CombatScene.UsageParameters.ActionRef;
 			List<Vector3i> targets = action.GetTargetVectors(CombatScene.UsageParameters);
 
+			//This is not working
 			foreach (var item in targets)
 			{
 				AddChild(NodeTargeting);
