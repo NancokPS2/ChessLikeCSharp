@@ -114,7 +114,7 @@ public partial class MobScene : Node3D
         switch (MobUsing.MovementMode)
         {
             case EMobMovementMode.WALK:
-                currentGoalGlobal = CombatScene.GridNode.MapToGlobal(currentGoal);
+                currentGoalGlobal = CombatScene.GetGridNode().MapToGlobal(currentGoal);
                 break;
 
             default:
@@ -136,7 +136,7 @@ public partial class MobScene : Node3D
 
     public void MovementResetPosition()
     {
-        Godot.Vector3 vector = CombatScene.GridNode.MapToGlobal(MobUsing.GetPosition());
+        Godot.Vector3 vector = CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition());
         GlobalPosition = vector;
     }
 
@@ -151,7 +151,7 @@ public partial class MobScene : Node3D
 
     public void MovementVerifyPosition()
     {
-        if (!Mathf.IsZeroApprox(CombatScene.GridNode.MapToGlobal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
+        if (!Mathf.IsZeroApprox(CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
         {
             throw new Exception($"Position mismatch. Node:{GlobalPosition} | Mob:{MobUsing.GetPosition()}");
         }

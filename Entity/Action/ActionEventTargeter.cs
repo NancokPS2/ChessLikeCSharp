@@ -14,34 +14,30 @@ public partial class ActionEventTargeter : Node3D
 	const string TARGETING_NODE_GROUP = "ActionEventTargeterTARGETING_NODE_GROUP";
 	const string AoE_NODE_GROUP = "ActionEventTargeterAoE_NODE_GROUP";
 	[Export]
-	protected PackedScene SceneTargeting;
+	protected PackedScene? SceneTargeting;
 	public Node3D NodeTargeting
 	{
 		get
 		{
 
-			var node = SceneTargeting.Instantiate<Node3D>();
+			Node3D node = SceneTargeting?.Instantiate<Node3D>() ?? throw new Exception();
 			node.AddToGroup(TARGETING_NODE_GROUP);
 			return node;
 		}
 	}
 
 	[Export]
-	protected PackedScene SceneAoE;
+	protected PackedScene? SceneAoE;
 	public Node3D NodeAoE
 	{
 		get
 		{
 
-			var node = SceneAoE.Instantiate<Node3D>();
+			var node = SceneAoE?.Instantiate<Node3D>() ?? throw new Exception();
 			node.AddToGroup(AoE_NODE_GROUP);
 			return node;
 		}
 	}
-
-	protected Grid CurrentGrid;
-
-	bool DisplayTargetingRange;
 
 	public ActionEventTargeter()
 	{
@@ -64,7 +60,6 @@ public partial class ActionEventTargeter : Node3D
 	#region Event Connection
 	private void OnBattleStateChanged(EBattleState state)
 	{
-		DisplayTargetingRange = state == EBattleState.TARGETING;
 		if (state == EBattleState.TARGETING)
 		{
 			if (CombatScene.UsageParameters is null) throw new Exception();
@@ -75,8 +70,12 @@ public partial class ActionEventTargeter : Node3D
 			//This is not working
 			foreach (var item in targets)
 			{
-				AddChild(NodeTargeting);
-				NodeTargeting.GlobalPosition = CombatScene.GridNode.MapToGlobal(item);
+				Node3D newNode = NodeTargeting;
+				AddChild(newNode);
+				
+				Godot.Vector3 pos = CombatScene.GetGridNode().MapToGlobal(item);
+
+				newNode.GlobalPosition = pos;
 			}
 		}
 		else
@@ -111,7 +110,7 @@ public partial class ActionEventTargeter : Node3D
 
 		ActionEvent action = CombatScene.UsageParameters.ActionRef;
 		Mob owner = CombatScene.UsageParameters.OwnerRef;
-		Grid grid = CombatScene.Grid;
+		Grid grid = CombatScene.GetGrid();
 
 		switch (input)
 		{
@@ -121,7 +120,7 @@ public partial class ActionEventTargeter : Node3D
 			case ECellInput.SECONDARY:
 				break;
 
-			default: throw new Exception();
+			default:  break;
 		}
 	}
 	

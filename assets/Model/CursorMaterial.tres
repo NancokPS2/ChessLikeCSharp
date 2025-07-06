@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://0wxbrsg1tj7g"]
 
-[ext_resource type="Shader" path="res://assets/Shader/Crystal.gdshader" id="1_06wch"]
+[ext_resource type="Shader" uid="uid://cfeqrb2tjj33o" path="res://assets/Shader/Crystal.gdshader" id="1_06wch"]
 
 [resource]
 render_priority = 0

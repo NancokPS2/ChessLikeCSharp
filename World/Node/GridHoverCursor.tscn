@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvgbi2pu0b73j"]
+
+[ext_resource type="Script" uid="uid://gvso1tb4a2ks" path="res://World/Node/GridHoverCursor.cs" id="1_1utpp"]
+[ext_resource type="PackedScene" uid="uid://cmwdhr24j8kfl" path="res://assets/Model/Cursor.glb" id="2_qsbva"]
+
+[node name="GridHoverCursor" type="Node3D"]
+script = ExtResource("1_1utpp")
+metadata/_custom_type_script = "uid://gvso1tb4a2ks"
+
+[node name="Cursor" parent="." instance=ExtResource("2_qsbva")]

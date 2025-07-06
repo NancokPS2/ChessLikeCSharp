@@ -13,8 +13,6 @@ namespace Godot;
 [GlobalClass]
 public partial class GridNode : Node3D
 {
-    [Export]
-    protected Mesh ModelCellHover;
 
     public enum Layer
     {
@@ -249,34 +247,31 @@ public partial class GridNode : Node3D
     {
         if (!InputEnabled) { return; }
 
-        if (input.IsPressed())
+        ECellInput cellInput = ECellInput.NONE;
+        if (input.IsActionPressed("accept"))
         {
-            ECellInput cellInput;
-            if (input.IsActionPressed("accept"))
-            {
-                cellInput = ECellInput.PRIMARY;
-                EventBus.CellPositionSelected?.Invoke(componentPos + Vector3i.UP);
-            }
-            else if (input.IsActionPressed("cancel"))
-            {
-                cellInput = ECellInput.SECONDARY;
-            }
-            else
-            {
-                cellInput = ECellInput.PRIMARY;
-            }
-            EventBus.CellPositionInputReceived?.Invoke(componentPos, grid.GetCell(componentPos), cellInput);
+            cellInput = ECellInput.PRIMARY;
+            EventBus.CellPositionSelected?.Invoke(componentPos + Vector3i.UP);
+        }
+        else if (input.IsActionPressed("cancel"))
+        {
+            cellInput = ECellInput.SECONDARY;
         }
         else if (input is InputEventMouseMotion)
         {
+            cellInput = ECellInput.HOVER;
             EventBus.CellPositionHovered?.Invoke(componentPos + Vector3i.UP);
-            MeshRemove(Layer.CURSOR);
-            MeshSet(
-                componentPos,
-                GridNode.Layer.CURSOR,
-                ModelCellHover
-                );
         }
+        EventBus.CellPositionInputReceived?.Invoke(
+            componentPos + Vector3i.UP,
+            grid.GetCell(componentPos),
+            cellInput
+            );
+        EventBus.CellInputReceived?.Invoke(
+            componentPos + Vector3i.UP,
+            grid.GetCell(componentPos),
+            cellInput
+            );
     }
 
     private void OnEncounterLoaded(EncounterData obj)

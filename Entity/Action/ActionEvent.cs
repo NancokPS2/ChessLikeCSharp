@@ -109,7 +109,9 @@ public partial class ActionEvent : Resource
             .Where(x => grid.IsPositionInbounds(x))
             .ToList();
 
-        return output;
+
+        //Convert the list to be relative to its owner position.
+        return output.Select( x => x + Owner.GetPosition()).ToList();
     }
 
     public List<Vector3i> GetAoEVectors(UsageParameters usageParams, List<Vector3i> targets)
@@ -191,7 +193,7 @@ public partial class ActionEvent : Resource
     protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
         => new(Owner, parameters.GridRef, this);
     protected virtual UsageParameters GetAutoActivationUsageParameters()
-        => new(Owner, CombatScene.GridNode.GetGrid(), this);
+        => new(Owner, CombatScene.GetGrid(), this);
 
     protected void AutoActivationRequest(UsageParameters parameters)
     {
@@ -314,7 +316,7 @@ public partial class ActionEvent : Resource
         if (obj != this) return;
 
         EventBus.TargetingUsageParametersGenerated?.Invoke(
-            new(Owner, CombatScene.GridNode.GetGrid(), this)
+            new(Owner, CombatScene.GetGrid(), this)
         );
 	}
     #endregion

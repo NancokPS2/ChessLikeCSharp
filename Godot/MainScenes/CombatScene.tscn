@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://cs0et8n4nl2xx" path="res://Turn/TurnManager.cs" id="6_a0jkw"]
 [ext_resource type="PackedScene" uid="uid://cg45vppi3yf5h" path="res://assets/Model/cell_object/AoEMarker.tscn" id="6_wmbcu"]
 [ext_resource type="PackedScene" uid="uid://dslo3iy2wc5fx" path="res://UI/Combat/CombatUI.tscn" id="7_e5xpt"]
-[ext_resource type="PackedScene" uid="uid://cmwdhr24j8kfl" path="res://assets/Model/Cursor.glb" id="8_wmbcu"]
+[ext_resource type="PackedScene" uid="uid://cvgbi2pu0b73j" path="res://World/Node/GridHoverCursor.tscn" id="8_wmbcu"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
@@ -39,8 +39,9 @@ metadata/_custom_type_script = "uid://cbukun27q6n85"
 
 [node name="GridNode" type="Node3D" parent="Singletons"]
 script = ExtResource("3_brs8u")
-SceneCellHover = ExtResource("8_wmbcu")
 metadata/_custom_type_script = "uid://md7uxykgpoyx"
+
+[node name="GridHoverCursor" parent="Singletons" instance=ExtResource("8_wmbcu")]
 
 [node name="MobSceneManager" type="Node3D" parent="Singletons"]
 script = ExtResource("4_e5xpt")
