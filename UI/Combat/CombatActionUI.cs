@@ -76,7 +76,7 @@ public partial class CombatActionUI : Control, ISceneDependency
     {
         switch (state)
         {
-            case EBattleState.AWAITING_ACTION:
+            case EBattleState.ACTION_INPUT:
                 EnableActionButtons(true);
                 break;
 

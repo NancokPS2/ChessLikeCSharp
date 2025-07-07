@@ -89,7 +89,7 @@ public class BattleControllerStateAwaitingAction : BattleControllerState
             if (_popup.IndexLastPressed == (int)PopupButtonDialogUI.EConfirmCancel.CONFIRM)
             {
                 //Swap to ENDING_TURN
-                User.FSMSetState(EBattleState.ENDING_TURN); 
+                User.FSMSetState(EBattleState.TURN_ENDING); 
             }
             //else if (_popup.IndexLastPressed == (int)PopupUI.OPTION_CONFIRM_CANCEL.CANCEL)
 

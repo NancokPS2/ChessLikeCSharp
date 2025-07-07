@@ -47,7 +47,7 @@ public class BattleControllerStatePreparation : BattleControllerState
         //TODO: Ask for confirmation.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.PAUSE))
         {
-            User.FSMSetState(EBattleState.AWAITING_TURN);
+            User.FSMSetState(EBattleState.TURN_SELECTION);
         }
 
         //If accepted.

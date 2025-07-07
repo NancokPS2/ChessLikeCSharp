@@ -148,6 +148,7 @@ public partial class EventBus : Node
 
     public static ActionUsageParametersEvent? ActionAnimationStarted;
     public static ActionUsageParametersEvent? ActionAnimationEnded;
+    public static ActionUsageParametersListEvent? ActionAnimationQueueEnded;
 
     public static ActionUsageParametersEvent? TargetingUsageParametersGenerated;
     public static ActionUsageParametersEvent? TargetingParametersDone;

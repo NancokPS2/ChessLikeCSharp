@@ -11,26 +11,35 @@ namespace ChessLike.Turn;
 [GlobalClass]
 public partial class TurnManager : Node3D
 {
-    //public delegate void TurnChangeHandler(ITurn who);
-    //public event TurnChangeHandler? TurnEnded;
-    //public event TurnChangeHandler? TurnStarted;
-
 
     UniqueList<ITurn> Participants = new();
 
-    ITurn? CurrentTaker;
+    protected ITurn? CurrentTaker
+    {
+        get => currentTaker;
+        set
+        {
+            currentTaker = value;
+            Debug.Assert(currentTaker is not null);
+        }
+    }
+    ITurn? currentTaker;
 
     ITurn? _round_ender;
 
     public ITurn? RoundEnder { get => _round_ender; set => _round_ender = value; }
 
+
     bool ReadyToStartTurn;
+    bool ReadyToEndTurn;
 
     public TurnManager()
     {
         EventBus.BattleStateChanged += OnBattleStateChanged;
         EventBus.MobStateChanged += OnMobStateChanged;
+        EventBus.InputTurnEnded += OnInputTurnEnded;
     }
+
 
     public override void _Process(double delta)
     {
@@ -39,7 +48,12 @@ public partial class TurnManager : Node3D
         {
             StartTurn();
         }
-	}
+        else if (ReadyToEndTurn)
+        {
+            EndTurn();
+        }
+        Debug.Assert(CurrentTaker is not null);
+    }
 
 
     #region Handle Participants
@@ -121,6 +135,7 @@ public partial class TurnManager : Node3D
 
         //Whoever has the lowest delay takes it.
         CurrentTaker = GetWithLowestDelay();
+        Debug.Assert(CurrentTaker is not null);
 
         float initial_delay = CurrentTaker.DelayCurrent;
 
@@ -146,6 +161,8 @@ public partial class TurnManager : Node3D
 
     public void EndTurn()
     {
+        ReadyToEndTurn = false;
+
         if (CurrentTaker is null) { throw new Exception("No one is taking a turn at this moment."); }
 
         //Reset the delay, the CurrentTaker should end up with a high delay.
@@ -192,7 +209,7 @@ public partial class TurnManager : Node3D
     #region Event Connection
     private void OnBattleStateChanged(EBattleState state)
     {
-        if (state == EBattleState.AWAITING_TURN)
+        if (state == EBattleState.TURN_SELECTION)
         {
             ReadyToStartTurn = true;
         }
@@ -212,6 +229,12 @@ public partial class TurnManager : Node3D
         {
             Remove(mob);
         }
+    }
+    
+    private void OnInputTurnEnded()
+    {
+        Debug.Assert(CurrentTaker is not null);
+        ReadyToEndTurn = true;
     }
     #endregion
 }

@@ -20,7 +20,7 @@ public class BattleControllerStateActionRunning : BattleControllerState
         if (BattleController.CompActionRunner.QueueIsEmpty()){throw new Exception("Entered state without queued actions.");}
 
         BattleController.CompCombatUI.Hide();
-        BattleController.CompActionRunner.RunStart();
+        BattleController.CompActionRunner.QueueRun();
     }
 
     public override void StateOnExit()
@@ -34,7 +34,7 @@ public class BattleControllerStateActionRunning : BattleControllerState
     {
         if (BattleController.CompActionRunner.QueueIsEmpty())
         {
-            User.FSMSetState(EBattleState.AWAITING_ACTION);
+            User.FSMSetState(EBattleState.ACTION_INPUT);
         }
     }
 }

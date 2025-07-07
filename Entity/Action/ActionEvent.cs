@@ -68,6 +68,11 @@ public partial class ActionEvent : Resource
     #region Visual
     public Texture2D GetAnimationFloatingTexture() => throw new NotImplementedException();
 
+    public virtual void AnimationRun(UsageParameters parameters)
+    {
+        if (parameters.ActionRef != this) throw new Exception();
+    }
+
     #endregion
 
     #region Targeting
@@ -87,7 +92,7 @@ public partial class ActionEvent : Resource
     //Returns the positions targetable by this action, relative to the owner.
     public List<Vector3i> GetTargetVectors(UsageParameters usageParams)
     {
-        //if (usage_params.PositionsTargeted.Count != 0 || usage_params.MobsTargeted.Count != 0){throw new Exception("This should be called BEFORE locations have been chosen.");}
+        if (usageParams.ActionRef != this) throw new Exception();
 
         Vector3i origin = usageParams.OwnerRef.GetPosition();
         Grid grid = usageParams.GridRef;
@@ -123,6 +128,7 @@ public partial class ActionEvent : Resource
 
     public List<List<Vector3i>> GetAoEVectors(UsageParameters usageParams, List<Vector3i> selectedPositions)
     {
+        if (usageParams.ActionRef != this) throw new Exception();
         if (selectedPositions.Count == 0) throw new Exception("No position to use AoE in.");
 
         Vector3i origin = usageParams.OwnerRef.GetPosition();
@@ -262,6 +268,8 @@ public partial class ActionEvent : Resource
 
     public virtual void Use(UsageParameters usageParams)
     {
+        if (usageParams.ActionRef != this) throw new Exception();
+        
         foreach (var command in Commands)
         {
             foreach (var mob in usageParams.MobsTargeted)

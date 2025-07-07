@@ -15,17 +15,17 @@ public enum EBattleState
     /// <summary>
     /// Waiting for TurnManager to assign a turn.
     /// </summary>
-    AWAITING_TURN,
+    TURN_SELECTION,
 
     /// <summary>
     /// Undefined
     /// </summary>
-    ENDING_TURN,
+    TURN_ENDING,
 
     /// <summary>
     /// Waiting for the player to select an action in the ActionUI
     /// </summary>
-    AWAITING_ACTION,
+    ACTION_INPUT,
 
     /// <summary>
     /// WIP: Enables targeting for the player.

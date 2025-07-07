@@ -38,6 +38,6 @@ public class BattleControllerStateEndingTurn : BattleControllerState
             User.FSMSetState(EBattleState.END_COMBAT);
         }
 
-        User.FSMSetState(EBattleState.AWAITING_TURN);
+        User.FSMSetState(EBattleState.TURN_SELECTION);
     }
 }

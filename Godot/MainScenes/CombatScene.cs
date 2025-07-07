@@ -41,6 +41,8 @@ public partial class CombatScene : Node3D
 		EventBus.InputBack += OnInputBack;
 		EventBus.CombatStarted += OnCombatStarted;
 		EventBus.TargetingParametersDone += OnTargetingParametersDone;
+		EventBus.MobTurnEnded += OnMobTurnEnded;
+		EventBus.ActionAnimationQueueEnded += OnActionAnimationQueueEnded;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -91,7 +93,7 @@ public partial class CombatScene : Node3D
 	#region Event Connection
 	private void OnCombatStarted()
 	{
-		SetState(EBattleState.AWAITING_TURN);
+		SetState(EBattleState.TURN_SELECTION);
 	}
 
 	private void OnInputBack()
@@ -106,7 +108,7 @@ public partial class CombatScene : Node3D
 				break;
 
 			case EBattleState.TARGETING:
-				SetState(EBattleState.AWAITING_ACTION);
+				SetState(EBattleState.ACTION_INPUT);
 				break;
 
 			default: break;
@@ -115,7 +117,7 @@ public partial class CombatScene : Node3D
 
 	private void OnMobTurnStarted(Mob mob)
 	{
-		SetState(EBattleState.AWAITING_ACTION);
+		SetState(EBattleState.ACTION_INPUT);
 	}
 
 	private void OnTargetingUsageParametersGenerated(UsageParameters parameters)
@@ -123,12 +125,23 @@ public partial class CombatScene : Node3D
 		UsageParameters = parameters;
 		SetState(EBattleState.TARGETING);
 	}
-	
+
 	private void OnTargetingParametersDone(UsageParameters parameters)
 	{
 		UsageParameters = parameters;
 		SetState(EBattleState.ACTION_RUNNING);
 	}
+
+	private void OnMobTurnEnded(Mob mob)
+	{
+		UsageParameters = null;
+		SetState(EBattleState.TURN_SELECTION);
+	}
+	
+    private void OnActionAnimationQueueEnded(List<UsageParameters> parameterList)
+    {
+		SetState(EBattleState.ACTION_INPUT);
+    }
 	#endregion
 
 }

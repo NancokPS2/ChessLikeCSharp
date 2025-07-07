@@ -21,13 +21,26 @@ public partial class ActionEventRunner : Node3D
     public delegate void Delegate();
 
     #region Queue
+    protected bool ReadyToStartRun;
     private List<UsageParameters> Queue = new();
-    public bool RunningEnabled;
 
     public ActionEventRunner()
     {
         EventBus.ActionEventAutoActivated += OnActionEventAutoActivated;
+        EventBus.BattleStateChanged += OnBattleStateChanged;
     }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        if (ReadyToStartRun)
+        {
+            UsageParameters usageParametersInitial = CombatScene.UsageParameters ?? throw new Exception();
+            QueueAdd(usageParametersInitial);
+            QueueRun();
+        }
+	}
+
 
     public void QueueAdd(UsageParameters parameters)
     {
@@ -73,11 +86,11 @@ public partial class ActionEventRunner : Node3D
     #region Run Logic
     // RUN LOGIC
 
-    public void RunStart()
+    public void QueueRun()
     {
+        ReadyToStartRun = false;
+        
         if (Queue.Count == 0) { throw new Exception("Nothing to run."); }
-
-        if (!RunningEnabled) { return; }
 
         for (int queueIndex = 0; queueIndex < Queue.Count; queueIndex++)
         {
@@ -98,11 +111,17 @@ public partial class ActionEventRunner : Node3D
     #endregion
 
     #region Event Connection
-
     private void OnActionEventAutoActivated(UsageParameters activated, UsageParameters activatedBy)
     {
         QueueAddBefore(activated, activatedBy);
     }
 
+    private void OnBattleStateChanged(EBattleState state)
+    {
+        if (state == EBattleState.ACTION_RUNNING)
+        {
+            ReadyToStartRun = true;
+        }
+    }
     #endregion
 }

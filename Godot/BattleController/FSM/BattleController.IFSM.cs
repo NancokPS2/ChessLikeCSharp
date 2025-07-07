@@ -11,10 +11,10 @@ public partial class BattleController
     public List<BattleControllerState> StateList { get; set; } = new()
     {
         new BattleControllerStatePaused(EBattleState.PAUSED),
-        new BattleControllerStateTakingTurn(EBattleState.AWAITING_TURN),
-        new BattleControllerStateEndingTurn(EBattleState.ENDING_TURN),
+        new BattleControllerStateTakingTurn(EBattleState.TURN_SELECTION),
+        new BattleControllerStateEndingTurn(EBattleState.TURN_ENDING),
         new BattleControllerStateTargeting(EBattleState.TARGETING),
-        new BattleControllerStateAwaitingAction(EBattleState.AWAITING_ACTION),
+        new BattleControllerStateAwaitingAction(EBattleState.ACTION_INPUT),
         new BattleControllerStateActionRunning(EBattleState.ACTION_RUNNING),
         new BattleControllerStatePreparation(EBattleState.PREPARATION),
         new BattleControllerStateEndCombat(EBattleState.END_COMBAT),

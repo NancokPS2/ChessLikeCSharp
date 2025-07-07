@@ -25,13 +25,43 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
     #region Animation
     protected void StartAnimationQueue(List<UsageParameters> parameterList)
     {
-        if (Queue.Count == 0) throw new Exception("Empty queue.");
+        if (parameterList.Count == 0) throw new Exception("No parameters where received.");
 
         CurrentIndex = 0;
         CurrentAnimationTime = 0;
         Queue = parameterList;
 
         StartAnimation();
+    }
+
+    protected void StartAnimation()
+    {
+        if (!IsValidAnimationIndex()) throw new Exception();
+        StartAnimation(Queue[CurrentIndex]);
+    }
+
+    protected void StartAnimation(UsageParameters parameters)
+    {
+        CurrentAnimationTime = 0;
+        CurrentParameters = parameters;
+
+        AnimationParameters animationParams = parameters.ActionRef.AnimationParams;
+        ActionEvent action = parameters.ActionRef;
+        Mob owner = parameters.OwnerRef;
+
+        EventBus.ActionAnimationStarted?.Invoke(CurrentParameters);
+
+        //WIP need to animate this.
+        action.AnimationRun(parameters);
+    }
+    
+    protected void EndAnimationQueue()
+    {
+        CurrentIndex = 0;
+        CurrentAnimationTime = 0;
+        CurrentParameters = null;
+        EventBus.ActionAnimationQueueEnded?.Invoke(Queue);
+        Queue.Clear();
     }
 
     protected void NextAnimation()
@@ -55,36 +85,7 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
 
     }
 
-    public float GetAnimationTimeLeft(UsageParameters parameters)
-        => parameters.ActionRef.AnimationParams.MaxDuration;
-
     protected bool IsValidAnimationIndex() => CurrentIndex < Queue.Count;
-
-    protected void EndAnimationQueue()
-    {
-        CurrentIndex = 0;
-        CurrentAnimationTime = 0;
-        CurrentParameters = null;
-        Queue.Clear();
-    }
-
-    protected void StartAnimation()
-    {
-        if (!IsValidAnimationIndex()) throw new Exception();
-        StartAnimation(Queue[CurrentIndex]);
-    }
-
-    protected void StartAnimation(UsageParameters parameters)
-    {
-        CurrentAnimationTime = 0;
-        CurrentParameters = parameters;
-
-        AnimationParameters animationParams = parameters.ActionRef.AnimationParams;
-        ActionEvent action = parameters.ActionRef;
-        Mob owner = parameters.OwnerRef;
-
-        EventBus.ActionAnimationStarted?.Invoke(CurrentParameters);
-    }
 
     public override void _Process(double delta)
     {

@@ -48,7 +48,7 @@ public partial class CombatStateOverlay : Control
                     flat.BorderColor = Colors.Gray;
                     break;
 
-                case EBattleState.AWAITING_ACTION:
+                case EBattleState.ACTION_INPUT:
                     flat.BorderColor = Colors.LightCyan;
                     break;
 

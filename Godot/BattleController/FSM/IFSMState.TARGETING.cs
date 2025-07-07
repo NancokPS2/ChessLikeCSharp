@@ -83,7 +83,7 @@ public class BattleControllerStateTargeting : BattleControllerState
         //If CANCEL pressed, return to AWAITING_ACTION.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.CANCEL))
         {
-            User.FSMSetState(EBattleState.AWAITING_ACTION);
+            User.FSMSetState(EBattleState.ACTION_INPUT);
         }
         //If ACCEPT pressed, select the position.
         if (Global.GInput.IsButtonJustPressed(Global.GInput.Button.ACCEPT))
