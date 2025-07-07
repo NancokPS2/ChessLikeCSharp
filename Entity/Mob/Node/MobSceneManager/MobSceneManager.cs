@@ -18,6 +18,7 @@ public partial class MobSceneManager : Node3D
         EventBus.MobStateChanged += OnMobStatChanged;
         EventBus.CellPositionSelected += OnCellSelected;
         EventBus.CellPositionHovered += OnCellHovered;
+        EventBus.MobTurnStarted += OnMobTurnStarted;
     }
 
     public override void _Ready()
@@ -66,6 +67,43 @@ public partial class MobSceneManager : Node3D
         InstancedMobs.Remove(instance);
     }
 
+    public MobScene? GetInstanceByPosition(Vector3i cellPos)
+    {
+        foreach (var instance in InstancedMobs)
+        {
+            if (instance.MobUsing.GetPosition() == cellPos)
+            {
+                return instance;
+            }
+        }
+        return null;
+    }
+
+    protected void SelectMob(MobScene scene)
+        => SelectMob(scene.MobUsing);
+
+    protected void SelectMob(Mob mob)
+    {
+        MobScene? scene = GetInstanceByPosition(mob.GetPosition());
+        if (scene is null) return;
+
+        NodeSelectionCursor.GlobalPosition = scene.MarkerOverhead.GlobalPosition;
+        NodeSelectionCursor.Show();
+        EventBus.MobSelected?.Invoke(scene.MobUsing);
+    }
+
+    protected void HoverMob(MobScene scene)
+        => HoverMob(scene.MobUsing);
+    protected void HoverMob(Mob mob)
+    {
+        MobScene? scene = GetInstanceByPosition(mob.GetPosition());
+        if (scene is null) return;
+
+        NodeHoveringCursor.GlobalPosition = scene.MarkerOverhead.GlobalPosition;
+        NodeHoveringCursor.Show();
+        EventBus.MobHovered?.Invoke(scene.MobUsing);
+    }
+
 
     #region Event Connection
     private void OnMobStatChanged(Mob mob, EMobState state)
@@ -88,33 +126,31 @@ public partial class MobSceneManager : Node3D
 
     private void OnCellSelected(Vector3i cellPos)
     {
-        foreach (var item in InstancedMobs)
-        {
-            if (item.MobUsing.GetPosition() == cellPos)
-            {
-                NodeSelectionCursor.GlobalPosition = item.MarkerOverhead.GlobalPosition;
-                NodeSelectionCursor.Show();
-                EventBus.MobSelected?.Invoke(item.MobUsing);
-                return;
-            }
-        }
+        //Try to find an instance.
+        MobScene? scene = GetInstanceByPosition(cellPos);
+        if (scene is null) return;
+
+        SelectMob(scene);
     }
 
     private void OnCellHovered(Vector3i cellPos)
     {
-        foreach (var item in InstancedMobs)
+        //Try to find an instance.
+        MobScene? scene = GetInstanceByPosition(cellPos);
+        if (scene is not null)
         {
-            if (item.MobUsing.GetPosition() == cellPos)
-            {
-                NodeHoveringCursor.GlobalPosition = item.MarkerOverhead.GlobalPosition;
-                NodeHoveringCursor.Show();
-                EventBus.MobHovered?.Invoke(item.MobUsing);
-                return;
-            }
+            HoverMob(scene);
         }
-        //Fell out of the foreach, none was found.
-        NodeHoveringCursor.Hide();
+        else
+        {
+            NodeHoveringCursor.Hide();
+        }
+
     }
 
+    private void OnMobTurnStarted(Mob mob)
+    {
+        SelectMob(mob);
+    }
     #endregion
 }

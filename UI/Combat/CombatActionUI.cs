@@ -14,6 +14,9 @@ public partial class CombatActionUI : Control, ISceneDependency
 
     private Mob? MobCurrent;
 
+    protected Mob? MobSelected;
+    protected Mob? MobToUpdate;
+
     public CombatActionUI()
     {
         EventBus.BattleStateChanged += OnBattleStateChanged;
@@ -26,6 +29,14 @@ public partial class CombatActionUI : Control, ISceneDependency
         base._Ready();
         NodeActionContainer ??= (Control)FindChild("ActionContainer");
     }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        Visible = MobSelected == MobCurrent;
+
+    }
+
 
     public void Update(Mob mob)
     {
@@ -93,7 +104,7 @@ public partial class CombatActionUI : Control, ISceneDependency
 
     private void OnMobSelected(Mob obj)
     {
-        Visible = obj == MobCurrent;
+        MobSelected = obj;
     }
     #endregion
 
