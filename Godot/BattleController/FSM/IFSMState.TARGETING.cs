@@ -143,11 +143,11 @@ public class BattleControllerStateTargeting : BattleControllerState
     {
         //Add the AoE positions steming from SELECTED ones.
         UniqueList<Vector3i> positions_to_add = new(){Safe = false};
-        positions_to_add.AddRange(
+/*         positions_to_add.AddRange(
             GetUsageParams().ActionRef.GetAoEVectors(
                 GetUsageParams(), PositionsSelected
                 )
-            );
+            ); */
         GetUsageParams().PositionsTargeted = positions_to_add;
 
         //Add the targeted mobs to the UsageParameters if valid.

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Extension;
 using ChessLike.World;
+using ExtendedXmlSerializer;
 using Godot;
 
 namespace ChessLike.Entity.Action;
@@ -83,14 +84,15 @@ public partial class ActionEvent : Resource
         return output;
     }
 
-    public List<Vector3i> GetTargetVectors(UsageParameters usage_params)
+    //Returns the positions targetable by this action, relative to the owner.
+    public List<Vector3i> GetTargetVectors(UsageParameters usageParams)
     {
         //if (usage_params.PositionsTargeted.Count != 0 || usage_params.MobsTargeted.Count != 0){throw new Exception("This should be called BEFORE locations have been chosen.");}
 
-        Vector3i origin = usage_params.OwnerRef.GetPosition();
-        Grid grid = usage_params.GridRef;
+        Vector3i origin = usageParams.OwnerRef.GetPosition();
+        Grid grid = usageParams.GridRef;
+        Mob owner = usageParams.OwnerRef;
         List<Vector3i> output = new();
-        Mob owner = usage_params.OwnerRef;
 
         //If it uses pathing, just query that directly and move on.
         if (TargetParams.TargetingUsesPathing)
@@ -102,32 +104,66 @@ public partial class ActionEvent : Resource
         //Get the shape.
         output = TargetParams.GetTargetingShape();
 
+        //Make sure they are inbounds
+        output = output
+            .Where(x => grid.IsPositionInbounds(x))
+            .ToList();
+
+        //Convert the list to be relative to its owner position.
+        output = output.Select(x => x + Owner.GetPosition()).ToList();
+
         //Select positions within range and filter them.
         uint maxRange = GetTotalRange(owner);
         output = output
             .Where(x => x.DistanceManhattanTo(origin) <= maxRange)
-            .Where(x => grid.IsPositionInbounds(x))
             .ToList();
 
-
-        //Convert the list to be relative to its owner position.
-        return output.Select( x => x + Owner.GetPosition()).ToList();
+        return output;
     }
 
-    public List<Vector3i> GetAoEVectors(UsageParameters usageParams, List<Vector3i> targets)
+    public List<List<Vector3i>> GetAoEVectors(UsageParameters usageParams, List<Vector3i> selectedPositions)
     {
-        if (targets.Count == 0) throw new Exception("No position to use AoE in.");
+        if (selectedPositions.Count == 0) throw new Exception("No position to use AoE in.");
 
-        List<Vector3i> output = new();
+        Vector3i origin = usageParams.OwnerRef.GetPosition();
+        Grid grid = usageParams.GridRef;
+        Mob owner = usageParams.OwnerRef;
+        List<List<Vector3i>> output = new();
 
-        foreach (Vector3i target in targets)
+        foreach (Vector3i selected in selectedPositions)
         {
-            Vector3i.Rotation rotation = usageParams.OwnerRef.GetPosition().GetRotationToLookAt(target, true);
+            List<Vector3i> subOutput = new();
 
-            output.AddRange(TargetParams.GetAoEShape(rotation));
+            //Get the rotation to look from the owner to the target. This is relative to the user, so ZERO atm.
+            Vector3i.Rotation rotation = Vector3i.ZERO.GetRotationToLookAt(selected, true);
+
+            //Get the shape.
+            subOutput = TargetParams.GetAoEShape(rotation);
+
+            //Make sure they are inbounds
+            subOutput = subOutput
+                .Where(x => grid.IsPositionInbounds(x))
+                .ToList();
+
+            //Convert the list to be relative to the selection position.
+            subOutput = subOutput.Select(x => x + selected).ToList();
+
+            //Select positions within range and filter them.
+            uint maxRange = GetTotalRange(owner);
+            subOutput = subOutput
+                .Where(x => x.DistanceManhattanTo(origin) <= maxRange)
+                .ToList();
+
+            //Add new entries that are not duplicated to output.
+            foreach (var cluster in output)
+            {
+                subOutput = subOutput
+                    .Where(x => cluster.Contains(x))
+                    .ToList();
+            }
+
+            output.Add(subOutput);
         }
-
-        if (output.Count == 0) { GD.PushWarning("Action's AoE is empty. Could not target here. Maybe tweak its TargetingParams."); }//throw new Exception("Nothing to select?");}
 
         return output;
     }

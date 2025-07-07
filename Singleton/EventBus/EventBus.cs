@@ -150,6 +150,7 @@ public partial class EventBus : Node
     public static ActionUsageParametersEvent? ActionAnimationEnded;
 
     public static ActionUsageParametersEvent? TargetingUsageParametersGenerated;
+    public static ActionUsageParametersEvent? TargetingParametersDone;
 
     #endregion
 

@@ -14,14 +14,17 @@ public class UniqueList<T> : List<T>
         {
             base.Add(obj);
             return true;
-        } else if (safe)
+        }
+        else if (safe)
         {
             throw new Exception("Already in list");
-        }else
+        }
+        else
         {
             return false;
         }
     }
 
-public new bool Add(T obj) => Add(obj, Safe);
+    public new bool Add(T obj) => Add(obj, Safe);
+
 }

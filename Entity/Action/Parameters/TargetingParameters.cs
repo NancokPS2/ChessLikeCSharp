@@ -57,26 +57,26 @@ public partial class TargetingParameters : Resource
         switch (AoEShape)
         {
             case AoEMode.SINGLE:
-                output.Append(Vector3i.ZERO);
+                output.Add(Vector3i.ZERO);
                 break;
 
             case AoEMode.STRAIGHT_LINE:
                 for (int i = 0; i < AoESize; i++)
                 {
-                    output.Append(Vector3i.FORWARD * i);
+                    output.Add(Vector3i.FORWARD * i);
                 }
                 break;
 
             case AoEMode.PERPENDICULAR_LINE:
-                output.Append(Vector3i.ZERO);
+                output.Add(Vector3i.ZERO);
 
                 //Skip if the size is 0
                 if (AoESize == 0) break;
 
                 for (int distance = 1; distance <= AoESize; distance++)
                 {
-                    output.Append(Vector3i.LEFT * (distance + 1));
-                    output.Append(Vector3i.RIGHT * (distance + 1));
+                    output.Add(Vector3i.LEFT * (distance + 1));
+                    output.Add(Vector3i.RIGHT * (distance + 1));
                 }
                 break;
 
@@ -86,7 +86,7 @@ public partial class TargetingParameters : Resource
         List<Vector3i> rotatedOutput = new();
         foreach (var item in output)
         {
-            rotatedOutput.Append(item.Rotated(direction));
+            rotatedOutput.Add(item.Rotated(direction));
         }
 
         return rotatedOutput;

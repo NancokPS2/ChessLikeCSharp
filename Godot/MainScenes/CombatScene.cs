@@ -27,19 +27,20 @@ public partial class CombatScene : Node3D
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 	public static UsageParameters? UsageParameters;
 
-    protected static EBattleState StatePrevious;
-    protected static EBattleState StateCurrent
-    {
-        get => stateCurrent;
-    }
-    private static EBattleState stateCurrent;
+	protected static EBattleState StatePrevious;
+	protected static EBattleState StateCurrent
+	{
+		get => stateCurrent;
+	}
+	private static EBattleState stateCurrent;
 
 	public CombatScene()
 	{
 		EventBus.TargetingUsageParametersGenerated += OnTargetingUsageParametersGenerated;
 		EventBus.MobTurnStarted += OnMobTurnStarted;
-        EventBus.InputBack += OnInputBack;
-        EventBus.CombatStarted += OnCombatStarted;
+		EventBus.InputBack += OnInputBack;
+		EventBus.CombatStarted += OnCombatStarted;
+		EventBus.TargetingParametersDone += OnTargetingParametersDone;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -85,41 +86,49 @@ public partial class CombatScene : Node3D
 
 	public static EncounterData GetEncounterData() => EncounterData;
 
+	public static List<Mob> GetMobsInCombat() => Global.ManagerMob.GetPooledInCombat();
+
 	#region Event Connection
 	private void OnCombatStarted()
 	{
 		SetState(EBattleState.AWAITING_TURN);
 	}
-    
-    private void OnInputBack()
-    {
-        switch (StateCurrent)
-        {
-            case EBattleState.PAUSED:
-                if (StatePrevious == EBattleState.PAUSED || StatePrevious == EBattleState.INVALID)
-                    throw new Exception("The previous state is not valid!");
 
-                SetState(StatePrevious);
-                break;
+	private void OnInputBack()
+	{
+		switch (StateCurrent)
+		{
+			case EBattleState.PAUSED:
+				if (StatePrevious == EBattleState.PAUSED || StatePrevious == EBattleState.INVALID)
+					throw new Exception("The previous state is not valid!");
 
-            case EBattleState.TARGETING:
-                SetState(EBattleState.AWAITING_ACTION);
-                break;
+				SetState(StatePrevious);
+				break;
 
-            default: break;
-        }
-    }
+			case EBattleState.TARGETING:
+				SetState(EBattleState.AWAITING_ACTION);
+				break;
 
-    private void OnMobTurnStarted(Mob mob)
-    {
-        SetState(EBattleState.AWAITING_ACTION);
-    }
+			default: break;
+		}
+	}
+
+	private void OnMobTurnStarted(Mob mob)
+	{
+		SetState(EBattleState.AWAITING_ACTION);
+	}
 
 	private void OnTargetingUsageParametersGenerated(UsageParameters parameters)
 	{
 		UsageParameters = parameters;
 		SetState(EBattleState.TARGETING);
 	}
-	#endregion
 	
+	private void OnTargetingParametersDone(UsageParameters parameters)
+	{
+		UsageParameters = parameters;
+		SetState(EBattleState.ACTION_RUNNING);
+	}
+	#endregion
+
 }

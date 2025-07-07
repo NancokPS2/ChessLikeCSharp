@@ -131,9 +131,9 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		}
 		if (longestAxis is null)
 		{
-			throw new Exception("No value was higher than the minimum value.");
+			Console.WriteLine("Normalized a Vector3i.ZERO? Returning null.");
 		}
-		else return longestAxis;
+		return longestAxis;
 	}
 
 	public int GetLength()
@@ -178,13 +178,17 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 
 		else if (normalized == LEFT) return Rotation.Y_90_CCW;
 
+		else if (normalized == FORWARD) return Rotation.UNROTATED;
+
 		else if (normalized == BACK) return Rotation.Y_180;
 
 		else if (normalized == UP) return Rotation.X_90_CCW;
 
 		else if (normalized == DOWN) return Rotation.X_90_CW;
 
-		throw new Exception($"Invalid vector {this}");
+		else if (normalized == ZERO) return Rotation.UNROTATED;
+
+		throw new Exception($"Invalid vector {normalized}");
 	}
 
     public bool Equals(Vector3i other)
