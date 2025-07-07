@@ -131,6 +131,14 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "CombatTurnUI not updating Delay (?)",
+                    "id": "qcxop4agrjcyrx897e7t91nk"
+                },
+                {
+                    "text": "IsMobValid() crashing at the faction fetching.",
+                    "id": "h64yznisuonobfcvryg27ak7"
+                },
+                {
                     "text": "AOE targeting mesh is not being removed, possible issue in the Grid script.",
                     "id": "jymqaz1w8nlnkbvm9ut3n62v"
                 },
@@ -145,5 +153,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1751567060830
+    "timestamp": 1751916751313
 }
