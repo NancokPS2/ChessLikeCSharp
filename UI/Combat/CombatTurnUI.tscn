@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d7wnoug6teta" path="res://UI/Combat/CombatTurnUI.cs" id="1_4qqtp"]
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" node_paths=PackedStringArray("NodeTurnContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4qqtp")
+NodeTurnContainer = NodePath("TurnPanel/TurnContainer")
 
 [node name="TurnPanel" type="Panel" parent="."]
 layout_mode = 1

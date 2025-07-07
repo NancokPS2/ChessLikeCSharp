@@ -14,53 +14,77 @@ public partial class CombatTurnUI : Control, ISceneDependency
     [Export]
     public Control? NodeTurnContainer;
 
+    protected Dictionary<Mob, Control> TurnDisplayInstances = new();
+
     public CombatTurnUI()
     {
-        EventBus.MobTurnStarted += OnTurnChanged;
-        EventBus.MobTurnEnded += OnTurnChanged;
+        EventBus.MobStateChanged += OnMobStateChanged;
+        EventBus.MobTurnStarted += OnMobTurnStarted;
     }
 
-    private void OnTurnChanged(Mob mob)
+    protected void UpdateInstancePool(Mob mob, bool entering)
     {
-        Update(BattleController.CompTurnManager);
-    }
+        if (NodeTurnContainer is null) throw new Exception();
 
-
-    public override void _Ready()
-    {
-        base._Ready();
-        NodeTurnContainer ??= (Control)FindChild("TurnContainer");
-    }
-
-    public void Update(TurnManager manager)
-    {
-        if(NodeTurnContainer is null) {throw new Exception("Null NodeTurnContainer");}
-
-        NodeTurnContainer.FreeChildren();
-
-        List<ITurn> participants = manager.GetParticipants();
-        participants.Sort( comparison: (ITurn x, ITurn y) => 
-            x.DelayCurrent < y.DelayCurrent ? -1 : 1
-        );
-
-        foreach (var item in participants)
+        if (!TurnDisplayInstances.ContainsKey(mob) && entering)
         {
-            DelayContainer delay_container = new (item);
-            NodeTurnContainer.AddChild(delay_container);
-            if (item == manager.GetCurrentTurnTaker())
+            DelayContainer newInstance = new() { User = mob };
+            TurnDisplayInstances.Add(
+                mob,
+                newInstance
+                );
+            NodeTurnContainer.AddChild(newInstance);
+        }
+        else if (TurnDisplayInstances.ContainsKey(mob) && !entering)
+        {
+            Control instance = TurnDisplayInstances[mob];
+            TurnDisplayInstances.Remove(mob);
+            NodeTurnContainer.RemoveChild(instance);
+        }
+    }
+    
+    protected void UpdateCurrentTurnTaker(Mob mob)
+    {
+        if (!TurnDisplayInstances.ContainsKey(mob)) throw new Exception();
+        foreach (var entry in TurnDisplayInstances)
+        {
+            if (entry.Key == mob)
             {
-                delay_container.Modulate = new(0.8f,1,0.8f);
+                entry.Value.Modulate = new(0.8f, 1, 0.8f);
+            }
+            else
+            {
+                entry.Value.Modulate = Colors.White;
             }
         }
     }
 
+    #region Event Connection
+    private void OnMobTurnStarted(Mob mob)
+    {
+        UpdateCurrentTurnTaker(mob);
+    }
+
+    private void OnMobStateChanged(Mob mob, EMobState state)
+    {
+        if (state == EMobState.COMBAT)
+        {
+            UpdateInstancePool(mob, true);
+
+        }
+        else if (state == EMobState.BENCHED)
+        {
+            UpdateInstancePool(mob, false);
+        }
+    }
+    #endregion
 
     private partial class DelayContainer : TextureRect
     {
-        private readonly ITurn User;
-        public DelayContainer(ITurn turn)
+        public required ITurn User;
+
+        public DelayContainer()
         {
-            User = turn;
         }
 
         public override void _Ready()
