@@ -1,5 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.UI.Base;
 using ChessLike.World.Encounter;
 using Godot;
 using System;
@@ -63,8 +64,8 @@ public partial class CombatActionUI : Control, ISceneDependency
         }
 
         //Button for ending turn.
-        Button end_turn = new();
-        end_turn.Pressed += () => EventBus.InputTurnEnded?.Invoke();
+        ConfirmationButton end_turn = new();
+        end_turn.Confirmed += () => EventBus.InputTurnEnded?.Invoke();
         end_turn.Text = "End Turn";
         container.AddChild(end_turn);
     }
