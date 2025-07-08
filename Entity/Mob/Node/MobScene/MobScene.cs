@@ -59,15 +59,15 @@ public partial class MobScene : Node3D
     public void AnimatePopupText(string text, Godot.Color? color = null, Godot.Gradient? gradient = null)
     {
         PopupText3D popupText = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
-        popupText.SetText(text);
+        popupText.Text = text;
         popupText.Color = color ?? Colors.White;
         popupText.ColorRamp = gradient;
-        popupText.Emitting = true;
         popupText.Finished += popupText.QueueFree;
 
         GetTree().Root.AddChild(popupText);
 
-        popupText.GlobalPosition = GlobalPosition;
+        popupText.GlobalPosition = MarkerOverhead.GlobalPosition;
+        popupText.Emitting = true;
     }
 
     #endregion
@@ -186,7 +186,7 @@ public partial class MobScene : Node3D
                 text = change.ToString();
                 break;
 
-            default: return;
+            default: break;
         }
         AnimatePopupText($"{stat}: {change}", color);
     }

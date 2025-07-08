@@ -109,13 +109,13 @@ public partial class ActionEvent : Resource
         //Get the shape.
         output = TargetParams.GetTargetingShape();
 
+        //Convert the list to be relative to its owner position.
+        output = output.Select(x => x + Owner.GetPosition()).ToList();
+
         //Make sure they are inbounds
         output = output
             .Where(x => grid.IsPositionInbounds(x))
             .ToList();
-
-        //Convert the list to be relative to its owner position.
-        output = output.Select(x => x + Owner.GetPosition()).ToList();
 
         //Select positions within range and filter them.
         uint maxRange = GetTotalRange(owner);
@@ -146,13 +146,13 @@ public partial class ActionEvent : Resource
             //Get the shape.
             subOutput = TargetParams.GetAoEShape(rotation);
 
+            //Convert the list to be relative to the selection position.
+            subOutput = subOutput.Select(x => x + selected).ToList();
+
             //Make sure they are inbounds
             subOutput = subOutput
                 .Where(x => grid.IsPositionInbounds(x))
                 .ToList();
-
-            //Convert the list to be relative to the selection position.
-            subOutput = subOutput.Select(x => x + selected).ToList();
 
             //Select positions within range and filter them.
             uint maxRange = GetTotalRange(owner);
@@ -269,7 +269,7 @@ public partial class ActionEvent : Resource
     public virtual void Use(UsageParameters usageParams)
     {
         if (usageParams.ActionRef != this) throw new Exception();
-        
+
         foreach (var command in Commands)
         {
             foreach (var mob in usageParams.MobsTargeted)

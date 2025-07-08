@@ -13,13 +13,16 @@ billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
+fixed_size = true
 
 [sub_resource type="TextMesh" id="TextMesh_ogkte"]
-text = "Test"
+text = "TEST"
+font = ExtResource("2_dtdcq")
+pixel_size = 0.0025
 depth = 0.0
 
 [node name="PopupText" type="CPUParticles3D"]
-sorting_offset = 1.0
+sorting_offset = 100.0
 material_override = SubResource("StandardMaterial3D_uawnm")
 emitting = false
 amount = 1
@@ -35,4 +38,6 @@ damping_min = 1.0
 damping_max = 1.0
 script = ExtResource("1_dtdcq")
 Font = ExtResource("2_dtdcq")
-text = "Test"
+Text = "TEST"
+
+[connection signal="finished" from="." to="." method="queue_free"]

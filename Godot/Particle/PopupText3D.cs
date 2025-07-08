@@ -4,45 +4,43 @@ using Godot;
 public partial class PopupText3D : CpuParticles3D
 {
     [Export]
-    private Godot.Font Font;
-    [Export]
-    private string text
+    public Godot.Font Font
     {
         set
         {
-            Text = value;
-            GetTextMesh().Text = Text;
+            font = value;
+            GetTextMesh().Font = font;
+        }
+        get => font;
+    }
+    private Godot.Font font;
+
+    [Export]
+    public string Text
+    {
+        set
+        {
+            text = value;
+            GetTextMesh().Text = text;
         }
 
-        get => Text;
+        get => text;
 
     }
-    private string Text = "";
+    private string text = "";
 
     public PopupText3D() { }
 
     public override void _Ready()
     {
         base._Ready();
-        SetText(Text);
-        SetFont(Font);
     }
 
     private TextMesh GetTextMesh() => (TextMesh)Mesh ?? throw new Exception("No TextMesh assigned.");
 
-    public void SetText(string value)
-    {
-        GetTextMesh().Text = value;
-    }
-
     public string GetText()
     {
         return GetTextMesh().Text;
-    }
-
-    public void SetFont(Godot.Font font)
-    {
-        GetTextMesh().Font = font;
     }
 
     public Godot.Font GetFont()

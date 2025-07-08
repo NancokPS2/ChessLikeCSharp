@@ -104,18 +104,6 @@ public partial class MobSceneManager : Node3D
         EventBus.MobHovered?.Invoke(scene.MobUsing);
     }
 
-    protected void PopupText(Mob mob, string text, Godot.Color? color = null)
-    {
-        color ??= Colors.White;
-
-        ThrowOnMissingInstance(mob);
-
-        MobScene scene = GetInstance(mob);
-        PopupText3D particle = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
-        particle.SetText("text");
-        scene.MarkerOverhead.AddChild(particle);
-    }
-
     private void ThrowOnMissingInstance(Mob mob)
     {
         if (!HasInstance(mob)) throw new Exception();
