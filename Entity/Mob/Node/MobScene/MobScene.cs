@@ -166,10 +166,29 @@ public partial class MobScene : Node3D
         MovementStored.Add(to);
     }
 
-    private void OnMobStatChanged(Mob mob, EStatName stat, float new_value)
+    private void OnMobStatChanged(Mob mob, EStatName stat, float change)
     {
         if (mob != MobUsing) return;
-        AnimatePopupText($"{stat}: {new_value}", Colors.Red);
+        string text;
+        Godot.Color color = Colors.White;
+        if (change < 0)
+        {
+            color = Colors.Red;
+        }
+        else if (change > 0)
+        {
+            color = Colors.Green;
+        }
+        
+        switch (stat)
+        {
+            case EStatName.HEALTH:
+                text = change.ToString();
+                break;
+
+            default: return;
+        }
+        AnimatePopupText($"{stat}: {change}", color);
     }
 
     private void OnMobTurnStarted(Mob mob)

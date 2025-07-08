@@ -15,7 +15,7 @@ public partial class MobSceneManager : Node3D
     public List<MobScene> InstancedMobs = new();
     public MobSceneManager()
     {
-        EventBus.MobStateChanged += OnMobStatChanged;
+        EventBus.MobStateChanged += OnMobStateChanged;
         EventBus.CellPositionSelected += OnCellSelected;
         EventBus.CellPositionHovered += OnCellHovered;
         EventBus.MobTurnStarted += OnMobTurnStarted;
@@ -104,9 +104,25 @@ public partial class MobSceneManager : Node3D
         EventBus.MobHovered?.Invoke(scene.MobUsing);
     }
 
+    protected void PopupText(Mob mob, string text, Godot.Color? color = null)
+    {
+        color ??= Colors.White;
+
+        ThrowOnMissingInstance(mob);
+
+        MobScene scene = GetInstance(mob);
+        PopupText3D particle = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
+        particle.SetText("text");
+        scene.MarkerOverhead.AddChild(particle);
+    }
+
+    private void ThrowOnMissingInstance(Mob mob)
+    {
+        if (!HasInstance(mob)) throw new Exception();
+    }
 
     #region Event Connection
-    private void OnMobStatChanged(Mob mob, EMobState state)
+    private void OnMobStateChanged(Mob mob, EMobState state)
     {
         if (state == EMobState.COMBAT)
         {
@@ -150,6 +166,8 @@ public partial class MobSceneManager : Node3D
 
     private void OnMobTurnStarted(Mob mob)
     {
+        ThrowOnMissingInstance(mob);
+
         SelectMob(mob);
     }
     #endregion

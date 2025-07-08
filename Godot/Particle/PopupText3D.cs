@@ -1,19 +1,31 @@
 using Godot;
-using System;
 
-namespace Godot;
-
-[GlobalClass]
+[GlobalClass, Tool]
 public partial class PopupText3D : CpuParticles3D
 {
-	private Godot.Font Font = Global.ManagerFont.GetResource("Regular");
-	private string Text = "";
+    [Export]
+    private Godot.Font Font;
+    [Export]
+    private string text
+    {
+        set
+        {
+            Text = value;
+            GetTextMesh().Text = Text;
+        }
+
+        get => Text;
+
+    }
+    private string Text = "";
+
+    public PopupText3D() { }
 
     public override void _Ready()
     {
         base._Ready();
-		SetText(Text);
-		SetFont(Font);
+        SetText(Text);
+        SetFont(Font);
     }
 
     private TextMesh GetTextMesh() => (TextMesh)Mesh ?? throw new Exception("No TextMesh assigned.");
@@ -29,13 +41,13 @@ public partial class PopupText3D : CpuParticles3D
     }
 
     public void SetFont(Godot.Font font)
-	{
-		GetTextMesh().Font = font;
-	}
+    {
+        GetTextMesh().Font = font;
+    }
 
-	public Godot.Font GetFont()
-	{
-		return GetTextMesh().Font;
-	}
+    public Godot.Font GetFont()
+    {
+        return GetTextMesh().Font;
+    }
 
 }

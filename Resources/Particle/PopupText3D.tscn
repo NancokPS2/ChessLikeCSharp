@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://ia3s65kbmt7u"]
+[gd_scene load_steps=5 format=3 uid="uid://ia3s65kbmt7u"]
 
-[ext_resource type="Script" uid="uid://c6lxdpe373yfb" path="res://Godot/Particle/PopupText3D.cs" id="1_kba0t"]
+[ext_resource type="Script" uid="uid://c6lxdpe373yfb" path="res://Godot/Particle/PopupText3D.cs" id="1_dtdcq"]
+[ext_resource type="FontFile" uid="uid://butdqtp87dtbi" path="res://Resources/Font/Default.otf" id="2_dtdcq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uawnm"]
 transparency = 1
@@ -14,7 +15,7 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="TextMesh" id="TextMesh_ogkte"]
-text = "READY"
+text = "Test"
 depth = 0.0
 
 [node name="PopupText" type="CPUParticles3D"]
@@ -32,4 +33,6 @@ initial_velocity_min = 0.5
 initial_velocity_max = 0.5
 damping_min = 1.0
 damping_max = 1.0
-script = ExtResource("1_kba0t")
+script = ExtResource("1_dtdcq")
+Font = ExtResource("2_dtdcq")
+text = "Test"
