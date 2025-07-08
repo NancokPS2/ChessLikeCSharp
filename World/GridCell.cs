@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChessLike.World;
+
 
 public partial struct GridCell : IEquatable<GridCell>
 {
@@ -55,27 +58,37 @@ public partial struct GridCell : IEquatable<GridCell>
         public static readonly GridCell Air = new()
         {
             Name = "Air",
-            Flags = new List<ECellFlag>(){ECellFlag.AIR},
+            Flags = new List<ECellFlag>() { ECellFlag.AIR },
             Selectable = false,
         };
         public static readonly GridCell Floor = new()
         {
             Name = "Floor",
-            Flags = new List<ECellFlag>(){ECellFlag.SOLID},
+            Flags = new List<ECellFlag>() { ECellFlag.SOLID },
             Selectable = true,
         };
         public static readonly GridCell Spawnpoint = new()
         {
             Name = "Spawnpoint",
-            Flags = new List<ECellFlag>(){ECellFlag.AIR, ECellFlag.PLAYER_SPAWNPOINT},
+            Flags = new List<ECellFlag>() { ECellFlag.AIR, ECellFlag.PLAYER_SPAWNPOINT },
             Selectable = false,
         };
         public static readonly GridCell Invalid = new()
         {
             Name = "INVALID",
-            Flags = new List<ECellFlag>(){ECellFlag.UNKNOWN},
+            Flags = new List<ECellFlag>() { ECellFlag.UNKNOWN },
             Selectable = false,
         };
+
+        public static GridCell GetByName(string name)
+            => name switch
+            {
+                "Air" => Air,
+                "Floor" => Floor,
+                "SpawnPoint" => Spawnpoint,
+                "INVALID" => Invalid,
+                _ => throw new Exception()
+            };
     }
 
 }

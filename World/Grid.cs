@@ -7,12 +7,43 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace ChessLike.World;
 
+[GlobalClass]
 public partial class Grid : Resource
 {
-    public static Godot.Vector3 CellSize = new(1,1,1);
+    public static Godot.Vector3 CellSize = new(1, 1, 1);
+
     public Vector3i Boundary = new(10, 10, 10);
+    [Export]
+    private Vector3I boundary
+    {
+        set => Boundary = new(value);
+        get => Boundary.ToGVector3I();
+    }
 
     public Dictionary<Vector3i, GridCell> CellDictionary = new();
+    [Export]
+    private Godot.Collections.Dictionary<Godot.Vector3I, string> cellDictionary
+    {
+        set
+        {
+            Dictionary<Vector3i, GridCell> input = new();
+            foreach (var item in value)
+            {
+                input[new(item.Key)] = GridCell.Preset.GetByName(item.Value);
+            }
+            CellDictionary = input;
+        }
+        get
+        {
+            Godot.Collections.Dictionary<Godot.Vector3I, string> output = new();
+            foreach (var item in CellDictionary)
+            {
+                output[item.Key] = item.Value.Name;
+            }
+            return output;
+        }
+
+    }
 
     public Grid()
     {
@@ -26,7 +57,7 @@ public partial class Grid : Resource
     public GridCell GetCell(Vector3i position)
     {
         GridCell cell = GridCell.Preset.Invalid;
-        if (!CellDictionary.TryGetValue(position, out cell)){throw new Exception("Not found!");}
+        if (!CellDictionary.TryGetValue(position, out cell)) { throw new Exception("Not found!"); }
         return cell;
     }
 
@@ -34,11 +65,13 @@ public partial class Grid : Resource
     {
         return CellDictionary.Values.ToArray();
     }
+
+    public void ClearCells() => CellDictionary.Clear();
     #endregion
 
     #region Positions
     //public static Godot.Vector3 MapToReal(Vector3i mapPos) => mapPos * CellSize;
-    
+
     public Vector3i[] GetUsedPositions()
     {
         return CellDictionary.Keys.ToArray();
@@ -48,7 +81,7 @@ public partial class Grid : Resource
     {
         List<Vector3i> output = new();
 
-        int[] range = Enumerable.Range((int)-max_distance, (int)max_distance*2+1).ToArray();
+        int[] range = Enumerable.Range((int)-max_distance, (int)max_distance * 2 + 1).ToArray();
 
         foreach (var x in range)
         {
@@ -56,13 +89,13 @@ public partial class Grid : Resource
             {
                 foreach (var y in range)
                 {
-                    Vector3i vector = new Vector3i(x,y,z) + origin;
+                    Vector3i vector = new Vector3i(x, y, z) + origin;
                     output.Add(vector);
                 }
             }
         }
         output = output.Where(x => IsPositionInbounds(x)).ToList();
-        return output;   
+        return output;
     }
     #endregion
 
@@ -90,7 +123,7 @@ public partial class Grid : Resource
     public bool IsFlagInPosition(Vector3i position, ECellFlag flag)
     {
         GridCell cell = GetCell(position);
-        if(cell == GridCell.Preset.Invalid)
+        if (cell == GridCell.Preset.Invalid)
         {
             return false;
         }
@@ -101,16 +134,16 @@ public partial class Grid : Resource
     {
         foreach (ECellFlag flag in flags)
         {
-            if(!IsFlagInPosition(position, flag))
+            if (!IsFlagInPosition(position, flag))
             {
                 return false;
             }
-            
+
         }
         return true;
     }
     #endregion
-    
+
     public struct FloodFillParameters
     {
         public int VerticalTolerance;

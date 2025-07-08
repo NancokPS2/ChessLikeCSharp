@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cepaaqbq0ilsu"]
+
+[ext_resource type="Script" uid="uid://ycebqtdk3llj" path="res://World/GridTerrain/GridBuilder3D.cs" id="1_bfb8w"]
+[ext_resource type="Texture2D" uid="uid://lagcmk013yo" path="res://assets/HeightMaps/BaseHeightMap.tres" id="2_rqrcj"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_bfb8w")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture_repeat = 1
+texture = ExtResource("2_rqrcj")
