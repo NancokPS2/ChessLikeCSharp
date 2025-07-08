@@ -11,10 +11,35 @@ public partial class Mob : IEventBusMember
 {
     public void SetupEventBus()
     {
+        EventBus.MobTurnStarted += OnMobTurnStarted;
+        EventBus.MobTurnEnded += OnMobTurnEnded;
+        EventBus.ActionUsed += OnActionUsed;
         EventBus.InventoryChanged += OnInventoryChanged;
     }
+    
+	private void OnMobTurnStarted(Mob mob)
+    {
+        if (mob != this) return;
+        TurnActive = true;
+        TurnResourceReset();
+    }
 
-    private void OnInventoryChanged(Inventory obj)
+	private void OnMobTurnEnded(Mob mob)
+	{
+        TurnActive = false;
+	}
+
+    private void OnActionUsed(UsageParameters parameters)
+    {
+        if (parameters.OwnerRef != this) return;
+        if (TurnActive)
+            TurnActionsUsed++;
+        else
+            TurnReactionsUsed++;
+        
+	}
+
+	private void OnInventoryChanged(Inventory obj)
     {
         if (obj != MobInventory) return;
 

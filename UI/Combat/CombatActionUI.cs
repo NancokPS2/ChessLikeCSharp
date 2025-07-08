@@ -35,9 +35,18 @@ public partial class CombatActionUI : Control, ISceneDependency
     {
         base._Process(delta);
         Visible = MobSelected == MobCurrent;
+        if (NodeActionContainer is null) throw new Exception();
 
+        //If there are no buttons to select, end here.
+        if (NodeActionContainer.GetChildren().Count == 0) return;
+
+        //If there are buttons but there is no mob, something went wrong.
+        if (MobCurrent is null) throw new Exception();
+        foreach (ActionButton item in NodeActionContainer.GetChildren().Where(x => x is ActionButton))
+        {
+            item.Disabled = !MobCurrent.HasActionUsesLeft();
+        }
     }
-
 
     public void Update(Mob mob)
     {

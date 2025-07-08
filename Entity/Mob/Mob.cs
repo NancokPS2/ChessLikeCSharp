@@ -287,6 +287,24 @@ public partial class Mob : Resource
         => GetAbilities().Where(x => x.IsPassive()).ToList();
     #endregion
 
+    #region Per Turn Values
+    protected int TurnActionsUsed;
+    protected int TurnReactionsUsed;
+    protected bool TurnActive;
+    
+    protected int GetActionsUsed() => TurnActionsUsed;
+    protected int GetReactionsUsed() => TurnReactionsUsed;
+
+    public bool HasActionUsesLeft() => GetActionsUsed() < 1;
+    public bool HasReactionUsesLeft() => GetReactionsUsed() < int.MaxValue;
+
+    protected void TurnResourceReset()
+    {
+        TurnActionsUsed = 0;
+        TurnReactionsUsed = 0;
+    }
+    #endregion
+
     #region Misc
     public override string ToString()
     {

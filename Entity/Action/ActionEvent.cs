@@ -280,8 +280,9 @@ public partial class ActionEvent : Resource
         EventBus.ActionUsed?.Invoke(usageParams);
     }
 
-    public bool CanUse() => true;
-    public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
+	public bool CanUse() => true;
+
+	public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
     public override string ToString() => Name;
     #endregion
 
