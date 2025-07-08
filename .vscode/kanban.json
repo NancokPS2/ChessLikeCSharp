@@ -131,12 +131,12 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "CombatTurnUI not updating Delay (?)",
-                    "id": "qcxop4agrjcyrx897e7t91nk"
+                    "text": "Can select other units while targeting, causing actions to dissapear",
+                    "id": "zzn54ks4g5icssbupn3a9cad"
                 },
                 {
-                    "text": "IsMobValid() crashing at the faction fetching.",
-                    "id": "h64yznisuonobfcvryg27ak7"
+                    "text": "CombatTurnUI not updating Delay (?)",
+                    "id": "qcxop4agrjcyrx897e7t91nk"
                 },
                 {
                     "text": "AOE targeting mesh is not being removed, possible issue in the Grid script.",
@@ -153,5 +153,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1751916751313
+    "timestamp": 1751935457815
 }

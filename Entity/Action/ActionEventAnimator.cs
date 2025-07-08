@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.World.Encounter;
 using Godot;
 
 namespace ChessLike.Entity.Action;
@@ -15,11 +16,13 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
     private UsageParameters? CurrentParameters;
     private int CurrentIndex;
     private float CurrentAnimationTime;
+    private GridNode CurrentGridNode;
     private List<UsageParameters> Queue = new();
 
     public ActionEventAnimator()
     {
         EventBus.ActionEventQueueFinished += OnActionEventQueueFinished;
+        EventBus.EncounterLoading += OnEncounterLoading;
     }
 
     #region Animation
@@ -52,9 +55,37 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
         EventBus.ActionAnimationStarted?.Invoke(CurrentParameters);
 
         //WIP need to animate this.
+        //Spawn scenes.
+        foreach (var item in action.AnimationParams.ScenesToSpawn)
+        {
+            switch (item.Key)
+            {
+                case AnimationParameters.ESceneAnimationMode.SPAWN_AT_OWNER:
+                    item.Value.InstantiateAt<Node3D>(
+                        this,
+                        CurrentGridNode.MapToGlobal(owner.GetPosition())
+                        );
+                    break;
+
+                case AnimationParameters.ESceneAnimationMode.SPAWN_AT_TARGET:
+                    foreach (var targetMob in parameters.MobsTargeted)
+                    {
+                        Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
+						item.Value.InstantiateAt<Node3D>(
+                            this,
+                            globalPos
+                            );
+                    }
+                    break;
+
+                case AnimationParameters.ESceneAnimationMode.MOVE_TO_TARGET: throw new NotImplementedException();
+
+                default: throw new Exception();
+            }
+        }
         action.AnimationRun(parameters);
     }
-    
+
     protected void EndAnimationQueue()
     {
         CurrentIndex = 0;
@@ -121,5 +152,9 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
         StartAnimationQueue(parameterList);
     }
 
+	private void OnEncounterLoading(EncounterData data)
+	{
+        CurrentGridNode = CombatScene.GetGridNode();
+	}
     #endregion
 }

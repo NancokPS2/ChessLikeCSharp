@@ -50,12 +50,14 @@ public partial class EncounterData : Resource
 
         Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("PlayerFac")
+            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
             .ChainFaction(EFaction.PLAYER);
         def_mob1.Move(Vector3i.ONE);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
         Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("PlayerFac2Warrior")
+            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
             .ChainFaction(EFaction.PLAYER)
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WARRIOR) });
         def_mob2.Move(Vector3i.ONE+Vector3i.FORWARD);
@@ -63,12 +65,14 @@ public partial class EncounterData : Resource
 
         Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("Civilian")
+            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.CIVILIAN) });
         def_mob3.Move(Vector3i.ONE+Vector3i.LEFT);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
 
         Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WIZARD) })
+            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
             .ChainName("Neutral wizard");
         def_mob4.Move(Vector3i.ONE+Vector3i.FORWARD+Vector3i.FORWARD);
         //.ChainEquipment(new WeaponSpear());

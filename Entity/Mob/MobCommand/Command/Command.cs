@@ -11,8 +11,6 @@ namespace ChessLike.Entity.MobCommand;
 [GlobalClass]
 public abstract partial class Command : Resource
 {
-    private bool Used = false;
-
     public List<ECommandFlag> Flags = new();
 
     public Command()
@@ -21,12 +19,6 @@ public abstract partial class Command : Resource
 
     public virtual void UseCommand(Mob mob)
     {
-        if (Used)
-        {
-            throw new Exception("Commands are single-use.");
-        }
-        Used = true;
-
         EventBus.MobCommandUsed?.Invoke(this, mob);
     }
 

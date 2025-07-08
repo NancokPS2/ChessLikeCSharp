@@ -27,7 +27,7 @@ public partial class Global
         ManagerJob = new();
         ManagerAbility = new();
         ManagerMob = new();
-        ManagerFaction = new();
+        ManagerFaction = new(){AutoPoolLoaded = true};
         ManagerInventory = new();
         ManagerItem = new();
         ManagerModel = new("Model");

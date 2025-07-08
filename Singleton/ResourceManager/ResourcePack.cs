@@ -5,6 +5,8 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     public const string DEFAULT_DIR = "Resources";
     public const string INVALID_UNIQUE_STRING = "";
 
+    public bool AutoPoolLoaded;
+
     private Dictionary<string, TRes> Contents = new();
     private UniqueList<TRes> Pooled = new();
     public readonly string UniqueString = "";
@@ -56,6 +58,11 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         }
 
         Contents[identifier] = resource;
+
+        if (AutoPoolLoaded)
+        {
+            AddPooled(resource);
+        }
     }
 
     public bool HasResource(string identifier)

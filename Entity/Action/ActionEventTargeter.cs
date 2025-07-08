@@ -20,7 +20,6 @@ public partial class ActionEventTargeter : Node3D
 	{
 		get
 		{
-
 			Node3D node = SceneTargeting?.Instantiate<Node3D>() ?? throw new Exception();
 			node.AddToGroup(TARGETING_NODE_GROUP);
 			return node;
