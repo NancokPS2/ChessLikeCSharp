@@ -9,10 +9,14 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobSceneManager : Node3D
 {
-    public Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
-    public Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
+    [Export]
+    protected float CursorSpeed = 15;
+    protected Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
+    protected Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
 
-    public List<MobScene> InstancedMobs = new();
+    protected List<MobScene> InstancedMobs = new();
+
+    protected MobScene? SelectedMobScene;
     public MobSceneManager()
     {
         EventBus.MobStateChanged += OnMobStateChanged;
@@ -20,6 +24,19 @@ public partial class MobSceneManager : Node3D
         EventBus.CellPositionHovered += OnCellHovered;
         EventBus.MobTurnStarted += OnMobTurnStarted;
     }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero;;
+
+        NodeSelectionCursor.Visible = SelectedMobScene is not null;
+
+        NodeSelectionCursor.GlobalPosition = NodeSelectionCursor.GlobalPosition.MoveToward(
+            target, (float)(CursorSpeed * delta)
+            );
+    }
+
 
     public override void _Ready()
     {
@@ -87,8 +104,7 @@ public partial class MobSceneManager : Node3D
         MobScene? scene = GetInstanceByPosition(mob.GetPosition());
         if (scene is null) return;
 
-        NodeSelectionCursor.GlobalPosition = scene.MarkerOverhead.GlobalPosition;
-        NodeSelectionCursor.Show();
+        SelectedMobScene = GetInstance(mob);
         EventBus.MobSelected?.Invoke(scene.MobUsing);
     }
 
@@ -130,6 +146,9 @@ public partial class MobSceneManager : Node3D
 
     private void OnCellSelected(Vector3i cellPos)
     {
+        //Do not select anything if in targeting state.
+        if (CombatScene.GetState() == EBattleState.TARGETING) return;
+
         //Try to find an instance.
         MobScene? scene = GetInstanceByPosition(cellPos);
         if (scene is null) return;

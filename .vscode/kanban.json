@@ -131,6 +131,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Can select empty spaces to use abilities that can only target mobs",
+                    "id": "f6xtxttizhez1w6oklyv0v08"
+                },
+                {
                     "text": "Can select other units while targeting, causing actions to dissapear",
                     "id": "zzn54ks4g5icssbupn3a9cad"
                 },
@@ -153,5 +157,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1751935457815
+    "timestamp": 1751993651468
 }

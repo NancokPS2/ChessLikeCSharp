@@ -256,8 +256,12 @@ public partial class ActionEventTargeter : Node3D
 		{
 			case ECellInput.PRIMARY:
 				if (!IsCellTargeted(cellPos, ETargetingType.TARGETING)) return;
+				//Ran out of selections, proceed to confirm.
 				if (!HasSelectionsLeft(UsageParametersCurrent))
 				{
+					//Must be a cell already set to be hit.
+					if (!IsCellTargeted(cellPos, ETargetingType.AOE)) break;
+
 					UpdateAoECells(UsageParametersCurrent);
 					ConfirmSelection();
 					break;
