@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://sd45fwjw5ocd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ccuwf"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ccuwf"]
+
+[node name="GridBuilderMarker" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_ccuwf")
+mesh = SubResource("SphereMesh_ccuwf")

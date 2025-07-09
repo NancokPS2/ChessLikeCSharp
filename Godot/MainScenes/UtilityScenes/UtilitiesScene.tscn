@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://mxisu54bve6f"]
+
+[ext_resource type="Script" uid="uid://cy2ca06qum4so" path="res://Godot/MainScenes/UtilityScenes/UtilityScenes.cs" id="1_iircb"]
+[ext_resource type="Script" uid="uid://c6yfk73hna1l3" path="res://Godot/MainScenes/UtilityScenes/SceneButton.cs" id="2_fw18w"]
+[ext_resource type="PackedScene" uid="uid://cepaaqbq0ilsu" path="res://World/Node/GridBuilder/GridBuilder.tscn" id="3_tdw87"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_tdw87"]
+device = -1
+shift_pressed = true
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_jl67a"]
+events = [SubResource("InputEventKey_tdw87")]
+
+[node name="UtilitiesScene" type="Node3D" node_paths=PackedStringArray("GridBuilderButton", "UnloadSceneButton")]
+script = ExtResource("1_iircb")
+GridBuilderButton = NodePath("SceneButton")
+UnloadSceneButton = NodePath("Button")
+
+[node name="Button" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "UNLOAD"
+
+[node name="SceneButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+shortcut = SubResource("Shortcut_jl67a")
+text = "GRID"
+script = ExtResource("2_fw18w")
+Scene = ExtResource("3_tdw87")
+metadata/_custom_type_script = "uid://c6yfk73hna1l3"

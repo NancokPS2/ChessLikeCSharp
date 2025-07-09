@@ -42,8 +42,9 @@ public partial class Grid : Resource
             }
             return output;
         }
-
     }
+
+    public Dictionary<Vector3i, List<PackedScene>> Decorations;
 
     public Grid()
     {

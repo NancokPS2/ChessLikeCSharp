@@ -10,7 +10,7 @@ using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 
 namespace Godot;
 
-[GlobalClass]
+[GlobalClass, Tool]
 public partial class GridNode : Node3D
 {
 
