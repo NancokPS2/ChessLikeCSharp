@@ -89,6 +89,9 @@ public partial struct GridCell : IEquatable<GridCell>
                 "INVALID" => Invalid,
                 _ => throw new Exception()
             };
+
+        public static List<GridCell> GetAll()
+            => new() {Air, Floor, Spawnpoint, Invalid};
     }
 
 }

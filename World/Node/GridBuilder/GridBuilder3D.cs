@@ -10,8 +10,19 @@ namespace ChessLike.World;
 public partial class GridBuilder3D : Node3D
 {
     const int MAX_SIZE = 32;
+    protected readonly List<Godot.Color> ColorList = new()
+    {
+        Colors.Red, Colors.Blue, Colors.Green,
+        Colors.Gray, Colors.Purple, Colors.Brown,
+        Colors.Black, Colors.Pink, Colors.Yellow
+    };
     protected Grid GridUsed = new();
-    protected GridNode GridNodeUsed = new();
+
+    [Export]
+    protected GridNode GridNodeUsed;
+
+    [Export]
+    protected GridMap GridMapNode;
 
     [Export]
     protected PackedScene MarkerScene;
@@ -57,10 +68,10 @@ public partial class GridBuilder3D : Node3D
     public override void _Ready()
     {
         base._Ready();
-        AddChild(GridNodeUsed);
-
         MarkerNode = MarkerScene.Instantiate<Node3D>();
         AddChild(MarkerNode);
+
+        GridMapNode.MeshLibrary = GetMeshLibFromGridCells(null);
     }
 
     public void Save()
@@ -69,11 +80,44 @@ public partial class GridBuilder3D : Node3D
         if (error != Error.Ok) GD.PushError($"Failed to save Grid with error: {error}");
     }
 
+    protected MeshLibrary GetMeshLibFromGridCells(List<GridCell>? gridCells)
+    {
+        gridCells ??= GridCell.Preset.GetAll();
+        if (gridCells.Count > ColorList.Count)
+            throw new Exception($"There are {gridCells.Count} GridCells but we only have {ColorList.Count} colors.");
+
+        MeshLibrary output = new();
+        Godot.Vector3 cellSize = Grid.CellSize;
+
+        int id = 0;
+        foreach (var item in gridCells)
+        {
+            Godot.Color color = ColorList[id];
+            StandardMaterial3D material = new() { AlbedoColor = color };
+            BoxMesh mesh = new() { Material = material, Size = cellSize };
+            BoxShape3D shape = new() { Size = cellSize };
+
+            output.CreateItem(id);
+            output.SetItemName(id, item.Name);
+            output.SetItemMesh(
+                id,
+                mesh
+                );
+            output.SetItemShapes(
+                id,
+                new() { shape }
+                );
+            id++;
+        }
+        return output;
+    }
+
     private void SetTerrainHeightMap(NoiseTexture2D map)
     {
         Godot.Image image = map.GetImage();
+        GridMapNode.Clear();
         GridUsed.Boundary = new(map.GetWidth(), HeightMax, map.GetHeight());
-        List<Vector3i> chosen = new();
+        //List<Vector3i> chosen = new();
         for (int x = 0; x < GridUsed.Boundary.X; x++)
         {
             for (int z = 0; z < GridUsed.Boundary.Z; z++)
@@ -83,16 +127,51 @@ public partial class GridBuilder3D : Node3D
 
                 for (int y = 0; y < GridUsed.Boundary.Y; y++)
                 {
-                    if (heightValue > ((float)y / (float)HeightMax)) chosen.Add(new(x, y, z));
+                    if (heightValue > ((float)y / (float)HeightMax))
+                    {
+                        GridMapNode.SetCellItem(
+                            new(x, y, z), 
+                            GetGroundIDFromMeshLibrary(GridMapNode.MeshLibrary)
+                            );
+                        //chosen.Add(new(x, y, z));
+                    }
                 }
             }
         }
-        foreach (var item in chosen)
-        {
-            GridUsed.SetCell(item, GridCell.Preset.Floor);
-        }
+        UpdateGridFromGridMap();
+    }
 
+    protected void UpdateGridFromGridMap()
+    {
+        foreach (var item in GridMapNode.GetUsedCells())
+        {
+            int id = GridMapNode.GetCellItem(item);
+            string name = GridMapNode.MeshLibrary.GetItemName(id);
+            GridUsed.SetCell(new(item), GridCell.Preset.GetByName(name));
+        }
+        UpdateGridNode();
+    }
+
+    protected void UpdateGridMapFromGrid()
+    {
+        foreach (var item in GridUsed.CellDictionary)
+        {
+            
+        }
+    }
+
+    protected void UpdateGridNode()
+    {
         GridNodeUsed.SetGrid(GridUsed);
+    }
+
+    protected int GetGroundIDFromMeshLibrary(MeshLibrary meshLibrary)
+    {
+        foreach (var id in meshLibrary.GetItemList())
+        {
+            if (meshLibrary.GetItemName(id) == "Ground") return id;
+        }
+        throw new Exception("Ground not found in MeshLibrary.");
     }
 
     public override void _Process(double delta)
