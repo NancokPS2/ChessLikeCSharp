@@ -5,8 +5,8 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Make MobUI also display its name",
-                    "id": "md1zkmxgjym9rlsf7xfzuy1t"
+                    "text": "Make GridCell a Resource",
+                    "id": "p7qfapwu7ivdkr8dgx1xxmdi"
                 },
                 {
                     "text": "Implement mob templates to automatically give gear, actions and stats to mobs.",
@@ -131,14 +131,6 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Can select empty spaces to use abilities that can only target mobs",
-                    "id": "f6xtxttizhez1w6oklyv0v08"
-                },
-                {
-                    "text": "Can select other units while targeting, causing actions to dissapear",
-                    "id": "zzn54ks4g5icssbupn3a9cad"
-                },
-                {
                     "text": "CombatTurnUI not updating Delay (?)",
                     "id": "qcxop4agrjcyrx897e7t91nk"
                 },
@@ -157,5 +149,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1751993651468
+    "timestamp": 1752092430960
 }
