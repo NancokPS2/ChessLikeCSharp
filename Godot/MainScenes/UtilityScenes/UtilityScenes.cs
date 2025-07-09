@@ -8,25 +8,19 @@ using Godot;
 public partial class UtilityScenes : Node3D
 {
     public Node? CurrentScene;
+
     [Export]
-    public SceneButton GridBuilderButton
-    {
-        get => gridBuilderButton;
-        set
-        {
-            if (gridBuilderButton is not null) gridBuilderButton.SceneButtonPressed -= OnSceneButtonPressed;
-            gridBuilderButton = value;
-        }
-    }
+    public SceneButton GridBuilderButton;
+    
     [Export]
     public Button UnloadSceneButton;
 
-    private SceneButton gridBuilderButton;
 
     public override void _Ready()
     {
         base._Ready();
         UnloadSceneButton.Pressed += OnUnloadSceneButtonPressed;
+        GridBuilderButton.SceneButtonPressed += OnSceneButtonPressed;
     }
 
 

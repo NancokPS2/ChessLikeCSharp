@@ -12,4 +12,10 @@ public partial class SceneButton : Button
 
     [Export]
     protected PackedScene Scene;
+
+    public override void _Pressed()
+    {
+        base._Pressed();
+        SceneButtonPressed?.Invoke(Scene);
+    }
 }

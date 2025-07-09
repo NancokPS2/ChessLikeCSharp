@@ -16,10 +16,12 @@ events = [SubResource("InputEventKey_tdw87")]
 script = ExtResource("1_iircb")
 GridBuilderButton = NodePath("SceneButton")
 UnloadSceneButton = NodePath("Button")
+metadata/_custom_type_script = "uid://cy2ca06qum4so"
 
 [node name="Button" type="Button" parent="."]
 offset_right = 8.0
 offset_bottom = 8.0
+shortcut = SubResource("Shortcut_jl67a")
 text = "UNLOAD"
 
 [node name="SceneButton" type="Button" parent="."]
@@ -29,7 +31,6 @@ anchor_right = 1.0
 offset_left = -8.0
 offset_bottom = 8.0
 grow_horizontal = 0
-shortcut = SubResource("Shortcut_jl67a")
 text = "GRID"
 script = ExtResource("2_fw18w")
 Scene = ExtResource("3_tdw87")
