@@ -55,6 +55,23 @@ public partial class Grid : Resource
         CellDictionary[position] = cell;
     }
 
+    public void FillCell(GridCell cell, bool emptyOnly)
+    {
+        for (int x = 0; x < Boundary.X; x++)
+        {
+            for (int y = 0; y < Boundary.Y; y++)
+            {
+                for (int z = 0; z < Boundary.Z; z++)
+                {
+                    Vector3i vector = new(x, y, z);
+                    if (emptyOnly && GetCell(vector) is not null) continue;
+                    SetCell(vector, cell);
+                }
+            }
+            
+        }
+    }
+
     public GridCell GetCell(Vector3i position)
     {
         GridCell cell = GridCell.Preset.Invalid;

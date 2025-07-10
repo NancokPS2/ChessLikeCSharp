@@ -99,6 +99,10 @@ public partial class GridBuilder3D : Node3D
     public void Save()
     {
         UpdateGridFromGridMap();
+        
+        if (AutoFillEmptySpaceWithAir)
+            GridUsed.FillCell(GridCell.Preset.Air, true);
+
         var error = ResourceSaver.Save(GridUsed, SavePath);
         if (error != Error.Ok) GD.PushError($"Failed to save Grid with error: {error}");
     }
