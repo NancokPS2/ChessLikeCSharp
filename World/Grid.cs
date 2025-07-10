@@ -7,7 +7,7 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace ChessLike.World;
 
-[GlobalClass]
+[GlobalClass, Tool]
 public partial class Grid : Resource
 {
     public static Godot.Vector3 CellSize = new(1, 1, 1);
@@ -22,23 +22,23 @@ public partial class Grid : Resource
 
     public Dictionary<Vector3i, GridCell> CellDictionary = new();
     [Export]
-    private Godot.Collections.Dictionary<Godot.Vector3I, string> cellDictionary
+    private Godot.Collections.Dictionary<Godot.Vector3I, GridCell> cellDictionary
     {
         set
         {
             Dictionary<Vector3i, GridCell> input = new();
             foreach (var item in value)
             {
-                input[new(item.Key)] = GridCell.Preset.GetByName(item.Value);
+                input[new(item.Key)] = item.Value;
             }
             CellDictionary = input;
         }
         get
         {
-            Godot.Collections.Dictionary<Godot.Vector3I, string> output = new();
+            Godot.Collections.Dictionary<Godot.Vector3I, GridCell> output = new();
             foreach (var item in CellDictionary)
             {
-                output[item.Key] = item.Value.Name;
+                output[item.Key] = item.Value;
             }
             return output;
         }
@@ -65,6 +65,20 @@ public partial class Grid : Resource
     public ICollection<GridCell> GetCells()
     {
         return CellDictionary.Values.ToArray();
+    }
+
+    /// <summary>
+    /// Makes a list of all unique GridCells
+    /// </summary>
+    /// <returns></returns>
+    public List<GridCell> GetGridCells()
+    {
+        List<GridCell> output = new();
+        foreach (var item in CellDictionary.Values)
+        {
+            if (!output.Contains(item)) output.Add(item);
+        }
+        return output;
     }
 
     public void ClearCells() => CellDictionary.Clear();

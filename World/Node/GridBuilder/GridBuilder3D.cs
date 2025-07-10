@@ -18,6 +18,7 @@ public partial class GridBuilder3D : Node3D
     };
     protected Grid GridUsed = new();
 
+    [ExportCategory("Nodes and Scenes")]
     [Export]
     protected GridNode GridNodeUsed;
 
@@ -29,11 +30,18 @@ public partial class GridBuilder3D : Node3D
     protected Node3D MarkerNode;
     protected Vector3i MarkerNodePosition;
 
+    [ExportCategory("Main")]
     /// <summary>
-    /// The actual max height of the terrain
+    /// The actual max height of the terrain.
     /// </summary>
     [Export]
     public int HeightMax = 8;
+
+    [ExportToolButton("Show GridNode")]
+    public Callable ShowGridNodeCall
+    {
+        get => Callable.From(ShowInGridNode);
+    }
 
     [ExportCategory("Terrain Generation")]
     /// <summary>
@@ -54,8 +62,22 @@ public partial class GridBuilder3D : Node3D
         }
         get => null;
     }
-    
+
+    [ExportCategory("Loading")]
+    [Export]
+    protected Grid? GridToLoad;
+
+    [ExportToolButton("Load")]
+    protected Callable LoadCall
+    {
+        get => Callable.From(Load);
+    }
+
     [ExportCategory("Saving")]
+
+    [Export]
+    protected bool AutoFillEmptySpaceWithAir = true;
+
     [Export(PropertyHint.SaveFile, "*.tres")]
     public string SavePath = "user://SavedGrid.tres";
 
@@ -71,45 +93,38 @@ public partial class GridBuilder3D : Node3D
         MarkerNode = MarkerScene.Instantiate<Node3D>();
         AddChild(MarkerNode);
 
-        GridMapNode.MeshLibrary = GetMeshLibFromGridCells(null);
+        SetGridCells(null);
     }
 
     public void Save()
     {
+        UpdateGridFromGridMap();
         var error = ResourceSaver.Save(GridUsed, SavePath);
         if (error != Error.Ok) GD.PushError($"Failed to save Grid with error: {error}");
     }
 
-    protected MeshLibrary GetMeshLibFromGridCells(List<GridCell>? gridCells)
+    public void Load()
     {
-        gridCells ??= GridCell.Preset.GetAll();
-        if (gridCells.Count > ColorList.Count)
-            throw new Exception($"There are {gridCells.Count} GridCells but we only have {ColorList.Count} colors.");
-
-        MeshLibrary output = new();
-        Godot.Vector3 cellSize = Grid.CellSize;
-
-        int id = 0;
-        foreach (var item in gridCells)
+        if (GridToLoad is null)
         {
-            Godot.Color color = ColorList[id];
-            StandardMaterial3D material = new() { AlbedoColor = color };
-            BoxMesh mesh = new() { Material = material, Size = cellSize };
-            BoxShape3D shape = new() { Size = cellSize };
-
-            output.CreateItem(id);
-            output.SetItemName(id, item.Name);
-            output.SetItemMesh(
-                id,
-                mesh
-                );
-            output.SetItemShapes(
-                id,
-                new() { shape }
-                );
-            id++;
+            GD.PushError("Nothing to load.");
+            return;
         }
-        return output;
+        GridUsed = GridToLoad;
+        UpdateGridMapFromGrid();
+    }
+
+    protected void ShowInGridNode()
+    {
+        bool show = !GridNodeUsed.Visible;
+
+        GridNodeUsed.Visible = show;
+        GridMapNode.Visible = !show;
+        if (show)
+        {
+            UpdateGridFromGridMap();
+            GridNodeUsed.SetGrid(GridUsed);
+        }
     }
 
     private void SetTerrainHeightMap(NoiseTexture2D map)
@@ -141,28 +156,77 @@ public partial class GridBuilder3D : Node3D
         UpdateGridFromGridMap();
     }
 
-    protected void UpdateGridFromGridMap()
+    public void SetGridCells(List<GridCell>? gridCells)
     {
-        foreach (var item in GridMapNode.GetUsedCells())
-        {
-            int id = GridMapNode.GetCellItem(item);
-            string name = GridMapNode.MeshLibrary.GetItemName(id);
-            GridUsed.SetCell(new(item), GridCell.Preset.GetByName(name));
-        }
-        UpdateGridNode();
+        GridMapNode.MeshLibrary = GetMeshLibFromGridCells(gridCells);
     }
 
-    protected void UpdateGridMapFromGrid()
+    protected void FillEmptyWithAir()
     {
-        foreach (var item in GridUsed.CellDictionary)
-        {
+
+    }
+
+    protected MeshLibrary GetMeshLibFromGridCells(List<GridCell>? gridCells)
+    {
+        gridCells ??= GridCell.Preset.GetAll();
             
+        MeshLibrary output = new();
+
+        int id = 0;
+        foreach (var item in gridCells)
+        {
+            AddMeshToLibrary(output, id, item);
+            id++;
         }
+        return output;
     }
 
-    protected void UpdateGridNode()
+    private void AddMeshToLibrary(MeshLibrary meshLib, int id, GridCell item)
     {
-        GridNodeUsed.SetGrid(GridUsed);
+        if (id > ColorList.Count)
+            throw new Exception($"We only have {ColorList.Count} colors, but id is {id}.");
+        if (id < meshLib.GetItemList().Count())
+            throw new Exception("We are REPLACING an item!");
+
+        Godot.Vector3 cellSize = Grid.CellSize;
+
+        Godot.Color color = ColorList[id];
+        color.A = item.Name == "Air" ? 0.5f : 0.75f;
+        StandardMaterial3D material = new()
+        {
+            AlbedoColor = color,
+            Transparency = BaseMaterial3D.TransparencyEnum.Alpha
+        };
+        BoxMesh mesh = new()
+        {
+            Material = material,
+            Size = cellSize
+        };
+        BoxShape3D shape = new() { Size = cellSize };
+
+        Godot.Image image = Godot.Image.CreateEmpty(
+                2,
+                2,
+                false,
+                Godot.Image.Format.Rgbah
+                );
+        image.Fill(color);
+        ImageTexture texture = ImageTexture.CreateFromImage(image);
+
+        meshLib.CreateItem(id);
+        meshLib.SetItemName(id, item.Name);
+        meshLib.SetItemMesh(
+            id,
+            mesh
+            );
+        meshLib.SetItemShapes(
+            id,
+            new() { shape }
+            );
+        meshLib.SetItemPreview(
+            id,
+            texture
+        );
     }
 
     protected int GetGroundIDFromMeshLibrary(MeshLibrary meshLibrary)
@@ -174,6 +238,42 @@ public partial class GridBuilder3D : Node3D
         throw new Exception("Ground not found in MeshLibrary.");
     }
 
+    protected void UpdateGridFromGridMap()
+    {
+        foreach (var item in GridMapNode.GetUsedCells())
+        {
+            int id = GridMapNode.GetCellItem(item);
+            string name = GridMapNode.MeshLibrary.GetItemName(id);
+            GridUsed.SetCell(new(item), GridCell.Preset.GetByName(name));
+        }
+    }
+
+    protected void UpdateGridMapFromGrid()
+    {
+        GridMapNode.Clear();
+        GridMapNode.MeshLibrary = null;
+
+        MeshLibrary newLibrary = new();
+        GridMapNode.MeshLibrary = newLibrary;
+
+        Dictionary<GridCell, int> uniqueCells = new();
+        int id = 0;
+        foreach (var item in GridUsed.CellDictionary)
+        {
+            //If we do not have an item in the MeshLibrary for this kind of GridCell, make a new one.
+            if (!uniqueCells.ContainsKey(item.Value))
+            {
+                AddMeshToLibrary(newLibrary, id, item.Value);
+                uniqueCells[item.Value] = id;
+                id++;
+            }
+
+            int libItemId = uniqueCells[item.Value];
+            GridMapNode.SetCellItem(item.Key, libItemId);
+            GD.Print($"Placed {libItemId} at {item.Key}");
+        }
+    }
+
     public override void _Process(double delta)
     {
         base._Process(delta);
@@ -181,6 +281,7 @@ public partial class GridBuilder3D : Node3D
         if (Input.IsActionJustPressed("ui_up"))
         {
             newPos += Vector3i.FORWARD;
+            GridToLoad = new();
         }
         else if (Input.IsActionJustPressed("ui_down"))
         {

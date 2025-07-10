@@ -4,22 +4,32 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Godot;
 
 namespace ChessLike.World;
 
-
-public partial struct GridCell : IEquatable<GridCell>
+[GlobalClass, Tool]
+public partial class GridCell : Resource, IEquatable<GridCell>
 {
 
+    [Export]
     public string Name = "UNNAMED";
+
     public List<ECellFlag> Flags = new List<ECellFlag>();
+    [Export]
+    private Godot.Collections.Array<ECellFlag> flags
+    {
+        set => Flags = new(value);
+        get => new(Flags);
+    }
+
+    [Export]
     public bool Selectable = false;
 
     public GridCell()
     {
         Name = "";
         Flags = new List<ECellFlag>();
-
     }
 
     public GridCell(string name, List<ECellFlag> flags, bool selectable)
