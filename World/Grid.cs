@@ -52,6 +52,7 @@ public partial class Grid : Resource
     #region Cells
     public void SetCell(Vector3i position, GridCell cell)
     {
+        if (!IsPositionInbounds(position)) throw new Exception($"Position {position} out of bounds.");
         CellDictionary[position] = cell;
     }
 
@@ -64,7 +65,7 @@ public partial class Grid : Resource
                 for (int z = 0; z < Boundary.Z; z++)
                 {
                     Vector3i vector = new(x, y, z);
-                    if (emptyOnly && GetCell(vector) is not null) continue;
+                    if (emptyOnly && HasCell(vector)) continue;
                     SetCell(vector, cell);
                 }
             }
@@ -78,6 +79,9 @@ public partial class Grid : Resource
         if (!CellDictionary.TryGetValue(position, out cell)) { throw new Exception("Not found!"); }
         return cell;
     }
+
+    public bool HasCell(Vector3i position)
+        => CellDictionary.ContainsKey(position);
 
     public ICollection<GridCell> GetCells()
     {

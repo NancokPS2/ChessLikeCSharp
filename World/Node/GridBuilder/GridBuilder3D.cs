@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 using Godot;
 
 namespace ChessLike.World;
@@ -43,24 +44,26 @@ public partial class GridBuilder3D : Node3D
         get => Callable.From(ShowInGridNode);
     }
 
+    [ExportToolButton("Sanitize GridMap")]
+    public Callable SanitizeGridMapCall
+    {
+        get => Callable.From(SanitizeGridMap);
+    }
+
     [ExportCategory("Terrain Generation")]
     /// <summary>
-    /// The height that the terrain can reach.
+    /// The height that the terrain can reach. If set to 1, the terrain will usually touch the top of the Grid.
     /// </summary>
     [Export(PropertyHint.Range, "0,1,0.01")]
     public float TerrainHeightModifier = 1;
 
     [Export]
-    protected NoiseTexture2D? TerrainHeightMap
+    protected Texture2D? TerrainHeightMap;
+
+    [ExportToolButton("Generate Terrain")]
+    protected Callable TerrainGenerateCall
     {
-        set
-        {
-            if (value?.GetWidth() > MAX_SIZE || value?.GetHeight() > MAX_SIZE)
-                GD.PushError($"Image is larger than {MAX_SIZE}x{MAX_SIZE}.");
-            if (value is null) return;
-            SetTerrainHeightMap(value);
-        }
-        get => null;
+        get => Callable.From(TerrainGenerationCall);
     }
 
     [ExportCategory("Loading")]
@@ -70,7 +73,13 @@ public partial class GridBuilder3D : Node3D
     [ExportToolButton("Load")]
     protected Callable LoadCall
     {
-        get => Callable.From(Load);
+        get => Callable.From(LoadingCall);
+    }
+
+    [ExportToolButton("Reload GridMap")]
+    protected Callable ReloadGridMapCall
+    {
+        get => Callable.From(UpdateGridMapFromGrid);
     }
 
     [ExportCategory("Saving")]
@@ -84,7 +93,7 @@ public partial class GridBuilder3D : Node3D
     [ExportToolButton("Save")]
     public Callable SaveCall
     {
-        get => Callable.From(Save);
+        get => Callable.From(SavingCall);
     }
 
     public override void _Ready()
@@ -93,48 +102,32 @@ public partial class GridBuilder3D : Node3D
         MarkerNode = MarkerScene.Instantiate<Node3D>();
         AddChild(MarkerNode);
 
-        SetGridCells(null);
+        GridMapNode.MeshLibrary = null;
+        GridMapNode.Clear();
     }
 
-    public void Save()
+    #region Terrain Generation
+
+    private void TerrainGenerationCall()
     {
+        GridMapNode.Clear();
+
+        if (TerrainHeightMap is not null)
+        {
+            if (TerrainHeightMap.GetWidth() > MAX_SIZE || TerrainHeightMap.GetHeight() > MAX_SIZE)
+            {
+                GD.PushError($"Image is larger than {MAX_SIZE}x{MAX_SIZE}.");
+                return;
+            }
+            SetGridMapToHeightMap(TerrainHeightMap);
+        }
+
         UpdateGridFromGridMap();
-        
-        if (AutoFillEmptySpaceWithAir)
-            GridUsed.FillCell(GridCell.Preset.Air, true);
-
-        var error = ResourceSaver.Save(GridUsed, SavePath);
-        if (error != Error.Ok) GD.PushError($"Failed to save Grid with error: {error}");
     }
 
-    public void Load()
-    {
-        if (GridToLoad is null)
-        {
-            GD.PushError("Nothing to load.");
-            return;
-        }
-        GridUsed = GridToLoad;
-        UpdateGridMapFromGrid();
-    }
-
-    protected void ShowInGridNode()
-    {
-        bool show = !GridNodeUsed.Visible;
-
-        GridNodeUsed.Visible = show;
-        GridMapNode.Visible = !show;
-        if (show)
-        {
-            UpdateGridFromGridMap();
-            GridNodeUsed.SetGrid(GridUsed);
-        }
-    }
-
-    private void SetTerrainHeightMap(NoiseTexture2D map)
+    private void SetGridMapToHeightMap(Texture2D map)
     {
         Godot.Image image = map.GetImage();
-        GridMapNode.Clear();
         GridUsed.Boundary = new(map.GetWidth(), HeightMax, map.GetHeight());
         //List<Vector3i> chosen = new();
         for (int x = 0; x < GridUsed.Boundary.X; x++)
@@ -157,17 +150,53 @@ public partial class GridBuilder3D : Node3D
                 }
             }
         }
+    }
+    #endregion
+
+    #region Saving and Loading
+    private void SavingCall()
+    {
         UpdateGridFromGridMap();
+
+        if (AutoFillEmptySpaceWithAir)
+            GridUsed.FillCell(GridCell.Preset.Air, true);
+
+        var error = ResourceSaver.Save(GridUsed, SavePath);
+        if (error != Error.Ok) GD.PushError($"Failed to save Grid with error: {error}");
     }
 
-    public void SetGridCells(List<GridCell>? gridCells)
+    public void LoadingCall()
     {
-        GridMapNode.MeshLibrary = GetMeshLibFromGridCells(gridCells);
+        if (GridToLoad is null)
+        {
+            GD.PushError("Nothing to load.");
+            return;
+        }
+        GridUsed = GridToLoad;
+        UpdateGridMapFromGrid();
     }
 
-    protected void FillEmptyWithAir()
+    protected void SanitizeGridMap()
     {
+        foreach (var item in GridUsed.CellDictionary.Keys)
+        {
+            if (item.X < 0 || item.Y < 0 || item.Z < 0)
+                GridMapNode.SetCellItem(item, -1);
+        }
+    }
+    #endregion
 
+    protected void ShowInGridNode()
+    {
+        bool show = !GridNodeUsed.Visible;
+
+        GridNodeUsed.Visible = show;
+        GridMapNode.Visible = !show;
+        if (show)
+        {
+            UpdateGridFromGridMap();
+            GridNodeUsed.SetGrid(GridUsed);
+        }
     }
 
     protected MeshLibrary GetMeshLibFromGridCells(List<GridCell>? gridCells)
@@ -274,7 +303,6 @@ public partial class GridBuilder3D : Node3D
 
             int libItemId = uniqueCells[item.Value];
             GridMapNode.SetCellItem(item.Key, libItemId);
-            GD.Print($"Placed {libItemId} at {item.Key}");
         }
     }
 
@@ -285,7 +313,6 @@ public partial class GridBuilder3D : Node3D
         if (Input.IsActionJustPressed("ui_up"))
         {
             newPos += Vector3i.FORWARD;
-            GridToLoad = new();
         }
         else if (Input.IsActionJustPressed("ui_down"))
         {
