@@ -137,13 +137,15 @@ public partial class Grid : Resource
 
     #region Checks
     public bool IsPositionInbounds(Vector3i position)
+        => IsPositionInbounds(position, Boundary);
+    public static bool IsPositionInbounds(Vector3i position, Vector3i boundary)
     {
 
         if (position.X < 0 || position.Y < 0 || position.Z < 0)
         {
             return false;
         }
-        else if (position.X >= Boundary.X || position.Y >= Boundary.Y || position.Z >= Boundary.Z)
+        else if (position.X >= boundary.X || position.Y >= boundary.Y || position.Z >= boundary.Z)
         {
             return false;
         }
@@ -174,7 +176,6 @@ public partial class Grid : Resource
             {
                 return false;
             }
-
         }
         return true;
     }
