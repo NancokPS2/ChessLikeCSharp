@@ -24,4 +24,26 @@ public static class GridMapExtension
         }
         return output;
     }
+
+    public static void SetItemMeta(this MeshLibrary @this, int id, Variant variant)
+    {
+        @this.SetMeta($"ItemMeta{id}", variant);
+    }
+    public static Variant GetItemMeta(this MeshLibrary @this, int id, Variant def = default)
+    {
+        return @this.GetMeta($"ItemMeta{id}", def);
+    }
+    public static bool HasItemMeta(this MeshLibrary @this, int id)
+    {
+        return @this.HasMeta($"ItemMeta{id}");
+    }
+    public static int FindIdWithMeta<[MustBeVariant] TMeta>(this MeshLibrary @this, TMeta meta) where TMeta : IEquatable<TMeta>
+    {
+        foreach (var id in @this.GetItemList())
+        {
+            if (!@this.HasItemMeta(id)) continue;
+            if (@this.GetItemMeta(id).As<TMeta>().Equals(meta)) return id;
+        }
+        return -1;
+    }
 }

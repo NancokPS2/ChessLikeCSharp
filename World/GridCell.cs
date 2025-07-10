@@ -39,14 +39,9 @@ public partial class GridCell : Resource, IEquatable<GridCell>
         Selectable = selectable;
     }
 
-    public bool Equals(GridCell other)
+    public bool Equals(GridCell? other)
     {
-        return Name == other.Name && Flags == other.Flags && Selectable == other.Selectable;
-    }
-    public override bool Equals(Object? obj)
-    {
-        return base.Equals(obj);
-        //return GetHashCode() == obj?.GetHashCode();
+        return Name == other?.Name && Flags == other.Flags && Selectable == other.Selectable;
     }
     public override int GetHashCode()
     {

@@ -131,6 +131,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "GridBuilder.SanitizeGridMap() is not working?",
+                    "id": "jhq9lz9is9wa7gq3h8oq6gac"
+                },
+                {
                     "text": "CombatTurnUI not updating Delay (?)",
                     "id": "qcxop4agrjcyrx897e7t91nk"
                 },
@@ -149,5 +153,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752092430960
+    "timestamp": 1752171940323
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Extension;
@@ -17,6 +18,7 @@ public partial class GridBuilder3D : Node3D
         Colors.Gray, Colors.Purple, Colors.Brown,
         Colors.Black, Colors.Pink, Colors.Yellow
     };
+
     protected Grid GridUsed = new();
 
     [ExportCategory("Nodes and Scenes")]
@@ -32,6 +34,29 @@ public partial class GridBuilder3D : Node3D
     protected Vector3i MarkerNodePosition;
 
     [ExportCategory("Main")]
+
+    [Export]
+    protected Godot.Collections.Array<GridCell> GridCellsLoaded
+    {
+        set
+        {
+            if (GridMapNode is null) return;
+            GridMapNode.MeshLibrary = new();
+            GridMapNode.MeshLibrary = GetMeshLibFromGridCells(
+                new(
+                    from gridCell
+                    in value
+                    select gridCell is not null ? gridCell : GridCell.Preset.Air)
+                );
+        }
+
+        get
+        {
+            if (GridMapNode is null || GridMapNode.MeshLibrary is null) return new();
+            return new(from id in GridMapNode.MeshLibrary.GetItemList() select GridMapNode.MeshLibrary.GetItemMeta(id).As<GridCell>());
+        }
+    }
+
     /// <summary>
     /// The actual max height of the terrain.
     /// </summary>
@@ -56,6 +81,9 @@ public partial class GridBuilder3D : Node3D
     /// </summary>
     [Export(PropertyHint.Range, "0,1,0.01")]
     public float TerrainHeightModifier = 1;
+
+    [Export]
+    public int TerrainGroundMeshLibItem;
 
     [Export]
     protected Texture2D? TerrainHeightMap;
@@ -129,7 +157,7 @@ public partial class GridBuilder3D : Node3D
     {
         Godot.Image image = map.GetImage();
         GridUsed.Boundary = new(map.GetWidth(), HeightMax, map.GetHeight());
-        //List<Vector3i> chosen = new();
+
         for (int x = 0; x < GridUsed.Boundary.X; x++)
         {
             for (int z = 0; z < GridUsed.Boundary.Z; z++)
@@ -142,10 +170,9 @@ public partial class GridBuilder3D : Node3D
                     if (heightValue > ((float)y / (float)HeightMax))
                     {
                         GridMapNode.SetCellItem(
-                            new(x, y, z), 
-                            GetGroundIDFromMeshLibrary(GridMapNode.MeshLibrary)
+                            new(x, y, z),
+                            TerrainGroundMeshLibItem
                             );
-                        //chosen.Add(new(x, y, z));
                     }
                 }
             }
@@ -156,6 +183,7 @@ public partial class GridBuilder3D : Node3D
     #region Saving and Loading
     private void SavingCall()
     {
+        SanitizeGridMap();
         UpdateGridFromGridMap();
 
         if (AutoFillEmptySpaceWithAir)
@@ -180,7 +208,7 @@ public partial class GridBuilder3D : Node3D
     {
         foreach (var item in GridUsed.CellDictionary.Keys)
         {
-            if (item.X < 0 || item.Y < 0 || item.Z < 0)
+            if (!GridUsed.IsPositionInbounds(item))
                 GridMapNode.SetCellItem(item, -1);
         }
     }
@@ -208,18 +236,20 @@ public partial class GridBuilder3D : Node3D
         int id = 0;
         foreach (var item in gridCells)
         {
-            AddMeshToLibrary(output, id, item);
+            AddGridCellToMeshLib(output, id, item);
             id++;
         }
         return output;
     }
 
-    private void AddMeshToLibrary(MeshLibrary meshLib, int id, GridCell item)
+    private void AddGridCellToMeshLib(MeshLibrary meshLib, int id, GridCell item)
     {
         if (id > ColorList.Count)
             throw new Exception($"We only have {ColorList.Count} colors, but id is {id}.");
         if (id < meshLib.GetItemList().Count())
             throw new Exception("We are REPLACING an item!");
+        if (item is null)
+            throw new Exception("Can't add a null item to the MeshLibrary");
 
         Godot.Vector3 cellSize = Grid.CellSize;
 
@@ -259,26 +289,25 @@ public partial class GridBuilder3D : Node3D
         meshLib.SetItemPreview(
             id,
             texture
-        );
+            );
+        meshLib.SetItemMeta(
+            id,
+            item
+            );
+        if (meshLib.GetItemMeta(id).As<GridCell>() != item)
+            throw new Exception($"{id} does not have the metadata that was just set.");
     }
 
-    protected int GetGroundIDFromMeshLibrary(MeshLibrary meshLibrary)
-    {
-        foreach (var id in meshLibrary.GetItemList())
-        {
-            if (meshLibrary.GetItemName(id) == "Ground") return id;
-        }
-        throw new Exception("Ground not found in MeshLibrary.");
-    }
-
+    #region Updates
     protected void UpdateGridFromGridMap()
     {
-        foreach (var item in GridMapNode.GetUsedCells())
+        foreach (var vector in GridMapNode.GetUsedCells())
         {
-            int id = GridMapNode.GetCellItem(item);
-            string name = GridMapNode.MeshLibrary.GetItemName(id);
-            GridUsed.SetCell(new(item), GridCell.Preset.GetByName(name));
+            int id = GridMapNode.GetCellItem(vector);
+            GridCell gridCell = GridMapNode.MeshLibrary.GetItemMeta(id).As<GridCell>();
+            GridUsed.SetCell(new(vector), gridCell);
         }
+        GridNodeUsed.SetGrid(GridUsed);
     }
 
     protected void UpdateGridMapFromGrid()
@@ -289,46 +318,22 @@ public partial class GridBuilder3D : Node3D
         MeshLibrary newLibrary = new();
         GridMapNode.MeshLibrary = newLibrary;
 
-        Dictionary<GridCell, int> uniqueCells = new();
         int id = 0;
         foreach (var item in GridUsed.CellDictionary)
         {
             //If we do not have an item in the MeshLibrary for this kind of GridCell, make a new one.
-            if (!uniqueCells.ContainsKey(item.Value))
+            if (newLibrary.FindIdWithMeta(item.Value) == -1)
             {
-                AddMeshToLibrary(newLibrary, id, item.Value);
-                uniqueCells[item.Value] = id;
+                AddGridCellToMeshLib(newLibrary, id, item.Value);
+                if (newLibrary.FindIdWithMeta(item.Value) != id)
+                    throw new Exception($"Could not find metadata for id {id}");
                 id++;
             }
 
-            int libItemId = uniqueCells[item.Value];
+            int libItemId = newLibrary.FindIdWithMeta(item.Value);
+            if (libItemId == -1) throw new Exception("Could not find any GridCell in the MeshLibrary.");
             GridMapNode.SetCellItem(item.Key, libItemId);
         }
     }
-
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        Vector3i newPos = MarkerNodePosition;
-        if (Input.IsActionJustPressed("ui_up"))
-        {
-            newPos += Vector3i.FORWARD;
-        }
-        else if (Input.IsActionJustPressed("ui_down"))
-        {
-            newPos += Vector3i.BACK;
-        }
-        else if (Input.IsActionJustPressed("ui_left"))
-        {
-            newPos += Vector3i.LEFT;
-        }
-        else if (Input.IsActionJustPressed("ui_right"))
-        {
-            newPos += Vector3i.RIGHT;
-        }
-
-        if (!GridUsed.IsPositionInbounds(newPos)) return;
-
-        MarkerNode.GlobalPosition = GridNodeUsed.MapToGlobal(newPos);
-    }
+    #endregion
 }

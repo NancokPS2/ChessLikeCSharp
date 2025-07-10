@@ -143,7 +143,7 @@ public partial class Grid : Resource
         {
             return false;
         }
-        if (position.X >= Boundary.X || position.Y >= Boundary.Y || position.Z >= Boundary.Z)
+        else if (position.X >= Boundary.X || position.Y >= Boundary.Y || position.Z >= Boundary.Z)
         {
             return false;
         }

@@ -71,4 +71,6 @@ public class BiDictionary<TKey, TValue> where TKey : notnull where TValue : notn
         set { AddReversed(index, value); }
     }
 
+    public bool ContainsKey(TKey key) => _forward.ContainsKey(key);
+    public bool ContainsValue(TValue value) => _reverse.ContainsKey(value);
 }
