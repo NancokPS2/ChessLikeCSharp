@@ -1,0 +1,14 @@
+{
+	"recommendations": [
+		"willasm.obsidian-md-vsc",
+		"ms-dotnettools.csharp",
+		"ms-dotnettools.csdevkit",
+		"ms-dotnettools.vscode-dotnet-runtime",
+		"ms-vscode.cpptools",
+		"kreativ-software.csharpextensions",
+		"neikeq.godot-csharp-vscode",
+		"mhutchie.git-graph",
+		"geequlim.godot-tools",
+		"lbauskar.kanban"
+	]
+}
