@@ -173,7 +173,7 @@ public partial class EventBus : Node
 
     #region Storage
     public delegate void InventoryItemChange(Inventory inventory, Slot slot, Item item);
-    public delegate void InventoryError(Inventory inventory, Inventory.Error error);
+    public delegate void InventoryError(Inventory inventory, Inventory.EInventoryError error);
     public static ObjectChange<Inventory>? InventoryChanged;
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;

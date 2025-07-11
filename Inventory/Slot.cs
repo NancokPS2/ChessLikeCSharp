@@ -53,4 +53,7 @@ public partial class Slot : Resource
 
         return blacklist_clear && whitelist_clear;
     }
+
+    public bool IsEmpty()
+        => Item is null;
 }

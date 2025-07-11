@@ -20,7 +20,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependenc
 	private InventoryUI? _transfer_ui;
 	[Export]
 	public InventoryUI? TransferUI {get => _transfer_ui; set => SetTransferUI(value);}
-	protected Inventory.Error LastError;
+	protected Inventory.EInventoryError LastError;
 	[Export]
 	public bool CanTransferItems;
 
@@ -121,7 +121,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependenc
 		//Either of the selected slots must have an item.
 		if (TupleSelected?.Item2.Item is null && TransferUI?.TupleSelected?.Item2.Item is null)
 		{
-			LastError = Inventory.Error.UNHANDLED; 
+			LastError = Inventory.EInventoryError.UNHANDLED; 
 			MessageQueue.AddMessage("Failed to transfer, there is no item in either of the slots.", 3);
 			ButtonDeselection();
 			return;
@@ -134,7 +134,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependenc
 			transfer_ui_slot
 		);
 
-		if (LastError != Inventory.Error.NONE)
+		if (LastError != Inventory.EInventoryError.NONE)
 		{
 			MessageQueue.AddMessage("Failed to transfer due to " + LastError.ToString(), 3);
 		}
@@ -149,22 +149,22 @@ public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependenc
 
 	}
 
-	public Inventory.Error TransferItemToInventory(Inventory source_inv, Inventory target_inv, Slot source_slot, Slot target_slot, Item item_to_transfer)
+	public Inventory.EInventoryError TransferItemToInventory(Inventory source_inv, Inventory target_inv, Slot source_slot, Slot target_slot, Item item_to_transfer)
 	{
 
-		Inventory.Error remove_err = source_inv.RemoveItem(source_slot);
-		if (remove_err != Inventory.Error.NONE)
+		Inventory.EInventoryError remove_err = source_inv.RemoveItem(source_slot);
+		if (remove_err != Inventory.EInventoryError.NONE)
 		{
 			return remove_err;
 		}
 
-		Inventory.Error add_err = target_inv.AddItem(item_to_transfer, target_slot);
-		if (add_err != Inventory.Error.NONE)
+		Inventory.EInventoryError add_err = target_inv.AddItem(item_to_transfer, target_slot);
+		if (add_err != Inventory.EInventoryError.NONE)
 		{
 			return add_err;
 		}
 
-		return Inventory.Error.NONE;
+		return Inventory.EInventoryError.NONE;
 	}
 
 	public string GetText()

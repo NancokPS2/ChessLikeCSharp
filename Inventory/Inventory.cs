@@ -5,18 +5,6 @@ namespace ChessLike.Storage;
 
 public abstract partial class Inventory : Resource
 {
-    public enum Error
-    {
-        NONE,
-        UNHANDLED,          //If something that's not supposed to happen, happens.
-
-        REMOVE_ITEM_NOT_IN_INVENTORY, //Tried to take an item, but nothing was inside the inventory.
-        REMOVE_SLOT_ALREADY_EMPTY,
-
-        ADD_NO_SPACE,       //Add: Not enough slots left to fit the item.
-        ADD_INVALID_SLOT,   //A forced attempt was made to add the item to an invalid slot.
-        TRANSFER_FAILED,    //Any problem related to a transfer.
-    }
 
     public const int INVALID_SLOT = -1;
 
@@ -32,45 +20,31 @@ public abstract partial class Inventory : Resource
     {
     }
 
-    public Inventory(int size)
+    public Inventory(int size, Slot defaultSlot)
     {
         for (int i = size; i < size; i++)
         {
-            Slots.Add(new());
+            Slots.Add(new Slot(defaultSlot));
         }
     }
 
     #region Slot
-    protected void AddSlot(Slot slot)
-    {
-        Slots.Add(slot);
-        EventBus.InventoryChanged?.Invoke(this);
-    }
-
-    protected void RemoveSlot(Slot slot)
-    {
-        Slots.Remove(slot);
-        EventBus.InventoryChanged?.Invoke(this);
-    }
-
     [Obsolete("Turn back to protected later")]
     public List<Slot> GetSlots() => Slots;
 
-    protected Slot? GetSlotForItem(Item item, bool must_be_empty)
+    protected Slot? GetSlotThatAllowsItem(Item item, bool must_be_empty)
     {
         List<Slot> list = must_be_empty ? GetSlotsEmpty() : GetSlots();
         return list.First(x => x.IsItemValid(item));
     }
 
-    public bool ContainsSlot(Slot slot) => Slots.Any(x => x == slot);
+    public bool ContainsSlot(Slot slot) => Slots.Contains(slot);
 
-    protected List<Slot> GetSlotsEmpty() => Slots.Where(x => x.Item is null).ToList();
+    protected List<Slot> GetSlotsEmpty() => Slots.Where(x => x.IsEmpty()).ToList();
 
     [Obsolete("Turn back to protected")]
     public void ClearEmptySlots()
-    {
-        Slots.RemoveAll(x => x.Item is null);
-    }
+        => Slots.RemoveAll(x => x.IsEmpty());
 
     /// <summary>
     /// Returns a slot containing the provided item.
@@ -78,40 +52,24 @@ public abstract partial class Inventory : Resource
     /// <param name="item">The item to look for.</param>
     /// <returns>The slot with the item, or null if none are found in this inventory.</returns>
     protected Slot? FindSlotWithItem(Item item)
-    {
-        if (!ContainsItem(item))
-        {
-            return null;
-        }
+        => Slots.Find(x => x.Item == item);
 
-        return Slots.First(x => x.Item == item);
-    }
-
-    protected int GetFreeSlots() => Slots.Count(x => x.Item is null);
-
-    public bool IsSlotEmpty(int slot)
-    {
-        return GetItem(slot) == null;
-    }
+    protected int GetEmptySlots()
+        => Slots.Count(x => x.IsEmpty());
     #endregion
 
     #region Item
-    public Item? GetItem(int slot)
-    {
-        return Slots[slot].Item;
-    }
-
     public List<Item> GetItems()
         => (
             from slot
-            in GetSlots().Where(x => x.Item != null)
+            in GetSlots().Where(x => !x.IsEmpty())
             select slot.Item
             ).ToList();
 
     [Obsolete("Turn back to protected later")]
-    public Error AddItem(Item item_to_add, Slot slot)
+    public EInventoryError AddItem(Item item_to_add, Slot slot)
     {
-        Error err;
+        EInventoryError err;
         if (!ContainsSlot(slot))
         {
             throw new Exception("This function is meant to be used in one of this inventory's slots.");
@@ -120,15 +78,15 @@ public abstract partial class Inventory : Resource
         //The lost must be able to hold it
         if (!slot.IsItemValid(item_to_add))
         {
-            err = Error.ADD_INVALID_SLOT;
+            err = EInventoryError.ADD_INVALID_SLOT;
             EventBus.InventoryErrored?.Invoke(this, err);
             return err;
         }
 
         //Fail if there's not enough slots.
-        if (GetFreeSlots() <= 0)
+        if (GetEmptySlots() <= 0)
         {
-            err = Error.ADD_NO_SPACE;
+            err = EInventoryError.ADD_NO_SPACE;
             EventBus.InventoryErrored?.Invoke(this, err);
             return err;
         }
@@ -137,70 +95,29 @@ public abstract partial class Inventory : Resource
         slot.Item = item_to_add;
         EventBus.InventoryChanged?.Invoke(this);
         EventBus.InventoryItemAdded?.Invoke(this, slot, item_to_add);
-        return Error.NONE;
+        return EInventoryError.NONE;
     }
 
     [Obsolete("Turn back to protected later")]
-    public Error AddItem(Item item_to_add)
+    public EInventoryError RemoveItem(Slot slot)
     {
-        Error err;
-        //Check if any slot can house the item.
-        foreach (var slot in Slots)
-        {
-            if (slot.IsItemValid(item_to_add))
-            {
-                return AddItem(item_to_add, slot);
-            }
-        }
-        err = Error.ADD_INVALID_SLOT;
-        EventBus.InventoryErrored?.Invoke(this, err);
-        return err;
-    }
-    protected Error AddItem(Slot source_slot, Slot target_slot)
-    {
-        if (source_slot.Item is null) throw new ArgumentException("The slot must contain something.");
-        return AddItem(source_slot.Item, target_slot);
-    }
-
-    [Obsolete("Turn back to protected later")]
-    public Error RemoveItem(Item item)
-    {
-        Slot? slot_with_item = FindSlotWithItem(item);
-        Error err;
-        if (slot_with_item is not null)
-        {
-            err = RemoveItem(slot_with_item);
-        }
-        else
-        {
-            err = Error.REMOVE_ITEM_NOT_IN_INVENTORY;
-            EventBus.InventoryErrored?.Invoke(this, err);
-        }
-        return err;
-    }
-
-    [Obsolete("Turn back to protected later")]
-    public Error RemoveItem(Slot slot)
-    {
-        if (slot.Item is null) { return Error.REMOVE_SLOT_ALREADY_EMPTY; }
+        if (slot.Item is null) { return EInventoryError.REMOVE_SLOT_ALREADY_EMPTY; }
         else
         {
             Item item = slot.Item;
             slot.Item = null;
             EventBus.InventoryChanged?.Invoke(this);
             EventBus.InventoryItemRemoved?.Invoke(this, slot, item);
-            return Error.NONE;
+            return EInventoryError.NONE;
         }
     }
-
-    public bool ContainsItem(Item item) => Slots.Any(x => x.Item == item);
     #endregion
 
 
     #region Transfer
     private enum TransferMode { EXCHANGE, SEND_TO_TARGET, TAKE_FROM_TARGET }
-    public Error TransferItem(Slot source_slot, Inventory target_inv, Slot target_slot) => TransferItem(this, source_slot, target_inv, target_slot);
-    public static Error TransferItem(Inventory source_inv, Slot source_slot, Inventory target_inv, Slot target_slot)
+    public EInventoryError TransferItem(Slot source_slot, Inventory target_inv, Slot target_slot) => TransferItem(this, source_slot, target_inv, target_slot);
+    public static EInventoryError TransferItem(Inventory source_inv, Slot source_slot, Inventory target_inv, Slot target_slot)
     {
         if (!source_inv.ContainsSlot(source_slot)) { throw new ArgumentException("The source slot must be inside the source inventory"); }
         if (!target_inv.ContainsSlot(target_slot)) { throw new ArgumentException("The target slot must be inside the target inventory"); }
@@ -222,7 +139,7 @@ public abstract partial class Inventory : Resource
         && source_slot.IsItemValid(target_item) && target_slot.IsItemValid(source_item))
         { mode = TransferMode.EXCHANGE; }
         else
-        { return Error.ADD_INVALID_SLOT; }
+        { return EInventoryError.ADD_INVALID_SLOT; }
 
         switch (mode)
         {
@@ -233,7 +150,7 @@ public abstract partial class Inventory : Resource
 
                 if (source_item is null || target_item is null)
                 {
-                    Error err = Error.TRANSFER_FAILED;
+                    EInventoryError err = EInventoryError.TRANSFER_FAILED;
                     EventBus.InventoryErrored?.Invoke(source_inv, err);
                     EventBus.InventoryErrored?.Invoke(target_inv, err);
                     return err;
@@ -262,13 +179,13 @@ public abstract partial class Inventory : Resource
 
 
 
-        return Error.NONE;
+        return EInventoryError.NONE;
     }
     #endregion
 
-    private static void ThrowOnError(Error error, List<Error>? to_ignore = null)
+    private static void ThrowOnError(EInventoryError error, List<EInventoryError>? to_ignore = null)
     {
-        if (error != Error.NONE || (!to_ignore?.Contains(error) ?? false))
+        if (error != EInventoryError.NONE || (!to_ignore?.Contains(error) ?? false))
         {
             throw new Exception("Failed due to error " + error.ToString());
         }

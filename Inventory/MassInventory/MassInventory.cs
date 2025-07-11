@@ -9,5 +9,8 @@ namespace ChessLike.Storage;
 [GlobalClass]
 public partial class MassInventory : Inventory
 {
-
+    public void AddItem(Item item)
+    {
+        
+    }
 }
