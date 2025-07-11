@@ -1,0 +1,32 @@
+[gd_scene load_steps=10 format=3 uid="uid://mx8prtbowjri"]
+
+[ext_resource type="Script" uid="uid://cvqrdtim0ykx4" path="res://World/Node/EncounterBuilder/EncounterBuilder.cs" id="1_cqslv"]
+[ext_resource type="Resource" uid="uid://b47g816gdf5qm" path="res://World/Node/GridBuilder/SavedGrid.tres" id="2_aqw70"]
+[ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="2_q1ntt"]
+[ext_resource type="Script" uid="uid://dmiuqa6liu2f7" path="res://World/GridCell.cs" id="3_dwt5f"]
+[ext_resource type="Script" uid="uid://nn5u5g4oig5l" path="res://World/Grid.cs" id="4_iqqsj"]
+[ext_resource type="Script" uid="uid://bodnw66lsmq04" path="res://Entity/Mob/Mob.cs" id="5_oqlke"]
+[ext_resource type="Script" uid="uid://cfhm8ksi08g1x" path="res://World/Encounter/EncounterData.cs" id="6_5j5oy"]
+
+[sub_resource type="Resource" id="Resource_t6qcn"]
+script = ExtResource("4_iqqsj")
+boundary = Vector3i(10, 10, 10)
+cellDictionary = Dictionary[Vector3i, ExtResource("3_dwt5f")]({})
+
+[sub_resource type="Resource" id="Resource_fksiu"]
+script = ExtResource("6_5j5oy")
+Grid = SubResource("Resource_t6qcn")
+mobPlacement = Dictionary[Vector3i, ExtResource("5_oqlke")]({})
+
+[node name="EncounterBuilder" type="Node3D" node_paths=PackedStringArray("GridNodeUsed")]
+script = ExtResource("1_cqslv")
+GridNodeUsed = NodePath("GridNode")
+GridToLoad = ExtResource("2_aqw70")
+EncounterLoaded = SubResource("Resource_fksiu")
+mobPlacementDictionary = Dictionary[Vector3i, ExtResource("5_oqlke")]({})
+MobPlacementPosition = Vector3i(0, 3, 0)
+metadata/_custom_type_script = "uid://cvqrdtim0ykx4"
+
+[node name="GridNode" type="Node3D" parent="."]
+script = ExtResource("2_q1ntt")
+metadata/_custom_type_script = "uid://md7uxykgpoyx"

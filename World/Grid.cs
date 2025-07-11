@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
+using ChessLike.Entity;
 using Godot;
 using Vector3 = System.Numerics.Vector3;
 
@@ -134,6 +135,9 @@ public partial class Grid : Resource
         return output;
     }
     #endregion
+
+    public EFaction GetFactionSpawn(Vector3i pos)
+        => GetCell(pos).FactionSpawn;
 
     #region Checks
     public bool IsPositionInbounds(Vector3i position)

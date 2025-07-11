@@ -90,7 +90,7 @@ public partial class GridNode : Node3D
             {
                 MeshSet(position, Layer.BASE, Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL));
             }
-            if (grid.IsFlagInPosition(position, ECellFlag.PLAYER_SPAWNPOINT))
+            if (grid.GetFactionSpawn(position) != ChessLike.Entity.EFaction.INVALID)
             {
                 MeshSet(position, Layer.SPAWN_POINT, Global.Resources.GetMesh(Global.Resources.MeshIdent.SPAWNPOINT));
             }

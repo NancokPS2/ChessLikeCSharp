@@ -8,14 +8,32 @@ namespace ChessLike.World.Encounter;
 [GlobalClass]
 public partial class EncounterData : Resource
 {
+    [Export]
     public Grid Grid = new();
 
-    public List<SpawnSlot> MobPlacement = new();
+    public Dictionary<Vector3i, Mob> MobPlacement = new();
     [Export]
-    private Godot.Collections.Array<SpawnSlot> mobPlacement
+    private Godot.Collections.Dictionary<Godot.Vector3I, Mob> mobPlacement
     {
-        set => MobPlacement = new(value);
-        get => new(MobPlacement);
+        set
+        {
+            MobPlacement = value
+                .ToDictionary(
+                    x => new Vector3i(x.Key),
+                    y => y.Value
+                    );
+        }
+        get
+        {
+            return new(
+                MobPlacement
+                .ToDictionary(
+                    x => x.Key.ToGVector3I(),
+                    y => y.Value
+                    )
+                );
+        }
+
     }
 
     public int RoundLimit = -1;
@@ -24,7 +42,6 @@ public partial class EncounterData : Resource
 
     public EncounterData()
     {
-        EventBus.RoundEnded += () => RoundCount++;
     }
 
     public virtual void EncounterProcess()
@@ -77,29 +94,11 @@ public partial class EncounterData : Resource
         def_mob4.Move(Vector3i.ONE+Vector3i.FORWARD+Vector3i.FORWARD);
         //.ChainEquipment(new WeaponSpear());
 
-        encounter.MobPlacement = new(){
-                new(){
-                    Location = new(0,1,0),
-                    FactionAllowed = EFaction.PLAYER,
-                    PresetMob = def_mob1
-                },
-                new(){
-                    Location = new(2,1,2),
-                    FactionAllowed = EFaction.PLAYER,
-                    PresetMob = def_mob2
-                },
-                new(){
-                    Location = new(2,1,1),
-                    FactionAllowed = EFaction.PLAYER,
-                    PresetMob = def_mob3
-                },
-                new(){
-                    Location = new(0,1,2),
-                    FactionAllowed = EFaction.PLAYER,
-                    PresetMob = def_mob4
-                }
-            };
-
+        encounter.MobPlacement = new();
+        encounter.MobPlacement[Vector3i.ONE] =  def_mob1;
+        encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD] = def_mob2;
+        encounter.MobPlacement[Vector3i.ONE+Vector3i.LEFT] = def_mob3;
+        encounter.MobPlacement[Vector3i.ONE+Vector3i.LEFT] = def_mob4;
         return encounter;
     }
 

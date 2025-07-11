@@ -84,11 +84,11 @@ public partial class BattleController : Node, IDebugDisplay
         SetupComponents();
         
         //Add the mobs after setting their position.
-        foreach (var item in Encounter.MobPlacement)
+/*         foreach (var item in Encounter.MobPlacement)
         {
             if (item.PresetMob is null) return;
             SetupParticipant(item.PresetMob, new(item.Location), true);
-        }
+        } */
 
         EventBus.EncounterLoading?.Invoke(to_load);
     }

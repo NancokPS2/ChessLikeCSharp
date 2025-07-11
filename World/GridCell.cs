@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
 using Godot;
 
 namespace ChessLike.World;
@@ -25,6 +26,9 @@ public partial class GridCell : Resource, IEquatable<GridCell>
 
     [Export]
     public bool Selectable = false;
+
+    [Export]
+    public EFaction FactionSpawn = EFaction.INVALID;
 
     public GridCell()
     {

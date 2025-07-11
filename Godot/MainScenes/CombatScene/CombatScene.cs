@@ -60,13 +60,14 @@ public partial class CombatScene : Node3D
 
 		EventBus.EncounterLoading?.Invoke(encounterToLoad);
 
-		foreach (var item in encounterToLoad.MobPlacement)
+		foreach (KeyValuePair<Vector3i, Mob> pair in encounterToLoad.MobPlacement)
 		{
-			if (item.PresetMob is null) return;
+			Mob mob = pair.Value;
+			if (mob is null) return;
 
-			item.PresetMob.MobState = ChessLike.Entity.EMobState.COMBAT;
+			mob.MobState = ChessLike.Entity.EMobState.COMBAT;
 			//WIP This should be used automatically
-			item.PresetMob.Move(new(item.Location));
+			mob.Move(new(pair.Key));
 		}
 
 		//Everything must be loaded by now.

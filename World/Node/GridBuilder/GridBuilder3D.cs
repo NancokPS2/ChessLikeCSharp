@@ -26,8 +26,6 @@ public partial class GridBuilder3D : Node3D
 
     [Export]
     protected GridMap GridMapNode;
-
-    protected Vector3i MarkerNodePosition;
     
     [ExportCategory("Main")]
 
@@ -335,7 +333,7 @@ public partial class GridBuilder3D : Node3D
     #region Grid
     protected Grid GetNewGrid()
     {
-        Grid grid = new(){Boundary = Boundary};
+        Grid grid = new() { Boundary = Boundary };
         foreach (var vector in GridMapNode.GetUsedCells())
         {
             int id = GridMapNode.GetCellItem(vector);
