@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 public partial class Slot : Resource
 {

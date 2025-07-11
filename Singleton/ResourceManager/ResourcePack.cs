@@ -4,11 +4,11 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 {
     public const string DEFAULT_DIR = "Resources";
     public const string INVALID_UNIQUE_STRING = "";
-
+    private const string DEFAULT_CATEGORY = "unsorted";
     public bool AutoPoolLoaded;
 
     private Dictionary<string, TRes> Contents = new();
-    private UniqueList<TRes> Pooled = new();
+    private Dictionary<string, List<TRes>> Pooled = new();
     public readonly string UniqueString = "";
 
     public ResourcePack()
@@ -22,14 +22,33 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         PrepareDirectories();
     }
 
-    public bool AddPooled(TRes res)
-        => Pooled.Add(res);
+    public void AddPooled(TRes res, string category = DEFAULT_CATEGORY)
+    {
+        CreateCategory(category);
+        Pooled[category].Add(res);
+    }
 
-    public void RemovePooled(TRes res)
-        => Pooled.Remove(res);
+    public void RemovePooled(TRes res, string category = DEFAULT_CATEGORY)
+    {
+        CreateCategory(category);
+        Pooled[category].Remove(res);
+    }
+
+    protected void CreateCategory(string category)
+    {
+        if (Pooled.ContainsKey(category)) return;
+        else Pooled[category] = new();
+    }
 
     public List<TRes> GetAllPooled()
-        => Pooled;
+    {
+        List<TRes> output = new();
+        foreach (var item in Pooled.Values)
+        {
+            output.AddRange(item);
+        }
+        return output;
+    }
 
     public string GetUniqueString()
     {

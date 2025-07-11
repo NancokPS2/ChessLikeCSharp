@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 
 namespace ChessLike.Entity;
 

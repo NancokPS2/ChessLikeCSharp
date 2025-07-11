@@ -1,5 +1,5 @@
 using ChessLike.Entity;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ChessLike.World;
 using Godot;
 
@@ -70,7 +70,7 @@ public partial class EncounterData : Resource
             .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
             .ChainFaction(EFaction.PLAYER);
         def_mob1.Move(Vector3i.ONE);
-        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
+        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("PlayerFac2Warrior")
@@ -78,14 +78,14 @@ public partial class EncounterData : Resource
             .ChainFaction(EFaction.PLAYER)
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WARRIOR) });
         def_mob2.Move(Vector3i.ONE+Vector3i.FORWARD);
-        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
+        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainName("Civilian")
             .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.CIVILIAN) });
         def_mob3.Move(Vector3i.ONE+Vector3i.LEFT);
-        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Shared.Storage.EItem.SWORD));
+        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
             .ChainJob(new List<Job>() { Job.CreatePrototype(EJob.WIZARD) })

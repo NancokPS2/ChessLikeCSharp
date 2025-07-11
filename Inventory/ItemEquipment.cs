@@ -3,7 +3,7 @@ using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using Godot;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 [GlobalClass]
 public partial class ItemEquipment : Item

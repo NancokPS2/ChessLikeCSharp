@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.MobCommand;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
 using ChessLike.World.Encounter;

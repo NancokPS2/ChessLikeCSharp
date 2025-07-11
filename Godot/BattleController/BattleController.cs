@@ -1,7 +1,7 @@
 
 
 using ChessLike.Entity;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
 using ChessLike.World.Encounter;

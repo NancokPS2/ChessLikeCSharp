@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Grid" load_steps=5 format=3 uid="uid://b2a4plkyvd8kr"]
+[gd_resource type="Resource" script_class="Grid" load_steps=5 format=3 uid="uid://b47g816gdf5qm"]
 
 [ext_resource type="Script" uid="uid://dmiuqa6liu2f7" path="res://World/GridCell.cs" id="1_hrpg0"]
 [ext_resource type="Script" uid="uid://nn5u5g4oig5l" path="res://World/Grid.cs" id="2_cfxl2"]
@@ -8,6 +8,7 @@ script = ExtResource("1_hrpg0")
 Name = "Ground"
 flags = Array[int]([1])
 Selectable = false
+FactionSpawn = -1
 metadata/_custom_type_script = "uid://dmiuqa6liu2f7"
 
 [sub_resource type="Resource" id="Resource_jracj"]
@@ -15,6 +16,7 @@ script = ExtResource("1_hrpg0")
 Name = "Air"
 flags = Array[int]([3])
 Selectable = false
+FactionSpawn = -1
 
 [resource]
 script = ExtResource("2_cfxl2")

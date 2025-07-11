@@ -2,7 +2,7 @@ using ChessLike.Entity;
 using Godot;
 using static ChessLike.Entity.Mob;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 public partial class Item : Resource, IValuable
 {
 

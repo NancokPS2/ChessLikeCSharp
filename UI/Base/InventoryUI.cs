@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Extension;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ExtendedXmlSerializer.Core.Sources;
 using Godot;
 

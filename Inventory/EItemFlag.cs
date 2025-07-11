@@ -1,4 +1,4 @@
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 public enum EItemFlag
 {

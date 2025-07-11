@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ChessLike.World.Encounter;
 using Godot;
 

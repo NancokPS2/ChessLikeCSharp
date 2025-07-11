@@ -2,7 +2,7 @@ using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using static ChessLike.Entity.Mob;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 public partial class Item : IActionProvider
 {
     protected List<Ability> Abilities = new();

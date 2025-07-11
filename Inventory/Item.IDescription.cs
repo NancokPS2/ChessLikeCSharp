@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Godot;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 public partial class Item : IDescription
 {

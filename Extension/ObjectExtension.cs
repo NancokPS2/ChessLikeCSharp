@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using ChessLike.Extension;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ExtendedXmlSerializer;
 
 public static class ObjectExtension

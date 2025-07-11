@@ -1,5 +1,5 @@
 using System;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using Godot;
 
 public class ItemResourcePack : ResourcePack<Item>

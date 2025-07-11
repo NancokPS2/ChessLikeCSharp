@@ -5,7 +5,7 @@ using ChessLike.Entity;
 using ChessLike.Shared.Serialization;
 using ExtendedXmlSerializer;
 using ISerializable = ChessLike.Shared.Serialization.ISerializable;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using Godot;
 namespace ChessLike.Entity;
 

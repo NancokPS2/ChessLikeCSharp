@@ -3,7 +3,7 @@ using ChessLike.Entity.Action.Preset;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
 using ChessLike.Shared;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
 using ExtendedXmlSerializer.ExtensionModel.Content;

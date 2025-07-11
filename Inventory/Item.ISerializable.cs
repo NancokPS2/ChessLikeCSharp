@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ChessLike.Shared.Serialization;
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 public partial class Item : ISerializable
 {

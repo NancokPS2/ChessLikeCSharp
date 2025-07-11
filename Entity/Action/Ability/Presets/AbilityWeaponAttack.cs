@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 
 namespace ChessLike.Entity.Action.Preset;
 

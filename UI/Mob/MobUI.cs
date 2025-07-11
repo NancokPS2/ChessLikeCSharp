@@ -1,5 +1,5 @@
 using ChessLike.Entity;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using Godot;
 using System;
 

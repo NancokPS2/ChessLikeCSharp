@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 public partial class Trinket : Item
 {

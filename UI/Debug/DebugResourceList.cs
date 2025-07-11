@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 using Godot;
 
 public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , ISceneDependency

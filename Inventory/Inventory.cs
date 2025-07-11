@@ -1,7 +1,7 @@
 using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 using Godot;
 
-namespace ChessLike.Shared.Storage;
+namespace ChessLike.Storage;
 
 [GlobalClass, Obsolete("Needs RESOURCIFICATION")]
 public partial class Inventory : Resource

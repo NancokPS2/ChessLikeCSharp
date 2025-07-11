@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
+using Godot;
 
 namespace ChessLike.Extension;
 
@@ -20,8 +21,8 @@ public static class ICollectionExtension
         }
         return true;
     }
-    public static string ToStringList<TKey, TValue>(this Dictionary<TKey, TValue> @this) 
-    where TKey : notnull 
+    public static string ToStringList<TKey, TValue>(this Dictionary<TKey, TValue> @this)
+    where TKey : notnull
     where TValue : notnull
     {
         string output = "";
@@ -46,7 +47,7 @@ public static class ICollectionExtension
             {
                 output += item.ToString() + separator;
             }
-            
+
         }
         return output;
     }
@@ -64,8 +65,23 @@ public static class ICollectionExtension
             {
                 output += item.ToString() + separator;
             }
-            
+
         }
         return output;
     }
+
+    public static TColl GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection, TColl def)
+        => GetRandom(collection, def);
+
+    public static TColl GetRandom<TColl>(this List<TColl> collection, TColl def)
+    {
+        if (collection.Count == 0) return def;
+
+        RandomNumberGenerator rng = new();
+        int index = rng.RandiRange(0, collection.Count);
+        return collection[index];
+    }
+
+    public static bool IsEmpty<T>(this ICollection<T> coll)
+        => coll.Count == 0;
 }

@@ -5,7 +5,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.Action.Preset;
-using ChessLike.Shared.Storage;
+using ChessLike.Storage;
 
 namespace ChessLike.Entity;
 
