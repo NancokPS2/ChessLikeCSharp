@@ -56,11 +56,12 @@ public partial class Mob
 
     public Mob ChainEquipment(Item item)
     {
-        Slot? slot = MobInventory.GetSlotForItem(item, false);
+        throw new NotImplementedException();
+        /* Slot? slot = MobInventory.GetSlotForItem(item, false);
         if (slot is null) return this;
 
         EventBus.InventoryItemAdded?.Invoke(MobInventory, slot, item);
-        return this;
+        return this; */
     }
 
     public Mob ChainJob(List<Job> jobs)

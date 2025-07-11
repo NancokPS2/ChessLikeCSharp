@@ -3,8 +3,7 @@ using Godot;
 
 namespace ChessLike.Storage;
 
-[GlobalClass, Obsolete("Needs RESOURCIFICATION")]
-public partial class Inventory : Resource
+public abstract partial class Inventory : Resource
 {
     public enum Error
     {
@@ -21,12 +20,13 @@ public partial class Inventory : Resource
 
     public const int INVALID_SLOT = -1;
 
-    /// <summary>
-    /// When this is used as a slot and StorageInventory is true, the item is added regardless of existing slots. Maybe don't give this slot an item.
-    /// </summary>
-    public Slot StorageInventoryUniversalSlot = new();
-
     protected List<Slot> Slots = new();
+    [Export]
+    private Godot.Collections.Array<Slot> slots
+    {
+        set => Slots = new(value);
+        get => new(Slots);
+    }
 
     public Inventory()
     {
@@ -41,21 +41,22 @@ public partial class Inventory : Resource
     }
 
     #region Slot
-    public void AddSlot(Slot slot)
+    protected void AddSlot(Slot slot)
     {
         Slots.Add(slot);
         EventBus.InventoryChanged?.Invoke(this);
     }
 
-    public void RemoveSlot(Slot slot)
+    protected void RemoveSlot(Slot slot)
     {
         Slots.Remove(slot);
         EventBus.InventoryChanged?.Invoke(this);
     }
 
+    [Obsolete("Turn back to protected later")]
     public List<Slot> GetSlots() => Slots;
 
-    public Slot? GetSlotForItem(Item item, bool must_be_empty)
+    protected Slot? GetSlotForItem(Item item, bool must_be_empty)
     {
         List<Slot> list = must_be_empty ? GetSlotsEmpty() : GetSlots();
         return list.First(x => x.IsItemValid(item));
@@ -63,8 +64,9 @@ public partial class Inventory : Resource
 
     public bool ContainsSlot(Slot slot) => Slots.Any(x => x == slot);
 
-    public List<Slot> GetSlotsEmpty() => Slots.Where(x => x.Item is null).ToList();
+    protected List<Slot> GetSlotsEmpty() => Slots.Where(x => x.Item is null).ToList();
 
+    [Obsolete("Turn back to protected")]
     public void ClearEmptySlots()
     {
         Slots.RemoveAll(x => x.Item is null);
@@ -75,7 +77,7 @@ public partial class Inventory : Resource
     /// </summary>
     /// <param name="item">The item to look for.</param>
     /// <returns>The slot with the item, or null if none are found in this inventory.</returns>
-    public Slot? FindSlotWithItem(Item item)
+    protected Slot? FindSlotWithItem(Item item)
     {
         if (!ContainsItem(item))
         {
@@ -85,7 +87,7 @@ public partial class Inventory : Resource
         return Slots.First(x => x.Item == item);
     }
 
-    public int GetFreeSlots() => Slots.Count(x => x.Item is null);
+    protected int GetFreeSlots() => Slots.Count(x => x.Item is null);
 
     public bool IsSlotEmpty(int slot)
     {
@@ -106,6 +108,7 @@ public partial class Inventory : Resource
             select slot.Item
             ).ToList();
 
+    [Obsolete("Turn back to protected later")]
     public Error AddItem(Item item_to_add, Slot slot)
     {
         Error err;
@@ -137,6 +140,7 @@ public partial class Inventory : Resource
         return Error.NONE;
     }
 
+    [Obsolete("Turn back to protected later")]
     public Error AddItem(Item item_to_add)
     {
         Error err;
@@ -152,12 +156,13 @@ public partial class Inventory : Resource
         EventBus.InventoryErrored?.Invoke(this, err);
         return err;
     }
-    public Error AddItem(Slot source_slot, Slot target_slot)
+    protected Error AddItem(Slot source_slot, Slot target_slot)
     {
         if (source_slot.Item is null) throw new ArgumentException("The slot must contain something.");
         return AddItem(source_slot.Item, target_slot);
     }
 
+    [Obsolete("Turn back to protected later")]
     public Error RemoveItem(Item item)
     {
         Slot? slot_with_item = FindSlotWithItem(item);
@@ -174,6 +179,7 @@ public partial class Inventory : Resource
         return err;
     }
 
+    [Obsolete("Turn back to protected later")]
     public Error RemoveItem(Slot slot)
     {
         if (slot.Item is null) { return Error.REMOVE_SLOT_ALREADY_EMPTY; }

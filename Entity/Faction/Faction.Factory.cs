@@ -13,7 +13,7 @@ public partial class Faction
         Faction output = new();
         output = faction_enum switch
         {
-            EFaction.PLAYER => new FactionPlayer(),
+            EFaction.PLAYER => new Faction(),
             EFaction.NEUTRAL => output.ChainBasicInventory(),
             _ => output,
         }; 

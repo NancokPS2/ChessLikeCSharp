@@ -6,10 +6,26 @@ using Godot;
 
 namespace ChessLike.Storage;
 
+[GlobalClass]
 public partial class Slot : Resource
 {
     public List<EItemFlag> FlagWhitelist = new();
+    [Export]
+    private Godot.Collections.Array<EItemFlag> flagWhiteList
+    {
+        set => FlagWhitelist = new(value);
+        get => new(FlagWhitelist);
+    }
+
     public List<EItemFlag> FlagBlacklist = new();
+    [Export]
+    private Godot.Collections.Array<EItemFlag> flagBlacklist
+    {
+        set => FlagBlacklist = new(value);
+        get => new(FlagBlacklist);
+    }
+
+    [Export]
     public Item? Item;
 
     public Slot()
@@ -19,7 +35,7 @@ public partial class Slot : Resource
         Item = null;
     }
 
-    public Slot( Slot slot ) : this(slot.FlagWhitelist, slot.FlagBlacklist, slot.Item)
+    public Slot(Slot slot) : this(slot.FlagWhitelist, slot.FlagBlacklist, slot.Item)
     {
     }
 
@@ -33,7 +49,7 @@ public partial class Slot : Resource
     public bool IsItemValid(Item item)
     {
         bool blacklist_clear = FlagBlacklist.Count == 0 || !FlagBlacklist.Any(x => item.Flags.Contains(x));
-        bool whitelist_clear = FlagWhitelist.Count == 0 || FlagWhitelist.All( x => item.Flags.Contains(x));
+        bool whitelist_clear = FlagWhitelist.Count == 0 || FlagWhitelist.All(x => item.Flags.Contains(x));
 
         return blacklist_clear && whitelist_clear;
     }

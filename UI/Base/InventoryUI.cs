@@ -45,9 +45,10 @@ public partial class InventoryUI : BaseButtonMenu<Button, Slot>, ISceneDependenc
 		_transfer_ui = ui;
 	}
 
+	[Obsolete("Does nothing.")]
 	public void Update(Mob mob)
 	{
-		InventorySelected = mob.MobInventory;
+		InventorySelected = new MobInventory();
 		Update(InventorySelected.GetSlots());
 	}
 

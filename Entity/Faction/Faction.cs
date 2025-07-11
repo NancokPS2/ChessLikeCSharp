@@ -28,7 +28,7 @@ public partial class Faction : Resource, ISerializable
     public Dictionary<EFaction, float> RelationList = new();
 
     [Export]
-    public Inventory Inventory = new(999);
+    public MassInventory Inventory = new();
 
     public Faction() : base() { }
 

@@ -41,9 +41,6 @@ public partial class Mob : Resource
     [Export]
     public EFaction Faction = EFaction.NEUTRAL;
 
-    [Export]
-    public Inventory MobInventory = new();
-
     public EMobMovementMode MovementMode { set => SetMovementMode(value); get => movementMode; }
     private EMobMovementMode movementMode;
 
@@ -74,15 +71,13 @@ public partial class Mob : Resource
         //Default stats
         Stats = GetDefaultStats();
 
-        //TODO: Implement a default inventory
-        Inventory inv = new Inventory(15);
-        MobInventory = inv;
-
         SetupEventBus();
     }
 
     #region Inventory
-    private Inventory EquipmentInventory = new();
+    [Export]
+    private MobInventory EquipmentInventory = new();
+
     public void UpdateEquipmentStatBoosts()
     {
         MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
@@ -226,7 +221,7 @@ public partial class Mob : Resource
             AddAction(job.GetActionEvents());
         }
 
-        foreach (IActionProvider item in MobInventory.GetItems())
+        foreach (IActionProvider item in EquipmentInventory.GetItems())
         {
             AddAction(item.GetActionEvents());
         }

@@ -14,7 +14,7 @@ public partial class Global
     public static ResourcePack<Ability> ManagerAbility;
     public static MobResourcePack ManagerMob;
     public static FactionResourcePack ManagerFaction;
-    public static ResourcePack<Inventory> ManagerInventory;
+    public static ResourcePack<MobInventory> ManagerInventory;
     public static ItemResourcePack ManagerItem;
     public static SceneResourcePack<Node3D> ManagerModel;
     public static SceneResourcePack<CpuParticles3D> ManagerParticle;
