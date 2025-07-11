@@ -115,7 +115,7 @@ public partial class EventBus : Node
     #endregion
 
     #region Mob - Equipment
-    public delegate void MobEquip(Mob mob, Item item, Slot slot);
+    public delegate void MobEquip(Mob mob, Item item, ItemFilter slot);
     public static MobEquip? MobEquipmentAdded;
     public static MobEquip? MobEquipmentRemoved;
     #endregion
@@ -172,12 +172,10 @@ public partial class EventBus : Node
     #endregion
 
     #region Storage
-    public delegate void InventoryItemChange(Inventory inventory, Slot slot, Item item);
-    public delegate void InventoryError(Inventory inventory, Inventory.EInventoryError error);
+    public delegate void InventoryItemChange(MobEquipmentInventory inventory, ItemFilter slot, Item item);
     public static ObjectChange<Inventory>? InventoryChanged;
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;
-    public static InventoryError? InventoryErrored;
 	#endregion
 
 

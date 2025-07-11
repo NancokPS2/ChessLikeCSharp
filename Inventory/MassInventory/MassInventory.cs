@@ -7,10 +7,11 @@ using Godot;
 namespace ChessLike.Storage;
 
 [GlobalClass]
-public partial class MassInventory : Inventory
+public partial class MassInventory : Resource
 {
+    
     public void AddItem(Item item)
     {
-        
+
     }
 }

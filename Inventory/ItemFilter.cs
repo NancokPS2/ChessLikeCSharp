@@ -7,7 +7,7 @@ using Godot;
 namespace ChessLike.Storage;
 
 [GlobalClass]
-public partial class Slot : Resource
+public partial class ItemFilter : Resource
 {
     public List<EItemFlag> FlagWhitelist = new();
     [Export]
@@ -28,18 +28,18 @@ public partial class Slot : Resource
     [Export]
     public Item? Item;
 
-    public Slot()
+    public ItemFilter()
     {
         FlagWhitelist = new();
         FlagBlacklist = new();
         Item = null;
     }
 
-    public Slot(Slot slot) : this(slot.FlagWhitelist, slot.FlagBlacklist, slot.Item)
+    public ItemFilter(ItemFilter slot) : this(slot.FlagWhitelist, slot.FlagBlacklist, slot.Item)
     {
     }
 
-    public Slot(List<EItemFlag> flag_wl, List<EItemFlag> flag_bl, Item? item = null)
+    public ItemFilter(List<EItemFlag> flag_wl, List<EItemFlag> flag_bl, Item? item = null)
     {
         FlagWhitelist = flag_wl;
         FlagBlacklist = flag_bl;

@@ -76,7 +76,7 @@ public partial class Mob : Resource
 
     #region Inventory
     [Export]
-    private MobInventory EquipmentInventory = new();
+    private MobEquipmentInventory EquipmentInventory = new();
 
     public void UpdateEquipmentStatBoosts()
     {

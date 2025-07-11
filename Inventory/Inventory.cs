@@ -8,9 +8,9 @@ public abstract partial class Inventory : Resource
 
     public const int INVALID_SLOT = -1;
 
-    protected List<Slot> Slots = new();
+    protected List<ItemFilter> Slots = new();
     [Export]
-    private Godot.Collections.Array<Slot> slots
+    private Godot.Collections.Array<ItemFilter> slots
     {
         set => Slots = new(value);
         get => new(Slots);
@@ -20,27 +20,27 @@ public abstract partial class Inventory : Resource
     {
     }
 
-    public Inventory(int size, Slot defaultSlot)
+    public Inventory(int size, ItemFilter defaultSlot)
     {
         for (int i = size; i < size; i++)
         {
-            Slots.Add(new Slot(defaultSlot));
+            Slots.Add(new ItemFilter(defaultSlot));
         }
     }
 
     #region Slot
     [Obsolete("Turn back to protected later")]
-    public List<Slot> GetSlots() => Slots;
+    public List<ItemFilter> GetSlots() => Slots;
 
-    protected Slot? GetSlotThatAllowsItem(Item item, bool must_be_empty)
+    protected ItemFilter? GetSlotThatAllowsItem(Item item, bool must_be_empty)
     {
-        List<Slot> list = must_be_empty ? GetSlotsEmpty() : GetSlots();
+        List<ItemFilter> list = must_be_empty ? GetSlotsEmpty() : GetSlots();
         return list.First(x => x.IsItemValid(item));
     }
 
-    public bool ContainsSlot(Slot slot) => Slots.Contains(slot);
+    public bool ContainsSlot(ItemFilter slot) => Slots.Contains(slot);
 
-    protected List<Slot> GetSlotsEmpty() => Slots.Where(x => x.IsEmpty()).ToList();
+    protected List<ItemFilter> GetSlotsEmpty() => Slots.Where(x => x.IsEmpty()).ToList();
 
     [Obsolete("Turn back to protected")]
     public void ClearEmptySlots()
@@ -51,7 +51,7 @@ public abstract partial class Inventory : Resource
     /// </summary>
     /// <param name="item">The item to look for.</param>
     /// <returns>The slot with the item, or null if none are found in this inventory.</returns>
-    protected Slot? FindSlotWithItem(Item item)
+    protected ItemFilter? FindSlotWithItem(Item item)
         => Slots.Find(x => x.Item == item);
 
     protected int GetEmptySlots()
@@ -67,7 +67,7 @@ public abstract partial class Inventory : Resource
             ).ToList();
 
     [Obsolete("Turn back to protected later")]
-    public EInventoryError AddItem(Item item_to_add, Slot slot)
+    public EInventoryError AddItem(Item item_to_add, ItemFilter slot)
     {
         EInventoryError err;
         if (!ContainsSlot(slot))
@@ -99,7 +99,7 @@ public abstract partial class Inventory : Resource
     }
 
     [Obsolete("Turn back to protected later")]
-    public EInventoryError RemoveItem(Slot slot)
+    public EInventoryError RemoveItem(ItemFilter slot)
     {
         if (slot.Item is null) { return EInventoryError.REMOVE_SLOT_ALREADY_EMPTY; }
         else
@@ -116,8 +116,8 @@ public abstract partial class Inventory : Resource
 
     #region Transfer
     private enum TransferMode { EXCHANGE, SEND_TO_TARGET, TAKE_FROM_TARGET }
-    public EInventoryError TransferItem(Slot source_slot, Inventory target_inv, Slot target_slot) => TransferItem(this, source_slot, target_inv, target_slot);
-    public static EInventoryError TransferItem(Inventory source_inv, Slot source_slot, Inventory target_inv, Slot target_slot)
+    public EInventoryError TransferItem(ItemFilter source_slot, Inventory target_inv, ItemFilter target_slot) => TransferItem(this, source_slot, target_inv, target_slot);
+    public static EInventoryError TransferItem(Inventory source_inv, ItemFilter source_slot, Inventory target_inv, ItemFilter target_slot)
     {
         if (!source_inv.ContainsSlot(source_slot)) { throw new ArgumentException("The source slot must be inside the source inventory"); }
         if (!target_inv.ContainsSlot(target_slot)) { throw new ArgumentException("The target slot must be inside the target inventory"); }
