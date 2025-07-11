@@ -6,5 +6,6 @@ public enum ECellFlag
     SOLID,
     LIQUID,
     AIR,
-    PLAYER_SPAWNPOINT
+    PLAYER_SPAWNPOINT,
+    ENEMY_SPAWNPOINT,
 }

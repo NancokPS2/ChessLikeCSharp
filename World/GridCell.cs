@@ -57,6 +57,11 @@ public partial class GridCell : Resource, IEquatable<GridCell>
     {
         return !a.Equals(b);
     }
+    
+	public override bool Equals(object? obj)
+	{
+		return Equals(obj as GridCell);
+	}
 
     public static class Preset
     {
@@ -96,7 +101,6 @@ public partial class GridCell : Resource, IEquatable<GridCell>
             };
 
         public static List<GridCell> GetAll()
-            => new() {Air, Floor, Spawnpoint, Invalid};
+            => new() { Air, Floor, Spawnpoint, Invalid };
     }
-
 }
