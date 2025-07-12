@@ -66,7 +66,7 @@ public partial class Mob
 
     public Mob ChainJob(List<Job> jobs)
     {
-        AddJob(jobs, true);
+        SetJobs(jobs);
         return this;
     }
 

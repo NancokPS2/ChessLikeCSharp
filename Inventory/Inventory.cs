@@ -79,7 +79,6 @@ public abstract partial class Inventory : Resource
         if (!slot.IsItemValid(item_to_add))
         {
             err = EInventoryError.ADD_INVALID_SLOT;
-            EventBus.InventoryErrored?.Invoke(this, err);
             return err;
         }
 
@@ -87,14 +86,11 @@ public abstract partial class Inventory : Resource
         if (GetEmptySlots() <= 0)
         {
             err = EInventoryError.ADD_NO_SPACE;
-            EventBus.InventoryErrored?.Invoke(this, err);
             return err;
         }
 
         //Finally add the item.
         slot.Item = item_to_add;
-        EventBus.InventoryChanged?.Invoke(this);
-        EventBus.InventoryItemAdded?.Invoke(this, slot, item_to_add);
         return EInventoryError.NONE;
     }
 
@@ -106,8 +102,6 @@ public abstract partial class Inventory : Resource
         {
             Item item = slot.Item;
             slot.Item = null;
-            EventBus.InventoryChanged?.Invoke(this);
-            EventBus.InventoryItemRemoved?.Invoke(this, slot, item);
             return EInventoryError.NONE;
         }
     }
@@ -151,8 +145,6 @@ public abstract partial class Inventory : Resource
                 if (source_item is null || target_item is null)
                 {
                     EInventoryError err = EInventoryError.TRANSFER_FAILED;
-                    EventBus.InventoryErrored?.Invoke(source_inv, err);
-                    EventBus.InventoryErrored?.Invoke(target_inv, err);
                     return err;
                 }
 

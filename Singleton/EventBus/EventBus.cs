@@ -173,7 +173,7 @@ public partial class EventBus : Node
 
     #region Storage
     public delegate void InventoryItemChange(MobEquipmentInventory inventory, ItemFilter slot, Item item);
-    public static ObjectChange<Inventory>? InventoryChanged;
+    public static ObjectChange<MobEquipmentInventory>? InventoryChanged;
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;
 	#endregion

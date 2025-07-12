@@ -3,6 +3,8 @@ using Godot;
 using static ChessLike.Entity.Mob;
 
 namespace ChessLike.Storage;
+
+[GlobalClass]
 public partial class Item : Resource, IValuable
 {
 
@@ -38,7 +40,7 @@ public partial class Item : Resource, IValuable
         return new(Flags);
     }
 
-    public virtual string GetDescription() 
+    public virtual string GetDescription()
         => $"{Name} \nValue: {Value} \nFlags: {Flags} \n";
 
 

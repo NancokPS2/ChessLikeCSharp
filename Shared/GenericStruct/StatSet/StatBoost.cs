@@ -20,6 +20,12 @@ public partial class StatBoost<[MustBeVariant] TStatEnum> : Resource where TStat
     {
         this.Source = Source;
     }
+
+    public StatBoost(StatBoost<TStatEnum> boost) : this(boost.Source)
+    {
+        MaxAdditiveBonus = boost.MaxAdditiveBonus;
+        MaxMultiplicativeBonus = boost.MaxMultiplicativeBonus;
+    }
     /* 
             public float GetAdditiveValue(TStatEnum stat) => 
                 ValueAdditiveBonus.ContainsKey(stat) ? ValueAdditiveBonus[stat] : 0;

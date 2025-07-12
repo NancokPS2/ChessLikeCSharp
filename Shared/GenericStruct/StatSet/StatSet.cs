@@ -7,7 +7,7 @@ using ChessLike.Entity;
 using Godot;
 
 namespace ChessLike.Shared;
-public partial class StatSet<TStatEnum> : Resource where TStatEnum : notnull, Enum
+public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnum : notnull, Enum
 {
     public readonly TStatEnum[] AllStats;
 

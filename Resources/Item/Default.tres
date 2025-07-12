@@ -1,10 +1,10 @@
-[gd_resource type="Resource" load_steps=2 format=3]
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dmok2tgcb740i"]
 
-[ext_resource type="Script" path="res://Shared/Storage/Item.cs" id="1_i6nch"]
+[ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="1_i6nch"]
 
 [resource]
 script = ExtResource("1_i6nch")
-Name = ""
+Name = "UNDEFINED"
 Price = 0.0
 Flags = Array[int]([])
 Value = 0.0

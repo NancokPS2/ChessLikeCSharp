@@ -12,10 +12,8 @@ public partial class MobStatBoost : StatBoost<EStatName>
 
     }
 
-    public MobStatBoost(StatBoost<EStatName> statBoost) : this(statBoost.Source)
+    public MobStatBoost(StatBoost<EStatName> statSet) : base(statSet)
     {
-        MaxAdditiveBonus = new(statBoost.GetMaxAdditiveBonusDict());
-        MaxMultiplicativeBonus = new(statBoost.GetMaxMultiplicativeBonusDict());
     }
 
     public static MobStatBoost operator +(MobStatBoost source, MobStatBoost added)

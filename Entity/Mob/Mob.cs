@@ -25,6 +25,8 @@ public partial class Mob : Resource
         set => Jobs = new(value);
         get => new(Jobs);
     }
+
+    [Obsolete("Consider replacing these with templates.")]
     private List<Job> Jobs = new() { Job.CreatePrototype(EJob.DEFAULT) };
 
     [Export]
@@ -76,9 +78,9 @@ public partial class Mob : Resource
 
     #region Inventory
     [Export]
-    private MobEquipmentInventory EquipmentInventory = new();
+    public MobEquipmentInventory EquipmentInventory = new();
 
-    public void UpdateEquipmentStatBoosts()
+    protected void UpdateEquipmentStatBoosts()
     {
         MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
 
@@ -96,20 +98,6 @@ public partial class Mob : Resource
         Stats.BoostAdd(outputStatBoost, true);
     }
 
-    public void UpdateJobStatBoosts()
-    {
-        MobStatBoost outputBoost = new(Job.BOOST_SOURCE);
-
-        //TODO: Jobs should not be able to be null in the first place.
-        foreach (Job job in Jobs)//.Where(x => x is not null))
-        {
-            //Average the stats from the job's.
-            outputBoost = outputBoost + job.GetStatBoost();
-        }
-
-        Stats.BoostAdd(outputBoost, true);
-    }
-
     #endregion
 
     #region Faction
@@ -124,34 +112,16 @@ public partial class Mob : Resource
         return Jobs;
     }
 
-    public void AddJob(List<Job> jobs, bool replace)
+    public void SetJobs(List<Job> jobs)
     {
-        if (replace) ClearJobs();
-
-        foreach (var item in jobs)
-        {
-            Jobs.Add(item);
-        }
+        Jobs = jobs;
         UpdateJobs();
     }
 
-    public void AddJob(Job job) => AddJob(new List<Job>() { job }, false);
-
-    public void RemoveJob(List<Job> jobs)
-    {
-        List<Job> to_delete = new(jobs);
-        foreach (var item in to_delete)
-        {
-            Jobs.Remove(item);
-        }
-        UpdateJobs();
-    }
-
-    public void RemoveJob(Job job) => RemoveJob(new List<Job>() { job });
 
     private void ClearJobs()
     {
-        RemoveJob(Jobs);
+        SetJobs(new());
     }
 
     private void UpdateJobs()
@@ -168,6 +138,20 @@ public partial class Mob : Resource
 
         UpdateActions();
         Stats.SetToMax();
+    }
+
+    protected void UpdateJobStatBoosts()
+    {
+        MobStatBoost outputBoost = new(Job.BOOST_SOURCE);
+
+        //TODO: Jobs should not be able to be null in the first place.
+        foreach (Job job in Jobs)//.Where(x => x is not null))
+        {
+            //Average the stats from the job's.
+            outputBoost = outputBoost + job.GetStatBoost();
+        }
+
+        Stats.BoostAdd(outputBoost, true);
     }
 
     public static MobStatSet GetDefaultStats()

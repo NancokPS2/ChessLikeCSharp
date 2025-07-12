@@ -182,8 +182,11 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     protected void CreateEnums()
     {
         string enumName = $"EPackID{GetUniqueString()}";
+        
+        DirAccess.MakeDirRecursiveAbsolute($"{GetBaseDirectory(false)}/ENUMS");
+
         FileAccess file = FileAccess.Open(
-            $"{GetBaseDirectory(false)}/{enumName}.cs",
+            $"{GetBaseDirectory(false)}/ENUMS/{enumName}.cs",
             FileAccess.ModeFlags.WriteRead
             );
 

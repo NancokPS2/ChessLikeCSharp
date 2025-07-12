@@ -14,7 +14,6 @@ public partial class Global
     public static ResourcePack<Ability> ManagerAbility;
     public static MobResourcePack ManagerMob;
     public static FactionResourcePack ManagerFaction;
-    public static ResourcePack<MobEquipmentInventory> ManagerInventory;
     public static ItemResourcePack ManagerItem;
     public static SceneResourcePack<Node3D> ManagerModel;
     public static SceneResourcePack<CpuParticles3D> ManagerParticle;
@@ -28,7 +27,6 @@ public partial class Global
         ManagerAbility = new();
         ManagerMob = new();
         ManagerFaction = new(){AutoPoolLoaded = true};
-        ManagerInventory = new();
         ManagerItem = new();
         ManagerModel = new("Model");
         ManagerParticle = new("Particle");
@@ -40,7 +38,6 @@ public partial class Global
         ManagerAbility.CreateDefault();
         ManagerMob.CreateDefault();
         ManagerFaction.CreateDefault();
-        ManagerInventory.CreateDefault();
         ManagerItem.CreateDefault();
         ManagerModel.CreateDefault();
         ManagerParticle.CreateDefault();
@@ -52,7 +49,6 @@ public partial class Global
         ManagerAbility.LoadAllInFolder();
         ManagerMob.LoadAllInFolder();
         ManagerFaction.LoadAllInFolder();
-        ManagerInventory.LoadAllInFolder();
         ManagerItem.LoadAllInFolder();
         ManagerModel.LoadAllInFolder();
         ManagerParticle.LoadAllInFolder();

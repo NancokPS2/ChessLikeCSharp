@@ -1,6 +1,23 @@
-[gd_resource type="Resource" script_class="Faction" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Faction" load_steps=6 format=3 uid="uid://bx655ptgm7nwr"]
 
-[ext_resource type="Script" path="res://Entity/Faction/Faction.cs" id="1_aceah"]
+[ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Inventory/ItemFilter.cs" id="1_3ng1i"]
+[ext_resource type="Script" uid="uid://c0ducr6ksvfmg" path="res://Entity/Faction/Faction.cs" id="1_aceah"]
+[ext_resource type="Script" uid="uid://cwewjc8svycgy" path="res://Inventory/MassInventory/MassInventory.cs" id="1_ini8j"]
+
+[sub_resource type="Resource" id="Resource_rpm5k"]
+script = ExtResource("1_3ng1i")
+flagWhiteList = Array[int]([])
+flagBlacklist = Array[int]([])
+
+[sub_resource type="Resource" id="Resource_3ng1i"]
+script = ExtResource("1_ini8j")
+contents = Array[Resource]([])
+Filter = SubResource("Resource_rpm5k")
+metadata/_custom_type_script = "uid://cwewjc8svycgy"
 
 [resource]
 script = ExtResource("1_aceah")
+DisplayedName = "Unnamed Faction"
+Identifier = 1
+relationList = null
+Inventory = SubResource("Resource_3ng1i")

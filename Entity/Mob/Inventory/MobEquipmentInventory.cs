@@ -8,7 +8,7 @@ using Godot;
 namespace ChessLike.Entity;
 
 [GlobalClass]
-public partial class MobEquipmentInventory : Resource
+public partial class MobEquipmentInventory : Resource, IInventory
 {
     public enum ESlot { LEFT_HAND, RIGHT_HAND, HELMET, ARMOR, ACCESSORY_1, ACCESSORY_2 }
 
@@ -73,6 +73,7 @@ public partial class MobEquipmentInventory : Resource
     public Item? GetItem(ESlot slot)
         => Contents[slot];
 
-    public Item[] GetItems()
+    public List<Item> GetItems()
         => [.. Contents.Values.Where(x => x is not null)];
+
 }

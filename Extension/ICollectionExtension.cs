@@ -73,6 +73,9 @@ public static class ICollectionExtension
     public static TColl GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection, TColl def)
         => GetRandom(collection, def);
 
+    public static TColl GetRandom<TColl>(this IEnumerable<TColl> @this)
+        => @this.ToList().GetRandom();
+
     public static TColl GetRandom<TColl>(this List<TColl> collection, TColl def)
     {
         if (collection.Count == 0) return def;

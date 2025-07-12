@@ -34,8 +34,7 @@ public partial class MobLoadingTest : Node3D
         Console.WriteLine(mob.ToString());
 
         //Test updates.
-        mob.UpdateEquipmentStatBoosts();
-        mob.UpdateJobStatBoosts();
+        mob.SetJobs(new());
 
         Console.WriteLine(mob.Stats.BoostGetListOfStatChanges().ToString());
 

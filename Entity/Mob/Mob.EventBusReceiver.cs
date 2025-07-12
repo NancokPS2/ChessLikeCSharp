@@ -9,6 +9,7 @@ namespace ChessLike.Entity;
 
 public partial class Mob : IEventBusMember
 {
+
     public void SetupEventBus()
     {
         EventBus.MobTurnStarted += OnMobTurnStarted;
@@ -16,8 +17,8 @@ public partial class Mob : IEventBusMember
         EventBus.ActionUsed += OnActionUsed;
         EventBus.InventoryChanged += OnInventoryChanged;
     }
-    
-	private void OnMobTurnStarted(Mob mob)
+
+    private void OnMobTurnStarted(Mob mob)
     {
         if (mob != this) return;
         TurnActive = true;
@@ -39,7 +40,7 @@ public partial class Mob : IEventBusMember
         
 	}
 
-	private void OnInventoryChanged(Inventory obj)
+	private void OnInventoryChanged(MobEquipmentInventory obj)
     {
         if (obj != EquipmentInventory) return;
 

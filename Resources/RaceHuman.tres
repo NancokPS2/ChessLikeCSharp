@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="MobTemplate" load_steps=4 format=3 uid="uid://c2cnylvo0o16q"]
+
+[ext_resource type="Script" uid="uid://d3idorgao3ps6" path="res://Entity/Mob/StatSet/MobStatSet.cs" id="2_fplks"]
+[ext_resource type="Script" uid="uid://cdqoayy2u0tao" path="res://Entity/Mob/Template/MobTemplate.cs" id="3_wwhrg"]
+
+[sub_resource type="Resource" id="Resource_t0ov6"]
+script = ExtResource("2_fplks")
+maxDict = Dictionary[int, float]({
+0: 100.0,
+1: 30.0,
+2: 3.0,
+3: 100.0,
+4: 100.0,
+5: 100.0,
+6: 100.0,
+7: 2.0,
+8: 0.0
+})
+
+[resource]
+script = ExtResource("3_wwhrg")
+PresetName = "UNNAMED PRESET"
+Names = Array[String]([])
+Equipment = []
+MobStatsBase = SubResource("Resource_t0ov6")
+Races = Array[int]([])
+metadata/_custom_type_script = "uid://cdqoayy2u0tao"

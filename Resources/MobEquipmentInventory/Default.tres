@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MobEquipmentInventory" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Inventory/Item.cs" id="1_e2x2s"]
+[ext_resource type="Script" path="res://Entity/Mob/Inventory/MobEquipmentInventory.cs" id="2_vpcqm"]
+
+[resource]
+script = ExtResource("2_vpcqm")
+contents = Dictionary[int, ExtResource("1_e2x2s")]({
+0: null,
+1: null,
+2: null,
+3: null,
+4: null,
+5: null
+})
