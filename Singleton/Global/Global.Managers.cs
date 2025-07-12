@@ -20,44 +20,40 @@ public partial class Global
     public static ResourcePack<Material> ManagerMaterial;
     public static ResourcePack<FontFile> ManagerFont;
     public static ResourcePack<EncounterData> ManagerEncounter;
+    public static ResourcePack<MobTemplate> ManagerMobTemplate;
 
     public static void SetupManager()
     {
         ManagerJob = new();
         ManagerAbility = new();
         ManagerMob = new();
-        ManagerFaction = new(){AutoPoolLoaded = true};
+        ManagerFaction = new() { AutoPoolLoaded = true };
         ManagerItem = new();
         ManagerModel = new("Model");
         ManagerParticle = new("Particle");
         ManagerMaterial = new("Material");
         ManagerFont = new("Font");
         ManagerEncounter = new();
+        ManagerMobTemplate = new();
 
-        ManagerJob.CreateDefault();
-        ManagerAbility.CreateDefault();
-        ManagerMob.CreateDefault();
-        ManagerFaction.CreateDefault();
-        ManagerItem.CreateDefault();
-        ManagerModel.CreateDefault();
-        ManagerParticle.CreateDefault();
-        ManagerMaterial.CreateDefault();
-        ManagerFont.CreateDefault();
-        ManagerEncounter.CreateDefault();
 
-        ManagerJob.LoadAllInFolder();
-        ManagerAbility.LoadAllInFolder();
-        ManagerMob.LoadAllInFolder();
-        ManagerFaction.LoadAllInFolder();
-        ManagerItem.LoadAllInFolder();
-        ManagerModel.LoadAllInFolder();
-        ManagerParticle.LoadAllInFolder();
-        ManagerMaterial.LoadAllInFolder();
-        ManagerFont.LoadAllInFolder();
-        ManagerEncounter.LoadAllInFolder();
+        PreparePack(ManagerJob);
+        PreparePack(ManagerAbility);
+        PreparePack(ManagerMob);
+        PreparePack(ManagerFaction);
+        PreparePack(ManagerItem);
+        PreparePack(ManagerModel);
+        PreparePack(ManagerParticle);
+        PreparePack(ManagerMaterial);
+        PreparePack(ManagerFont);
+        PreparePack(ManagerEncounter);
+        PreparePack(ManagerMobTemplate);
+    }
 
-        Job testJob = new Job();
-        testJob.SetMeta("TEST", 94);
-        ResourceSaver.Save(testJob, "user://temp.tres");
+    private static ResourcePack<T> PreparePack<T>(ResourcePack<T> resourcePack) where T : Resource, new()
+    {
+        resourcePack.CreateDefault();
+        resourcePack.LoadAllInFolder();
+        return resourcePack;
     }
 }
