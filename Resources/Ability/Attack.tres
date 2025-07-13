@@ -44,6 +44,7 @@ AoEShape = 0
 AoESize = 0
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("5_p72tq")
 Identifier = 4
 Name = "Attack"

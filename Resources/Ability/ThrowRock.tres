@@ -48,6 +48,7 @@ AoEShape = 0
 AoESize = 0
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("6_xh551")
 Identifier = 1
 Name = "Throw Rock"

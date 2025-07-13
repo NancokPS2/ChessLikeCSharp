@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=11 format=3 uid="uid://bittf0xemmhpq"]
+[gd_resource type="Resource" script_class="Ability" load_steps=10 format=3 uid="uid://bittf0xemmhpq"]
 
 [ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/AnimationParameters.cs" id="1_i6bp7"]
 [ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="2_vpcxa"]
@@ -24,14 +24,6 @@ ActivatedByTurnStart = true
 ActivatedByTurnEnd = false
 ActivatedOnlyIfTurnIsMine = true
 
-[sub_resource type="Resource" id="Resource_lqjk8"]
-script = ExtResource("4_otf84")
-PickMobInTargetPos = true
-OnlyAffectOwner = false
-CannotAffectAlly = false
-CannotAffectEnemy = false
-MaximumHealthPercent = 1.0
-
 [sub_resource type="Resource" id="Resource_x42lr"]
 script = ExtResource("4_otf84")
 PickMobInTargetPos = true
@@ -52,12 +44,12 @@ AoEShape = 0
 AoESize = 0
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("6_ar72c")
 Identifier = 0
 Name = "Undefined Action"
 flags = null
 commands = null
-FilterParams = SubResource("Resource_lqjk8")
 TargetParams = SubResource("Resource_0qxi2")
 AnimationParams = SubResource("Resource_ryo0r")
 MobFilterParams = SubResource("Resource_x42lr")

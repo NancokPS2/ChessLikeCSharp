@@ -30,6 +30,14 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
         }
     }
 
+    public void Refill()
+    {
+        foreach (var item in AllStats)
+        {
+            SetValue(item, GetMax(item));
+        }
+    }
+
     protected virtual bool IsValidStat(TStatEnum stat) => true;
 
     public StatSet(Dictionary<TStatEnum, float> values) : this()

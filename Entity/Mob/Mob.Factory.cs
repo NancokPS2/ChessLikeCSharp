@@ -9,6 +9,7 @@ using ChessLike.Storage;
 
 namespace ChessLike.Entity;
 
+[Obsolete("Get rid of the Factory.")]
 public partial class Mob
 {
     /// <summary>
@@ -23,7 +24,7 @@ public partial class Mob
             EMobPrototype.HUMAN => output
                 .ChainName("Human")
                 .ChainRace(ERace.HUMAN)
-                .ChainJob(new(){Job.CreatePrototype(EJob.DEFAULT)}),
+                .ChainJob(new() { Job.CreatePrototype(EJob.DEFAULT) }),
             _ => new Mob()
         };
         return output;
@@ -36,49 +37,15 @@ public partial class Mob
         return this;
     }
 
-    public Mob ChainMovementMode(EMobMovementMode mode)
-    {
-        MovementMode = mode;
-        return this;
-    }
-
     public Mob ChainFaction(EFaction faction)
     {
         Faction = faction;
         return this;
     }
 
-    public Mob ChainState(EMobState state)
-    {
-        MobState = state;
-        return this;
-    }
-
-    public Mob ChainEquipment(Item item)
-    {
-        throw new NotImplementedException();
-        /* Slot? slot = MobInventory.GetSlotForItem(item, false);
-        if (slot is null) return this;
-
-        EventBus.InventoryItemAdded?.Invoke(MobInventory, slot, item);
-        return this; */
-    }
-
     public Mob ChainJob(List<Job> jobs)
     {
         SetJobs(jobs);
-        return this;
-    }
-
-    public Mob ChainAction(ActionEvent action)
-    {
-        AddAction(action);
-        return this;
-    }
-
-    public Mob ChainPosition(Vector3i position)
-    {
-        Position = position;
         return this;
     }
 

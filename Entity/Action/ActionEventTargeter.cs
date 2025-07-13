@@ -212,7 +212,7 @@ public partial class ActionEventTargeter : Node3D
 	protected bool CanSelectPosition(Vector3i pos)
 	{
 		Mob? mob = GetMobAtPosition(pos);
-		bool hasMob = mob is null;
+		bool hasMob = mob is not null;
 		ActionEvent action = UsageParametersCurrent?.ActionRef ?? throw new Exception();
 
 		//If it does NOT have a mob, but can't target empty spots, fail.
@@ -283,7 +283,7 @@ public partial class ActionEventTargeter : Node3D
 				{
 					//Before adding, make sure it isn't targeted already.
 					if (!IsCellTargeted(cellPos, ETargetingType.TARGETING)) return;
-					
+
 					AddSelectedCell(cellPos);
 					UpdateAoECells(UsageParametersCurrent);
 				}

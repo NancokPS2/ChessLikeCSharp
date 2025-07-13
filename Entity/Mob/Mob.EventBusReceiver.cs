@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.Action;
 using ChessLike.Storage;
+using Godot;
 
 namespace ChessLike.Entity;
 
@@ -25,8 +26,9 @@ public partial class Mob : IEventBusMember
         TurnResourceReset();
     }
 
-	private void OnMobTurnEnded(Mob mob)
-	{
+    private void OnMobTurnEnded(Mob mob)
+    {
+        if (mob != this) return;
         TurnActive = false;
 	}
 

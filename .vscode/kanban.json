@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Add cost parameters to actions so you can use more than 1 per turn",
+                    "id": "goag6gljtkhpnydd857ah6h5"
+                },
+                {
+                    "text": "Move event receivers from Mob to MobSceneManager",
+                    "id": "s4wlbltlkyg66mg5y9bmjx0j"
+                },
+                {
                     "text": "InventoryUI needs to be re done.",
                     "id": "cz944ibemyuccz5yj6j70qxc"
                 },
@@ -161,5 +169,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752259900167
+    "timestamp": 1752415207606
 }

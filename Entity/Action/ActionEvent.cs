@@ -13,9 +13,19 @@ namespace ChessLike.Entity.Action;
 public partial class ActionEvent : Resource
 {
     private Mob? owner;
-    public Mob Owner { get => owner ?? throw new Exception("Owner should be set before usage."); set => owner = value; }
+    public Mob Owner
+	{
+		get
+		{
+			return owner ?? throw new Exception("Owner should be set before usage.");
+		}
+		set
+		{
+			owner = value;
+		}
+	}
 
-    [Export]
+	[Export]
     public string Name = "Undefined Action";
 
     [Export]
@@ -80,7 +90,7 @@ public partial class ActionEvent : Resource
     public uint GetTotalRange(Mob owner)
     {
         uint output = TargetParams.Range;
-        if (TargetParams.RangeStatBonus is EStatName stat)
+        if (TargetParams.RangeStatBonus is EStatName stat && stat != EStatName.NONE)
         {
             output += (uint)owner.Stats.GetValue(stat);
         }

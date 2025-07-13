@@ -55,7 +55,7 @@ public partial class MobTemplate : Resource
         //Abilities
         foreach (var item in Abilities)
         {
-            mob.AddAction(item);
+            mob.AddAction((ActionEvent)item.Duplicate(true));
         }
 
         //Equipment
@@ -72,6 +72,7 @@ public partial class MobTemplate : Resource
 
         //Stats
         mob.Stats = MobStatsBase ?? mob.Stats;
+        mob.Stats.Refill();
 
         //StatBoosts
         string boostSource = Type.ToString();
