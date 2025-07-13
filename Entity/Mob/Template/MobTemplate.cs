@@ -55,7 +55,7 @@ public partial class MobTemplate : Resource
         //Abilities
         foreach (var item in Abilities)
         {
-            mob.AddAction((ActionEvent)item.Duplicate(true));
+            mob.AddAction(item);
         }
 
         //Equipment

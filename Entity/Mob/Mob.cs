@@ -225,9 +225,10 @@ public partial class Mob : Resource
     {
         foreach (var action in actions)
         {
-            Actions.Add(action);
-            action.Owner = this;
-            EventBus.MobActionAdded?.Invoke(this, action);
+            ActionEvent newAction = (ActionEvent)action.Duplicate(true);
+            Actions.Add(newAction);
+            newAction.Owner = this;
+            EventBus.MobActionAdded?.Invoke(this, newAction);
         }
     }
 
