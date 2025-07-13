@@ -43,6 +43,7 @@ public partial class Item : Resource, IValuable
     public virtual string GetDescription()
         => $"{Name} \nValue: {Value} \nFlags: {Flags} \n";
 
+	public override string ToString() => GetDescription();
 
 }
 

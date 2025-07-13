@@ -59,15 +59,18 @@ public partial class MobTemplate : Resource
         }
 
         //Equipment
+        List<Item> equipment = new(Equipment);
         foreach (var slot in Enum.GetValues<MobEquipmentInventory.ESlot>())
         {
-            var candidates = Equipment.Where(
+            var candidates = equipment.Where(
                 x => mob.EquipmentInventory.IsValidForSlot(x, slot)
                 );
 
             if (candidates.IsEmpty()) continue;
 
-            mob.EquipmentInventory.EquipItem(candidates.ToList().GetRandom(), slot, true);
+            Item item = candidates.ToList().GetRandom();
+            mob.EquipmentInventory.EquipItem(item, slot, true);
+            equipment.Remove(item);
         }
 
         //Stats

@@ -76,4 +76,7 @@ public partial class MobEquipmentInventory : Resource, IInventory
     public List<Item> GetItems()
         => [.. Contents.Values.Where(x => x is not null)];
 
+    public ESlot[] GetSlots()
+        => Enum.GetValues<ESlot>();
+
 }

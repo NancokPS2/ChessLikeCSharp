@@ -4,7 +4,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class MobEquipmentUI : BaseButtonMenu<Button, Item>
+public partial class MobEquipmentUI : BaseButtonMenu<Button, Item?>
 {
 	public MobEquipmentUI() : base()
 	{
@@ -18,15 +18,20 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, Item>
 	}
 
 
-	public void Update(MobEquipmentInventory equipmentUI)
+	public void Update(MobEquipmentInventory equipInventory)
 	{
-		Update(equipmentUI.GetItems());
+		List<Item?> items = new();
+		foreach (var slot in equipInventory.GetSlots())
+		{
+			items.Add(equipInventory.GetItem(slot));
+		}
+		Update(items);
 	}
 
-	protected override void OnButtonCreated(Button button, Item param)
+	protected override void OnButtonCreated(Button button, Item? param)
 	{
-		button.Text = param.Name;
-		button.TooltipText = param.ToString();
+		button.Text = param?.Name ?? "Empty";
+		button.TooltipText = param?.ToString() ?? "Empty";
 	}
 
 	#region Event Connection
