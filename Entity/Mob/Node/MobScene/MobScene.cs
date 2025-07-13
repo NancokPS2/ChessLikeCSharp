@@ -33,13 +33,16 @@ public partial class MobScene : Node3D
 
     private List<Vector3i> MovementStored = new();
     private int MovementCurrentIndex;
-    private List<Tween> MovementTweens = new();
+
+    private Dictionary<EMobSceneEffect, Node3D> EffectNodes = new();
 
     public MobScene()
     {
         EventBus.MobMoved += OnMobMoved;
         EventBus.MobStatChanged += OnMobStatChanged;
         EventBus.MobTurnStarted += OnMobTurnStarted;
+        EventBus.MobTurnEnded += OnMobTurnEnded;
+        EventBus.MobSelected += OnMobSelected;
     }
 
     public override void _Ready()
@@ -69,6 +72,48 @@ public partial class MobScene : Node3D
         popupText.GlobalPosition = MarkerOverhead.GlobalPosition;
         popupText.Emitting = true;
     }
+
+    public void ToggleEffect(EMobSceneEffect effect, bool enabled)
+    {
+        Node3D? effectNode = EffectNodes.ContainsKey(effect) ? EffectNodes[effect] : null;
+        Node3D parentNode = MarkerCenterBody;
+        if (enabled)
+        {
+            effectNode?.QueueFree();
+            effectNode = effect switch
+            {
+                EMobSceneEffect.TURN_ACTIVE
+                    => Global.ManagerParticle
+                    .GetResource("HoveringStar")
+                    .Instantiate<Node3D>(),
+
+                EMobSceneEffect.TARGETED 
+                    => Global.ManagerParticle
+                    .GetResource("InwardArrows")
+                    .Instantiate<Node3D>(),
+                    
+                _
+                    => throw new Exception("Invalid effect.")
+            };
+
+            parentNode = effect switch
+            {
+                EMobSceneEffect.TURN_ACTIVE => MarkerOverhead,
+                EMobSceneEffect.TARGETED => MarkerCenterBody,
+                _ => MarkerOverhead
+
+            };
+
+            parentNode.AddChild(effectNode);
+            EffectNodes[effect] = effectNode;
+        }
+        else
+        {
+            effectNode?.QueueFree();
+            EffectNodes.Remove(effect);
+        }
+    }
+
 
     #endregion
 
@@ -140,15 +185,6 @@ public partial class MobScene : Node3D
         GlobalPosition = vector;
     }
 
-    public void MovementResetTweens()
-    {
-        foreach (var item in MovementTweens)
-        {
-            item.Kill();
-            MovementTweens.Clear();
-        }
-    }
-
     public void MovementVerifyPosition()
     {
         if (!Mathf.IsZeroApprox(CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
@@ -162,7 +198,6 @@ public partial class MobScene : Node3D
     private void OnMobMoved(Mob mob, Vector3i from, Vector3i to)
     {
         if (mob != MobUsing) return;
-        MovementResetTweens();
         MovementStored.Add(to);
     }
 
@@ -179,7 +214,7 @@ public partial class MobScene : Node3D
         {
             color = Colors.Green;
         }
-        
+
         switch (stat)
         {
             case EStatName.HEALTH:
@@ -195,6 +230,19 @@ public partial class MobScene : Node3D
     {
         if (mob != MobUsing) return;
         AnimatePopupText("READY");
+        ToggleEffect(EMobSceneEffect.TURN_ACTIVE, true);
+    }
+
+    private void OnMobTurnEnded(Mob mob)
+    {
+        if (mob != MobUsing) return;
+        ToggleEffect(EMobSceneEffect.TURN_ACTIVE, false);
+    }
+
+    private void OnMobSelected(Mob mob)
+    {
+        if (mob != MobUsing) return;
+        
     }
     #endregion
 

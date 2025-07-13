@@ -1,5 +1,5 @@
 [gd_scene load_steps=2 format=3 uid="uid://ojmmihpl7mmn"]
 
-[ext_resource type="PackedScene" uid="uid://7tq2j2n30axr" path="res://assets/Model/humanoid/OLDDummy.dae" id="1_kl0tm"]
+[ext_resource type="PackedScene" uid="uid://7tq2j2n30axr" path="res://assets/Model/character/humanoid/OLDDummy.dae" id="1_kl0tm"]
 
 [node name="Model" instance=ExtResource("1_kl0tm")]

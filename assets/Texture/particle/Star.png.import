@@ -2,19 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cy0lg06fany8q"
-path="res://.godot/imported/basic_Default.png-475684dbffe0d63d085243f3deae1e5f.ctex"
+uid="uid://54dbkfl8e8sq"
+path="res://.godot/imported/Star.png-b8d0f9f111ec20d5f9b57f7cde210234.ctex"
 metadata={
 "vram_texture": false
-}
-generator_parameters={
-"md5": "c84ba803020a79b34d3d3704a22d5703"
 }
 
 [deps]
 
-source_file="res://assets/Model/terrain/basic_Default.png"
-dest_files=["res://.godot/imported/basic_Default.png-475684dbffe0d63d085243f3deae1e5f.ctex"]
+source_file="res://assets/Texture/particle/Star.png"
+dest_files=["res://.godot/imported/Star.png-b8d0f9f111ec20d5f9b57f7cde210234.ctex"]
 
 [params]
 
