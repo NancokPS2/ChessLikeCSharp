@@ -5,29 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
+using Godot;
 
 namespace ChessLike.Entity.Action.Preset;
 
-public partial class AbilityPunch : Ability
+[GlobalClass]
+public partial class AbilityAttack : Ability
 {
-    public AbilityPunch() : base()
+    public AbilityAttack() : base()
     {
-
-        ChainName("Attack");
-        ChainIdentifier(EAbility.PUNCH);
-        ChainFlag(EActionFlag.DEALS_DAMAGE);
-        ChainFlag(EActionFlag.HOSTILE);
-
-        TargetParams = new TargetingParameters(){
-            TargetingRange = 1,
-            TargetingNeedsValidMob = true,
-            TargetingMaxPositions = 1,
-        };
-
-        FilterParams = new MobFilterParameters()
-        {
-            
-        };
     }
 
     public override void Use(UsageParameters usage_params)

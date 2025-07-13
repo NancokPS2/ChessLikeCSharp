@@ -15,7 +15,7 @@ public partial class Ability : IDescription
         return String.Format("Identifier: {0} \nName: {1} \nFilter Parameters: \n{2} \nTarget Parameters: \n{3} \nFlags: {4}",
             Enum.GetName(Identifier),
             Name,
-            FilterParams.ToString().Indent(@"    "),
+            MobFilterParams.ToString().Indent(@"    "),
             TargetParams.ToString().Indent(@"    "),
             Flags.ToStringList()
         );

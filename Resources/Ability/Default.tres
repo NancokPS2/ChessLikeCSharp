@@ -9,7 +9,7 @@
 [sub_resource type="Resource" id="Resource_ryo0r"]
 script = ExtResource("1_i6bp7")
 MaxDuration = 2.0
-FloatingText = ""
+scenesToSpawn = null
 animationFlags = null
 
 [sub_resource type="Resource" id="Resource_ols83"]
@@ -42,11 +42,12 @@ MaximumHealthPercent = 1.0
 
 [sub_resource type="Resource" id="Resource_0qxi2"]
 script = ExtResource("5_nlmxh")
-TargetingRange = 4
-TargetingRangeStatBonus = -1
-TargetingMaxPositions = 1
-TargetingNeedsValidMob = true
-TargetingUsesPathing = false
+Range = 4
+RangeStatBonus = -1
+MaxPositions = 1
+CanTargetWithMob = true
+CanTargetEmpty = false
+UsesPathing = false
 AoEShape = 0
 AoESize = 0
 

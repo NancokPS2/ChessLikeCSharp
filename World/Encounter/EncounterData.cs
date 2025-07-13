@@ -65,38 +65,32 @@ public partial class EncounterData : Resource
         EncounterData encounter = new();
         encounter.Grid = GridTerrainGenerator.GenerateFlat(new(6));
 
-        Mob def_mob1 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-            .ChainName("PlayerFac")
-            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
-            .ChainFaction(EFaction.PLAYER);
+        Mob def_mob1 = new Mob().ChainName("PlayerFac").ChainFaction(EFaction.PLAYER);
         def_mob1.Move(Vector3i.ONE);
+        Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.RaceHuman ).ApplyTemplate(def_mob1);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
-        Mob def_mob2 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-            .ChainName("HumanTemplated")
-            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
-            .ChainFaction(EFaction.PLAYER);
+        Mob def_mob2 = new Mob().ChainName("HumanTemplate").ChainFaction(EFaction.PLAYER);
         def_mob2.Move(Vector3i.ONE+Vector3i.FORWARD);
+        Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.RaceHuman ).ApplyTemplate(def_mob2);
         
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
-        Mob def_mob3 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-            .ChainName("Civilian")
-            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"));
+        Mob def_mob3 = new Mob().ChainName("Civilian").ChainFaction(EFaction.NEUTRAL);
         def_mob3.Move(Vector3i.ONE+Vector3i.LEFT);
+        Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.RaceHuman ).ApplyTemplate(def_mob3);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
-        Mob def_mob4 = Mob.CreatePrototype(EMobPrototype.HUMAN)
-            .ChainAction(Global.ManagerAbility.GetResource("ThrowRock"))
-            .ChainName("Neutral wizard");
+        Mob def_mob4 = new Mob().ChainName("Neutral Wizard").ChainFaction(EFaction.NEUTRAL);
         def_mob4.Move(Vector3i.ONE+Vector3i.FORWARD+Vector3i.FORWARD);
+        Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.RaceHuman ).ApplyTemplate(def_mob4);
         //.ChainEquipment(new WeaponSpear());
 
         encounter.MobPlacement = new();
         encounter.MobPlacement[Vector3i.ONE] =  def_mob1;
         encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD] = def_mob2;
         encounter.MobPlacement[Vector3i.ONE+Vector3i.LEFT] = def_mob3;
-        encounter.MobPlacement[Vector3i.ONE+Vector3i.LEFT] = def_mob4;
+        encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD*2] = def_mob4;
         return encounter;
     }
 

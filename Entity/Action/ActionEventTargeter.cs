@@ -51,11 +51,6 @@ public partial class ActionEventTargeter : Node3D
 		EventBus.CellInputReceived += OnCellInputReceived;
 	}
 
-	public override void _Process(double delta)
-	{
-		base._Process(delta);
-	}
-
 	public void SetMarkers(List<Vector3i> targets, ETargetingType targetingType)
 	{
 		ClearMarkers(targetingType);
@@ -211,6 +206,24 @@ public partial class ActionEventTargeter : Node3D
 		}
 	}
 
+	protected Mob? GetMobAtPosition(Vector3i pos)
+		=> CombatScene.GetMobsInCombat().Find(x => x.GetPosition() == pos);
+
+	protected bool CanSelectPosition(Vector3i pos)
+	{
+		Mob? mob = GetMobAtPosition(pos);
+		bool hasMob = mob is null;
+		ActionEvent action = UsageParametersCurrent?.ActionRef ?? throw new Exception();
+
+		//If it does NOT have a mob, but can't target empty spots, fail.
+		if (!hasMob && !action.TargetParams.CanTargetEmpty) return false;
+
+		//If it has a mob, but can't target spots with mobs, fail.
+		if (hasMob && !action.TargetParams.CanTargetWithMob) return false;
+
+		return true;
+	}
+
 	protected bool HasSelectionsLeft(UsageParameters parameters)
 		=> PositionsSelected.Count < parameters.ActionRef.GetMaxTargetingSelections();
 
@@ -238,7 +251,6 @@ public partial class ActionEventTargeter : Node3D
 	}
 
 
-
 	private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
 	{
 		//Must be on targeting state.
@@ -255,7 +267,8 @@ public partial class ActionEventTargeter : Node3D
 		switch (input)
 		{
 			case ECellInput.PRIMARY:
-				if (!IsCellTargeted(cellPos, ETargetingType.TARGETING)) return;
+				if (!CanSelectPosition(cellPos)) break;
+
 				//Ran out of selections, proceed to confirm.
 				if (!HasSelectionsLeft(UsageParametersCurrent))
 				{
@@ -264,11 +277,16 @@ public partial class ActionEventTargeter : Node3D
 
 					UpdateAoECells(UsageParametersCurrent);
 					ConfirmSelection();
-					break;
 				}
-
-				AddSelectedCell(cellPos);
-				UpdateAoECells(UsageParametersCurrent);
+				//There are selections left.
+				else
+				{
+					//Before adding, make sure it isn't targeted already.
+					if (!IsCellTargeted(cellPos, ETargetingType.TARGETING)) return;
+					
+					AddSelectedCell(cellPos);
+					UpdateAoECells(UsageParametersCurrent);
+				}
 				break;
 
 			case ECellInput.SECONDARY:

@@ -25,12 +25,12 @@ public partial class AbilityWeaponAttack : Ability
         ChainFlag(EActionFlag.HOSTILE);
 
         TargetParams = new TargetingParameters(){
-            TargetingRange = GetRange(),
-            TargetingNeedsValidMob = true,
-            TargetingMaxPositions = 1,
+            Range = GetRange(),
+            CanTargetWithMob = true,
+            MaxPositions = 1,
         };
 
-        FilterParams = new MobFilterParameters()
+        MobFilterParams = new MobFilterParameters()
         {
             
         };

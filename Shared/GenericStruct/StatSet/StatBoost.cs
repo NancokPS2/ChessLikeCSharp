@@ -10,11 +10,9 @@ public partial class StatBoost<[MustBeVariant] TStatEnum> : Resource where TStat
     public string Source;
     //public Dictionary<TStatEnum, float> ValueAdditiveBonus = new();
     //public Dictionary<TStatEnum, float> ValueMultiplicativeBonus = new();
-    [Export]
-    protected Godot.Collections.Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
+    protected Dictionary<TStatEnum, float> MaxAdditiveBonus = new();
 
-    [Export]
-    protected Godot.Collections.Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
+    protected Dictionary<TStatEnum, float> MaxMultiplicativeBonus = new();
 
     public StatBoost(string Source)
     {

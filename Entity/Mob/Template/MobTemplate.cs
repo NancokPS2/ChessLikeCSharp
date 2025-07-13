@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity.Action;
 using ChessLike.Extension;
 using ChessLike.Storage;
 using Godot;
@@ -12,11 +13,13 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobTemplate : Resource
 {
-    [Export]
-    public string PresetName = "UNNAMED PRESET";
+    public enum ETemplateType {JOB, RACE, BASE}
 
     [Export]
-    public Array<string> Names = new();
+    protected ETemplateType Type;
+
+    [Export]
+    protected Array<string> Names = new();
     /* [Export]
     private Godot.Collections.Array<string> names
     {
@@ -25,13 +28,19 @@ public partial class MobTemplate : Resource
     } */
 
     [Export]
-    public Array<Item> Equipment = new();
+    protected Array<Ability> Abilities = new();
 
     [Export]
-    public MobStatSet? MobStatsBase = Mob.GetDefaultStats();
+    protected Array<Item> Equipment = new();
 
     [Export]
-    public Array<ERace> Races = new();
+    protected MobStatSet? MobStatsBase = Mob.GetDefaultStats();
+
+    [Export]
+    protected Array<MobStatBoost> StatBoosts = new();
+
+    [Export]
+    protected Array<ERace> Races = new();
 
     /// <summary>
     /// Applies the template to a mob, any non empty fields of the template will replace parts of the mob.
@@ -42,6 +51,12 @@ public partial class MobTemplate : Resource
     {
         //Name
         mob.DisplayedName = Names.GetRandom(mob.DisplayedName);
+
+        //Abilities
+        foreach (var item in Abilities)
+        {
+            mob.AddAction(item);
+        }
 
         //Equipment
         foreach (var slot in Enum.GetValues<MobEquipmentInventory.ESlot>())
@@ -57,6 +72,16 @@ public partial class MobTemplate : Resource
 
         //Stats
         mob.Stats = MobStatsBase ?? mob.Stats;
+
+        //StatBoosts
+        string boostSource = Type.ToString();
+        MobStatBoost finalBoost = new(boostSource);
+        foreach (var item in StatBoosts)
+        {
+            item.Source = boostSource;
+            finalBoost += item;
+        }
+        mob.Stats.BoostAdd(finalBoost, true);
 
         //Race
         mob.Race = Races.GetRandom(mob.Race);

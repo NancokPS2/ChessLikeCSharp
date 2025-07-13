@@ -2,29 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity.MobCommand;
+using Godot;
 
 namespace ChessLike.Entity.Action.Preset;
 
+[GlobalClass]
 public partial class AbilityMove : Ability
-{ 
+{
     //TODO: implement variants
+
+    public AbilityMove() : base()
+    {
+    }
 
     public AbilityMove(EMobMovementMode variant) : base()
     {
-        ChainName("Move");
-        ChainIdentifier(EAbility.MOVE);
-
-        TargetParams = new TargetingParameters(){
-            TargetingRange = 0,
-            TargetingMaxPositions = 1,
-            TargetingUsesPathing = true,
-            TargetingRangeStatBonus = EStatName.MOVEMENT,
-        };
-
-        FilterParams = new MobFilterParameters()
-        {
-            PickMobInTargetPos = false
-        };
     }
 
     public override void Use(UsageParameters usage_params)
@@ -32,7 +25,8 @@ public partial class AbilityMove : Ability
         base.Use(usage_params);
         Mob owner = usage_params.OwnerRef;
         Vector3i target = usage_params.PositionsTargeted[0];
-        owner.Move(target);
+        MobCommandTeleport command = new(target);
+        owner.CommandProcess(command);
     }
 
     public override string GetDescription()

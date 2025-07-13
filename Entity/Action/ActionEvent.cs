@@ -35,17 +35,15 @@ public partial class ActionEvent : Resource
     public List<MobCommand.Command> Commands = new();
 
     [ExportGroup("Parameters")]
-    [Export]
-    protected MobFilterParameters FilterParams = new();
 
     [Export]
-    protected TargetingParameters TargetParams = new();
+    public TargetingParameters TargetParams = new();
 
     [Export]
     public AnimationParameters AnimationParams = new();
 
     [Export]
-    protected MobFilterParameters MobFilterParams = new();
+    public MobFilterParameters MobFilterParams = new();
 
 
     public ActionEvent()
@@ -77,12 +75,12 @@ public partial class ActionEvent : Resource
 
     #region Targeting
     public int GetMaxTargetingSelections()
-        => TargetParams.TargetingMaxPositions;
+        => TargetParams.MaxPositions;
 
     public uint GetTotalRange(Mob owner)
     {
-        uint output = TargetParams.TargetingRange;
-        if (TargetParams.TargetingRangeStatBonus is EStatName stat)
+        uint output = TargetParams.Range;
+        if (TargetParams.RangeStatBonus is EStatName stat)
         {
             output += (uint)owner.Stats.GetValue(stat);
         }
@@ -100,7 +98,7 @@ public partial class ActionEvent : Resource
         List<Vector3i> output = new();
 
         //If it uses pathing, just query that directly and move on.
-        if (TargetParams.TargetingUsesPathing)
+        if (TargetParams.UsesPathing)
         {
             output = grid.NavGetPathablePositions(owner);
             return output;

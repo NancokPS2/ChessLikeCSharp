@@ -20,7 +20,7 @@ public partial class Global
     public static ResourcePack<Material> ManagerMaterial;
     public static ResourcePack<FontFile> ManagerFont;
     public static ResourcePack<EncounterData> ManagerEncounter;
-    public static ResourcePack<MobTemplate> ManagerMobTemplate;
+    public static MobTemplateResourcePack ManagerMobTemplate;
 
     public static void SetupManager()
     {
@@ -35,7 +35,6 @@ public partial class Global
         ManagerFont = new("Font");
         ManagerEncounter = new();
         ManagerMobTemplate = new();
-
 
         PreparePack(ManagerJob);
         PreparePack(ManagerAbility);

@@ -15,20 +15,23 @@ public partial class TargetingParameters : Resource
     //Targeting
     //Distance from the user at which this can be used.
     [Export]
-    public uint TargetingRange = 4;
+    public uint Range = 4;
 
     [Export]
-    public EStatName TargetingRangeStatBonus = EStatName.NONE;
+    public EStatName RangeStatBonus = EStatName.NONE;
 
     [Export]
-    public int TargetingMaxPositions = 1;
+    public int MaxPositions = 1;
 
     [Export]
     //Only works if the filter deems the position as valid.
-    public bool TargetingNeedsValidMob = true;
+    public bool CanTargetWithMob = true;
 
     [Export]
-    public bool TargetingUsesPathing = false;
+    public bool CanTargetEmpty = false;
+
+    [Export]
+    public bool UsesPathing = false;
 
     //AoE
     public enum AoEMode
@@ -46,8 +49,8 @@ public partial class TargetingParameters : Resource
     public uint AoESize = 0;
 
     public List<Vector3i> GetTargetingShape()
-        => Vector3i.CreateCube(TargetingRange)
-            .Where(x => x.DistanceManhattanTo(Vector3i.ZERO) <= TargetingRange)
+        => Vector3i.CreateCube(Range)
+            .Where(x => x.DistanceManhattanTo(Vector3i.ZERO) <= Range)
             .ToList();
 
     public List<Vector3i> GetAoEShape(Vector3i.Rotation direction)

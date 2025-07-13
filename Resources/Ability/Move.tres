@@ -1,16 +1,18 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=13 format=3 uid="uid://pbfni1ocfqog"]
+[gd_resource type="Resource" script_class="AbilityMove" load_steps=11 format=3 uid="uid://uqy62um3owdf"]
 
 [ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/AnimationParameters.cs" id="1_4ec03"]
 [ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="2_5kv0w"]
 [ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="3_ge7gt"]
 [ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="4_pm15s"]
-[ext_resource type="Script" uid="uid://cf30u0py5dtbx" path="res://Entity/Mob/MobCommand/Command/MobCommandWalk.cs" id="5_w6vv2"]
-[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="6_504tu"]
+[ext_resource type="Script" uid="uid://c6aiqyvks6qc7" path="res://Entity/Action/Ability/Presets/AbilityMove.cs" id="5_rawa4"]
 
-[sub_resource type="Resource" id="Resource_q3yuo"]
+[sub_resource type="Resource" id="Resource_8ho3f"]
 script = ExtResource("1_4ec03")
+MaxDuration = 2.0
+scenesToSpawn = Dictionary[int, PackedScene]({})
+animationFlags = Array[int]([])
 
-[sub_resource type="Resource" id="Resource_sp43n"]
+[sub_resource type="Resource" id="Resource_jkrd7"]
 script = ExtResource("2_5kv0w")
 AutoActivationMode = 0
 AutoActivationMax = 0
@@ -22,7 +24,7 @@ ActivatedByTurnStart = true
 ActivatedByTurnEnd = false
 ActivatedOnlyIfTurnIsMine = true
 
-[sub_resource type="Resource" id="Resource_egoag"]
+[sub_resource type="Resource" id="Resource_iiaji"]
 script = ExtResource("3_ge7gt")
 PickMobInTargetPos = false
 OnlyAffectOwner = false
@@ -30,37 +32,34 @@ CannotAffectAlly = false
 CannotAffectEnemy = false
 MaximumHealthPercent = 1.0
 
-[sub_resource type="Resource" id="Resource_eelg6"]
+[sub_resource type="Resource" id="Resource_86hu2"]
 script = ExtResource("3_ge7gt")
-PickMobInTargetPos = true
+PickMobInTargetPos = false
 OnlyAffectOwner = false
 CannotAffectAlly = false
 CannotAffectEnemy = false
 MaximumHealthPercent = 1.0
 
-[sub_resource type="Resource" id="Resource_tvss1"]
+[sub_resource type="Resource" id="Resource_870ju"]
 script = ExtResource("4_pm15s")
-TargetingRange = 4
-TargetingRangeStatBonus = -1
-TargetingMaxPositions = 1
-TargetingNeedsValidMob = false
-TargetingUsesPathing = true
+Range = 4
+RangeStatBonus = 2
+MaxPositions = 1
+CanTargetWithMob = false
+CanTargetEmpty = true
+UsesPathing = true
 AoEShape = 0
 AoESize = 0
 
-[sub_resource type="Resource" id="Resource_fmdw1"]
-script = ExtResource("5_w6vv2")
-metadata/_custom_type_script = "uid://cf30u0py5dtbx"
-
 [resource]
-script = ExtResource("6_504tu")
+script = ExtResource("5_rawa4")
 Identifier = 3
 Name = "Move"
 flags = Array[int]([])
-commands = Array[Object]([SubResource("Resource_fmdw1")])
-FilterParams = SubResource("Resource_egoag")
-TargetParams = SubResource("Resource_tvss1")
-AnimationParams = SubResource("Resource_q3yuo")
-MobFilterParams = SubResource("Resource_eelg6")
-AutoActivationParams = SubResource("Resource_sp43n")
-metadata/_custom_type_script = "uid://r2wtknux1ih3"
+commands = null
+FilterParams = SubResource("Resource_iiaji")
+TargetParams = SubResource("Resource_870ju")
+AnimationParams = SubResource("Resource_8ho3f")
+MobFilterParams = SubResource("Resource_86hu2")
+AutoActivationParams = SubResource("Resource_jkrd7")
+metadata/_custom_type_script = "uid://c6aiqyvks6qc7"

@@ -58,7 +58,7 @@ public partial class Ability
         effect.SetOwnerAddingBoost(EStatName.STRENGTH, 1);
 
         //Targeting
-        TargetParams.TargetingRange = 1;
+        TargetParams.Range = 1;
 
         return this;
     }
@@ -70,7 +70,7 @@ public partial class Ability
         effect.SetFlatAmount(amount);
 
         //Targeting
-        TargetParams.TargetingRange = 1;
+        TargetParams.Range = 1;
 
         return this;
     }
@@ -78,15 +78,15 @@ public partial class Ability
     public Ability ChainEffectMove()
     {
         //TargetParams
-        TargetParams.TargetingRangeStatBonus = EStatName.MOVEMENT;
-        TargetParams.TargetingRange = 0;
-        TargetParams.TargetingUsesPathing = true;
+        TargetParams.RangeStatBonus = EStatName.MOVEMENT;
+        TargetParams.Range = 0;
+        TargetParams.UsesPathing = true;
         return this;
     }
 
     public Ability ChainTargetBoostRangeByStat( EStatName stat)
     {
-        TargetParams.TargetingRangeStatBonus = stat;
+        TargetParams.RangeStatBonus = stat;
         return this;
     }
 

@@ -71,17 +71,17 @@ public static class ICollectionExtension
     }
 
     public static TColl GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection, TColl def)
-        => GetRandom(collection, def);
+        => GetRandom(new List<TColl>(collection), def);
 
     public static TColl GetRandom<TColl>(this IEnumerable<TColl> @this)
         => @this.ToList().GetRandom();
 
     public static TColl GetRandom<TColl>(this List<TColl> collection, TColl def)
     {
-        if (collection.Count == 0) return def;
+        if (collection.IsEmpty()) return def;
 
         RandomNumberGenerator rng = new();
-        int index = rng.RandiRange(0, collection.Count);
+        int index = rng.RandiRange(0, collection.Count-1);
         return collection[index];
     }
 
