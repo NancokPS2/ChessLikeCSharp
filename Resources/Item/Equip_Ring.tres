@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemEquipment" load_steps=5 format=3 uid="uid://d10pp0ao2nwa1"]
+
+[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_osn50"]
+[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_335mu"]
+[ext_resource type="Script" uid="uid://cl830npf4tu4k" path="res://Inventory/ItemEquipment.cs" id="3_ny810"]
+
+[sub_resource type="Resource" id="Resource_d0hun"]
+script = ExtResource("2_335mu")
+maxAdditiveBonus = Dictionary[int, float]({})
+maxMultiplicativeBonus = Dictionary[int, float]({})
+
+[resource]
+script = ExtResource("3_ny810")
+AbilitiesGrantedToUser = Array[ExtResource("1_osn50")]([])
+StatBoost = SubResource("Resource_d0hun")
+Name = "Ring"
+Price = 0.0
+Flags = Array[int]([5])
+Value = 0.0
+metadata/_custom_type_script = "uid://cl830npf4tu4k"

@@ -76,9 +76,9 @@ public partial class EncounterData : Resource
         
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
-        Mob def_mob3 = new Mob().ChainName("Civilian").ChainFaction(EFaction.NEUTRAL);
+        Mob def_mob3 = new Mob().ChainName("Bandit").ChainFaction(EFaction.NEUTRAL);
         def_mob3.Move(Vector3i.ONE+Vector3i.LEFT);
-        Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.RaceHuman ).ApplyTemplate(def_mob3);
+        Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.Extra_Bandit ).ApplyTemplate(def_mob3);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob4 = new Mob().ChainName("Neutral Wizard").ChainFaction(EFaction.NEUTRAL);

@@ -70,21 +70,30 @@ public static class ICollectionExtension
         return output;
     }
 
-    public static TColl GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection, TColl def)
-        => GetRandom(new List<TColl>(collection), def);
-
-    public static TColl GetRandom<TColl>(this IEnumerable<TColl> @this)
-        => @this.ToList().GetRandom();
-
-    public static TColl GetRandom<TColl>(this List<TColl> collection, TColl def)
+    public static TColl? GetRandom<TColl>(this List<TColl> collection, TColl? def)
     {
         if (collection.IsEmpty()) return def;
+        else return GetRandom(collection);
+    }
 
+    public static TColl? GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection, TColl? def)
+    {
+        if (collection.IsEmpty()) return def;
+        else return GetRandom(collection);
+    }
+
+    public static TColl GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection)
+        => GetRandom(new List<TColl>(collection));
+
+    public static TColl GetRandom<TColl>(this List<TColl> collection)
+    {
         RandomNumberGenerator rng = new();
         int index = rng.RandiRange(0, collection.Count-1);
         return collection[index];
     }
 
+    public static bool IsEmpty<T>(this IEnumerable<T> coll)
+        => coll.Count() == 0;
     public static bool IsEmpty<T>(this ICollection<T> coll)
         => coll.Count == 0;
 }

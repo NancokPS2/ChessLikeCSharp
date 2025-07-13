@@ -13,7 +13,7 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobTemplate : Resource
 {
-    public enum ETemplateType {JOB, RACE, BASE}
+    public enum ETemplateType {JOB, RACE, BASE, EXTRA}
 
     [Export]
     protected ETemplateType Type;
@@ -65,9 +65,9 @@ public partial class MobTemplate : Resource
                 x => mob.EquipmentInventory.IsValidForSlot(x, slot)
                 );
 
-            if (candidates.Count() == 0) continue;
+            if (candidates.IsEmpty()) continue;
 
-            mob.EquipmentInventory.EquipItem(candidates.GetRandom(), slot, true);
+            mob.EquipmentInventory.EquipItem(candidates.ToList().GetRandom(), slot, true);
         }
 
         //Stats
