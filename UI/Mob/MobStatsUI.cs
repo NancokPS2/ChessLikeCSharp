@@ -12,11 +12,15 @@ public partial class MobStatsUI : Control, ISceneDependency
 	[Export]
 	Control? NodeStatContainer;
 
-    public override void _Ready()
-    {
-        base._Ready();
-		NodeStatContainer ??= (Control?)FindChild("StatsContainer");
-    }
+	public MobStatsUI()
+	{
+	}
+
+	public override void _Ready()
+	{
+		base._Ready();
+		EventBus.MobSelected += OnMobSelected;
+	}
 
     public void Update(Mob mob)
 	{
@@ -39,8 +43,15 @@ public partial class MobStatsUI : Control, ISceneDependency
 
 	}
 
+	#region Event Connection
+	private void OnMobSelected(Mob mob)
+	{
+		Update(mob);
+	}
+	#endregion
+
     private partial class StatsLabel : Label, ITooltip
-    {
+	{
 		public MobStatSet StatSet;
 		public EStatName Stat;
 
@@ -51,13 +62,13 @@ public partial class MobStatsUI : Control, ISceneDependency
 		}
 		string ITooltip.GetText()
 		{
-			string output = $"{Enum.GetName(Stat) ?? throw new Exception()}\n" 
+			string output = $"{Enum.GetName(Stat) ?? throw new Exception()}\n"
 			+ $"{StatSet.BoostGetListOfStatChanges(Stat)}";
-			
+
 			return output;
 		}
 
-		Godot.Vector2 ITooltip.GetRectSize() => new(200,80);
-		
-    }
+		Godot.Vector2 ITooltip.GetRectSize() => new(200, 80);
+
+	}
 }

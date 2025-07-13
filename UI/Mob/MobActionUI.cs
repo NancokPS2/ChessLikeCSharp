@@ -10,10 +10,14 @@ public partial class MobActionUI : Control, ISceneDependency
     [Export]
 	public Control? ActionGrid;
 
-    public override void _Ready()
+    public MobActionUI()
+    {
+	}
+
+	public override void _Ready()
     {
         base._Ready();
-		ActionGrid ??= (Control)FindChild("ActionGrid");
+        EventBus.MobSelected += OnMobSelected;
     }
 
     public void Update(Mob mob)
@@ -29,6 +33,13 @@ public partial class MobActionUI : Control, ISceneDependency
 		}
     }
 
+    #region Event Connection
+    private void OnMobSelected(Mob mob)
+    {
+        Update(mob);
+    }
+    #endregion
+
     private partial class ActionLabel : Label, ITooltip
     {
         ActionEvent Action;
@@ -39,6 +50,6 @@ public partial class MobActionUI : Control, ISceneDependency
         }
 
         string ITooltip.GetText() => Action.GetDescription();
-        Godot.Vector2 ITooltip.GetRectSize() => new(200,80);
+        Godot.Vector2 ITooltip.GetRectSize() => new(200, 80);
     }
 }

@@ -29,7 +29,6 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 
     public BaseButtonMenu()
     {
-        ButtonCreated += OnButtonCreated;
     }
     
     public BaseButtonMenu(Control container) : this()
@@ -37,9 +36,16 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         Container = container;
     }
 
+    public override void _Ready()
+    {
+        base._Ready();
+        ButtonCreated += OnButtonCreated;
+	}
+
+
     protected void Update()
     {
-        if (_last_update is null) {GD.PushWarning("Nothing to update with. The last updated value is null or it was never set."); return;}
+        if (_last_update is null) { GD.PushWarning("Nothing to update with. The last updated value is null or it was never set."); return; }
         Update(_last_update);
     }
 
@@ -78,7 +84,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         return output;
     }
 
-    public virtual void ButtonDelete(ButtonInstance instance)
+    protected virtual void ButtonDelete(ButtonInstance instance)
     {
         instance.NodeReference.QueueFree();
     }
@@ -87,14 +93,23 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     {
         ButtonPressed?.Invoke(button, param);
     }
-    protected abstract void OnButtonCreated(TButton button, TAssociatedParam param);
+
+    /// <summary>
+    /// Used to modify the button after it is created.
+    /// </summary>
+    /// <param name="button">Button just created.</param>
+    /// <param name="param">Object associated with it.</param>
+    protected virtual void OnButtonCreated(TButton button, TAssociatedParam param)
+    {
+
+    }
 
     protected virtual void OnButtonHovered(TButton button, TAssociatedParam param, bool hovered)
     {
         TupleHovered = hovered ? (button, param) : null;
     }
 
-    public class ButtonInstance
+    protected class ButtonInstance
     {
         public TButton NodeReference;
         public TAssociatedParam ParameterReference;

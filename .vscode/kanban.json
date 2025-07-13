@@ -116,7 +116,7 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "Make UI work with the new event system",
+                    "text": "Make UI work with the new event system; Separate the UI elements from the \"General\" node they have.",
                     "id": "qyjohvf3qere1k4ltcv1plwg"
                 },
                 {
@@ -169,5 +169,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752415207606
+    "timestamp": 1752447898875
 }

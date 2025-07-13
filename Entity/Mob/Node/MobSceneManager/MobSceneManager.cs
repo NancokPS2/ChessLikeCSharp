@@ -19,16 +19,29 @@ public partial class MobSceneManager : Node3D
     protected MobScene? SelectedMobScene;
     public MobSceneManager()
     {
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        EventBus.MobStateChanged -= OnMobStateChanged;
+        EventBus.CellPositionSelected -= OnCellSelected;
+        EventBus.CellPositionHovered -= OnCellHovered;
+        EventBus.MobTurnStarted -= OnMobTurnStarted;
+
         EventBus.MobStateChanged += OnMobStateChanged;
         EventBus.CellPositionSelected += OnCellSelected;
         EventBus.CellPositionHovered += OnCellHovered;
         EventBus.MobTurnStarted += OnMobTurnStarted;
+
+        AddChild(NodeSelectionCursor);
+        AddChild(NodeHoveringCursor);
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero;;
+        Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero; ;
 
         NodeSelectionCursor.Visible = SelectedMobScene is not null;
 
@@ -36,15 +49,6 @@ public partial class MobSceneManager : Node3D
             target, (float)(CursorSpeed * delta)
             );
     }
-
-
-    public override void _Ready()
-    {
-        base._Ready();
-        AddChild(NodeSelectionCursor);
-        AddChild(NodeHoveringCursor);
-    }
-
 
     private bool HasInstance(Mob mob)
         => InstancedMobs.Any(x => x.MobUsing == mob);

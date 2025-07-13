@@ -58,7 +58,7 @@ public partial class MobEquipmentInventory : Resource, IInventory
         if (Contents[slot] is not null && !replace)
             throw new Exception();
 
-        if (IsValidForSlot(item, slot))
+        if (!IsValidForSlot(item, slot))
         {
             MessageQueue.AddMessage($"{item.Name} does not fit in slot {slot}");
             return;

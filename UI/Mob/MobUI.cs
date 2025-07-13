@@ -9,7 +9,7 @@ public partial class MobUI : Control, ISceneDependency
 	[Export]
 	public TabContainer? NodeTabContainer;
 	[Export]
-	public InventoryUI? NodeEquipmentUI;
+	public MobEquipmentUI? NodeEquipmentUI;
 	[Export]
 	public MobActionUI? NodeActionUI;
 
@@ -21,25 +21,20 @@ public partial class MobUI : Control, ISceneDependency
 
 	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobGeneralUI.tscn";
 
+	private Mob? MobCurrent;
+
 	public MobUI()
 	{
-		EventBus.MobSelected += OnMobSelected;
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
-/* 		NodeEquipmentUI ??= (InventoryUI?)FindChild("Equipment");
-		NodeStatsUI ??= (MobStatsUI?)FindChild("Stats");
-		NodeActionUI ??= (MobActionUI?)FindChild("Action");
-		NodeTabContainer ??= this.GetChild<TabContainer>(); */
+		EventBus.MobSelected += OnMobSelected;
 
 		NodeTabContainer.TabChanged += (x) => Update(MobCurrent);
 		DisplayDummy();
 	}
-
-	private Mob? MobCurrent;
-
 
 	public void Update(Mob mob)
 	{
@@ -48,23 +43,7 @@ public partial class MobUI : Control, ISceneDependency
 
 		MobCurrent = mob;
 
-		NodeNameUI.Text = mob.DisplayedName;
-
-		Node current_ui = NodeTabContainer.GetChild<Control>(NodeTabContainer.CurrentTab);
-
-		if (current_ui is InventoryUI equip)
-		{
-			equip.Update(MobCurrent);
-		}
-		else if (current_ui is MobStatsUI stats)
-		{
-			stats.Update(mob);
-		}
-		else if (current_ui is MobActionUI action)
-		{
-			action.Update(mob);
-		}
-		
+		NodeNameUI.Text = mob.DisplayedName;		
 	}
 
 	private void DisplayDummy()
