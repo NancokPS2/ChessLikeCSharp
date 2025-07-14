@@ -165,9 +165,32 @@
             ],
             "id": "iv64sofsa6d5xpucq3jyksjg",
             "color": "#eb144c"
+        },
+        {
+            "title": "Rules",
+            "tasks": [
+                {
+                    "text": "Interactions between classes should be done trough EventBus",
+                    "id": "ybwwpexas9ytar8l9ijapggu"
+                },
+                {
+                    "text": "Events for nodes should be connected in _Ready()",
+                    "id": "auz5dqrqige0oc2yexgeerbc"
+                },
+                {
+                    "text": "Singleton/Readonly.Scenes contains classes that need a scene to work",
+                    "id": "twl3wgityqqx43fsaapgi615"
+                },
+                {
+                    "text": "Godot/MainScenes contains the scenes that should be played",
+                    "id": "ktsa278h93kgh35a5j41a7eh"
+                }
+            ],
+            "id": "hjj8yzhq4eg3ord98aznc4lj",
+            "color": "var(--vscode-editor-foreground)"
         }
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752447898875
+    "timestamp": 1752455760332
 }
