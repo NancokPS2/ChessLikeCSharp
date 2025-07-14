@@ -1,24 +1,24 @@
-[gd_resource type="Resource" script_class="Faction" load_steps=6 format=3 uid="uid://djyh52u5w741b"]
+[gd_resource type="Resource" script_class="Faction" load_steps=7 format=3 uid="uid://djyh52u5w741b"]
 
 [ext_resource type="Script" uid="uid://cwewjc8svycgy" path="res://Inventory/MassInventory/MassInventory.cs" id="1_8fs8b"]
 [ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Inventory/ItemFilter.cs" id="1_rpm5k"]
+[ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="2_80vla"]
 [ext_resource type="Script" uid="uid://c0ducr6ksvfmg" path="res://Entity/Faction/Faction.cs" id="2_rpm5k"]
 
-[sub_resource type="Resource" id="Resource_rpm5k"]
+[sub_resource type="Resource" id="Resource_xh4ur"]
 script = ExtResource("1_rpm5k")
 flagWhiteList = Array[int]([])
 flagBlacklist = Array[int]([])
 
-[sub_resource type="Resource" id="Resource_80vla"]
+[sub_resource type="Resource" id="Resource_0pol8"]
 script = ExtResource("1_8fs8b")
-contents = Array[Object]([])
-Filter = SubResource("Resource_rpm5k")
-metadata/_custom_type_script = "uid://cwewjc8svycgy"
+contents = Array[ExtResource("2_80vla")]([null])
+Filter = SubResource("Resource_xh4ur")
 
 [resource]
 script = ExtResource("2_rpm5k")
 DisplayedName = "Player"
 Identifier = 0
 relationList = null
-Inventory = SubResource("Resource_80vla")
+Inventory = SubResource("Resource_0pol8")
 metadata/_custom_type_script = "uid://c0ducr6ksvfmg"

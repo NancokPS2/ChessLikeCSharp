@@ -6,6 +6,7 @@ using System;
 [GlobalClass]
 public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmentInventory.ESlot)>
 {
+	public MobEquipmentInventory MobEquipmentInventorySelected;
 	public MobEquipmentUI() : base()
 	{
 	}
@@ -26,6 +27,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmen
 			items.Add((equipInventory.GetItem(slot), slot));
 		}
 		Update(items);
+		MobEquipmentInventorySelected = equipInventory;
 	}
 
 	protected override void OnButtonCreated(Button button, (Item?, MobEquipmentInventory.ESlot) param)

@@ -1,0 +1,102 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1cq5yns2yd87"]
+
+[ext_resource type="Script" uid="uid://coe0lb8uk60be" path="res://UI/Party/PartyInventoryUI.cs" id="1_i1yq6"]
+[ext_resource type="Script" uid="uid://u6ju1u5ctdmk" path="res://UI/Base/MassInventoryUI.cs" id="2_5r5ck"]
+[ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="3_xwi4c"]
+[ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://UI/Base/HelpTooltip.tscn" id="4_h566o"]
+[ext_resource type="Script" uid="uid://b1j8hgoetbnq1" path="res://UI/Mob/MobEquipmentUI.cs" id="5_7aymu"]
+
+[node name="PartyInventoryUI" type="Control" node_paths=PackedStringArray("EquipmentUI", "MassUI")]
+layout_mode = 3
+anchor_top = 0.206
+anchor_right = 0.5
+anchor_bottom = 1.0
+script = ExtResource("1_i1yq6")
+EquipmentUI = NodePath("HBoxContainer/MobEquipmentUI")
+MassUI = NodePath("HBoxContainer/MassInventoryUI")
+metadata/_custom_type_script = "uid://coe0lb8uk60be"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MassInventoryUI" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("Container")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_5r5ck")
+Container = NodePath("Inventory")
+metadata/_custom_type_script = "uid://u6ju1u5ctdmk"
+
+[node name="Panel" type="Panel" parent="HBoxContainer/MassInventoryUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Inventory" type="VBoxContainer" parent="HBoxContainer/MassInventoryUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.0817901
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="HBoxContainer/MassInventoryUI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.049
+offset_bottom = 0.247999
+grow_horizontal = 2
+theme = ExtResource("3_xwi4c")
+theme_type_variation = &"LabelHeader"
+text = "FACTION_INVENTORY"
+
+[node name="HelpTooltip" parent="HBoxContainer/MassInventoryUI" instance=ExtResource("4_h566o")]
+layout_mode = 1
+Text = "Select a slot from the unit's inventory and then select a slot with an item in this inventory to equip it."
+
+[node name="MobEquipmentUI" type="Control" parent="HBoxContainer" node_paths=PackedStringArray("Container")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_7aymu")
+Container = NodePath("VBoxContainer/ScrollContainer/EQUIPMENT")
+metadata/_custom_type_script = "uid://b1j8hgoetbnq1"
+
+[node name="Panel" type="Panel" parent="HBoxContainer/MobEquipmentUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MobEquipmentUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/MobEquipmentUI/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"LabelHeader"
+text = "EQUIPMENT"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/MobEquipmentUI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EQUIPMENT" type="VBoxContainer" parent="HBoxContainer/MobEquipmentUI/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

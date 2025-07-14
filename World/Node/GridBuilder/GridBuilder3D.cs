@@ -46,12 +46,6 @@ public partial class GridBuilder3D : Node3D
         get => Callable.From( UpdateMeshLibrary );
     }
 
-    /// <summary>
-    /// The actual max height of the terrain.
-    /// </summary>
-    [Export]
-    public int HeightMax = 8;
-
     [ExportToolButton("Show GridNode")]
     public Callable ShowGridNodeCall
     {
@@ -144,7 +138,7 @@ public partial class GridBuilder3D : Node3D
 
 				for (int y = 0; y < Boundary.Y; y++)
 				{
-					if (heightValue > ((float)y / (float)HeightMax))
+					if (heightValue > ((float)y / (float)Boundary.Y))
 					{
 						GridMapNode.SetCellItem(
 							new(x, y, z),

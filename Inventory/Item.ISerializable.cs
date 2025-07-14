@@ -14,7 +14,7 @@ public partial class Item : ISerializable
         string flags = "";
         foreach (var item in Flags)
         {
-            flags +=  "_" + item.ToString();
+            flags += "_" + item.ToString();
         }
         return Name + flags + ".xml";
     }

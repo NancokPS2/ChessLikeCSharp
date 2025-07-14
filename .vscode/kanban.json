@@ -147,6 +147,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Faction inventory cannot store new items(?)",
+                    "id": "a9o1ag24nu5w7v2842giq6ry"
+                },
+                {
                     "text": "GridBuilder.SanitizeGridMap() is not working?",
                     "id": "jhq9lz9is9wa7gq3h8oq6gac"
                 },
@@ -192,5 +196,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752455760332
+    "timestamp": 1752504337441
 }

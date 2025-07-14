@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://47qrkw2tk2ik"]
+
+[ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="1_mondh"]
+
+[resource]
+script = ExtResource("1_mondh")
+Name = "Gold"
+Price = 1.0
+Flags = Array[int]([7])
+Value = 1.0
+metadata/_custom_type_script = "uid://bi2n21248nh24"
