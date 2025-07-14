@@ -33,7 +33,19 @@ public static class ICollectionExtension
         return output;
     }
 
-    public static string ToStringList<T>(this ICollection<T> collection, string separator = "|")
+    public static string ToStringList<TKey, TValue>(this Dictionary<TKey, TValue> @this, string prefix = "")
+    where TKey : notnull
+    where TValue : notnull
+    {
+        string output = "";
+        foreach (var item in @this)
+        {
+            output += prefix + item.Key.ToString() + ": " + item.Value.ToString() + "\n";
+        }
+        return output;
+    }
+
+    public static string ToStringList<T>(this ICollection<T> collection, string separator = " | ")
     where T : notnull
     {
         string output = "";
@@ -49,6 +61,7 @@ public static class ICollectionExtension
             }
 
         }
+        output.TrimSuffix(separator);
         return output;
     }
     public static string ToStringList<T>(this IEnumerable<T> collection, string separator = "|")

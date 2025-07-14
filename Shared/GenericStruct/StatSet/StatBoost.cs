@@ -1,5 +1,6 @@
 using System;
 using ChessLike.Entity;
+using ChessLike.Extension;
 using Godot;
 
 namespace ChessLike.Shared;
@@ -7,6 +8,7 @@ namespace ChessLike.Shared;
 
 public partial class StatBoost<[MustBeVariant] TStatEnum> : Resource where TStatEnum : notnull, Enum
 {
+    [Export]
     public string Source;
     //public Dictionary<TStatEnum, float> ValueAdditiveBonus = new();
     //public Dictionary<TStatEnum, float> ValueMultiplicativeBonus = new();
@@ -88,4 +90,8 @@ public partial class StatBoost<[MustBeVariant] TStatEnum> : Resource where TStat
 
     public static StatBoost<TStatEnum> operator +(StatBoost<TStatEnum> sourcer, StatBoost<TStatEnum> added)
         => Combined(sourcer, added);
+
+	public override string ToString()
+        => $"Source: {Source}\n{MaxAdditiveBonus.ToStringList("+")}\n{MaxMultiplicativeBonus.ToStringList("x")}";
+
 }

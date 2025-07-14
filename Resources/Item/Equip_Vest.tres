@@ -6,8 +6,11 @@
 
 [sub_resource type="Resource" id="Resource_d0hun"]
 script = ExtResource("2_xjv2x")
-maxAdditiveBonus = Dictionary[int, float]({})
+maxAdditiveBonus = Dictionary[int, float]({
+8: 5.0
+})
 maxMultiplicativeBonus = Dictionary[int, float]({})
+Source = ""
 
 [resource]
 script = ExtResource("3_8erin")
