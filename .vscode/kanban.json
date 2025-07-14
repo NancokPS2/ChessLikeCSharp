@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Dialogue bubble",
+                    "id": "c5qfasdzb0bb0s2ngj6c8j9m"
+                },
+                {
                     "text": "Add cost parameters to actions so you can use more than 1 per turn",
                     "id": "goag6gljtkhpnydd857ah6h5"
                 },
@@ -147,7 +151,7 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Faction inventory cannot store new items(?)",
+                    "text": "Faction inventory cannot store new items(?); Must test the party inventory UI after fixing",
                     "id": "a9o1ag24nu5w7v2842giq6ry"
                 },
                 {
@@ -196,5 +200,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752504337441
+    "timestamp": 1752506006084
 }
