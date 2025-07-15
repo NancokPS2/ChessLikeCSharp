@@ -53,10 +53,10 @@ public partial class PartyInventoryUI : Control
     #region Event Connection
     private void OnEquipmentUIButtonPressed(Button button, (Item?, MobEquipmentInventory.ESlot) param)
     {
-        Item? equipSelected = param.Item1;
-        Item? massSelected = MassInventoryItemSelected;
         MobEquipmentInventory mobEquipInv = EquipmentUI.MobEquipmentInventorySelected;
         MassInventory massInv = MassUI.MassInventorySelected;
+        Item? equipSelected = mobEquipInv.GetItem(param.Item2);
+        Item? massSelected = MassInventoryItemSelected;
 
         //Transfer from mob equipment to mass inventory. itemSelected is not empty, none is selected in the mass inventory.
         if (equipSelected is not null && massSelected is null)
@@ -80,6 +80,9 @@ public partial class PartyInventoryUI : Control
             massInv.RemoveItem(massSelected);
             mobEquipInv.EquipItem(massSelected, param.Item2, false);
         }
+
+        MassUI.Update();
+        EquipmentUI.Update();
     }
 
     private void OnMassUIButtonPressed(Button button, Item param)

@@ -43,7 +43,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 	}
 
 
-    protected void Update()
+    public void Update()
     {
         if (_last_update is null) { GD.PushWarning("Nothing to update with. The last updated value is null or it was never set."); return; }
         Update(_last_update);
