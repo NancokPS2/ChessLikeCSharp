@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="Faction" load_steps=7 format=3 uid="uid://djyh52u5w741b"]
+[gd_resource type="Resource" script_class="Faction" load_steps=9 format=3 uid="uid://djyh52u5w741b"]
 
 [ext_resource type="Script" uid="uid://cwewjc8svycgy" path="res://Inventory/MassInventory/MassInventory.cs" id="1_8fs8b"]
 [ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Inventory/ItemFilter.cs" id="1_rpm5k"]
 [ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="2_80vla"]
 [ext_resource type="Script" uid="uid://c0ducr6ksvfmg" path="res://Entity/Faction/Faction.cs" id="2_rpm5k"]
+[ext_resource type="Resource" uid="uid://47qrkw2tk2ik" path="res://Resources/Item/Item_Gold.tres" id="3_0pol8"]
+[ext_resource type="Resource" uid="uid://7lijrftbpnjo" path="res://Resources/Item/Equip_Vest.tres" id="4_rvgvy"]
 
 [sub_resource type="Resource" id="Resource_xh4ur"]
 script = ExtResource("1_rpm5k")
@@ -12,7 +14,7 @@ flagBlacklist = Array[int]([])
 
 [sub_resource type="Resource" id="Resource_0pol8"]
 script = ExtResource("1_8fs8b")
-contents = Array[ExtResource("2_80vla")]([null])
+contents = Array[ExtResource("2_80vla")]([ExtResource("3_0pol8"), ExtResource("4_rvgvy")])
 Filter = SubResource("Resource_xh4ur")
 
 [resource]

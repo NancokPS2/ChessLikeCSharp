@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="Faction" load_steps=6 format=3 uid="uid://bx655ptgm7nwr"]
+[gd_resource type="Resource" script_class="Faction" load_steps=7 format=3 uid="uid://bx655ptgm7nwr"]
 
 [ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Inventory/ItemFilter.cs" id="1_3ng1i"]
 [ext_resource type="Script" uid="uid://c0ducr6ksvfmg" path="res://Entity/Faction/Faction.cs" id="1_aceah"]
 [ext_resource type="Script" uid="uid://cwewjc8svycgy" path="res://Inventory/MassInventory/MassInventory.cs" id="1_ini8j"]
+[ext_resource type="Resource" uid="uid://d10pp0ao2nwa1" path="res://Resources/Item/Equip_Ring.tres" id="2_ht1jw"]
 
 [sub_resource type="Resource" id="Resource_rpm5k"]
 script = ExtResource("1_3ng1i")
@@ -11,7 +12,7 @@ flagBlacklist = Array[int]([])
 
 [sub_resource type="Resource" id="Resource_3ng1i"]
 script = ExtResource("1_ini8j")
-contents = Array[Resource]([])
+contents = Array[Resource]([ExtResource("2_ht1jw")])
 Filter = SubResource("Resource_rpm5k")
 metadata/_custom_type_script = "uid://cwewjc8svycgy"
 

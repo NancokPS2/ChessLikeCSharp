@@ -12,8 +12,8 @@ public partial class MassInventoryUI : BaseButtonMenu<Button, Item>
 
     public void Update(MassInventory massInventory)
     {
-        Update(MassInventorySelected.GetItems());
         MassInventorySelected = massInventory;
+        Update(MassInventorySelected.GetItems());
     }
 
     protected override void OnButtonCreated(Button button, Item param)

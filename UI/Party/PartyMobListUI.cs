@@ -3,11 +3,12 @@ using ChessLike.Extension;
 using Godot;
 using System;
 
+[GlobalClass]
 public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipButton, Mob>, ISceneDependency
 {
 	public Mob? MobSelected;
 
-	public Godot.Vector4 SelectBorderColor = new(0,1,0,0.6f);
+	public Godot.Vector4 SelectBorderColor = new(0, 1, 0, 0.6f);
 
 	public string SCENE_PATH { get; } = "res://Godot/Display/UI/Party/PartyMobListUI.tscn";
 
@@ -17,13 +18,6 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 	public PartyMobListUI() : base()
 	{
 		ButtonVerticalFlags = SizeFlags.ExpandFill;
-	}
-
-	public override void _Ready()
-	{
-		base._Ready();
-		Container ??= (Control)FindChild("PortraitContainer");
-		NodeFactionNameLabel ??= (Label)FindChild("FactionNameLabel");
 	}
 
 	public void Update(EFaction faction)
@@ -54,7 +48,7 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 
 	protected override void OnButtonPressed(MobTooltipButton button, Mob param)
 	{
-		MobSelected = param;     
+		MobSelected = param;
 		foreach (var item in ButtonInstances)
 		{
 			if (item.NodeReference.Material is ShaderMaterial other_shader)
@@ -68,13 +62,14 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 		}
 
 		base.OnButtonPressed(button, param);
+		EventBus.MobSelected?.Invoke(MobSelected);
 	}
 
 	protected override void OnButtonHovered(MobTooltipButton button, Mob param, bool hovered)
 	{
 		base.OnButtonHovered(button, param, hovered);
 		//Do not affect the modulate if this is the selected button.
-		if (param == MobSelected){return;}
+		if (param == MobSelected) { return; }
 
 		if (hovered)
 		{
@@ -90,19 +85,19 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 	{
 		public Mob? MobReference;
 
-        public MobTooltipButton()
-        {
+		public MobTooltipButton()
+		{
 			MobReference = null;
-        }
+		}
 
-        public MobTooltipButton(Mob mobReference)
-        {
-            MobReference = mobReference;
-        }
+		public MobTooltipButton(Mob mobReference)
+		{
+			MobReference = mobReference;
+		}
 
-        string ITooltip.GetText() => MobReference?.ToStringStats() ?? "UNDEFINED";
+		string ITooltip.GetText() => MobReference?.ToStringStats() ?? "UNDEFINED";
 
-		Godot.Vector2 ITooltip.GetRectSize() => new (240,100);
+		Godot.Vector2 ITooltip.GetRectSize() => new(240, 100);
 	}
 
 }

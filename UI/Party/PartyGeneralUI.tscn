@@ -12,7 +12,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_8fxnr"]
 font = ExtResource("7_jwnb4")
 
-[node name="PartyGeneralUI" type="Control" node_paths=PackedStringArray("NodePartyListUI", "NodeMobEquipmentUI", "NodeFactionInventoryUI", "NodePartyJobChangeUI", "NodeDebugOptions")]
+[node name="PartyGeneralUI" type="Control" node_paths=PackedStringArray("NodePartyListUI", "NodeDebugOptions")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,19 +22,12 @@ grow_vertical = 2
 theme = ExtResource("1_ucgmu")
 script = ExtResource("1_imkr4")
 NodePartyListUI = NodePath("PartyUnitListUI")
-NodeMobEquipmentUI = NodePath("")
-NodeFactionInventoryUI = NodePath("")
-NodePartyJobChangeUI = NodePath("MobJobChangeUI")
 NodeDebugOptions = NodePath("MenuButton")
-DebugButtons = null
 
 [node name="PartyUnitListUI" parent="." instance=ExtResource("2_ospk4")]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 0.197531
-ButtonHorizontalFlags = null
-ButtonVerticalFlags = null
-ButtonAnchors = null
 metadata/_edit_use_anchors_ = true
 
 [node name="MobJobChangeUI" parent="." instance=ExtResource("6_rogee")]
@@ -44,9 +37,6 @@ anchors_preset = -1
 anchor_left = 0.777778
 anchor_top = 0.197531
 anchor_bottom = 0.91358
-AvailableJobs = null
-CanChangeJob = null
-MaxJobs = null
 metadata/_edit_use_anchors_ = true
 
 [node name="PartyInventoryUI" type="Control" parent="." node_paths=PackedStringArray("EquipmentUI", "MassUI")]

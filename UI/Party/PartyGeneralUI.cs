@@ -13,12 +13,6 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 
 	[Export]
 	public PartyMobListUI? NodePartyListUI;
-	[Export]
-	public InventoryUI? NodeMobEquipmentUI;
-	[Export]
-	public InventoryUI? NodeFactionInventoryUI;
-	[Export]
-	public PartyJobChangeUI? NodePartyJobChangeUI;
 
 	[Export]
 	public MenuButton? NodeDebugOptions;
@@ -29,8 +23,6 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 	public override void _Ready()
 	{
 		base._Ready();
-		//When a button from the party UI is pressed, update the equipment UI.
-		NodePartyListUI.ButtonPressed += OnPartyListUIPressed;
 
 		NodeDebugOptions.GetPopup().IdPressed += OnIdPressed;
 		NodeDebugOptions.GetPopup().AddItem("SAVE", DEBUG_ACTION_SAVE_JOBS);
@@ -38,16 +30,9 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 
 	}
 
+	[Obsolete("Remove dependencies to pause menu, then delete.")]
 	public void Update()
 	{
-		NodePartyListUI.Update(ChessLike.Entity.EFaction.PLAYER);
-		NodeFactionInventoryUI.Update(Global.ManagerFaction.GetPooledByEnum(EFaction.PLAYER));
-	}
-
-	public void OnPartyListUIPressed(Button button, Mob mob)
-	{
-		NodeMobEquipmentUI.Update(mob);
-		NodePartyJobChangeUI.Update(mob);
 	}
 	private void OnIdPressed(long id)
 	{	
