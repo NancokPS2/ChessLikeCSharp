@@ -8,5 +8,5 @@ using Godot;
 public class MobTemplateResourcePack : ResourcePack<MobTemplate>
 {
 	public MobTemplate GetResource(EPackIDMobTemplate templateID)
-		=> GetResource(templateID.ToString());
+		=> ResourceGet(templateID.ToString());
 }

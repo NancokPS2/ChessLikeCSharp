@@ -68,7 +68,7 @@ public partial class Mob : Resource
     public Mob()
     {
         //TODO: Move this somewhere else
-        Global.ManagerMob.AddPooled(this);
+        Global.ManagerMob.PooledAdd(this);
 
         //Default stats
         Stats = GetDefaultStats();

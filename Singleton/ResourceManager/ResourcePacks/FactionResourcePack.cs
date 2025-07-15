@@ -4,21 +4,22 @@ using Godot;
 
 public class FactionResourcePack : ResourcePack<Faction>
 {
-	private void OnLoadedFromFolder(List<Faction> resources)
-	{
-        foreach (var item in GetAllPooled())
+    private void OnLoadedFromFolder(List<Faction> resources)
+    {
+        foreach (var item in PooledGetAll())
         {
-            AddPooled(item);   
+            PooledAdd(item);
         }
-	}
+    }
 
-	/* public Faction GetResource(EPackIDFaction enu)
+    public Faction GetResource(EPackIDFaction enu)
     {
         string? output = Enum.GetName<EPackIDFaction>(enu);
-        return GetResource(output ?? throw new Exception("Could not get name from enum."));
-    } */
+        return ResourceGet(output ?? throw new Exception("Could not get name from enum."));
+    }
 
     public Faction GetPooledByEnum(EFaction faction)
-        => GetAllPooled()
+        => PooledGetAll()
         .First(x => x.Identifier == faction);
+
 }

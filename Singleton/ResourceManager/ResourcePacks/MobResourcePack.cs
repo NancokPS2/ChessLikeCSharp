@@ -7,17 +7,26 @@ public class MobResourcePack : ResourcePack<Mob>
     public Mob GetResource(EPackIDMob enu)
     {
         string? output = Enum.GetName<EPackIDMob>(enu);
-        return GetResource(output ?? throw new Exception("Could not get name from enum."));
+        return ResourceGet(output ?? throw new Exception("Could not get name from enum."));
     }
 
+    [Obsolete("This is not safe enough.")]
+    public override string GetResourceIdentifier(Mob resource)
+    {
+        string output = base.GetResourceIdentifier(resource);
+        if (output == "") output = resource.DisplayedName;
+        return output;
+    }
+
+
     public List<Mob> GetPooledInCombat()
-        => GetAllPooled().FilterInCombat();
+        => PooledGetAll().FilterInCombat();
 
     public List<Mob> GetPooledInPosition(Vector3i position)
-        => GetAllPooled().FilterInPosition(position);
+        => PooledGetAll().FilterInPosition(position: position);
 
     public List<Mob> GetPooledInFaction(EFaction faction)
-        => GetAllPooled().FilterInFaction(faction);
+        => PooledGetAll().FilterInFaction(faction);
 
     public List<Mob> FilterFromHostilesFaction(List<Mob> mobList, EFaction main_faction_key)
     {

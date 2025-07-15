@@ -22,12 +22,12 @@ public partial class Global
     public static ResourcePack<EncounterData> ManagerEncounter;
     public static MobTemplateResourcePack ManagerMobTemplate;
 
-    public static void SetupManager()
+    public static void SetupManagers()
     {
         ManagerJob = new();
         ManagerAbility = new();
         ManagerMob = new();
-        ManagerFaction = new() { AutoPoolLoaded = true };
+        ManagerFaction = new();
         ManagerItem = new();
         ManagerModel = new("Model");
         ManagerParticle = new("Particle");
@@ -36,23 +36,39 @@ public partial class Global
         ManagerEncounter = new();
         ManagerMobTemplate = new();
 
-        PreparePack(ManagerJob);
-        PreparePack(ManagerAbility);
-        PreparePack(ManagerMob);
-        PreparePack(ManagerFaction);
-        PreparePack(ManagerItem);
-        PreparePack(ManagerModel);
-        PreparePack(ManagerParticle);
-        PreparePack(ManagerMaterial);
-        PreparePack(ManagerFont);
-        PreparePack(ManagerEncounter);
-        PreparePack(ManagerMobTemplate);
+        PackPrepare(ManagerJob);
+        PackPrepare(ManagerAbility);
+        PackPrepare(ManagerMob);
+        PackPrepare(ManagerFaction);
+        PackPrepare(ManagerItem);
+        PackPrepare(ManagerModel);
+        PackPrepare(ManagerParticle);
+        PackPrepare(ManagerMaterial);
+        PackPrepare(ManagerFont);
+        PackPrepare(ManagerEncounter);
+        PackPrepare(ManagerMobTemplate);
     }
 
-    private static ResourcePack<T> PreparePack<T>(ResourcePack<T> resourcePack) where T : Resource, new()
+    public static void PackSave()
+    {
+        ManagerJob.SavePersistent();
+        ManagerAbility.SavePersistent();
+        ManagerMob.SavePersistent();
+        ManagerFaction.SavePersistent();
+        ManagerItem.SavePersistent();
+        ManagerModel.SavePersistent();
+        ManagerParticle.SavePersistent();
+        ManagerMaterial.SavePersistent();
+        ManagerFont.SavePersistent();
+        ManagerEncounter.SavePersistent();
+        ManagerMobTemplate.SavePersistent();
+    }
+
+    private static ResourcePack<T> PackPrepare<T>(ResourcePack<T> resourcePack) where T : Resource, new()
     {
         resourcePack.CreateDefault();
-        resourcePack.LoadAllInFolder();
+        resourcePack.LoadContent(false, true);
+        resourcePack.LoadContent(true, true);
         return resourcePack;
     }
 }

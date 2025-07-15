@@ -174,7 +174,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, ItemFilter>, ISceneDep
 
 	public Godot.Font GetFont()
 	{
-		return Global.ManagerFont.GetResource("Regular");
+		return Global.ManagerFont.ResourceGet("Regular");
 	}
 
 	public bool IsShown()

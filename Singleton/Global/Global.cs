@@ -40,7 +40,7 @@ public static partial class Global
     {
         Console.WriteLine(Directory.GetContentDir(EDirectory.GAME_CONTENT));
         Console.WriteLine(Directory.GetContentDir(EDirectory.USER_CONTENT));
-        SetupManager();
+        SetupManagers();
 
         EventBus.EncounterLoading += OnEncounterLoading;
     }

@@ -190,7 +190,7 @@ public partial class ActionEvent : Resource
 
     public bool IsMobValid(Mob mob)
     {
-        Faction owner_fac = Global.ManagerFaction.GetAllPooled().First(x => x.Identifier == Owner.Faction);
+        Faction owner_fac = Global.ManagerFaction.PooledGetAll().First(x => x.Identifier == Owner.Faction);
 
         //Must be the owner?
         if (mob != Owner && MobFilterParams.OnlyAffectOwner)

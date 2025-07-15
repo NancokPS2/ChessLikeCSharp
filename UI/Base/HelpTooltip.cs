@@ -7,7 +7,7 @@ public partial class HelpTooltip : Panel, ITooltip
 
 	[Export(PropertyHint.MultilineText)]
 	public string Text = "";
-    public Godot.Font GetFont() => Global.ManagerFont.GetResource("Regular");//GetThemeFont(THEME_OBJECT, "font");
+    public Godot.Font GetFont() => Global.ManagerFont.ResourceGet("Regular");//GetThemeFont(THEME_OBJECT, "font");
 
     public int GetFontSize() => 16;
 

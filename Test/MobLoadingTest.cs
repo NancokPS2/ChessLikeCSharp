@@ -12,7 +12,7 @@ public partial class MobLoadingTest : Node3D
 
     public MobLoadingTest()
     {
-        mob = Global.ManagerMob.GetResource("Default");
+        mob = Global.ManagerMob.ResourceGet("Default");
     }
 
     public void TestChange(string name, bool start)

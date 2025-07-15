@@ -84,13 +84,22 @@ public partial class EncounterData : Resource
         Mob def_mob4 = new Mob().ChainName("Neutral Wizard").ChainFaction(EFaction.NEUTRAL);
         def_mob4.Move(Vector3i.ONE+Vector3i.FORWARD+Vector3i.FORWARD);
         Global.ManagerMobTemplate.GetResource( EPackIDMobTemplate.RaceHuman ).ApplyTemplate(def_mob4);
-        //.ChainEquipment(new WeaponSpear());
+
+        //Test persistence
+        Mob persistentMob = Global.ManagerMob.ResourceGet("Default");
+        persistentMob.MakePersistent();
+        persistentMob.DisplayedName = "Persistent MC";
+        Global.ManagerMob.PooledAdd(persistentMob);
+        Global.PackSave();
+        Global.ManagerMob.LoadContent(true, true);
+        Mob def_mob5 = Global.ManagerMob.ResourceGet("Persistent MC", true);
 
         encounter.MobPlacement = new();
         encounter.MobPlacement[Vector3i.ONE] =  def_mob1;
         encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD] = def_mob2;
         encounter.MobPlacement[Vector3i.ONE+Vector3i.LEFT] = def_mob3;
         encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD*2] = def_mob4;
+        encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD*4] = def_mob5;
         return encounter;
     }
 

@@ -12,10 +12,10 @@ public class SceneResourcePack<TNode> : ResourcePack<PackedScene> where TNode : 
     {
     }
 
-    public SceneResourcePack(string uniqueString) : base(uniqueString)
+    public SceneResourcePack(string packIdentifier) : base(packIdentifier)
     {
     }
 
     public TNode GetInstance(string identifier)
-        => GetResource(identifier).Instantiate<TNode>();
+        => ResourceGet(identifier).Instantiate<TNode>();
 }

@@ -84,12 +84,12 @@ public partial class MobScene : Node3D
             {
                 EMobSceneEffect.TURN_ACTIVE
                     => Global.ManagerParticle
-                    .GetResource("HoveringStar")
+                    .ResourceGet("HoveringStar")
                     .Instantiate<Node3D>(),
 
                 EMobSceneEffect.TARGETED 
                     => Global.ManagerParticle
-                    .GetResource("InwardArrows")
+                    .ResourceGet("InwardArrows")
                     .Instantiate<Node3D>(),
                     
                 _

@@ -42,7 +42,7 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 	{
 		button.MobReference = param;
 		button.Text = param.ToString();
-		button.Material = Global.ManagerMaterial.GetResource("CanvasShaderBorderColor");
+		button.Material = Global.ManagerMaterial.ResourceGet("CanvasShaderBorderColor");
 		(button.Material as ShaderMaterial)?.SetShaderParameter("border_color", Colors.Transparent);
 	}
 
