@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.Marshalling;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Storage;
@@ -61,7 +62,7 @@ public partial class PartyInventoryUI : Control
         //Transfer from mob equipment to mass inventory. itemSelected is not empty, none is selected in the mass inventory.
         if (equipSelected is not null && massSelected is null)
         {
-            if (mobEquipInv.GetItem(param.Item2) == equipSelected)
+            if (mobEquipInv.GetItem(param.Item2) != equipSelected)
                 throw new Exception("This item is not from this mob's inventory or is not at this slot.");
 
             mobEquipInv.UnequipItem(param.Item2);
@@ -75,14 +76,18 @@ public partial class PartyInventoryUI : Control
                 throw new Exception("This slot IS occupied. What!?");
 
             if (!mobEquipInv.IsValidForSlot(massSelected, param.Item2))
+            {
                 MessageQueue.AddMessage("That slot is not valid for this item.");
+                return;
+            }
 
             massInv.RemoveItem(massSelected);
             mobEquipInv.EquipItem(massSelected, param.Item2, false);
+            ClearSelected();
         }
 
-        MassUI.Update();
-        EquipmentUI.Update();
+        MassUI.Update(massInv);
+        EquipmentUI.Update(mobEquipInv);
     }
 
     private void OnMassUIButtonPressed(Button button, Item param)
