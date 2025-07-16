@@ -235,7 +235,7 @@ public partial class ActionEventTargeter : Node3D
 		UsageParametersCurrent = null;
 	}
 
-	#region Event Connection
+	#region Event Handling
 	private void OnBattleStateChanged(EBattleState state)
 	{
 		Reset();

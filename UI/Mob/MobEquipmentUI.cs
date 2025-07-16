@@ -36,7 +36,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmen
 		button.TooltipText = param.Item1?.ToString() ?? param.Item2.ToString();
 	}
 
-	#region Event Connection
+	#region Event Handling
 	private void OnMobSelected(Mob mob)
 	{
 		Update(mob.EquipmentInventory);

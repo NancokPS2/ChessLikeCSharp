@@ -110,7 +110,7 @@ public partial class ActionEventRunner : Node3D
     }
     #endregion
 
-    #region Event Connection
+    #region Event Handling
     private void OnActionEventAutoActivated(UsageParameters activated, UsageParameters activatedBy)
     {
         QueueAddBefore(activated, activatedBy);

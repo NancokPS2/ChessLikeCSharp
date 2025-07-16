@@ -69,7 +69,7 @@ public partial class CombatStateOverlay : Control
         NodePanel?.AddThemeStyleboxOverride("panel", style);
     }
 
-    #region Event Connection
+    #region Event Handling
     private void OnBattleStateChanged(EBattleState state)
     {
         UpdateStyle(state);

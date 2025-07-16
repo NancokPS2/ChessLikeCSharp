@@ -52,7 +52,7 @@ public partial class MobUI : Control, ISceneDependency
 		Update(mob);
 	}
 
-	#region Event Connection
+	#region Event Handling
 	private void OnMobSelected(Mob obj)
     {
 		Update(obj);

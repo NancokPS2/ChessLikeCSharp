@@ -145,7 +145,7 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
     }
     #endregion
 
-    #region Event Connection
+    #region Event Handling
 
     private void OnActionEventQueueFinished(List<UsageParameters> parameterList)
     {

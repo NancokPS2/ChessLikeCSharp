@@ -43,7 +43,7 @@ public partial class MobStatsUI : Control, ISceneDependency
 
 	}
 
-	#region Event Connection
+	#region Event Handling
 	private void OnMobSelected(Mob mob)
 	{
 		Update(mob);

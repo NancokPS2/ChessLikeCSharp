@@ -59,7 +59,7 @@ public partial class CombatTurnUI : Control, ISceneDependency
         }
     }
 
-    #region Event Connection
+    #region Event Handling
     private void OnMobTurnStarted(Mob mob)
     {
         UpdateCurrentTurnTaker(mob);

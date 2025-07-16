@@ -129,7 +129,7 @@ public partial class MobSceneManager : Node3D
         if (!HasInstance(mob)) throw new Exception();
     }
 
-    #region Event Connection
+    #region Event Handling
     private void OnMobStateChanged(Mob mob, EMobState state)
     {
         if (state == EMobState.COMBAT)

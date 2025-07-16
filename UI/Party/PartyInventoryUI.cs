@@ -51,7 +51,7 @@ public partial class PartyInventoryUI : Control
         MassInventoryItemSelected = null;
     }
 
-    #region Event Connection
+    #region Event Handling
     private void OnEquipmentUIButtonPressed(Button button, (Item?, MobEquipmentInventory.ESlot) param)
     {
         MobEquipmentInventory mobEquipInv = EquipmentUI.MobEquipmentInventorySelected;

@@ -85,7 +85,7 @@ public partial class MessageQueue: Node
         return new_label;
     }
 
-    #region Event Connection
+    #region Event Handling
 	private void OnBattleStateChanged(EBattleState state)
 	{
         AddMessage($"State entered {state}");

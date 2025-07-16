@@ -92,7 +92,7 @@ public partial class CombatActionUI : Control, ISceneDependency
         }
     }
 
-    #region Event Connection
+    #region Event Handling
     private void OnBattleStateChanged(EBattleState state)
     {
         switch (state)

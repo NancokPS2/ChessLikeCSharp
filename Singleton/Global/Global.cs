@@ -52,7 +52,7 @@ public static partial class Global
 
     public static Grid GetEncounterGrid() => EncounterGrid;
 
-    #region Event Connection
+    #region Event Handling
     private static void OnEncounterLoading(EncounterData obj)
     {
         EncounterGrid = obj.Grid;

@@ -215,7 +215,7 @@ public partial class TurnManager : Node3D
         }
     }
 
-    #region Event Connection
+    #region Event Handling
     private void OnBattleStateChanged(EBattleState state)
     {
         if (state == EBattleState.TURN_SELECTION)

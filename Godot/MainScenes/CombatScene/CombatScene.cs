@@ -91,7 +91,7 @@ public partial class CombatScene : Node3D
 
 	public static List<Mob> GetMobsInCombat() => Global.ManagerMob.GetPooledInCombat();
 
-	#region Event Connection
+	#region Event Handling
 	private void OnCombatStarted()
 	{
 		SetState(EBattleState.TURN_SELECTION);

@@ -242,7 +242,7 @@ public partial class GridNode : Node3D
     }
     #endregion
 
-    #region Event Connection
+    #region Event Handling
     public void OnCellInput(InputEvent input, Vector3i componentPos)
     {
         if (!InputEnabled) { return; }

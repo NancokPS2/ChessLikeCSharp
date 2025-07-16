@@ -17,22 +17,28 @@ public partial class Pause : Control, ISceneDependency
 	[Export]
 	public Button ButtonParty;
 
-	public Pause()
+	public override void _Ready()
 	{
+		base._Ready();
+		AddChild(_party_scene);
+
 		_party_scene = new PartyGeneralUI().GetInstantiatedScene<PartyGeneralUI>();
 		_party_scene.Activate(false);
-	}
-
-    public override void _Ready()
-    {
-        base._Ready();
-		AddChild(_party_scene);
 
 		ButtonResume.Pressed += () => OnButtonPressed(MenuOption.RESUME);
 		ButtonParty.Pressed += () => OnButtonPressed(MenuOption.PARTY);
+
+		EventBus.InputPause += OnInputPause;
     }
 
-	private void OnButtonPressed(MenuOption button)
+
+	#region Event Handling
+	private void OnInputPause()
+	{
+		this.Activate(!Visible);
+	}
+
+    private void OnButtonPressed(MenuOption button)
 	{
 		switch (button)
 		{
@@ -48,5 +54,5 @@ public partial class Pause : Control, ISceneDependency
 		}
 		
 	}
-
+	#endregion
 }

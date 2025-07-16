@@ -194,7 +194,7 @@ public partial class MobScene : Node3D
     }
     #endregion
 
-    #region Event Connection
+    #region Event Handling
     private void OnMobMoved(Mob mob, Vector3i from, Vector3i to)
     {
         if (mob != MobUsing) return;

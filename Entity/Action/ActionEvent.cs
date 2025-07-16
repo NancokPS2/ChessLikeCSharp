@@ -294,7 +294,7 @@ public partial class ActionEvent : Resource
     public override string ToString() => Name;
     #endregion
 
-    #region Event Connection
+    #region Event Handling
 
     protected void OnAutoActivationProcessTurnStarted(Mob who)
     {
