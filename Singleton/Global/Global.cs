@@ -33,7 +33,6 @@ public static partial class Global
         if (RootNode == null) { throw new Exception("No window found."); }
 
         DebugDisplay.Add(debug);
-
     }
 
     static Global()

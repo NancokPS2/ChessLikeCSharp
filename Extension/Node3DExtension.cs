@@ -10,10 +10,10 @@ namespace ChessLike;
 
 public static class Node3DExtension
 {
-    public static Godot.Vector3 GetFacingHorizontalInteger(this Node3D @this )
+    public static Godot.Vector3 GetFacingHorizontalInteger(this Node3D @this)
     {
         Godot.Vector3 facing_vector = @this.Basis.Z;
-        if (facing_vector.Length()== 0)
+        if (facing_vector.Length() == 0)
         {
             throw new Exception("How?");
         }
@@ -45,10 +45,10 @@ public static class Node3DExtension
         }
     }
 
-    public static Godot.Vector3 GetFacingGlobalHorizontalInteger(this Node3D @this )
+    public static Godot.Vector3 GetFacingGlobalHorizontalInteger(this Node3D @this)
     {
         Godot.Vector3 facing_vector = @this.GlobalBasis.Z;
-        if (facing_vector.Length()== 0)
+        if (facing_vector.Length() == 0)
         {
             throw new Exception("How?");
         }
@@ -78,5 +78,18 @@ public static class Node3DExtension
                 return Godot.Vector3.Forward;
             }
         }
+    }
+    
+    public static TNode SetGlobalPositionForced<TNode>(this TNode @this, Godot.Vector3 globalPos, Node3D parent) where TNode : Node3D
+    {
+        if (parent is Node3D node3d)
+        {
+            @this.Position = node3d.ToLocal(globalPos);
+        }
+        else
+        {
+            @this.Position = globalPos;
+        }
+        return @this;
     }
 }

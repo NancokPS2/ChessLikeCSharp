@@ -9,21 +9,16 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class AnimationParameters : Resource
 {
-    public enum ESceneAnimationMode
-    {
-        SPAWN_AT_OWNER,
-        SPAWN_AT_TARGET,
-        MOVE_TO_TARGET
-    }
+
     [Export]
     public float MaxDuration = 2f;
 
-    public Dictionary<ESceneAnimationMode, PackedScene> ScenesToSpawn = new();
+	public List<AnimatedSceneParameters> SceneSpawns = new();
     [Export]
-    private Godot.Collections.Dictionary<ESceneAnimationMode, PackedScene> scenesToSpawn
+    private Godot.Collections.Array<AnimatedSceneParameters> sceneSpawns
     {
-        set => ScenesToSpawn = new(value);
-        get => new(ScenesToSpawn);
+        set => SceneSpawns = new(value);
+        get => new(SceneSpawns);
     }
 
     public List<EActionAnimationFlags> AnimationFlags = new();
@@ -33,5 +28,4 @@ public partial class AnimationParameters : Resource
         set => AnimationFlags = new(value);
         get => new(AnimationFlags);
     }
-
 }

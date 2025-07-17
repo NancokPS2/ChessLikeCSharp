@@ -151,7 +151,7 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Faction inventory cannot store new items(?); Must test the party inventory UI after fixing",
+                    "text": "Must test the party inventory UI after fixing",
                     "id": "a9o1ag24nu5w7v2842giq6ry"
                 },
                 {
@@ -200,5 +200,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752677371354
+    "timestamp": 1752787127755
 }

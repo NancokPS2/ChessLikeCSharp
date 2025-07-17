@@ -17,16 +17,20 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 UI="*res://Singleton/UI/UI.cs"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
-SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
+GlobalNode="res://Singleton/Global/Node/GlobalNode.cs"
+NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
 Command="*res://Singleton/Command/Command.cs"
+
+[debug]
+
+settings/crash_handler/message="Your crash report, my liege."
 
 [dotnet]
 

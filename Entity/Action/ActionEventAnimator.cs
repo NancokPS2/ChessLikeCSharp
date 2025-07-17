@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.World.Encounter;
 using Godot;
+using static ChessLike.Entity.Action.AnimatedSceneParameters;
 
 namespace ChessLike.Entity.Action;
 
@@ -44,49 +45,96 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
     }
 
     protected void StartAnimation(UsageParameters parameters)
-    {
-        CurrentAnimationTime = 0;
-        CurrentParameters = parameters;
+	{
+		CurrentAnimationTime = 0;
+		CurrentParameters = parameters;
 
-        AnimationParameters animationParams = parameters.ActionRef.AnimationParams;
-        ActionEvent action = parameters.ActionRef;
-        Mob owner = parameters.OwnerRef;
+		AnimationParameters animationParams = parameters.ActionRef.AnimationParams;
+		ActionEvent action = parameters.ActionRef;
+		Mob owner = parameters.OwnerRef;
+		Godot.Vector3 ownerPosition = CurrentGridNode.MapToGlobal(owner.GetPosition());
 
-        EventBus.ActionAnimationStarted?.Invoke(CurrentParameters);
+		EventBus.ActionAnimationStarted?.Invoke(CurrentParameters);
 
-        //WIP need to animate this.
-        //Spawn scenes.
-        foreach (var item in action.AnimationParams.ScenesToSpawn)
+		//WIP need to animate this.
+		//Spawn scenes.
+		AnimateScenes(parameters);
+		action.AnimationRun(parameters);
+	}
+
+	private void AnimateScenes(UsageParameters parameters)
+	{
+		AnimationParameters animationParams = parameters.ActionRef.AnimationParams;
+		ActionEvent action = parameters.ActionRef;
+		Mob owner = parameters.OwnerRef;
+		Godot.Vector3 ownerPosition = CurrentGridNode.MapToGlobal(owner.GetPosition());
+    
+		foreach (var spawn in animationParams.SceneSpawns)
         {
-            switch (item.Key)
+            PackedScene scene = spawn.Scene;
+            List<Node3D> instances = new();
+            var motionModes = spawn.MotionMode;
+            var spawnMode = spawn.SpawnMode;
+            foreach (var item in parameters.MobsTargeted)
             {
-                case AnimationParameters.ESceneAnimationMode.SPAWN_AT_OWNER:
-                    item.Value.InstantiateAt<Node3D>(
-                        this,
-                        CurrentGridNode.MapToGlobal(owner.GetPosition())
-                        );
+                instances.Add(scene.Instantiate<Node3D>());
+            }
+            switch (spawnMode)
+            {
+                case ESpawn.SPAWN_AT_OWNER:
+                    instances = (
+                        from instance
+                        in instances
+                        select instance.SetGlobalPositionForced(ownerPosition, this)
+                        ).ToList();
                     break;
 
-                case AnimationParameters.ESceneAnimationMode.SPAWN_AT_TARGET:
+                case ESpawn.SPAWN_AT_TARGET:
                     foreach (var targetMob in parameters.MobsTargeted)
                     {
-                        Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
-						item.Value.InstantiateAt<Node3D>(
-                            this,
-                            globalPos
-                            );
+                        Godot.Vector3 targetPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
+                    instances = (
+                        from instance
+                        in instances
+                        select instance.SetGlobalPositionForced(targetPos, this)
+                        ).ToList();
                     }
                     break;
 
-                case AnimationParameters.ESceneAnimationMode.MOVE_TO_TARGET: throw new NotImplementedException();
-
                 default: throw new Exception();
             }
-        }
-        action.AnimationRun(parameters);
-    }
 
-    protected void EndAnimationQueue()
+            foreach (var motion in motionModes)
+            {
+                switch (motion)
+                {
+                    case EMotion.STILL:
+                        break;
+
+                    case EMotion.MOVE_TO_TARGET:
+                        int index = 0;
+                        for (int i = 0; i < instances.Count; i++)
+                        {
+                            Node3D instance = instances[i];
+                            Mob targetMob = parameters.MobsTargeted[i];
+                            Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
+                            instance.CreateTween()
+                                .TweenProperty(
+                                    instance,
+                                    "position",
+                                    globalPos,
+                                    spawn.Duration);
+                        }
+                        break;
+
+                    default: throw new Exception();
+                }
+
+            }
+        }
+	}
+
+	protected void EndAnimationQueue()
     {
         CurrentIndex = 0;
         CurrentAnimationTime = 0;
