@@ -15,7 +15,8 @@ public partial class AnimatedSceneParameters : Resource
 		MOVE_TO_TARGET,
 		RISE_AND_FALL,
         SPIN,
-    }
+		FACE_TRAJECTORY,
+	}
 	public enum ESpawn
 	{
 		SPAWN_AT_OWNER,

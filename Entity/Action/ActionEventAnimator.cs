@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Animation;
 using ChessLike.World.Encounter;
 using Godot;
 using static ChessLike.Entity.Action.AnimatedSceneParameters;
@@ -73,10 +74,9 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
         {
             float duration = sceneSpawn.Duration;
             PackedScene scene = sceneSpawn.Scene;
-            Dictionary<Node3D, Tween> tweenDict = new();
             var motionModes = sceneSpawn.MotionMode;
             var spawnMode = sceneSpawn.SpawnMode;
-            List<(Node3D, Mob, Tween)> instanceTuples = new();
+            List<(Node3D, Mob, AnimationComponentController)> instanceTuples = new();
 
             //Create instances and tweens
             foreach (var count in Enumerable.Range(0, sceneSpawn.SpawnCount))
@@ -85,7 +85,7 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                 {
                     Node3D instance = scene.Instantiate<Node3D>();
                     Tween tween = instance.CreateTween().SetParallel(true);
-                    instanceTuples.Add((instance, targeted, tween));
+                    instanceTuples.Add((instance, targeted, new AnimationComponentController()));
                 }
             }
 
@@ -128,12 +128,9 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                             Node3D instance = tuple.Item1;
                             Mob targetMob = tuple.Item2;
                             Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
-                            tuple.Item3
-                                .TweenProperty(
-                                    instance,
-                                    "position",
-                                    globalPos,
-                                    duration);
+                            tuple.Item3.Components.Add(
+                                new AnimCompAdvance() { TargetGlobal = globalPos, Duration = duration }
+                                );
                         }
                         break;
 
@@ -143,12 +140,9 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                             Node3D instance = tuple.Item1;
                             Mob targetMob = tuple.Item2;
                             Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
-                            tuple.Item3
-                                .TweenProperty(
-                                    instance,
-                                    "position:y",
-                                    instance.Position.Y + 1,
-                                    duration);
+                            tuple.Item3.Components.Add(
+                                new AnimCompBobbing() { Duration = duration }
+                                );
                         }
                         break;
 
@@ -156,27 +150,36 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                         foreach (var tuple in instanceTuples)
                         {
                             Node3D instance = tuple.Item1;
-                            tuple.Item3
-                                .TweenProperty(
-                                    instance,
-                                    "rotation:y",
-                                    instance.Rotation.Y + (Mathf.Tau * duration),
-                                    duration);
+                            tuple.Item3.Components.Add(new AnimCompSpin());
+                        }
+                        break;
+                    
+                    case EMotion.FACE_TRAJECTORY:
+                        foreach (var tuple in instanceTuples)
+                        {
+                            Node3D instance = tuple.Item1;
+                            tuple.Item3.Components.Add(new AnimCompFaceTravelDirection());
                         }
                         break;
 
                     default: throw new Exception();
                 }
 
-                //Free after it ends.
-                if (sceneSpawn.FreeAfterDuration)
+                //Process the ready tuples
+                foreach (var tuple in instanceTuples)
                 {
-                    foreach (var tuple in instanceTuples)
+                    //Set if it should auto free on finish (probably yes)
+                    tuple.Item3.AutoFreeOnFinish = sceneSpawn.FreeAfterDuration;
+
+                    //Add all nodes.
+                    AddChild(tuple.Item1);
+                    foreach (var animComp in tuple.Item3.Components)
                     {
-                        AddChild(tuple.Item1);
-                        GetTree().CreateTimer(duration).Timeout += tuple.Item1.QueueFree;
+                        tuple.Item1.AddChild(animComp);
                     }
+                    GetTree().CreateTimer(duration).Timeout += tuple.Item1.QueueFree;
                 }
+
             }
         }
 	}

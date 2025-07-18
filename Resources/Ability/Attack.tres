@@ -9,7 +9,7 @@
 [sub_resource type="Resource" id="Resource_ey4o7"]
 script = ExtResource("1_q24av")
 MaxDuration = 2.0
-scenesToSpawn = Dictionary[int, PackedScene]({})
+sceneSpawns = Array[Object]([])
 animationFlags = Array[int]([])
 
 [sub_resource type="Resource" id="Resource_rqgxg"]
