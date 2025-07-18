@@ -1,19 +1,28 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=12 format=3 uid="uid://fvux70sanp8w"]
+[gd_resource type="Resource" script_class="Ability" load_steps=14 format=3 uid="uid://fvux70sanp8w"]
 
-[ext_resource type="PackedScene" uid="uid://coowne23kcbpa" path="res://Resources/Particle/Explosion.tscn" id="1_pnvxo"]
-[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/AnimationParameters.cs" id="1_w05pa"]
+[ext_resource type="PackedScene" uid="uid://oni4d4rrl6r4" path="res://assets/Model/prop/rock.glb" id="1_ma7xx"]
+[ext_resource type="Script" uid="uid://djner218mvn0" path="res://Entity/Action/Parameters/Animation/AnimatedSceneParameters.cs" id="1_pnvxo"]
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/Animation/AnimationParameters.cs" id="1_w05pa"]
 [ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="2_pnvxo"]
 [ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="3_ma7xx"]
 [ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="4_04aif"]
 [ext_resource type="Resource" uid="uid://7tv6tesqywqd" path="res://Resources/Commands/OneDamage.tres" id="5_tgjq0"]
 [ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="6_xh551"]
 
+[sub_resource type="Resource" id="Resource_04aif"]
+script = ExtResource("1_pnvxo")
+scene = ExtResource("1_ma7xx")
+spawnCount = 1
+duration = 1.4
+spawnMode = 0
+motionMode = Array[int]([1])
+freeAfterDuration = true
+metadata/_custom_type_script = "uid://djner218mvn0"
+
 [sub_resource type="Resource" id="Resource_fld6l"]
 script = ExtResource("1_w05pa")
 MaxDuration = 2.0
-scenesToSpawn = Dictionary[int, PackedScene]({
-1: ExtResource("1_pnvxo")
-})
+sceneSpawns = Array[Object]([SubResource("Resource_04aif")])
 animationFlags = Array[int]([])
 
 [sub_resource type="Resource" id="Resource_bybqu"]

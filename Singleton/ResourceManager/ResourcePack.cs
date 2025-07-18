@@ -78,7 +78,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         return contentsCollection.ContainsKey(identifier);
     }
 
-    public TRes ResourceGet(string identifier, bool persistent = false)
+    public TRes ResourceGet(string identifier, bool persistent = false, bool contentsFallback = true)
     {
         TRes? output;
 
@@ -86,6 +86,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
             ? ContentsPersistent : Contents;
         contentsCollection.TryGetValue(identifier, out output);
 
+        if (output is null && contentsFallback) Contents.TryGetValue(identifier, out output);
         //If it does not exist, throw
         if (output is null) throw new Exception($"Resource {identifier} not found.");
 

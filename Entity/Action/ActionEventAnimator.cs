@@ -68,13 +68,15 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
 		ActionEvent action = parameters.ActionRef;
 		Mob owner = parameters.OwnerRef;
 		Godot.Vector3 ownerPosition = CurrentGridNode.MapToGlobal(owner.GetPosition());
-    
-		foreach (var spawn in animationParams.SceneSpawns)
+
+        foreach (AnimatedSceneParameters spawn in animationParams.SceneSpawns)
         {
+            float duration = spawn.Duration;
             PackedScene scene = spawn.Scene;
             List<Node3D> instances = new();
             var motionModes = spawn.MotionMode;
             var spawnMode = spawn.SpawnMode;
+
             foreach (var item in parameters.MobsTargeted)
             {
                 instances.Add(scene.Instantiate<Node3D>());
@@ -93,11 +95,11 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                     foreach (var targetMob in parameters.MobsTargeted)
                     {
                         Godot.Vector3 targetPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
-                    instances = (
-                        from instance
-                        in instances
-                        select instance.SetGlobalPositionForced(targetPos, this)
-                        ).ToList();
+                        instances = (
+                            from instance
+                            in instances
+                            select instance.SetGlobalPositionForced(targetPos, this)
+                            ).ToList();
                     }
                     break;
 
@@ -112,7 +114,6 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                         break;
 
                     case EMotion.MOVE_TO_TARGET:
-                        int index = 0;
                         for (int i = 0; i < instances.Count; i++)
                         {
                             Node3D instance = instances[i];
@@ -123,13 +124,21 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                                     instance,
                                     "position",
                                     globalPos,
-                                    spawn.Duration);
+                                    duration);
                         }
                         break;
 
                     default: throw new Exception();
                 }
 
+                if (spawn.FreeAfterDuration)
+                {
+                    foreach (var node in instances)
+                    {
+                        AddChild(node);
+                        GetTree().CreateTimer(duration).Timeout += node.QueueFree;
+                    }
+                }
             }
         }
 	}

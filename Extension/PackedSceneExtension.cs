@@ -21,7 +21,8 @@ public static class PackedSceneExtension
         throw new Exception("This is not a model");
     }
 
-    public static TNode InstantiateAt<TNode>(this PackedScene @this, Node parent, Godot.Vector3 globalPos) where TNode : Node3D
+    public static TNode InstantiateAt<TNode>(this PackedScene @this, Node parent, Godot.Vector3 globalPos)
+        where TNode : Node3D
     {
         TNode node = @this.Instantiate<TNode>();
         if (parent is Node3D node3d)

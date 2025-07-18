@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AbilityMove" load_steps=10 format=3 uid="uid://uqy62um3owdf"]
 
-[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/AnimationParameters.cs" id="1_4ec03"]
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/Animation/AnimationParameters.cs" id="1_4ec03"]
 [ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="2_5kv0w"]
 [ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="3_ge7gt"]
 [ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="4_pm15s"]
@@ -9,7 +9,7 @@
 [sub_resource type="Resource" id="Resource_8ho3f"]
 script = ExtResource("1_4ec03")
 MaxDuration = 2.0
-scenesToSpawn = Dictionary[int, PackedScene]({})
+sceneSpawns = Array[Object]([])
 animationFlags = Array[int]([])
 
 [sub_resource type="Resource" id="Resource_jkrd7"]
