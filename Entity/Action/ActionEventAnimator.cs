@@ -69,43 +69,52 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
 		Mob owner = parameters.OwnerRef;
 		Godot.Vector3 ownerPosition = CurrentGridNode.MapToGlobal(owner.GetPosition());
 
-        foreach (AnimatedSceneParameters spawn in animationParams.SceneSpawns)
+        foreach (AnimatedSceneParameters sceneSpawn in animationParams.SceneSpawns)
         {
-            float duration = spawn.Duration;
-            PackedScene scene = spawn.Scene;
-            List<Node3D> instances = new();
-            var motionModes = spawn.MotionMode;
-            var spawnMode = spawn.SpawnMode;
+            float duration = sceneSpawn.Duration;
+            PackedScene scene = sceneSpawn.Scene;
+            Dictionary<Node3D, Tween> tweenDict = new();
+            var motionModes = sceneSpawn.MotionMode;
+            var spawnMode = sceneSpawn.SpawnMode;
+            List<(Node3D, Mob, Tween)> instanceTuples = new();
 
-            foreach (var item in parameters.MobsTargeted)
+            //Create instances and tweens
+            foreach (var count in Enumerable.Range(0, sceneSpawn.SpawnCount))
             {
-                instances.Add(scene.Instantiate<Node3D>());
+                foreach (var targeted in parameters.MobsTargeted)
+                {
+                    Node3D instance = scene.Instantiate<Node3D>();
+                    Tween tween = instance.CreateTween().SetParallel(true);
+                    instanceTuples.Add((instance, targeted, tween));
+                }
             }
+
+            //Change spawn position
             switch (spawnMode)
             {
                 case ESpawn.SPAWN_AT_OWNER:
-                    instances = (
-                        from instance
-                        in instances
-                        select instance.SetGlobalPositionForced(ownerPosition, this)
-                        ).ToList();
+                    instanceTuples
+                        .ForEach(
+                            x => x.Item1.SetGlobalPositionForced(ownerPosition, this)
+                            );
+                        
                     break;
 
                 case ESpawn.SPAWN_AT_TARGET:
                     foreach (var targetMob in parameters.MobsTargeted)
                     {
                         Godot.Vector3 targetPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
-                        instances = (
-                            from instance
-                            in instances
-                            select instance.SetGlobalPositionForced(targetPos, this)
-                            ).ToList();
+                        instanceTuples
+                            .ForEach(
+                                x => x.Item1.SetGlobalPositionForced(targetPos, this)
+                                );
                     }
                     break;
 
                 default: throw new Exception();
             }
 
+            //Apply motion
             foreach (var motion in motionModes)
             {
                 switch (motion)
@@ -114,12 +123,12 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                         break;
 
                     case EMotion.MOVE_TO_TARGET:
-                        for (int i = 0; i < instances.Count; i++)
+                        foreach (var tuple in instanceTuples)
                         {
-                            Node3D instance = instances[i];
-                            Mob targetMob = parameters.MobsTargeted[i];
+                            Node3D instance = tuple.Item1;
+                            Mob targetMob = tuple.Item2;
                             Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
-                            instance.CreateTween()
+                            tuple.Item3
                                 .TweenProperty(
                                     instance,
                                     "position",
@@ -128,15 +137,44 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                         }
                         break;
 
+                    case EMotion.RISE_AND_FALL:
+                        foreach (var tuple in instanceTuples)
+                        {
+                            Node3D instance = tuple.Item1;
+                            Mob targetMob = tuple.Item2;
+                            Godot.Vector3 globalPos = CurrentGridNode.MapToGlobal(targetMob.GetPosition());
+                            tuple.Item3
+                                .TweenProperty(
+                                    instance,
+                                    "position:y",
+                                    instance.Position.Y + 1,
+                                    duration);
+                        }
+                        break;
+
+                    case EMotion.SPIN:
+                        foreach (var tuple in instanceTuples)
+                        {
+                            Node3D instance = tuple.Item1;
+                            tuple.Item3
+                                .TweenProperty(
+                                    instance,
+                                    "rotation:y",
+                                    instance.Rotation.Y + (Mathf.Tau * duration),
+                                    duration);
+                        }
+                        break;
+
                     default: throw new Exception();
                 }
 
-                if (spawn.FreeAfterDuration)
+                //Free after it ends.
+                if (sceneSpawn.FreeAfterDuration)
                 {
-                    foreach (var node in instances)
+                    foreach (var tuple in instanceTuples)
                     {
-                        AddChild(node);
-                        GetTree().CreateTimer(duration).Timeout += node.QueueFree;
+                        AddChild(tuple.Item1);
+                        GetTree().CreateTimer(duration).Timeout += tuple.Item1.QueueFree;
                     }
                 }
             }
