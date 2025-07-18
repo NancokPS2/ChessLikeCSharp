@@ -16,7 +16,6 @@ public partial class AnimCompFaceTravelDirection : AnimationComponent
 	{
 		base._Ready();
 		PosPreviousGlobal = GetAnimated().GlobalPosition;
-		Finished = true;
 	}
 
 	protected override void ProcessAnim(float delta)
@@ -25,7 +24,4 @@ public partial class AnimCompFaceTravelDirection : AnimationComponent
 			GetAnimatedPosition() + ((GetAnimatedPosition() - PosPreviousGlobal) * Rigidness)
 			);
 	}
-
-	protected override bool IsPerpetual() => true;
-
 }

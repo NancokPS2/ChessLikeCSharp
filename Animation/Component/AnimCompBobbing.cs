@@ -29,5 +29,4 @@ public partial class AnimCompBobbing : AnimationComponent
 		if (TimePassed > Duration) Finished = true;
 		TimePassed += delta;
 	}
-	protected override bool IsPerpetual() => false;
 }

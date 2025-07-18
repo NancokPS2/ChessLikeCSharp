@@ -35,7 +35,4 @@ public partial class AnimCompAdvance : AnimationComponent
 		if (TimePassed > Duration) Finished = true;
 		TimePassed += delta;
 	}
-
-	protected override bool IsPerpetual() => false;
-
 }

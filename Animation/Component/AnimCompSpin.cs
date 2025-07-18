@@ -16,15 +16,11 @@ public partial class AnimCompSpin : AnimationComponent
 	public override void _Ready()
 	{
 		base._Ready();
-		Finished = true;
 	}
 
 
 	protected override void ProcessAnim(float delta)
 	{
-		base._Process(delta);
-		GetAnimated().Rotate(Axis, Mathf.Tau * Speed);
+		GetAnimated().Rotate(Axis, Mathf.Tau * Speed * delta);
 	}
-
-	protected override bool IsPerpetual() => true;
 }

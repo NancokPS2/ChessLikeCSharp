@@ -78,14 +78,16 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
             var spawnMode = sceneSpawn.SpawnMode;
             List<(Node3D, Mob, AnimationComponentController)> instanceTuples = new();
 
-            //Create instances and tweens
+            //Create instances of the animations
             foreach (var count in Enumerable.Range(0, sceneSpawn.SpawnCount))
             {
                 foreach (var targeted in parameters.MobsTargeted)
                 {
                     Node3D instance = scene.Instantiate<Node3D>();
                     Tween tween = instance.CreateTween().SetParallel(true);
-                    instanceTuples.Add((instance, targeted, new AnimationComponentController()));
+                    instanceTuples.Add(
+                        (instance, targeted, new AnimationComponentController())
+                        );
                 }
             }
 
@@ -168,16 +170,18 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
                 //Process the ready tuples
                 foreach (var tuple in instanceTuples)
                 {
-                    //Set if it should auto free on finish (probably yes)
+                    //Set up the AnimationComponentController
                     tuple.Item3.AutoFreeOnFinish = sceneSpawn.FreeAfterDuration;
+                    tuple.Item3.DurationMax = duration;
+                    tuple.Item3.Finished += tuple.Item1.QueueFree;
 
                     //Add all nodes.
                     AddChild(tuple.Item1);
+                    tuple.Item1.AddChild(tuple.Item3);
                     foreach (var animComp in tuple.Item3.Components)
                     {
                         tuple.Item1.AddChild(animComp);
                     }
-                    GetTree().CreateTimer(duration).Timeout += tuple.Item1.QueueFree;
                 }
 
             }
