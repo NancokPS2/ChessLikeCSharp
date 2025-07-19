@@ -14,13 +14,6 @@ public partial class MobStatSet : StatSetWithValues<EStatName, EValueName>
 {
 
     [Export]
-    private Godot.Collections.Dictionary<EStatName, float> maxDict
-    {
-        set => StatDict = new(value);
-        get => new(StatDict);
-    }
-
-    [Export]
     private Godot.Collections.Dictionary<EStatName, float> statDict
     {
         set => StatDict = new(value);
