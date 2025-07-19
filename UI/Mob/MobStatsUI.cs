@@ -30,7 +30,7 @@ public partial class MobStatsUI : Control, ISceneDependency
 		foreach (var item in mob.Stats.GetMaxStatDictionary().Keys)
 		{
 			float current = mob.Stats.GetValue(item);
-			float max = mob.Stats.GetMax(item);
+			float max = mob.Stats.GetStat(item);
 
 			string text = item.ToString() + ": ";
 			if (current == max){text += max.ToString();}

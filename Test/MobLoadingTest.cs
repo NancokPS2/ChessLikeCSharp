@@ -52,15 +52,15 @@ public partial class MobLoadingTest : Node3D
         TestChange("Stat boosts", true);
         Console.WriteLine(mob.Stats.ToString());
 
-        float preHealth = mob.Stats.GetMax(EStatName.HEALTH);
+        float preHealth = mob.Stats.GetStat(EStatName.HEALTH);
         float healthMult = 1.5f;
 
         MobStatBoost testBoost = new("TEST");
         testBoost.SetMultiplicativeMax(EStatName.HEALTH, healthMult);
         mob.Stats.BoostAdd(testBoost);
-        mob.Stats.GetMax(EStatName.HEALTH);
+        mob.Stats.GetStat(EStatName.HEALTH);
 
-        Debug.Assert(mob.Stats.GetMax(EStatName.HEALTH) == preHealth * healthMult);
+        Debug.Assert(mob.Stats.GetStat(EStatName.HEALTH) == preHealth * healthMult);
 
         Console.WriteLine(mob.Stats.ToString());
         TestChange("Stat boosts", false);
@@ -92,12 +92,12 @@ public partial class MobLoadingTest : Node3D
         float damageAmount = 10;
         MobCommandTakeDamage damage = new(damageAmount);
 
-        float health = mob.Stats.GetValue(EStatName.HEALTH);
+        float health = mob.Stats.GetValue(EValueName.HEALTH);
         Console.WriteLine($"Health before damage: {health}");
 
         mob.CommandProcess(damage);
 
-        float newHealth = mob.Stats.GetValue(EStatName.HEALTH);
+        float newHealth = mob.Stats.GetValue(EValueName.HEALTH);
         Console.WriteLine($"Health after damage: {newHealth}");
 
         Debug.Assert(health - damageAmount == newHealth);

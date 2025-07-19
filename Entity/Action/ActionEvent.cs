@@ -92,7 +92,7 @@ public partial class ActionEvent : Resource
         uint output = TargetParams.Range;
         if (TargetParams.RangeStatBonus is EStatName stat && stat != EStatName.NONE)
         {
-            output += (uint)owner.Stats.GetValue(stat);
+            output += (uint)owner.Stats.GetStat(stat);
         }
         return output;
     }
@@ -198,7 +198,7 @@ public partial class ActionEvent : Resource
             return false;
         }
         //If health is above the max percent, fail.
-        else if (mob.Stats.GetValuePrecent(EStatName.HEALTH) > MobFilterParams.MaximumHealthPercent)
+        else if (mob.Stats.GetValuePrecent(EValueName.HEALTH) > MobFilterParams.MaximumHealthPercent)
         {
             return false;
         }

@@ -10,110 +10,44 @@ namespace ChessLike.Shared;
 public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnum : notnull, Enum
 {
     public readonly TStatEnum[] AllStats;
+    public readonly TStatEnum INVALID_STAT_ENUM;
 
     public const string INVALID_BOOST_SOURCE = "__INVALID__";
-    public delegate void StatChange(TStatEnum name, float amount);
-    public event StatChange? StatValueChanged;
 
-    public Dictionary<TStatEnum, float> MaxDict { get; set; } = new();
-    public Dictionary<TStatEnum, float> CurrentDict { get; set; } = new();
+    public Dictionary<TStatEnum, float> StatDict { get; set; } = new();
     public Dictionary<string, StatBoost<TStatEnum>> Boosts = new();
 
     public StatSet()
     {
-        AllStats = ((TStatEnum[])Enum.GetValues(typeof(TStatEnum))).Where(x => IsValidStat(x)).ToArray();
+        AllStats = (TStatEnum[])(
+            from TStatEnum e
+            in Enum.GetValues(typeof(TStatEnum))
+            where IsValidStat(e)
+            select e
+            );
 
         foreach (TStatEnum stat in AllStats)
         {
-            MaxDict[stat] = new();
-            CurrentDict[stat] = new();
+            StatDict[stat] = new();
         }
     }
 
-    public void Refill()
-    {
-        foreach (var item in AllStats)
-        {
-            SetValue(item, GetMax(item));
-        }
-    }
-
-    protected virtual bool IsValidStat(TStatEnum stat) => true;
-
-    public StatSet(Dictionary<TStatEnum, float> values) : this()
-    {
-        foreach (TStatEnum stat_name in values.Keys)
-        {
-            SetStat(stat_name, values[stat_name]);
-        }
-    }
-
-    #region Modify stats
-    public float ChangeValue(TStatEnum stat, float amount)
-    {
-        float original_value = GetValue(stat);
-        SetValue(stat, GetValue(stat) + amount);
-        float final_value = GetValue(stat);
-        return final_value - original_value;
-    }
-
-
-    public void SetValue(TStatEnum stat, float value)
-    {
-        float original_val;
-        CurrentDict.TryGetValue(stat, out original_val);
-        float max = GetMax(stat);
-        CurrentDict[stat] = MathF.Min(value, max);
-    }
-
-    public void SetValuePercent(TStatEnum stat, float percent)
-    {
-        if (percent > 1.0f || percent < 0.0f)
-        {
-            throw new ArgumentOutOfRangeException("Must be a float from 0 to 1.");
-        }
-        SetValue(stat, GetMax(stat) * percent);
-    }
+    public virtual bool IsValidStat(TStatEnum stat) => true;
 
     public void ChangeMax(TStatEnum stat, float value)
     {
-        SetMax(stat, GetMax(stat) + value);
+        SetStat(stat, GetStat(stat) + value);
     }
 
-    public void SetMax(TStatEnum stat, float value)
+    public void SetStat(TStatEnum stat, float value)
     {
-        MaxDict[stat] = value;
+        StatDict[stat] = value;
     }
 
-    public float GetValue(TStatEnum stat)
-    {
-        var val = CurrentDict[stat];
-        float additive = 0;
-        float multiplicative = 1;
-        /*      foreach (var item in Boosts.Values)
-                {
-                    additive += item.GetAdditiveValue(stat);
-                    multiplicative *= item.GetMultiplicativeValue(stat);
-                } 
-        */
-        Debug.Assert(multiplicative != 0);
-        return Mathf.Snapped(
-            MathF.Min(
-                (val + additive) * multiplicative,
-                GetMax(stat)),
-            0.1f
-            );
-    }
-
-    public float GetValuePrecent(TStatEnum stat)
-    {
-        return GetValue(stat) / GetMax(stat);
-    }
-
-    public float GetMax(TStatEnum stat)
+    public float GetStat(TStatEnum stat)
     {
         float val;
-        MaxDict.TryGetValue(stat, out val);
+        StatDict.TryGetValue(stat, out val);
         float additive = 0;
         float multiplicative = 1;
         foreach (var item in Boosts.Values)
@@ -125,50 +59,10 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
         return Mathf.Snapped((val + additive) * multiplicative, 0.1f);
     }
 
-
-    /// <summary>
-    /// Set max and current, for stats that are not meant to not use the max value.
-    /// </summary>
-    /// <param name="stat"></param>
-    /// <param name="value"></param>
-    public void SetStat(TStatEnum stat, float value)
-    {
-        SetMax(stat, value);
-        SetValue(stat, GetMax(stat));
-        Debug.Assert(GetValue(stat) == GetMax(stat), "The value does not match.");
-    }
-
-    public void MultiplyStat(TStatEnum stat, float multiplier)
-    {
-        float current = GetValue(stat);
-        SetStat(stat, current * multiplier);
-    }
-
-    public void MultiplyStat(TStatEnum stat, double multiplier)
-    {
-        MultiplyStat(stat, (float)multiplier);
-    }
-
-    /// <summary>
-    /// Resets the specified stats to their maximum value. If none are specified, all of them are reset.
-    /// </summary>
-    /// <param name="stats"></param>
-    public void SetToMax(TStatEnum[]? stats = null)
-    {
-        //Set ALL stats if null.
-        stats ??= GetArrayOfNames();
-
-        foreach (TStatEnum stat in stats)
-        {
-            SetValue(stat, GetMax(stat));
-        }
-    }
-    #endregion
-
     #region Boosts
     public string BoostGetListOfStatChanges(TStatEnum name)
     {
-        string output = $"{name} Boost \nBase: {MaxDict[name]}\n";
+        string output = $"{name} Boost \nBase: {StatDict[name]}\n";
 
         foreach (StatBoost<TStatEnum> boost in Boosts.Values)
         {
@@ -255,23 +149,7 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
     }
     public Dictionary<TStatEnum, float> GetMaxStatDictionary()
     {
-        return MaxDict;
-    }
-
-    public static StatSet<TStatEnum> GetAverage(StatSet<TStatEnum> a, StatSet<TStatEnum> b)
-    {
-        StatSet<TStatEnum> output = new StatSet<TStatEnum>();
-
-        foreach (TStatEnum stat in GetArrayOfNames())
-        {
-            float average_max = (a.GetMax(stat) + b.GetMax(stat)) / 2;
-            float average_value = (a.GetValue(stat) + b.GetValue(stat)) / 2;
-
-            output.SetMax(stat, average_max);
-            output.SetValue(stat, average_value);
-        }
-
-        return output;
+        return StatDict;
     }
 
 

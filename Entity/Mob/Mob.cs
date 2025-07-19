@@ -137,7 +137,7 @@ public partial class Mob : Resource
         UpdateJobStatBoosts();
 
         UpdateActions();
-        Stats.SetToMax();
+        Stats.Refill();
     }
 
     protected void UpdateJobStatBoosts()
@@ -165,6 +165,7 @@ public partial class Mob : Resource
         output.SetStat(EStatName.MOVEMENT, 3);
         output.SetStat(EStatName.JUMP, 2);
         output.SetStat(EStatName.DELAY, 100);
+        output.Refill();
         return output;
     }
     #endregion

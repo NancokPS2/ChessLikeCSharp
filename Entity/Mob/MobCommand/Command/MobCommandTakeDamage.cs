@@ -32,7 +32,7 @@ public partial class MobCommandTakeDamage : Command
         base.UseCommand(mob);
         float defense = mob.Stats.GetValue(EStatName.DEFENSE) * DefenseRatioAccounted - DefenseIgnoreFlat;
         float health_loss = Damage - defense;
-        float change = mob.Stats.ChangeValue(EStatName.HEALTH, Math.Min(-health_loss, 0));
+        float change = mob.Stats.ChangeValue(EValueName.HEALTH, Math.Min(-health_loss, 0));
 
         EventBus.MobStatChanged?.Invoke(mob, EStatName.HEALTH, change);
     }
