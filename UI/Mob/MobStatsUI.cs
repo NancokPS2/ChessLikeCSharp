@@ -27,9 +27,9 @@ public partial class MobStatsUI : Control, ISceneDependency
 		if(NodeStatContainer is null) {throw new Exception("Null NodeStatContainer");}
 
 		NodeStatContainer.FreeChildren();
-		foreach (var item in mob.Stats.GetMaxStatDictionary().Keys)
+		foreach (var item in mob.Stats.AllStats)
 		{
-			float current = mob.Stats.GetValue(item);
+			float current = mob.Stats.HasValueAssociatedToStat(item) ? mob.Stats.GetValueByStat(item) : -69;
 			float max = mob.Stats.GetStat(item);
 
 			string text = item.ToString() + ": ";

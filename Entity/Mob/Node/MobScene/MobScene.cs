@@ -175,7 +175,7 @@ public partial class MobScene : Node3D
 
     private float MovementGetSpeed()
     {
-        float agility = Mathf.Clamp(MobUsing.Stats.GetValue(EStatName.AGILITY), 0, 200);
+        float agility = Mathf.Clamp(MobUsing.Stats.GetStat(EStatName.AGILITY), 0, 200);
         return 2f * (agility / 100);
     }
 

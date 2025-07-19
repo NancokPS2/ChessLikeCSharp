@@ -14,7 +14,7 @@ public partial class Mob : ITurn
 
     public float GetDelayBase()
     {
-        float stat_delay = Stats.GetValue(EStatName.DELAY);
+        float stat_delay = Stats.GetStat(EStatName.DELAY);
         return stat_delay;
     }
 }

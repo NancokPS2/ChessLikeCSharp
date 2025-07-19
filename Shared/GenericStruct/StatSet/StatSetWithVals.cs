@@ -13,16 +13,18 @@ where TValueEnum : notnull, Enum
 {
     public readonly TValueEnum INVALID_VALUE_ENUM;
     public readonly TValueEnum[] AllValues;
-    public readonly BiDictionary<TValueEnum, TStatEnum> ValueToStatDict;
+    public readonly BiDictionary<TValueEnum, TStatEnum> ValueToStatDict = new();
 
-    public StatSetWithValues() : base()
+    public StatSetWithValues(TStatEnum invalidStat, TValueEnum invalidValue) : base(invalidStat)
     {
-        AllValues = (TValueEnum[])(
+        INVALID_VALUE_ENUM = invalidValue;
+
+        AllValues = (
             from TValueEnum e
             in Enum.GetValues(typeof(TValueEnum))
             where IsValidValue(e)
             select e
-            );
+            ).ToArray();
 
         foreach (TValueEnum stat in AllValues)
         {
@@ -36,10 +38,16 @@ where TValueEnum : notnull, Enum
         => ValueToStatDict[valKey] = stat;
 
     public TStatEnum GetAssociatedStat(TValueEnum val)
-        => ValueToStatDict.ContainsKey(val) ? ValueToStatDict.Get(val) : INVALID_STAT_ENUM;
+        => HasStatAssociatedToValue(val) ? ValueToStatDict.Get(val) : INVALID_STAT_ENUM;
 
     public TValueEnum GetAssociatedValue(TStatEnum stat)
-        => ValueToStatDict.ContainsValue(stat) ? ValueToStatDict.GetReversed(stat) : INVALID_VALUE_ENUM;
+        => HasValueAssociatedToStat(stat) ? ValueToStatDict.GetReversed(stat) : INVALID_VALUE_ENUM;
+
+    public bool HasStatAssociatedToValue(TValueEnum whichValue)
+        => ValueToStatDict.ContainsKey(whichValue);
+
+    public bool HasValueAssociatedToStat(TStatEnum whichStat)
+        => ValueToStatDict.ContainsValue(whichStat);
 
     #region Modify stats
 
@@ -80,8 +88,9 @@ where TValueEnum : notnull, Enum
             );
     }
 
-    public float GetValue(TStatEnum stat)
+    public float GetValueByStat(TStatEnum stat)
     {
+        if (!HasValueAssociatedToStat(stat)) throw new Exception();
         return GetValue(GetAssociatedValue(stat));
     }
 

@@ -151,6 +151,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "MobUI does not know what to do when a stat does not have a corresponding value",
+                    "id": "e6gkr9py0ivc0y0ekuh6jqp4"
+                },
+                {
                     "text": "Must test the party inventory UI after fixing",
                     "id": "a9o1ag24nu5w7v2842giq6ry"
                 },
@@ -200,5 +204,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752787127755
+    "timestamp": 1752939861213
 }

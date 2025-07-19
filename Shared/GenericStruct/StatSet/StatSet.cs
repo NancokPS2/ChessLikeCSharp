@@ -17,14 +17,16 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
     public Dictionary<TStatEnum, float> StatDict { get; set; } = new();
     public Dictionary<string, StatBoost<TStatEnum>> Boosts = new();
 
-    public StatSet()
+    public StatSet(TStatEnum invalidStat)
     {
-        AllStats = (TStatEnum[])(
+        INVALID_STAT_ENUM = invalidStat;
+
+        AllStats = (
             from TStatEnum e
             in Enum.GetValues(typeof(TStatEnum))
             where IsValidStat(e)
             select e
-            );
+            ).ToArray();
 
         foreach (TStatEnum stat in AllStats)
         {
@@ -146,10 +148,6 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
             index++;
         }
         return output;
-    }
-    public Dictionary<TStatEnum, float> GetMaxStatDictionary()
-    {
-        return StatDict;
     }
 
 

@@ -30,7 +30,7 @@ public partial class MobCommandTakeDamage : Command
     public override void UseCommand(Mob mob)
     {
         base.UseCommand(mob);
-        float defense = mob.Stats.GetValue(EStatName.DEFENSE) * DefenseRatioAccounted - DefenseIgnoreFlat;
+        float defense = mob.Stats.GetStat(EStatName.DEFENSE) * DefenseRatioAccounted - DefenseIgnoreFlat;
         float health_loss = Damage - defense;
         float change = mob.Stats.ChangeValue(EValueName.HEALTH, Math.Min(-health_loss, 0));
 
