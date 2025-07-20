@@ -41,11 +41,13 @@ public partial class CombatActionUI : Control, ISceneDependency
         if (NodeActionContainer.GetChildren().Count == 0) return;
 
         //If there are buttons but there is no mob, something went wrong.
-        if (MobCurrent is null) throw new Exception();
+        if (MobCurrent is null) throw new Exception("Buttons where generated but the mob that owns them is gone.");
+		
+		//Enable or disable the input to buttons.
         foreach (ActionButton item in NodeActionContainer.GetChildren().Where(x => x is ActionButton))
-        {
-            item.Disabled = !MobCurrent.HasActionUsesLeft();
-        }
+		{
+			item.Disabled = !item.HasMobEnoughResources(MobCurrent);
+		}
     }
 
     public void Update(Mob mob)
@@ -116,18 +118,25 @@ public partial class CombatActionUI : Control, ISceneDependency
     {
         MobSelected = obj;
     }
-    #endregion
+	#endregion
 
-    #region ActionButton subclass
-    private partial class ActionButton : Button
-    {
-        public Ability action;
+	#region ActionButton subclass
+	private partial class ActionButton : Button
+	{
+		public Ability action;
 
-        public ActionButton(Ability action)
-        {
-            this.action = action;
-            Text = action.Name;
-        }
+		public ActionButton(Ability action)
+		{
+			this.action = action;
+			Text = action.Name;
+		}
+
+		public bool HasMobEnoughResources(Mob mob)
+		{
+			bool enoughActions = mob.Stats.GetValue(EValueName.ACTION) >= action.CostParams.Action;
+			bool enoughReactions = mob.Stats.GetValue(EValueName.ACTION) >= action.CostParams.Reaction;
+			return enoughActions && enoughReactions;
+		}
     }
     #endregion
 }

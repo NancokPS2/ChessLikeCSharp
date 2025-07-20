@@ -55,18 +55,21 @@ public partial class ActionEvent : Resource
     [Export]
     public MobFilterParameters MobFilterParams = new();
 
+	[Export]
+	public CostParameters CostParams = new();
+
 
     public ActionEvent()
-    {
-        EventBus.ActionQueued += OnActionQueued;
+	{
+		EventBus.ActionQueued += OnActionQueued;
 
-        EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
+		EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
 
-        EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
-        EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
+		EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
+		EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
 
-        EventBus.InputActionSelected += OnInputActionSelected;
-    }
+		EventBus.InputActionSelected += OnInputActionSelected;
+	}
 
     protected override void Dispose(bool disposing)
     {

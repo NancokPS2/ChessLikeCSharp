@@ -1,27 +1,11 @@
-[gd_resource type="Resource" script_class="MobTemplate" load_steps=10 format=3 uid="uid://o0014mf0h0x2"]
+[gd_resource type="Resource" script_class="MobTemplate" load_steps=7 format=3 uid="uid://o0014mf0h0x2"]
 
 [ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_lkups"]
 [ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="2_ckucn"]
 [ext_resource type="Resource" uid="uid://2uoqrajfi1t6" path="res://Resources/Item/Equip_Dagger.tres" id="3_ngb2i"]
-[ext_resource type="Script" uid="uid://d3idorgao3ps6" path="res://Entity/Mob/StatSet/MobStatSet.cs" id="3_y3q54"]
 [ext_resource type="Resource" uid="uid://d10pp0ao2nwa1" path="res://Resources/Item/Equip_Ring.tres" id="4_6pk6k"]
-[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="4_ngb2i"]
 [ext_resource type="Script" uid="uid://cdqoayy2u0tao" path="res://Entity/Mob/Template/MobTemplate.cs" id="5_6pk6k"]
 [ext_resource type="Resource" uid="uid://7lijrftbpnjo" path="res://Resources/Item/Equip_Vest.tres" id="5_m5jrd"]
-
-[sub_resource type="Resource" id="Resource_rohlr"]
-script = ExtResource("3_y3q54")
-maxDict = Dictionary[int, float]({
-0: 100.0,
-1: 30.0,
-2: 3.0,
-3: 100.0,
-4: 100.0,
-5: 100.0,
-6: 100.0,
-7: 2.0,
-8: 0.0
-})
 
 [resource]
 script = ExtResource("5_6pk6k")
@@ -29,7 +13,6 @@ Type = 3
 Names = Array[String](["Roscoe", "Plinko", "Vatido"])
 Abilities = Array[ExtResource("1_lkups")]([])
 Equipment = Array[ExtResource("2_ckucn")]([ExtResource("3_ngb2i"), ExtResource("4_6pk6k"), ExtResource("5_m5jrd")])
-MobStatsBase = SubResource("Resource_rohlr")
-StatBoosts = Array[ExtResource("4_ngb2i")]([])
+StatBoosts = []
 Races = Array[int]([0])
 metadata/_custom_type_script = "uid://cdqoayy2u0tao"

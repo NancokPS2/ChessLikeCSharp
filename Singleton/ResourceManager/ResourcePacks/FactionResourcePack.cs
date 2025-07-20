@@ -14,8 +14,8 @@ public class FactionResourcePack : ResourcePack<Faction>
 
     public Faction ResourceGet(EPackIDFaction enu)
     {
-        string? output = Enum.GetName<EPackIDFaction>(enu);
-        return ResourceGet(output ?? throw new Exception("Could not get name from enum."), true);
+        string output = Enum.GetName<EPackIDFaction>(enu) ?? throw new Exception("Could not get name from enum.");
+        return ResourceGet(output, true);
     }
 
     public Faction GetPooledByEnum(EFaction faction)

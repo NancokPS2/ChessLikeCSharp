@@ -49,11 +49,11 @@ where TValueEnum : notnull, Enum
     public bool HasValueAssociatedToStat(TStatEnum whichStat)
         => ValueToStatDict.ContainsValue(whichStat);
 
-    #region Modify stats
+	#region Modify stats
 
-    public void Refill()
+	public void RefillValues(TValueEnum[]? values = null)
     {
-        foreach (var item in AllValues)
+        foreach (var item in values ?? AllValues)
         {
             SetValue(item, GetMax(item));
         }
@@ -112,8 +112,15 @@ where TValueEnum : notnull, Enum
 
     public float GetMax(TValueEnum valKey)
     {
-        var associatedStat = GetAssociatedStat(valKey);
-        return associatedStat is not null ? GetStat(associatedStat) : float.MaxValue;
+        TStatEnum associatedStat = GetAssociatedStat(valKey);
+		if (Convert.ToInt64(associatedStat) != Convert.ToInt64(INVALID_STAT_ENUM))
+		{
+			return GetStat(associatedStat);
+		}
+		else
+		{
+			return float.MaxValue;
+		}
     }
 
     public virtual bool IsValidValue(TValueEnum val)

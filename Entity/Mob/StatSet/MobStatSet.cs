@@ -27,10 +27,12 @@ public partial class MobStatSet : StatSetWithValues<EStatName, EValueName>
         get => new(ValueDict);
     }
 
-    public MobStatSet() : base(EStatName.NONE, EValueName.NONE)
-    {
-        SetAssociatedStat(EValueName.HEALTH, EStatName.HEALTH);
-        SetAssociatedStat(EValueName.ENERGY, EStatName.ENERGY);
+	public MobStatSet() : base(EStatName.NONE, EValueName.NONE)
+	{
+		SetAssociatedStat(EValueName.HEALTH, EStatName.HEALTH);
+		SetAssociatedStat(EValueName.ENERGY, EStatName.ENERGY);
+		SetAssociatedStat(EValueName.ACTION, EStatName.ACTION);
+		SetAssociatedStat(EValueName.REACTION, EStatName.REACTION);
     }
 
     public override bool IsValidStat(EStatName stat)

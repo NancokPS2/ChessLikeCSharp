@@ -137,7 +137,7 @@ public partial class Mob : Resource
         UpdateJobStatBoosts();
 
         UpdateActions();
-        Stats.Refill();
+        Stats.RefillValues();
     }
 
     protected void UpdateJobStatBoosts()
@@ -165,7 +165,9 @@ public partial class Mob : Resource
         output.SetStat(EStatName.MOVEMENT, 3);
         output.SetStat(EStatName.JUMP, 2);
         output.SetStat(EStatName.DELAY, 100);
-        output.Refill();
+		output.SetStat(EStatName.ACTION, 1);
+		output.SetStat(EStatName.REACTION, float.MaxValue);
+        output.RefillValues();
         return output;
     }
     #endregion
@@ -269,25 +271,14 @@ public partial class Mob : Resource
     #endregion
 
     #region Per Turn Values
-    protected int TurnActionsUsed;
-    protected int TurnReactionsUsed;
     protected bool TurnActive;
-    
-    protected int GetActionsUsed() => TurnActionsUsed;
-    protected int GetReactionsUsed() => TurnReactionsUsed;
 
-    public bool HasActionUsesLeft() => GetActionsUsed() < 1;
-    public bool HasReactionUsesLeft() => GetReactionsUsed() < int.MaxValue;
+    public bool HasActionUsesLeft() => Stats.GetValue(EValueName.ACTION) < 1;
+    public bool HasReactionUsesLeft() => Stats.GetValue(EValueName.REACTION) < 1;
+	#endregion
 
-    protected void TurnResourceReset()
-    {
-        TurnActionsUsed = 0;
-        TurnReactionsUsed = 0;
-    }
-    #endregion
-
-    #region Misc
-    public override string ToString()
+	#region Misc
+	public override string ToString()
     {
         string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";
 

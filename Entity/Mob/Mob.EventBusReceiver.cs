@@ -23,7 +23,7 @@ public partial class Mob : IEventBusMember
     {
         if (mob != this) return;
         TurnActive = true;
-        TurnResourceReset();
+		Stats.RefillValues([EValueName.ACTION, EValueName.REACTION]);
     }
 
     private void OnMobTurnEnded(Mob mob)
@@ -36,10 +36,9 @@ public partial class Mob : IEventBusMember
     {
         if (parameters.OwnerRef != this) return;
         if (TurnActive)
-            TurnActionsUsed++;
+            Stats.ChangeValue(EValueName.ACTION, -parameters.ActionRef.CostParams.Action);
         else
-            TurnReactionsUsed++;
-        
+            Stats.ChangeValue(EValueName.REACTION, -parameters.ActionRef.CostParams.Reaction);
 	}
 
 	private void OnInventoryChanged(MobEquipmentInventory obj)

@@ -34,7 +34,7 @@ public partial class MobTemplate : Resource
     protected Array<Item> Equipment = new();
 
     [Export]
-    protected MobStatSet? MobStatsBase = Mob.GetDefaultStats();
+    protected MobStatSet? MobStatsBase = null;
 
     [Export]
     protected Array<MobStatBoost> StatBoosts = new();
@@ -73,9 +73,10 @@ public partial class MobTemplate : Resource
             equipment.Remove(item);
         }
 
-        //Stats
+		//Stats
+		GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
         mob.Stats = MobStatsBase ?? mob.Stats;
-        mob.Stats.Refill();
+        mob.Stats.RefillValues();
 
         //StatBoosts
         string boostSource = Type.ToString();

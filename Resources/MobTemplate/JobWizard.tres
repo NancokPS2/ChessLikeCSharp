@@ -1,24 +1,9 @@
-[gd_resource type="Resource" script_class="MobTemplate" load_steps=8 format=3 uid="uid://2whr8ii52bei"]
+[gd_resource type="Resource" script_class="MobTemplate" load_steps=6 format=3 uid="uid://2whr8ii52bei"]
 
 [ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_b2wuk"]
 [ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="1_optjk"]
-[ext_resource type="Script" uid="uid://d3idorgao3ps6" path="res://Entity/Mob/StatSet/MobStatSet.cs" id="2_vsera"]
 [ext_resource type="Script" uid="uid://cdqoayy2u0tao" path="res://Entity/Mob/Template/MobTemplate.cs" id="3_b2wuk"]
 [ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="3_vsera"]
-
-[sub_resource type="Resource" id="Resource_b2wuk"]
-script = ExtResource("2_vsera")
-maxDict = Dictionary[int, float]({
-0: 100.0,
-1: 30.0,
-2: 3.0,
-3: 100.0,
-4: 100.0,
-5: 100.0,
-6: 100.0,
-7: 2.0,
-8: 0.0
-})
 
 [sub_resource type="Resource" id="Resource_k82kr"]
 script = ExtResource("3_vsera")
@@ -28,6 +13,7 @@ maxMultiplicativeBonus = Dictionary[int, float]({
 1: 1.5,
 6: 1.5
 })
+Source = ""
 metadata/_custom_type_script = "uid://r4d46yixqo3f"
 
 [resource]
@@ -36,7 +22,6 @@ Type = 0
 Names = Array[String]([])
 Abilities = Array[ExtResource("1_b2wuk")]([])
 Equipment = Array[ExtResource("1_optjk")]([])
-MobStatsBase = SubResource("Resource_b2wuk")
-StatBoosts = [SubResource("Resource_k82kr")]
+StatBoosts = Array[ExtResource("3_vsera")]([SubResource("Resource_k82kr")])
 Races = Array[int]([])
 metadata/_custom_type_script = "uid://cdqoayy2u0tao"
