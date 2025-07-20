@@ -165,7 +165,7 @@ public partial class Mob : Resource
         output.SetStat(EStatName.MOVEMENT, 3);
         output.SetStat(EStatName.JUMP, 2);
         output.SetStat(EStatName.DELAY, 100);
-		
+
 		output.SetStat(EStatName.ACTION, 1);
 		output.SetStat(EStatName.SUB_ACTION, 1);
 		output.SetStat(EStatName.REACTION, float.MaxValue);
@@ -275,9 +275,6 @@ public partial class Mob : Resource
 
     #region Per Turn Values
     protected bool TurnActive;
-
-    public bool HasActionUsesLeft() => Stats.GetValue(EValueName.ACTION) < 1;
-    public bool HasReactionUsesLeft() => Stats.GetValue(EValueName.REACTION) < 1;
 	#endregion
 
 	#region Misc

@@ -23,7 +23,7 @@ public partial class Mob : IEventBusMember
     {
         if (mob != this) return;
         TurnActive = true;
-		Stats.RefillValues([EValueName.ACTION, EValueName.REACTION]);
+		Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
     }
 
     private void OnMobTurnEnded(Mob mob)

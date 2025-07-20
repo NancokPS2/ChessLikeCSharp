@@ -32,7 +32,9 @@ public partial class MobStatSet : StatSetWithValues<EStatName, EValueName>
 		SetAssociatedStat(EValueName.HEALTH, EStatName.HEALTH);
 		SetAssociatedStat(EValueName.ENERGY, EStatName.ENERGY);
 		SetAssociatedStat(EValueName.ACTION, EStatName.ACTION);
+		SetAssociatedStat(EValueName.SUB_ACTION, EStatName.SUB_ACTION);
 		SetAssociatedStat(EValueName.REACTION, EStatName.REACTION);
+		SetAssociatedStat(EValueName.MOVE, EStatName.MOVE);
     }
 
     public override bool IsValidStat(EStatName stat)
