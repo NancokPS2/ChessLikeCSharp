@@ -15,4 +15,6 @@ public partial class CostParameters : Resource
 	public int SubAction;
 	[Export]
 	public int Reaction;
+	[Export]
+	public int Move;
 }

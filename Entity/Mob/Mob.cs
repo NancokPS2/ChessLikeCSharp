@@ -165,8 +165,11 @@ public partial class Mob : Resource
         output.SetStat(EStatName.MOVEMENT, 3);
         output.SetStat(EStatName.JUMP, 2);
         output.SetStat(EStatName.DELAY, 100);
+		
 		output.SetStat(EStatName.ACTION, 1);
+		output.SetStat(EStatName.SUB_ACTION, 1);
 		output.SetStat(EStatName.REACTION, float.MaxValue);
+		output.SetStat(EStatName.MOVE, 1);
         output.RefillValues();
         return output;
     }

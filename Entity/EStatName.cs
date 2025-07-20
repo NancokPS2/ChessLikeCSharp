@@ -13,5 +13,8 @@ public enum EStatName
 	JUMP,       //7
 	DEFENSE,    //8
 	ACTION, 
+	SUB_ACTION,
 	REACTION,
+	MOVE,
+
 }

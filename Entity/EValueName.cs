@@ -6,7 +6,8 @@ public enum EValueName
 	HEALTH,     //0
 	ENERGY,     //1...
 	ACTION,
+	SUB_ACTION,
 	REACTION,
+	MOVE,
 
-    
 }

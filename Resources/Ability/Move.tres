@@ -27,9 +27,10 @@ ActivatedOnlyIfTurnIsMine = true
 
 [sub_resource type="Resource" id="Resource_5kv0w"]
 script = ExtResource("3_4ec03")
-Action = 1
+Action = 0
 SubAction = 0
 Reaction = 0
+Move = 1
 
 [sub_resource type="Resource" id="Resource_86hu2"]
 script = ExtResource("3_ge7gt")

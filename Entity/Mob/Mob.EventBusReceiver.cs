@@ -39,6 +39,10 @@ public partial class Mob : IEventBusMember
             Stats.ChangeValue(EValueName.ACTION, -parameters.ActionRef.CostParams.Action);
         else
             Stats.ChangeValue(EValueName.REACTION, -parameters.ActionRef.CostParams.Reaction);
+
+		Stats.ChangeValue(EValueName.SUB_ACTION, -parameters.ActionRef.CostParams.Move);
+
+		Stats.ChangeValue(EValueName.MOVE, -parameters.ActionRef.CostParams.Move);
 	}
 
 	private void OnInventoryChanged(MobEquipmentInventory obj)

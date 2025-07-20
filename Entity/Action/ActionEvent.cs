@@ -291,6 +291,15 @@ public partial class ActionEvent : Resource
         EventBus.ActionUsed?.Invoke(usageParams);
     }
 
+	public static bool HasMobEnoughResources(ActionEvent action, Mob mob)
+	{
+		bool enoughActions = mob.Stats.GetValue(EValueName.ACTION) >= action.CostParams.Action;
+		bool enoughSubAction = mob.Stats.GetValue(EValueName.MOVE) >= action.CostParams.SubAction;
+		bool enoughReactions = mob.Stats.GetValue(EValueName.ACTION) >= action.CostParams.Reaction;
+		bool enoughMoves = mob.Stats.GetValue(EValueName.MOVE) >= action.CostParams.Move;
+		return enoughActions && enoughSubAction && enoughReactions && enoughMoves;
+	}
+
 	public bool CanUse() => true;
 
 	public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;

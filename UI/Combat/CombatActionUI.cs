@@ -46,7 +46,7 @@ public partial class CombatActionUI : Control, ISceneDependency
 		//Enable or disable the input to buttons.
         foreach (ActionButton item in NodeActionContainer.GetChildren().Where(x => x is ActionButton))
 		{
-			item.Disabled = !item.HasMobEnoughResources(MobCurrent);
+			item.Disabled = !ActionEvent.HasMobEnoughResources(item.action, MobCurrent);
 		}
     }
 
@@ -131,12 +131,6 @@ public partial class CombatActionUI : Control, ISceneDependency
 			Text = action.Name;
 		}
 
-		public bool HasMobEnoughResources(Mob mob)
-		{
-			bool enoughActions = mob.Stats.GetValue(EValueName.ACTION) >= action.CostParams.Action;
-			bool enoughReactions = mob.Stats.GetValue(EValueName.ACTION) >= action.CostParams.Reaction;
-			return enoughActions && enoughReactions;
-		}
     }
     #endregion
 }
