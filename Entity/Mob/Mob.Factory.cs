@@ -23,8 +23,7 @@ public partial class Mob
         {
             EMobPrototype.HUMAN => output
                 .ChainName("Human")
-                .ChainRace(ERace.HUMAN)
-                .ChainJob(new() { Job.CreatePrototype(EJob.DEFAULT) }),
+                .ChainRace(ERace.HUMAN),
             _ => new Mob()
         };
         return output;
@@ -37,21 +36,15 @@ public partial class Mob
         return this;
     }
 
-    public Mob ChainFaction(EFaction faction)
-    {
-        Faction = faction;
-        return this;
-    }
-
-    public Mob ChainJob(List<Job> jobs)
-    {
-        SetJobs(jobs);
-        return this;
-    }
-
     public Mob ChainRace(ERace race)
     {
         Race = race;
+        return this;
+    }
+
+    public Mob ChainFaction(EFaction faction)
+    {
+        Faction = faction;
         return this;
     }
 }

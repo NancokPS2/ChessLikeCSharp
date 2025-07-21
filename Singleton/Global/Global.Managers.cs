@@ -10,7 +10,6 @@ using Godot;
 
 public partial class Global
 {
-    public static JobResourcePack ManagerJob;
     public static ResourcePack<Ability> ManagerAbility;
     public static MobResourcePack ManagerMob;
     public static FactionResourcePack ManagerFaction;
@@ -24,7 +23,6 @@ public partial class Global
 
     public static void SetupManagers()
     {
-        ManagerJob = new();
         ManagerAbility = new();
         ManagerMob = new();
         ManagerFaction = new();
@@ -36,7 +34,7 @@ public partial class Global
         ManagerEncounter = new();
         ManagerMobTemplate = new();
 
-        PackPrepare(ManagerJob);
+
         PackPrepare(ManagerAbility);
         PackPrepare(ManagerMob);
         PackPrepare(ManagerFaction);
@@ -51,7 +49,6 @@ public partial class Global
 
     public static void PackSave()
     {
-        ManagerJob.SavePersistent();
         ManagerAbility.SavePersistent();
         ManagerMob.SavePersistent();
         ManagerFaction.SavePersistent();

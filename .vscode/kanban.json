@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "MobStatSet should allow for multiple option values (enum containers) and collections of them",
+                    "id": "h3523mhw4h5oe2fh3y0bfhwj"
+                },
+                {
+                    "text": "Make templates add their names to the Mob",
+                    "id": "fzzwa7hb69askmj7ut04rask"
+                },
+                {
                     "text": "Dialogue bubble",
                     "id": "c5qfasdzb0bb0s2ngj6c8j9m"
                 },
@@ -204,5 +212,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1752939861213
+    "timestamp": 1753106114866
 }

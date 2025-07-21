@@ -15,19 +15,8 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class Mob : Resource
 {
-    private Grid CurrentGrid;
-
     [Export]
     public string DisplayedName = "UNNAMED";
-    [Export]
-    private Godot.Collections.Array<Job> jobs
-    {
-        set => Jobs = new(value);
-        get => new(Jobs);
-    }
-
-    [Obsolete("Consider replacing these with templates.")]
-    private List<Job> Jobs = new() { Job.CreatePrototype(EJob.DEFAULT) };
 
     [Export]
     private Godot.Collections.Array<ActionEvent> actions
@@ -36,6 +25,29 @@ public partial class Mob : Resource
         get => new(Actions);
     }
     private List<ActionEvent> Actions = new();
+
+    public Dictionary<MobTemplate.ETemplateType, List<MobTemplate>> Templates = new();
+    [Export]
+    private Godot.Collections.Dictionary<MobTemplate.ETemplateType, Godot.Collections.Array<MobTemplate>> templates
+    {
+        set
+        {
+            foreach (var item in value)
+            {
+                Templates[item.Key] = item.Value.ToList();
+            }
+        }
+
+        get
+        {
+            Godot.Collections.Dictionary<MobTemplate.ETemplateType, Godot.Collections.Array<MobTemplate>> output = new();
+            foreach (var item in Templates)
+            {
+                Templates[item.Key] = item.Value;
+            }
+            return output;
+        }
+    }
 
     [Export]
     public ERace Race = ERace.HUMAN;
@@ -61,7 +73,7 @@ public partial class Mob : Resource
 
     public bool IsInCombat() => mobState == EMobState.COMBAT;
 
-    public MobStatSet Stats = GetDefaultStats();
+    public MobStatSet Stats = MobStatSet.GetDefault();
 
     private Vector3i Position;
 
@@ -71,7 +83,7 @@ public partial class Mob : Resource
         Global.ManagerMob.PooledAdd(this);
 
         //Default stats
-        Stats = GetDefaultStats();
+        Stats = MobStatSet.GetDefault();
 
         SetupEventBus();
     }
@@ -106,75 +118,6 @@ public partial class Mob : Resource
 
     #endregion
 
-    #region Jobs
-    public List<Job> GetJobs()
-    {
-        return Jobs;
-    }
-
-    public void SetJobs(List<Job> jobs)
-    {
-        Jobs = jobs;
-        UpdateJobs();
-    }
-
-
-    private void ClearJobs()
-    {
-        SetJobs(new());
-    }
-
-    private void UpdateJobs()
-    {
-
-        //TODO: Jobs should not be able to be null in the first place.
-        foreach (Job job in Jobs)//.Where(x => x is not null))
-        {
-            //TODO: Make the selected mode be deterministic instead of selecting the last job of the list.
-            SetMovementMode(job.MovementMode);
-        }
-        //Reset job modifiers
-        UpdateJobStatBoosts();
-
-        UpdateActions();
-        Stats.RefillValues();
-    }
-
-    protected void UpdateJobStatBoosts()
-    {
-        MobStatBoost outputBoost = new(Job.BOOST_SOURCE);
-
-        //TODO: Jobs should not be able to be null in the first place.
-        foreach (Job job in Jobs)//.Where(x => x is not null))
-        {
-            //Average the stats from the job's.
-            outputBoost = outputBoost + job.GetStatBoost();
-        }
-
-        Stats.BoostAdd(outputBoost, true);
-    }
-
-    public static MobStatSet GetDefaultStats()
-    {
-        MobStatSet output = new();
-        output.SetStat(EStatName.HEALTH, 100);
-        output.SetStat(EStatName.ENERGY, 30);
-        output.SetStat(EStatName.AGILITY, 100);
-        output.SetStat(EStatName.STRENGTH, 100);
-        output.SetStat(EStatName.INTELLIGENCE, 100);
-        output.SetStat(EStatName.MOVEMENT, 3);
-        output.SetStat(EStatName.JUMP, 2);
-        output.SetStat(EStatName.DELAY, 100);
-
-		output.SetStat(EStatName.ACTION, 1);
-		output.SetStat(EStatName.SUB_ACTION, 1);
-		output.SetStat(EStatName.REACTION, float.MaxValue);
-		output.SetStat(EStatName.MOVE, 1);
-        output.RefillValues();
-        return output;
-    }
-    #endregion
-
     #region Movement
     public void Move(Vector3i to)
     {
@@ -201,21 +144,6 @@ public partial class Mob : Resource
 
     #region Actions
     private Ability _movement = new();
-
-    private void UpdateActions()
-    {
-        ClearAction();
-
-        foreach (IActionProvider job in Jobs)
-        {
-            AddAction(job.GetActionEvents());
-        }
-
-        foreach (IActionProvider item in EquipmentInventory.GetItems())
-        {
-            AddAction(item.GetActionEvents());
-        }
-    }
 
     public void SetMovementMode(EMobMovementMode mode)
     {
@@ -251,11 +179,6 @@ public partial class Mob : Resource
 
     }
 
-    public void ClearAction()
-    {
-        RemoveAction(Actions);
-    }
-
     public List<Ability> GetAbilities()
     {
         List<Ability> output = new();
@@ -282,8 +205,6 @@ public partial class Mob : Resource
     {
         string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";
 
-        output += $"---\nJobs: {Jobs.ToStringList()}";
-
         return output;
     }
 
@@ -294,6 +215,7 @@ public partial class Mob : Resource
         string output = "";
         output += $"---\nAbilities: {GetAbilities().ToStringList()}";
         //output += $"---\nPassives: {GetPassives().ToStringList()}";
+        output += $"---\nTemplates: {Templates.ToStringList()}";
         return output;
     }
     #endregion

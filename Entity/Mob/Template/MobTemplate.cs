@@ -13,7 +13,10 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobTemplate : Resource
 {
-    public enum ETemplateType {JOB, RACE, BASE, EXTRA}
+    public enum ETemplateType { JOB, RACE, BASE, EXTRA }
+
+    [Export]
+    public string TemplateName = "Unnamed Template";
 
     [Export]
     protected ETemplateType Type;
@@ -26,6 +29,9 @@ public partial class MobTemplate : Resource
         set => Names = new(names);
         get => new(Names);
     } */
+
+    [Export]
+    protected EFaction Faction = EFaction.INVALID;
 
     [Export]
     protected Array<Ability> Abilities = new();
@@ -49,8 +55,13 @@ public partial class MobTemplate : Resource
     /// <returns></returns>
     public Mob ApplyTemplate(Mob mob)
     {
+        mob.Templates[Type].Add(this);
+
         //Name
-        mob.DisplayedName = Names.GetRandom(mob.DisplayedName);
+        mob.DisplayedName = Names.GetRandom() ?? mob.DisplayedName;
+
+        //Faction    
+        Faction = Faction != EFaction.INVALID ? Faction : mob.Faction;
 
         //Abilities
         foreach (var item in Abilities)
@@ -73,8 +84,8 @@ public partial class MobTemplate : Resource
             equipment.Remove(item);
         }
 
-		//Stats
-		GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
+        //Stats
+        GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
         mob.Stats = MobStatsBase ?? mob.Stats;
         mob.Stats.RefillValues();
 
@@ -92,4 +103,10 @@ public partial class MobTemplate : Resource
         mob.Race = Races.GetRandom(mob.Race);
         return mob;
     }
+
+    public override string ToString()
+    {
+        return $"{Type} - {TemplateName}";
+    }
+
 }

@@ -50,6 +50,5 @@ public partial class Mob : IEventBusMember
         if (obj != EquipmentInventory) return;
 
         UpdateEquipmentStatBoosts();
-        UpdateActions();
     }
 }

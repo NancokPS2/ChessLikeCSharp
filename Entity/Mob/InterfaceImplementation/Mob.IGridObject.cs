@@ -25,7 +25,7 @@ public partial class Mob : IGridObject
                     );
                 return distance <= 1;
             
-            default:
+            default: throw new NotImplementedException();
                 distance = from.DistanceManhattanWithToleranceTo(
                         to, 
                         new(0, (int)Stats.GetStat(EStatName.MOVEMENT), 0)

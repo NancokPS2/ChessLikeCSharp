@@ -41,12 +41,6 @@ public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , 
         Entries.Clear();
         NodeResourceTypeMenu?.GetPopup().Clear(true);
 
-        //Jobs
-        List<IDescription> jobs = new();
-        jobs.AddRange(Global.ManagerJob.PooledGetAll());
-        Entries.Add(ID_JOB, jobs);
-        NodeResourceTypeMenu?.GetPopup().AddItem("Jobs", ID_JOB);
-
         //Items
         List<IDescription> items = new();
         items.AddRange(Global.ManagerItem.PooledGetAll());

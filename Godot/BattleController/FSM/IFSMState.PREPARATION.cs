@@ -103,13 +103,6 @@ public class BattleControllerStatePreparation : BattleControllerState
         //Clean existing ghosts.
         BattleController.CompDisplayGrid.MeshRemove(layer);
 
-        //
-        Mesh mob_mesh = mob.GetMeshInstance().Mesh;
-        BattleController.CompDisplayGrid.MeshSet(
-            position, 
-            layer, 
-            mob_mesh
-        );
         BattleController.CompDisplayGrid.MeshGetInstance(position, layer)?.SetMaterialOverlay(_ghost_material);
                 //Set this position as the last valid one.
         if (IsValidSpawnPoint(position) && !IsPointOccupied(position))
