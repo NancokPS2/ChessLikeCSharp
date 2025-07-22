@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +22,18 @@ public static class ICollectionExtension
         }
         return true;
     }
+
+    public static void AddValueCollections<TKey, TValue>(this Dictionary<TKey, TValue> dict)
+    where TKey : notnull
+    where TValue : ICollection, new()
+    {
+        foreach (var item in dict.Keys)
+        {
+            if (dict.TryGetValue(item, out TValue? val) && val is not null) continue;
+            dict[item] = new();
+        }
+    }
+
     public static string ToStringList<TKey, TValue>(this Dictionary<TKey, TValue> @this)
     where TKey : notnull
     where TValue : notnull

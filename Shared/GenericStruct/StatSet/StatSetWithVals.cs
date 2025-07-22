@@ -34,6 +34,7 @@ where TValueEnum : notnull, Enum
 
     public Dictionary<TValueEnum, float> ValueDict { get; set; } = new();
 
+    #region Associated Stats
     protected void SetAssociatedStat(TValueEnum valKey, TStatEnum stat)
         => ValueToStatDict[valKey] = stat;
 
@@ -49,9 +50,11 @@ where TValueEnum : notnull, Enum
     public bool HasValueAssociatedToStat(TStatEnum whichStat)
         => ValueToStatDict.ContainsValue(whichStat);
 
-	#region Modify stats
+    #endregion
 
-	public void RefillValues(TValueEnum[]? values = null)
+	#region Setters
+
+    public void RefillValues(TValueEnum[]? values = null)
     {
         foreach (var item in values ?? AllValues)
         {
@@ -77,6 +80,16 @@ where TValueEnum : notnull, Enum
         ValueDict[valKey] = MathF.Min(value, max);
     }
 
+    public void SetValuePercent(TValueEnum stat, float percent)
+    {
+        if (percent > 1.0f || percent < 0.0f)
+        {
+            throw new ArgumentOutOfRangeException("Must be a float from 0 to 1.");
+        }
+        SetValue(stat, GetMax(stat) * percent);
+    }
+
+    #region Getters
     public float GetValue(TValueEnum valKey)
     {
         var val = ValueDict[valKey];
@@ -99,17 +112,6 @@ where TValueEnum : notnull, Enum
         return GetValue(valKey) / GetMax(valKey);
     }
 
-
-    public void SetValuePercent(TValueEnum stat, float percent)
-    {
-        if (percent > 1.0f || percent < 0.0f)
-        {
-            throw new ArgumentOutOfRangeException("Must be a float from 0 to 1.");
-        }
-        SetValue(stat, GetMax(stat) * percent);
-    }
-
-
     public float GetMax(TValueEnum valKey)
     {
         TStatEnum associatedStat = GetAssociatedStat(valKey);
@@ -122,6 +124,10 @@ where TValueEnum : notnull, Enum
 			return float.MaxValue;
 		}
     }
+
+    public Dictionary<TValueEnum, float> GetValueDictionary()
+        => new(ValueDict);
+    #endregion
 
     public virtual bool IsValidValue(TValueEnum val)
         => true;

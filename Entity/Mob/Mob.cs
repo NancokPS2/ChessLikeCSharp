@@ -71,8 +71,6 @@ public partial class Mob : Resource
 
     }
 
-    public bool IsInCombat() => mobState == EMobState.COMBAT;
-
     public MobStatSet Stats = MobStatSet.GetDefault();
 
     private Vector3i Position;
@@ -85,8 +83,43 @@ public partial class Mob : Resource
         //Default stats
         Stats = MobStatSet.GetDefault();
 
+        //Make sure the Templates array has Lists
+        Templates.AddValueCollections();
+
         SetupEventBus();
     }
+    #region MobTemplate
+    protected void TemplateResetToBase()
+    {
+        //Make sure there is exactly 1 base template.
+        if (Templates[MobTemplate.ETemplateType.BASE].Count() != 1)
+            throw new Exception($"There is more than one or NO {MobTemplate.ETemplateType.BASE} template.\n{Templates.ToStringList()}");
+    }
+
+    protected void TemplateSet(MobTemplate.ETemplateType type, ICollection<MobTemplate> templates)
+    {
+        if (templates.Any(x => x.Type != type))
+            throw new Exception($"Mismatched type of template, was setting {type}.\nFound templates:\n{templates.ToStringList()}");
+
+        Templates[type] = templates.ToList();
+    }
+
+    protected void TemplateClear(MobTemplate.ETemplateType type)
+    {
+        Templates[type].Clear();
+    }
+
+    protected void TemplateUpdate()
+    {
+        TemplateResetToBase();
+        foreach (var item in Templates)
+        {
+            if (item.Key == MobTemplate.ETemplateType.BASE) continue;
+
+            item.Value.ForEach(x => x.ApplyTemplate(this));
+        }
+    }
+    #endregion
 
     #region Inventory
     [Export]
@@ -198,9 +231,12 @@ public partial class Mob : Resource
 
     #region Per Turn Values
     protected bool TurnActive;
-	#endregion
+    #endregion
 
-	#region Misc
+    #region Misc
+    
+    public bool IsInCombat() => mobState == EMobState.COMBAT;
+
 	public override string ToString()
     {
         string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";

@@ -19,7 +19,7 @@ public partial class MobTemplate : Resource
     public string TemplateName = "Unnamed Template";
 
     [Export]
-    protected ETemplateType Type;
+    public ETemplateType Type;
 
     [Export]
     protected Array<string> Names = new();
@@ -87,7 +87,6 @@ public partial class MobTemplate : Resource
         //Stats
         GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
         mob.Stats = MobStatsBase ?? mob.Stats;
-        mob.Stats.RefillValues();
 
         //StatBoosts
         string boostSource = Type.ToString();
