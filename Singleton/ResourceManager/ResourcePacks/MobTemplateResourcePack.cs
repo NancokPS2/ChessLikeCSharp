@@ -7,6 +7,6 @@ using Godot;
 
 public class MobTemplateResourcePack : ResourcePack<MobTemplate>
 {
-	public MobTemplate GetResource(EPackIDMobTemplate templateID)
-		=> ResourceGet(templateID.ToString());
+	public TTemplate GetResource<TTemplate>(EPackIDMobTemplate templateID) where TTemplate : MobTemplate
+		=> (TTemplate)ResourceGet(templateID.ToString());
 }

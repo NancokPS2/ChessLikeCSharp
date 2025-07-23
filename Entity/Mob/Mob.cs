@@ -26,27 +26,13 @@ public partial class Mob : Resource
     }
     private List<ActionEvent> Actions = new();
 
-    public Dictionary<MobTemplate.ETemplateType, List<MobTemplate>> Templates = new();
+    public List<MobTemplate> Templates = new();
     [Export]
-    private Godot.Collections.Dictionary<MobTemplate.ETemplateType, Godot.Collections.Array<MobTemplate>> templates
+    private Godot.Collections.Array<MobTemplate> templates
     {
-        set
-        {
-            foreach (var item in value)
-            {
-                Templates[item.Key] = item.Value.ToList();
-            }
-        }
+        set => Templates = new(value);
 
-        get
-        {
-            Godot.Collections.Dictionary<MobTemplate.ETemplateType, Godot.Collections.Array<MobTemplate>> output = new();
-            foreach (var item in Templates)
-            {
-                Templates[item.Key] = item.Value;
-            }
-            return output;
-        }
+        get => new(Templates);
     }
 
     [Export]
@@ -80,53 +66,58 @@ public partial class Mob : Resource
         //Default stats
         Stats = MobStatSet.GetDefault();
 
-        //Make sure the Templates array has Lists
-        Templates.AddValueCollections();
-
-		//Prepare template dictionary
-		foreach (var item in Enum.GetValues<MobTemplate.ETemplateType>())
-		{
-			if (!Templates.ContainsKey(item))
-				Templates[item] = new();
-		}
-
         SetupEventBus();
     }
 	#region MobTemplate
 	public List<string> GetRaceNames()
-		=> (from template in Templates[MobTemplate.ETemplateType.RACE] select template.TemplateName).ToList();
+		=> (from template in Templates where template is MobTemplateRace select template.TemplateName).ToList();
 
 	public List<string> GetJobNames()
-		=> (from template in Templates[MobTemplate.ETemplateType.JOB] select template.TemplateName).ToList();
+		=> (from template in Templates where template is MobTemplateRace select template.TemplateName).ToList();
 
-	protected void TemplateResetToBase()
-	{
-		//Make sure there is exactly 1 base template.
-		if (Templates[MobTemplate.ETemplateType.BASE].Count() != 1)
-			throw new Exception($"There is more than one or NO {MobTemplate.ETemplateType.BASE} templates.\n{Templates.ToStringList()}");
-	}
+    public void TemplateSet(MobTemplateBase based)
+        => TemplateSet(new List<MobTemplateBase>(){based});
 
-    protected void TemplateSet(MobTemplate.ETemplateType type, ICollection<MobTemplate> templates)
+    public void TemplateSet<TTemplate>(List<TTemplate> template)
+    where TTemplate : MobTemplate
     {
-        if (templates.Any(x => x.Type != type))
-            throw new Exception($"Mismatched type of template, was setting {type}.\nFound templates:\n{templates.ToStringList()}");
-
-        Templates[type] = templates.ToList();
+        TemplateClear<TTemplate>();
+        Templates.AddRange(template);
     }
 
-    protected void TemplateClear(MobTemplate.ETemplateType type)
+    public List<TTemplate> TemplateGet<TTemplate>()
+    where TTemplate : MobTemplate
     {
-        Templates[type].Clear();
-    }
-
-    protected void TemplateUpdate()
-    {
-        TemplateResetToBase();
+        List<TTemplate> output = new();
         foreach (var item in Templates)
         {
-            if (item.Key == MobTemplate.ETemplateType.BASE) continue;
+            if (item is TTemplate tTemp) output.Add(tTemp);
+        }
+        return output;
+    }
 
-            item.Value.ForEach(x => x.ApplyTemplate(this));
+    protected void TemplateClear()
+        => TemplateClear<MobTemplate>();
+
+    protected void TemplateClear<TTemplate>()
+    where TTemplate : MobTemplate
+    {
+        Templates.RemoveAll(x => x is TTemplate);
+    }
+
+    public void TemplateUpdate(bool refillValues, bool startFromBase)
+    {
+        if (startFromBase) TemplateGet<MobTemplateBase>().First().ApplyTemplate(this);
+
+        TemplateGet<MobTemplateRace>().ForEach(x => x.ApplyTemplate(this));
+
+        TemplateGet<MobTemplateJob>().ForEach(x => x.ApplyTemplate(this));
+
+        foreach (var item in Templates)
+        {
+            if (item is MobTemplateBase) continue;
+
+            item.ApplyTemplate(this);
         }
     }
     #endregion
