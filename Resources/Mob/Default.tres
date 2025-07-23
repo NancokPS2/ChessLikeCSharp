@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="Mob" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="Mob" load_steps=7 format=3 uid="uid://dbuxur5cqs8h2"]
 
-[ext_resource type="Script" path="res://Inventory/Item.cs" id="1_oghla"]
-[ext_resource type="Script" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
-[ext_resource type="Script" path="res://Entity/Mob/Inventory/MobEquipmentInventory.cs" id="2_jfjfl"]
-[ext_resource type="Script" path="res://Entity/Action/ActionEvent.cs" id="3_qq2qs"]
+[ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="1_oghla"]
+[ext_resource type="Script" uid="uid://bodnw66lsmq04" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
+[ext_resource type="Script" uid="uid://cdh3pq8hwu2w4" path="res://Entity/Mob/Inventory/MobEquipmentInventory.cs" id="2_jfjfl"]
+[ext_resource type="Script" uid="uid://de7edn1j7u108" path="res://Entity/Action/ActionEvent.cs" id="3_qq2qs"]
+[ext_resource type="Resource" uid="uid://7btkf10h82tr" path="res://Resources/MobTemplate/Default.tres" id="5_jfjfl"]
 
 [sub_resource type="Resource" id="Resource_qdix7"]
 script = ExtResource("2_jfjfl")
@@ -20,6 +21,6 @@ contents = Dictionary[int, ExtResource("1_oghla")]({
 script = ExtResource("1_yrebf")
 DisplayedName = "UNNAMED"
 actions = Array[ExtResource("3_qq2qs")]([])
-templates = Dictionary[int, Array]({})
+templates = Array[Resource]([ExtResource("5_jfjfl")])
 Faction = 1
 EquipmentInventory = SubResource("Resource_qdix7")

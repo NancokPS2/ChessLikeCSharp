@@ -65,6 +65,8 @@ public partial class EncounterData : Resource
         EncounterData encounter = new();
         encounter.Grid = GridTerrainGenerator.GenerateFlat(new(6));
 
+		MobTemplateBase templateBase =
+			Global.ManagerMobTemplate.GetResource<MobTemplateBase>(EPackIDMobTemplate.Default);
         MobTemplateRace templateHuman =
             Global.ManagerMobTemplate.GetResource<MobTemplateRace>(EPackIDMobTemplate.RaceHuman);
         MobTemplateJob templateWizard =
@@ -72,27 +74,31 @@ public partial class EncounterData : Resource
 
         Mob def_mob1 = new Mob().ChainName("PlayerFac").ChainFaction(EFaction.PLAYER);
         def_mob1.Move(Vector3i.ONE);
-        def_mob1.TemplateSet(new List<MobTemplateRace>() { templateHuman });
+		def_mob1.TemplateSet(templateBase);
+        def_mob1.TemplateSet(templateHuman);
         def_mob1.TemplateUpdate(true, true);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob2 = new Mob().ChainName("HumanTemplate").ChainFaction(EFaction.PLAYER);
         def_mob2.Move(Vector3i.ONE+Vector3i.FORWARD);
-        def_mob2.TemplateSet(new List<MobTemplateRace>() { templateHuman });
+		def_mob2.TemplateSet(templateBase);
+        def_mob2.TemplateSet(templateHuman );
         def_mob2.TemplateUpdate(true, true);
         
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob3 = new Mob().ChainName("Bandit").ChainFaction(EFaction.NEUTRAL);
         def_mob3.Move(Vector3i.ONE+Vector3i.LEFT);
-        def_mob3.TemplateSet(new List<MobTemplateRace>() { templateHuman });
-        def_mob3.TemplateSet(new List<MobTemplateJob>() { templateWizard });
+		def_mob3.TemplateSet(templateBase);
+        def_mob3.TemplateSet(templateHuman);
+        def_mob3.TemplateSet(templateWizard);
         def_mob3.TemplateUpdate(true, true);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
 
         Mob def_mob4 = new Mob().ChainName("Neutral Wizard").ChainFaction(EFaction.NEUTRAL);
         def_mob4.Move(Vector3i.ONE+Vector3i.FORWARD+Vector3i.FORWARD);
-        def_mob4.TemplateSet(new List<MobTemplateRace>() { templateHuman });
+		def_mob4.TemplateSet(templateBase);
+        def_mob4.TemplateSet(templateHuman );
         def_mob4.TemplateUpdate(true, true);
 
         //Test persistence

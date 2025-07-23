@@ -1,12 +1,10 @@
-[gd_resource type="Resource" script_class="MobTemplate" load_steps=6 format=3 uid="uid://2whr8ii52bei"]
+[gd_resource type="Resource" script_class="MobTemplateJob" load_steps=4 format=3 uid="uid://2whr8ii52bei"]
 
-[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_b2wuk"]
-[ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="1_optjk"]
-[ext_resource type="Script" uid="uid://cdqoayy2u0tao" path="res://Entity/Mob/Template/MobTemplate.cs" id="3_b2wuk"]
-[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="3_vsera"]
+[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_vsera"]
+[ext_resource type="Script" uid="uid://dw1wcfbf5rr8e" path="res://Entity/Mob/Template/MobTemplateJob.cs" id="3_b2wuk"]
 
-[sub_resource type="Resource" id="Resource_k82kr"]
-script = ExtResource("3_vsera")
+[sub_resource type="Resource" id="Resource_optjk"]
+script = ExtResource("2_vsera")
 maxAdditiveBonus = null
 maxMultiplicativeBonus = Dictionary[int, float]({
 0: 0.8,
@@ -18,10 +16,7 @@ metadata/_custom_type_script = "uid://r4d46yixqo3f"
 
 [resource]
 script = ExtResource("3_b2wuk")
-Type = 0
-Names = Array[String]([])
-Abilities = Array[ExtResource("1_b2wuk")]([])
-Equipment = Array[ExtResource("1_optjk")]([])
-StatBoosts = Array[ExtResource("3_vsera")]([SubResource("Resource_k82kr")])
-Races = Array[int]([])
-metadata/_custom_type_script = "uid://cdqoayy2u0tao"
+Abilities = []
+StatBoosts = Array[ExtResource("2_vsera")]([SubResource("Resource_optjk")])
+TemplateName = "Wizard"
+metadata/_custom_type_script = "uid://dw1wcfbf5rr8e"

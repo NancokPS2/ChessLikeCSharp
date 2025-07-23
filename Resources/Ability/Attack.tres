@@ -30,6 +30,7 @@ script = ExtResource("3_fld6l")
 Action = 1
 SubAction = 0
 Reaction = 0
+Move = 0
 
 [sub_resource type="Resource" id="Resource_ggf3a"]
 script = ExtResource("3_bybqu")

@@ -75,15 +75,21 @@ public partial class Mob : Resource
 	public List<string> GetJobNames()
 		=> (from template in Templates where template is MobTemplateRace select template.TemplateName).ToList();
 
-    public void TemplateSet(MobTemplateBase based)
-        => TemplateSet(new List<MobTemplateBase>(){based});
+    public void TemplateSet(MobTemplateBase template)
+        => TemplateSet(new List<MobTemplateBase>(){template});
 
-    public void TemplateSet<TTemplate>(List<TTemplate> template)
-    where TTemplate : MobTemplate
-    {
-        TemplateClear<TTemplate>();
-        Templates.AddRange(template);
-    }
+    public void TemplateSet(MobTemplateRace template)
+        => TemplateSet(new List<MobTemplateRace>(){template});
+
+    public void TemplateSet(MobTemplateJob template)
+        => TemplateSet(new List<MobTemplateJob>(){template});
+
+    protected void TemplateSet<TTemplate>(List<TTemplate> template)
+	where TTemplate : MobTemplate
+	{
+		TemplateClear<TTemplate>();
+		Templates.AddRange(template);
+	}
 
     public List<TTemplate> TemplateGet<TTemplate>()
     where TTemplate : MobTemplate
@@ -112,13 +118,6 @@ public partial class Mob : Resource
         TemplateGet<MobTemplateRace>().ForEach(x => x.ApplyTemplate(this));
 
         TemplateGet<MobTemplateJob>().ForEach(x => x.ApplyTemplate(this));
-
-        foreach (var item in Templates)
-        {
-            if (item is MobTemplateBase) continue;
-
-            item.ApplyTemplate(this);
-        }
     }
     #endregion
 

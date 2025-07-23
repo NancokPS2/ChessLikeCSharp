@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MobTemplateIdentity" load_steps=2 format=3 uid="uid://mtkp7mgk8uj2"]
+
+[ext_resource type="Script" uid="uid://bu3hmnfj7dnh0" path="res://Entity/Mob/Template/MobTemplateIdentity.cs" id="1_3cbyl"]
+
+[resource]
+script = ExtResource("1_3cbyl")
+Names = Array[String](["Brutus", "Kain", "Pot"])
+Factions = Array[int]([1])
+TemplateName = "Unnamed Template"
+metadata/_custom_type_script = "uid://bu3hmnfj7dnh0"

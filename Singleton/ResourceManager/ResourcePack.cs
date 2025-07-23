@@ -373,6 +373,18 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 }
 public static class ResourcePackExtension
 {
-    public static void MakePersistent<TRes>(this TRes res) where TRes : Resource, new()
-        => ResourcePack<TRes>.TagAdd(res, ResourcePack<TRes>.TAG_PERSISTENT);
+	public static void MakePersistent<TRes>(this TRes res) where TRes : Resource, new()
+		=> ResourcePack<TRes>.TagAdd(res, ResourcePack<TRes>.TAG_PERSISTENT);
+
+	public static void TagSet<TRes>(this TRes res, Collections.Array<string> tags) where TRes : Resource, new()
+		=> ResourcePack<TRes>.TagSet(res, tags);
+
+	public static void TagAdd<TRes>(this TRes res, string tag) where TRes : Resource, new()
+		=> ResourcePack<TRes>.TagAdd(res, tag);
+
+	public static Collections.Array<string> TagGet<TRes>(this TRes res) where TRes : Resource, new()
+		=> ResourcePack<TRes>.TagGet(res);
+
+	public static bool TagIn<TRes>(this TRes res, string tag) where TRes : Resource, new()
+		=> ResourcePack<TRes>.TagIn(res, tag);
 }
