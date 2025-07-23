@@ -50,9 +50,6 @@ public partial class Mob : Resource
     }
 
     [Export]
-    public ERace Race = ERace.HUMAN;
-
-    [Export]
     public EFaction Faction = EFaction.NEUTRAL;
 
     public EMobMovementMode MovementMode { set => SetMovementMode(value); get => movementMode; }
@@ -86,15 +83,28 @@ public partial class Mob : Resource
         //Make sure the Templates array has Lists
         Templates.AddValueCollections();
 
+		//Prepare template dictionary
+		foreach (var item in Enum.GetValues<MobTemplate.ETemplateType>())
+		{
+			if (!Templates.ContainsKey(item))
+				Templates[item] = new();
+		}
+
         SetupEventBus();
     }
-    #region MobTemplate
-    protected void TemplateResetToBase()
-    {
-        //Make sure there is exactly 1 base template.
-        if (Templates[MobTemplate.ETemplateType.BASE].Count() != 1)
-            throw new Exception($"There is more than one or NO {MobTemplate.ETemplateType.BASE} template.\n{Templates.ToStringList()}");
-    }
+	#region MobTemplate
+	public List<string> GetRaceNames()
+		=> (from template in Templates[MobTemplate.ETemplateType.RACE] select template.TemplateName).ToList();
+
+	public List<string> GetJobNames()
+		=> (from template in Templates[MobTemplate.ETemplateType.JOB] select template.TemplateName).ToList();
+
+	protected void TemplateResetToBase()
+	{
+		//Make sure there is exactly 1 base template.
+		if (Templates[MobTemplate.ETemplateType.BASE].Count() != 1)
+			throw new Exception($"There is more than one or NO {MobTemplate.ETemplateType.BASE} templates.\n{Templates.ToStringList()}");
+	}
 
     protected void TemplateSet(MobTemplate.ETemplateType type, ICollection<MobTemplate> templates)
     {
@@ -239,7 +249,7 @@ public partial class Mob : Resource
 
 	public override string ToString()
     {
-        string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {Race} \n";
+        string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {GetRaceNames()} \n";
 
         return output;
     }

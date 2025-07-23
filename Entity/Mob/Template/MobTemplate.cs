@@ -48,58 +48,55 @@ public partial class MobTemplate : Resource
     [Export]
     protected Array<ERace> Races = new();
 
-    /// <summary>
-    /// Applies the template to a mob, any non empty fields of the template will replace parts of the mob.
-    /// </summary>
-    /// <param name="mob"></param>
-    /// <returns></returns>
-    public Mob ApplyTemplate(Mob mob)
-    {
-        mob.Templates[Type].Add(this);
+	/// <summary>
+	/// Applies the template to a mob, any non empty fields of the template will replace parts of the mob.
+	/// </summary>
+	/// <param name="mob"></param>
+	/// <returns></returns>
+	public Mob ApplyTemplate(Mob mob)
+	{
+		mob.Templates[Type].Add(this);
 
-        //Name
-        mob.DisplayedName = Names.GetRandom() ?? mob.DisplayedName;
+		//Name
+		mob.DisplayedName = Names.GetRandom() ?? mob.DisplayedName;
 
-        //Faction    
-        Faction = Faction != EFaction.INVALID ? Faction : mob.Faction;
+		//Faction    
+		Faction = Faction != EFaction.INVALID ? Faction : mob.Faction;
 
-        //Abilities
-        foreach (var item in Abilities)
-        {
-            mob.AddAction(item);
-        }
+		//Abilities
+		foreach (var item in Abilities)
+		{
+			mob.AddAction(item);
+		}
 
-        //Equipment
-        List<Item> equipment = new(Equipment);
-        foreach (var slot in Enum.GetValues<MobEquipmentInventory.ESlot>())
-        {
-            var candidates = equipment.Where(
-                x => mob.EquipmentInventory.IsValidForSlot(x, slot)
-                );
+		//Equipment
+		List<Item> equipment = new(Equipment);
+		foreach (var slot in Enum.GetValues<MobEquipmentInventory.ESlot>())
+		{
+			var candidates = equipment.Where(
+				x => mob.EquipmentInventory.IsValidForSlot(x, slot)
+				);
 
-            if (candidates.IsEmpty()) continue;
+			if (candidates.IsEmpty()) continue;
 
-            Item item = candidates.ToList().GetRandom();
-            mob.EquipmentInventory.EquipItem(item, slot, true);
-            equipment.Remove(item);
-        }
+			Item item = candidates.ToList().GetRandom();
+			mob.EquipmentInventory.EquipItem(item, slot, true);
+			equipment.Remove(item);
+		}
 
-        //Stats
-        GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
-        mob.Stats = MobStatsBase ?? mob.Stats;
+		//Stats
+		GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
+		mob.Stats = MobStatsBase ?? mob.Stats;
 
-        //StatBoosts
-        string boostSource = Type.ToString();
-        MobStatBoost finalBoost = new(boostSource);
-        foreach (var item in StatBoosts)
-        {
-            item.Source = boostSource;
-            finalBoost += item;
-        }
-        mob.Stats.BoostAdd(finalBoost, true);
-
-        //Race
-        mob.Race = Races.GetRandom(mob.Race);
+		//StatBoosts
+		string boostSource = Type.ToString();
+		MobStatBoost finalBoost = new(boostSource);
+		foreach (var item in StatBoosts)
+		{
+			item.Source = boostSource;
+			finalBoost += item;
+		}
+		mob.Stats.BoostAdd(finalBoost, true);
         return mob;
     }
 

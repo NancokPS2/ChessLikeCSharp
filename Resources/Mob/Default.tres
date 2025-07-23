@@ -1,23 +1,25 @@
-[gd_resource type="Resource" load_steps=7 format=3 uid="uid://inoxops2jmxa"]
+[gd_resource type="Resource" script_class="Mob" load_steps=6 format=3]
 
-[ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Shared/Storage/Inventory/Slot.cs" id="1_oa5xi"]
-[ext_resource type="Script" uid="uid://bodnw66lsmq04" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
-[ext_resource type="Script" uid="uid://dkbd2rugu0rr8" path="res://Shared/Storage/Inventory/Inventory.cs" id="2_oghla"]
-[ext_resource type="Resource" uid="uid://ct6qtlbthfdfj" path="res://Resources/Job/Default.tres" id="3_oghla"]
+[ext_resource type="Script" path="res://Inventory/Item.cs" id="1_oghla"]
+[ext_resource type="Script" path="res://Entity/Mob/Mob.cs" id="1_yrebf"]
+[ext_resource type="Script" path="res://Entity/Mob/Inventory/MobEquipmentInventory.cs" id="2_jfjfl"]
+[ext_resource type="Script" path="res://Entity/Action/ActionEvent.cs" id="3_qq2qs"]
 
-[sub_resource type="Resource" id="Resource_jfjfl"]
-script = ExtResource("1_oa5xi")
-Item = null
-
-[sub_resource type="Resource" id="Resource_qq2qs"]
-script = ExtResource("2_oghla")
-StorageInventoryUniversalSlot = SubResource("Resource_jfjfl")
+[sub_resource type="Resource" id="Resource_qdix7"]
+script = ExtResource("2_jfjfl")
+contents = Dictionary[int, ExtResource("1_oghla")]({
+0: null,
+1: null,
+2: null,
+3: null,
+4: null,
+5: null
+})
 
 [resource]
 script = ExtResource("1_yrebf")
-DisplayedName = "Marquito Default"
-jobs = Array[Object]([ExtResource("3_oghla")])
-actions = Array[Object]([])
-Race = 0
+DisplayedName = "UNNAMED"
+actions = Array[ExtResource("3_qq2qs")]([])
+templates = Dictionary[int, Array]({})
 Faction = 1
-MobInventory = SubResource("Resource_qq2qs")
+EquipmentInventory = SubResource("Resource_qdix7")

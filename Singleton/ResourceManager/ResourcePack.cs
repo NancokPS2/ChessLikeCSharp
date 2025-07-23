@@ -218,6 +218,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         {
             string loadPath = path + "/" + item;
             TRes res = GD.Load<TRes>(loadPath);
+			if (res is null) throw new Exception($"Loaded resource at {loadPath} is null.");
             string identifier = GetResourceIdentifier(res);
 
             if (identifier == "") throw new Exception("No identifier could be retrieved");
@@ -256,7 +257,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     private string GetDefaultResourcePath()
         => $"{GetDirectory(false)}/Default{GetExtension()}";
 
-    public bool DefaultResourceExists() => FileAccess.FileExists(GetDefaultResourcePath());
+    public bool DefaultResourceExists() => GD.Load<TRes>(GetDefaultResourcePath()) is not null;
 
     protected void PrepareDirectories()
     {

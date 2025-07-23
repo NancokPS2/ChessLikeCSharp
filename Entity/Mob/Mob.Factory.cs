@@ -22,23 +22,15 @@ public partial class Mob
         output = mob_template switch
         {
             EMobPrototype.HUMAN => output
-                .ChainName("Human")
-                .ChainRace(ERace.HUMAN),
+                .ChainName("Human"),
             _ => new Mob()
         };
         return output;
     }
 
-
     public Mob ChainName(string name)
     {
         DisplayedName = new(name);
-        return this;
-    }
-
-    public Mob ChainRace(ERace race)
-    {
-        Race = race;
         return this;
     }
 
