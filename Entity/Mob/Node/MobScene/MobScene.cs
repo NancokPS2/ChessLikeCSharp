@@ -43,6 +43,8 @@ public partial class MobScene : Node3D
         EventBus.MobTurnStarted += OnMobTurnStarted;
         EventBus.MobTurnEnded += OnMobTurnEnded;
         EventBus.MobSelected += OnMobSelected;
+        EventBus.ActionUsed += OnActionUsed;
+        EventBus.InventoryChanged += OnInventoryChanged;
     }
 
     public override void _Ready()
@@ -87,11 +89,11 @@ public partial class MobScene : Node3D
                     .ResourceGet("HoveringStar")
                     .Instantiate<Node3D>(),
 
-                EMobSceneEffect.TARGETED 
+                EMobSceneEffect.TARGETED
                     => Global.ManagerParticle
                     .ResourceGet("InwardArrows")
                     .Instantiate<Node3D>(),
-                    
+
                 _
                     => throw new Exception("Invalid effect.")
             };
@@ -229,6 +231,8 @@ public partial class MobScene : Node3D
     private void OnMobTurnStarted(Mob mob)
     {
         if (mob != MobUsing) return;
+        mob.TurnActive = true;
+        mob.Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
         AnimatePopupText("READY");
         ToggleEffect(EMobSceneEffect.TURN_ACTIVE, true);
     }
@@ -236,13 +240,34 @@ public partial class MobScene : Node3D
     private void OnMobTurnEnded(Mob mob)
     {
         if (mob != MobUsing) return;
+        mob.TurnActive = false;
         ToggleEffect(EMobSceneEffect.TURN_ACTIVE, false);
     }
 
     private void OnMobSelected(Mob mob)
     {
         if (mob != MobUsing) return;
-        
+
+    }
+
+    private void OnActionUsed(UsageParameters parameters)
+    {
+        if (parameters.OwnerRef != MobUsing) return;
+        if (MobUsing.TurnActive)
+            MobUsing.Stats.ChangeValue(EValueName.ACTION, -parameters.ActionRef.CostParams.Action);
+        else
+            MobUsing.Stats.ChangeValue(EValueName.REACTION, -parameters.ActionRef.CostParams.Reaction);
+
+        MobUsing.Stats.ChangeValue(EValueName.SUB_ACTION, -parameters.ActionRef.CostParams.Move);
+
+        MobUsing.Stats.ChangeValue(EValueName.MOVE, -parameters.ActionRef.CostParams.Move);
+    }
+    
+	private void OnInventoryChanged(MobEquipmentInventory obj)
+    {
+        if (obj != MobUsing.EquipmentInventory) return;
+
+        MobUsing.UpdateEquipmentStatBoosts();
     }
     #endregion
 

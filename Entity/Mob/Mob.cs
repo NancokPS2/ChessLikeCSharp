@@ -65,8 +65,6 @@ public partial class Mob : Resource
 
         //Default stats
         Stats = MobStatSet.GetDefault();
-
-        SetupEventBus();
     }
 	#region MobTemplate
 	public List<string> GetRaceNames()
@@ -113,11 +111,21 @@ public partial class Mob : Resource
 
     public void TemplateUpdate(bool refillValues, bool startFromBase)
     {
+        //Make sure there is only one base template
+        if (TemplateGet<MobTemplateBase>().Count() != 1)
+            throw new Exception(
+                $"More than one MobTemplateBase found ({TemplateGet<MobTemplateBase>().Count()})"
+                );
+        
         if (startFromBase) TemplateGet<MobTemplateBase>().First().ApplyTemplate(this);
 
         TemplateGet<MobTemplateRace>().ForEach(x => x.ApplyTemplate(this));
 
         TemplateGet<MobTemplateJob>().ForEach(x => x.ApplyTemplate(this));
+
+        TemplateGet<MobTemplateIdentity>().ForEach(x => x.ApplyTemplate(this));
+
+        if (refillValues) Stats.RefillValues();
     }
     #endregion
 
@@ -125,7 +133,7 @@ public partial class Mob : Resource
     [Export]
     public MobEquipmentInventory EquipmentInventory = new();
 
-    protected void UpdateEquipmentStatBoosts()
+    public void UpdateEquipmentStatBoosts()
     {
         MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
 
@@ -230,7 +238,7 @@ public partial class Mob : Resource
     #endregion
 
     #region Per Turn Values
-    protected bool TurnActive;
+    public bool TurnActive;
     #endregion
 
     #region Misc

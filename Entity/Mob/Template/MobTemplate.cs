@@ -24,15 +24,13 @@ public partial class MobTemplate : Resource
 
     public readonly ETemplateType Type;
 
-
-
     [Export]
     public string TemplateName = "Unnamed Template";
 
 	public MobTemplate(ETemplateType type)
 	{
 		Type = type;
-		if (Type == ETemplateType.INVALID) throw new Exception();
+		if (Type == ETemplateType.INVALID) throw new Exception("I could not make this abstract, but it should be treated as much. Do not construct it.");
     }
 
     public MobTemplate() : this(ETemplateType.INVALID)

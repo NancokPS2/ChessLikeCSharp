@@ -29,11 +29,11 @@ public partial class MobStatsUI : Control, ISceneDependency
 		NodeStatContainer.FreeChildren();
 		foreach (var item in mob.Stats.AllStats)
 		{
-			float current = mob.Stats.HasValueAssociatedToStat(item) ? mob.Stats.GetValueByStat(item) : -69;
+			float current = mob.Stats.HasValueAssociatedToStat(item) ? mob.Stats.GetValueByStat(item) : float.MinValue;
 			float max = mob.Stats.GetStat(item);
 
 			string text = item.ToString() + ": ";
-			if (current == max){text += max.ToString();}
+			if (current == max || current == float.MinValue){text += max.ToString();}
 			else {text += current.ToString() + "/" + max.ToString();}
 
 			StatsLabel label = new(mob.Stats, item){Text = text, SizeFlagsHorizontal = SizeFlags.ExpandFill};

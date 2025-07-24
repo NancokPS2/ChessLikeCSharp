@@ -97,7 +97,9 @@ public partial class EventBus : Node
 
     #region Mob - Stats
     public delegate void MobEventStat(Mob mob, EStatName stat, float change);
+    public delegate void MobEventStatValue(Mob mob, EValueName stat, float change);
     public static MobEventStat? MobStatChanged;
+    public static MobEventStatValue? MobStatValueChanged;
     #endregion
 
     #region Mob - Movement

@@ -79,7 +79,7 @@ public partial class Command: Node
                 break;
 
             case "fuckyou":
-                BattleController.Instance.FSMSetState(EBattleState.END_COMBAT);
+                throw new NotImplementedException();
                 label.Text += "Because i say so.";
                 break;
 
@@ -108,10 +108,7 @@ public partial class Command: Node
 
     private Mob? GetHoveredUnit()
     {
-        if (Global.ManagerMob.GetPooledInPosition(BattleController.Instance.PositionHovered) is List<Mob> list && list.Count > 0)
-        {
-            return list.First();
-        }
+        throw new NotImplementedException();
         return null;
     }
 }
