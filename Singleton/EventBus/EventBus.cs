@@ -61,6 +61,7 @@ public partial class EventBus : Node
     public static ObjectChange<EncounterData>? EncounterLoading;
 
     //Combat start and end
+    public static Event? CombatPreparationStarted;
     public static Event? CombatStarted;
     public static Event? CombatEnded;
 
@@ -71,7 +72,7 @@ public partial class EventBus : Node
     /// </summary>
     public static Event? RoundEnded;
 
-    public static ObjectChange<ECombatState>? BattleStateChanged;
+    public static ObjectChange<ECombatState>? CombatStateChanged;
     public static ObjectChange<UsageParameters>? SelectedUsageParametersChanged;
 
     #region TARGETING State

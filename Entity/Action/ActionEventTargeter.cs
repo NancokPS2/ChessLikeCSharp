@@ -47,7 +47,7 @@ public partial class ActionEventTargeter : Node3D
 
 	public ActionEventTargeter()
 	{
-		EventBus.BattleStateChanged += OnBattleStateChanged;
+		EventBus.CombatStateChanged += OnBattleStateChanged;
 		EventBus.CellInputReceived += OnCellInputReceived;
 	}
 

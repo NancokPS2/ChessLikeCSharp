@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "First pass to PREPARATION mode, then have that use some UI element that allows proceeding to TURN_SELECTION",
+                    "id": "d0ac9be1srj0kkyxshyfm8pi"
+                },
+                {
                     "text": "MobStatSet should allow for multiple option values (enum containers) and collections of them",
                     "id": "h3523mhw4h5oe2fh3y0bfhwj"
                 },
@@ -208,5 +212,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1753363269073
+    "timestamp": 1753364203732
 }

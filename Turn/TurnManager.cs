@@ -40,11 +40,11 @@ public partial class TurnManager : Node3D
     public override void _Ready()
     {
         base._Ready();
-        EventBus.BattleStateChanged -= OnBattleStateChanged;
+        EventBus.CombatStateChanged -= OnBattleStateChanged;
         EventBus.MobStateChanged -= OnMobStateChanged;
         EventBus.InputTurnEnded -= OnInputTurnEnded;
 
-        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.CombatStateChanged += OnBattleStateChanged;
         EventBus.MobStateChanged += OnMobStateChanged;
         EventBus.InputTurnEnded += OnInputTurnEnded;
 	}

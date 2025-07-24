@@ -17,7 +17,7 @@ public partial class CombatStateOverlay : Control
 
     public CombatStateOverlay()
     {
-        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.CombatStateChanged += OnBattleStateChanged;
     }
 
     public override void _Ready()

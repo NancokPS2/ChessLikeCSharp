@@ -54,7 +54,7 @@ public partial class Camera : Camera3D
 
     public Camera()
     {
-        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.CombatStateChanged += OnBattleStateChanged;
     }
 
     private void OnBattleStateChanged(ECombatState state)

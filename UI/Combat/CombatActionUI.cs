@@ -20,7 +20,7 @@ public partial class CombatActionUI : Control, ISceneDependency
 
     public CombatActionUI()
     {
-        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.CombatStateChanged += OnBattleStateChanged;
         EventBus.MobTurnStarted += OnMobTurnStarted;
         EventBus.MobSelected += OnMobSelected;
     }

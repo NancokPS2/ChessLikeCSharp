@@ -34,12 +34,13 @@ public partial class CombatScene : Node3D
 	}
 	private static ECombatState stateCurrent;
 
-	public CombatScene()
+	public override void _Ready()
 	{
+		EventBus.CombatPreparationStarted += OnCombatPreparationStarted;
+		EventBus.CombatStarted += OnCombatStarted;
 		EventBus.TargetingUsageParametersGenerated += OnTargetingUsageParametersGenerated;
 		EventBus.MobTurnStarted += OnMobTurnStarted;
 		EventBus.InputBack += OnInputBack;
-		EventBus.CombatStarted += OnCombatStarted;
 		EventBus.TargetingParametersDone += OnTargetingParametersDone;
 		EventBus.MobTurnEnded += OnMobTurnEnded;
 		EventBus.ActionAnimationQueueEnded += OnActionAnimationQueueEnded;
@@ -71,7 +72,7 @@ public partial class CombatScene : Node3D
 		}
 
 		//Everything must be loaded by now.
-		EventBus.CombatStarted?.Invoke();
+		EventBus.CombatPreparationStarted?.Invoke();
 	}
 
 	public static ECombatState GetState() => StateCurrent;
@@ -80,7 +81,7 @@ public partial class CombatScene : Node3D
 	{
 		StatePrevious = StateCurrent;
 		stateCurrent = state;
-		EventBus.BattleStateChanged?.Invoke(state);
+		EventBus.CombatStateChanged?.Invoke(state);
 	}
 
 	public static GridNode GetGridNode() => GridNode;
@@ -92,6 +93,11 @@ public partial class CombatScene : Node3D
 	public static List<Mob> GetMobsInCombat() => Global.ManagerMob.GetPooledInCombat();
 
 	#region Event Handling
+    private void OnCombatPreparationStarted()
+    {
+		SetState(ECombatState.PREPARATION);
+    }
+
 	private void OnCombatStarted()
 	{
 		SetState(ECombatState.TURN_SELECTION);
@@ -138,11 +144,11 @@ public partial class CombatScene : Node3D
 		UsageParameters = null;
 		SetState(ECombatState.TURN_SELECTION);
 	}
-	
-    private void OnActionAnimationQueueEnded(List<UsageParameters> parameterList)
-    {
+
+	private void OnActionAnimationQueueEnded(List<UsageParameters> parameterList)
+	{
 		SetState(ECombatState.ACTION_INPUT);
-    }
+	}
 	#endregion
 
 }

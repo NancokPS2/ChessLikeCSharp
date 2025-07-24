@@ -27,7 +27,7 @@ public partial class ActionEventRunner : Node3D
     public ActionEventRunner()
     {
         EventBus.ActionEventAutoActivated += OnActionEventAutoActivated;
-        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.CombatStateChanged += OnBattleStateChanged;
     }
 
     public override void _Process(double delta)

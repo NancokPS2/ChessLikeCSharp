@@ -26,7 +26,7 @@ public partial class MessageQueue: Node
         Instance = this;
 
         EventBus.MobTurnStarted += OnMobTurnStarted;
-        EventBus.BattleStateChanged += OnBattleStateChanged;
+        EventBus.CombatStateChanged += OnBattleStateChanged;
         EventBus.MobStateChanged += OnMobStateChanged;
         EventBus.CombatStarted += OnCombatStarted;
     }
