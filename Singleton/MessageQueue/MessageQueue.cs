@@ -86,7 +86,7 @@ public partial class MessageQueue: Node
     }
 
     #region Event Handling
-	private void OnBattleStateChanged(EBattleState state)
+	private void OnBattleStateChanged(ECombatState state)
 	{
         AddMessage($"State entered {state}");
 	}

@@ -236,11 +236,11 @@ public partial class ActionEventTargeter : Node3D
 	}
 
 	#region Event Handling
-	private void OnBattleStateChanged(EBattleState state)
+	private void OnBattleStateChanged(ECombatState state)
 	{
 		Reset();
 
-		if (state == EBattleState.TARGETING)
+		if (state == ECombatState.TARGETING)
 		{
 			UsageParametersCurrent = CombatScene.UsageParameters ?? throw new Exception();
 
@@ -254,7 +254,7 @@ public partial class ActionEventTargeter : Node3D
 	private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
 	{
 		//Must be on targeting state.
-		if (CombatScene.GetState() != EBattleState.TARGETING) return;
+		if (CombatScene.GetState() != ECombatState.TARGETING) return;
 
 		//There must be UsageParameters
 		if (UsageParametersCurrent is null) throw new Exception();

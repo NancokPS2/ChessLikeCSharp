@@ -95,11 +95,11 @@ public partial class CombatActionUI : Control, ISceneDependency
     }
 
     #region Event Handling
-    private void OnBattleStateChanged(EBattleState state)
+    private void OnBattleStateChanged(ECombatState state)
     {
         switch (state)
         {
-            case EBattleState.ACTION_INPUT:
+            case ECombatState.ACTION_INPUT:
                 EnableActionButtons(true);
                 break;
 

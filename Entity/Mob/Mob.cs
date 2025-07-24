@@ -82,12 +82,15 @@ public partial class Mob : Resource
     public void TemplateSet(MobTemplateJob template)
         => TemplateSet(new List<MobTemplateJob>(){template});
 
+    public void TemplateSet(MobTemplateIdentity template)
+        => TemplateSet(new List<MobTemplateIdentity>(){template});
+
     protected void TemplateSet<TTemplate>(List<TTemplate> template)
-	where TTemplate : MobTemplate
-	{
-		TemplateClear<TTemplate>();
-		Templates.AddRange(template);
-	}
+    where TTemplate : MobTemplate
+    {
+        TemplateClear<TTemplate>();
+        Templates.AddRange(template);
+    }
 
     public List<TTemplate> TemplateGet<TTemplate>()
     where TTemplate : MobTemplate

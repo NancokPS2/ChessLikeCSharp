@@ -1,6 +1,4 @@
-namespace Godot;
-
-public enum EBattleState
+public enum ECombatState
 {
     /// <summary>
     /// Invalid value

@@ -216,9 +216,9 @@ public partial class TurnManager : Node3D
     }
 
     #region Event Handling
-    private void OnBattleStateChanged(EBattleState state)
+    private void OnBattleStateChanged(ECombatState state)
     {
-        if (state == EBattleState.TURN_SELECTION)
+        if (state == ECombatState.TURN_SELECTION)
         {
             ReadyToStartTurn = true;
         }

@@ -71,7 +71,7 @@ public partial class EventBus : Node
     /// </summary>
     public static Event? RoundEnded;
 
-    public static ObjectChange<EBattleState>? BattleStateChanged;
+    public static ObjectChange<ECombatState>? BattleStateChanged;
     public static ObjectChange<UsageParameters>? SelectedUsageParametersChanged;
 
     #region TARGETING State

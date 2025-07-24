@@ -116,9 +116,9 @@ public partial class ActionEventRunner : Node3D
         QueueAddBefore(activated, activatedBy);
     }
 
-    private void OnBattleStateChanged(EBattleState state)
+    private void OnBattleStateChanged(ECombatState state)
     {
-        if (state == EBattleState.ACTION_RUNNING)
+        if (state == ECombatState.ACTION_RUNNING)
         {
             ReadyToStartRun = true;
         }

@@ -4,13 +4,13 @@ using System;
 [GlobalClass]
 public partial class CombatStateOverlay : Control
 {
-    public EBattleState StateCurrent;
+    public ECombatState StateCurrent;
 
     [Export]
     public Panel? NodePanel;
 
     [Export]
-    protected Godot.Collections.Dictionary<EBattleState, StyleBox> Styles = new();
+    protected Godot.Collections.Dictionary<ECombatState, StyleBox> Styles = new();
 
     [Export]
     protected StyleBox? StylePlaceholder;
@@ -28,7 +28,7 @@ public partial class CombatStateOverlay : Control
     }
 
 
-    protected void UpdateStyle(EBattleState state)
+    protected void UpdateStyle(ECombatState state)
     {
         StyleBox style;
         if (Styles.ContainsKey(state))
@@ -44,19 +44,19 @@ public partial class CombatStateOverlay : Control
         {
             switch (state)
             {
-                case EBattleState.PAUSED:
+                case ECombatState.PAUSED:
                     flat.BorderColor = Colors.Gray;
                     break;
 
-                case EBattleState.ACTION_INPUT:
+                case ECombatState.ACTION_INPUT:
                     flat.BorderColor = Colors.LightCyan;
                     break;
 
-                case EBattleState.TARGETING:
+                case ECombatState.TARGETING:
                     flat.BorderColor = Colors.Yellow;
                     break;
 
-                case EBattleState.ACTION_RUNNING:
+                case ECombatState.ACTION_RUNNING:
                     flat.BorderColor = Colors.DarkRed;
                     break;
 
@@ -70,7 +70,7 @@ public partial class CombatStateOverlay : Control
     }
 
     #region Event Handling
-    private void OnBattleStateChanged(EBattleState state)
+    private void OnBattleStateChanged(ECombatState state)
     {
         UpdateStyle(state);
     }

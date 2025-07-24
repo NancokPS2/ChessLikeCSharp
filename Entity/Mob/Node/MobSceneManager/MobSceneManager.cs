@@ -151,7 +151,7 @@ public partial class MobSceneManager : Node3D
     private void OnCellSelected(Vector3i cellPos)
     {
         //Do not select anything if in targeting state.
-        if (CombatScene.GetState() == EBattleState.TARGETING) return;
+        if (CombatScene.GetState() == ECombatState.TARGETING) return;
 
         //Try to find an instance.
         MobScene? scene = GetInstanceByPosition(cellPos);

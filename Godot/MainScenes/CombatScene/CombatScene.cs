@@ -27,12 +27,12 @@ public partial class CombatScene : Node3D
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 	public static UsageParameters? UsageParameters;
 
-	protected static EBattleState StatePrevious;
-	protected static EBattleState StateCurrent
+	protected static ECombatState StatePrevious;
+	protected static ECombatState StateCurrent
 	{
 		get => stateCurrent;
 	}
-	private static EBattleState stateCurrent;
+	private static ECombatState stateCurrent;
 
 	public CombatScene()
 	{
@@ -74,9 +74,9 @@ public partial class CombatScene : Node3D
 		EventBus.CombatStarted?.Invoke();
 	}
 
-	public static EBattleState GetState() => StateCurrent;
+	public static ECombatState GetState() => StateCurrent;
 
-	protected static void SetState(EBattleState state)
+	protected static void SetState(ECombatState state)
 	{
 		StatePrevious = StateCurrent;
 		stateCurrent = state;
@@ -94,22 +94,22 @@ public partial class CombatScene : Node3D
 	#region Event Handling
 	private void OnCombatStarted()
 	{
-		SetState(EBattleState.TURN_SELECTION);
+		SetState(ECombatState.TURN_SELECTION);
 	}
 
 	private void OnInputBack()
 	{
 		switch (StateCurrent)
 		{
-			case EBattleState.PAUSED:
-				if (StatePrevious == EBattleState.PAUSED || StatePrevious == EBattleState.INVALID)
+			case ECombatState.PAUSED:
+				if (StatePrevious == ECombatState.PAUSED || StatePrevious == ECombatState.INVALID)
 					throw new Exception("The previous state is not valid!");
 
 				SetState(StatePrevious);
 				break;
 
-			case EBattleState.TARGETING:
-				SetState(EBattleState.ACTION_INPUT);
+			case ECombatState.TARGETING:
+				SetState(ECombatState.ACTION_INPUT);
 				break;
 
 			default: break;
@@ -118,30 +118,30 @@ public partial class CombatScene : Node3D
 
 	private void OnMobTurnStarted(Mob mob)
 	{
-		SetState(EBattleState.ACTION_INPUT);
+		SetState(ECombatState.ACTION_INPUT);
 	}
 
 	private void OnTargetingUsageParametersGenerated(UsageParameters parameters)
 	{
 		UsageParameters = parameters;
-		SetState(EBattleState.TARGETING);
+		SetState(ECombatState.TARGETING);
 	}
 
 	private void OnTargetingParametersDone(UsageParameters parameters)
 	{
 		UsageParameters = parameters;
-		SetState(EBattleState.ACTION_RUNNING);
+		SetState(ECombatState.ACTION_RUNNING);
 	}
 
 	private void OnMobTurnEnded(Mob mob)
 	{
 		UsageParameters = null;
-		SetState(EBattleState.TURN_SELECTION);
+		SetState(ECombatState.TURN_SELECTION);
 	}
 	
     private void OnActionAnimationQueueEnded(List<UsageParameters> parameterList)
     {
-		SetState(EBattleState.ACTION_INPUT);
+		SetState(ECombatState.ACTION_INPUT);
     }
 	#endregion
 
