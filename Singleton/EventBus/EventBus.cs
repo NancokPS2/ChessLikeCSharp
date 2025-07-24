@@ -62,6 +62,7 @@ public partial class EventBus : Node
 
     //Combat start and end
     public static Event? CombatPreparationStarted;
+    public static Event? CombatPreparationEnded;
     public static Event? CombatStarted;
     public static Event? CombatEnded;
 
@@ -171,6 +172,7 @@ public partial class EventBus : Node
     public static Event? InputTurnEnded;
     public static Event? InputBack;
     public static Event? InputPause;
+    public static Event? InputPreparationFinished;
     public static ObjectChange<Mob>? MobSelected;
     public static ObjectChange<Mob>? MobHovered;
     #endregion

@@ -55,13 +55,16 @@ public partial class TurnManager : Node3D
         base._Process(delta);
         if (ReadyToStartTurn)
         {
+            if (CurrentTaker is null)
+                throw new Exception();
             StartTurn();
         }
         else if (ReadyToEndTurn)
         {
+            if (CurrentTaker is null)
+                throw new Exception();
             EndTurn();
         }
-        Debug.Assert(CurrentTaker is not null);
     }
 
 

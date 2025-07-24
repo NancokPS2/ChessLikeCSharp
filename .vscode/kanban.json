@@ -128,6 +128,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": "Introduce UI elements for PREPARATION and a way to emit EventBus.CombatPreparationEnded",
+                    "id": "m36grlornfuva2j3f6kt6ue3"
+                },
+                {
                     "text": "Make UI work with the new event system; Separate the UI elements from the \"General\" node they have.",
                     "id": "qyjohvf3qere1k4ltcv1plwg"
                 },
@@ -212,5 +216,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1753364203732
+    "timestamp": 1753378142629
 }

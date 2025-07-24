@@ -16,6 +16,13 @@ public partial class CombatPreparationManager : Node3D
         base._Ready();
         EventBus.MobSelected += OnMobSelected;
         EventBus.CellInputReceived += OnCellInputReceived;
+        EventBus.InputPreparationFinished += OnInputPreparationFinished;
+    }
+
+    #region Event Handling
+    private void OnInputPreparationFinished()
+    {
+        EventBus.CombatPreparationEnded?.Invoke();
     }
 
     private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
@@ -30,7 +37,7 @@ public partial class CombatPreparationManager : Node3D
 
         //The position must be valid for this mob.
         if (!SelectedMob.IsValidPositionToExist(CombatScene.GetGrid(), cellPos)) return;
-        
+
         SelectedMob.Move(cellPos);
     }
 
@@ -39,4 +46,5 @@ public partial class CombatPreparationManager : Node3D
         if (CombatScene.GetState() != ECombatState.PREPARATION) return;
         SelectedMob = obj;
     }
+    #endregion
 }

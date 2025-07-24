@@ -37,7 +37,9 @@ public partial class CombatScene : Node3D
 	public override void _Ready()
 	{
 		EventBus.CombatPreparationStarted += OnCombatPreparationStarted;
+		EventBus.CombatPreparationEnded += OnCombatPreparationEnded;
 		EventBus.CombatStarted += OnCombatStarted;
+		EventBus.CombatEnded += OnCombatEnded;
 		EventBus.TargetingUsageParametersGenerated += OnTargetingUsageParametersGenerated;
 		EventBus.MobTurnStarted += OnMobTurnStarted;
 		EventBus.InputBack += OnInputBack;
@@ -46,7 +48,7 @@ public partial class CombatScene : Node3D
 		EventBus.ActionAnimationQueueEnded += OnActionAnimationQueueEnded;
 	}
 
-	public override void _UnhandledInput(InputEvent @event)
+    public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
 		if (@event.IsActionPressed("cancel"))
@@ -98,10 +100,20 @@ public partial class CombatScene : Node3D
 		SetState(ECombatState.PREPARATION);
     }
 
+	private void OnCombatPreparationEnded()
+	{
+		EventBus.CombatStarted?.Invoke();
+    }
+
 	private void OnCombatStarted()
 	{
 		SetState(ECombatState.TURN_SELECTION);
 	}
+
+    private void OnCombatEnded()
+    {
+		SetState(ECombatState.END_COMBAT);
+    }
 
 	private void OnInputBack()
 	{
