@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Extension;
 using ChessLike.World;
 using Godot;
 
@@ -19,6 +20,50 @@ public partial class CombatPreparationManager : Node3D
         EventBus.InputPreparationFinished += OnInputPreparationFinished;
     }
 
+    protected bool PlaceMob(Vector3i cellPos, GridCell cell, Mob selectedMob)
+    {
+        //Mob must be selected
+        if (selectedMob is null) return false;
+
+        //The position must be valid for this mob.
+        if (!selectedMob.IsValidPositionToExist(CombatScene.GetGrid(), cellPos))
+        {
+            MessageQueue.AddMessage($"{selectedMob.DisplayedName} cannot stand there.");
+            return false;
+        }
+
+        //Must be a valid spot to place mobs
+        if (cell.FactionSpawn != selectedMob.Faction)
+        {
+            MessageQueue.AddMessage($"{selectedMob.DisplayedName} cannot start there.");
+            return false;
+        }
+
+        //If it passed all checks, add it to combat.
+        if (selectedMob.MobState != EMobState.COMBAT)
+        {
+            selectedMob.MobState = EMobState.COMBAT;
+        }
+
+        selectedMob.Move(cellPos);
+        return true;
+    }
+
+    protected bool RemoveMob(Vector3i cellPos)
+    {
+        List<Mob> mobs = Global.ManagerMob.GetPooledInCombat().FilterInPosition(cellPos);
+
+        if (mobs.IsEmpty())
+        {
+            return false;
+        }
+        else
+        {
+            mobs.First().MobState = EMobState.BENCHED;
+            return true;
+        }
+    }
+
     #region Event Handling
     private void OnInputPreparationFinished()
     {
@@ -28,17 +73,24 @@ public partial class CombatPreparationManager : Node3D
     private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
     {
         if (CombatScene.GetState() != ECombatState.PREPARATION) return;
+        bool placedMob;
+        bool removedMob;
 
         //Must be a PRIMARY input
-        if (input != ECellInput.PRIMARY) return;
+        switch (input)
+        {
+            case ECellInput.PRIMARY:
+                if (SelectedMob is null) break;
+                placedMob = PlaceMob(cellPos, cell, SelectedMob);
+                break;
 
-        //Mob must be selected
-        if (SelectedMob is null) return;
+            case ECellInput.SECONDARY:
+                removedMob = RemoveMob( cellPos);
+                break;
 
-        //The position must be valid for this mob.
-        if (!SelectedMob.IsValidPositionToExist(CombatScene.GetGrid(), cellPos)) return;
+            default: break;
+        }
 
-        SelectedMob.Move(cellPos);
     }
 
     private void OnMobSelected(Mob obj)
