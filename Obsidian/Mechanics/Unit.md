@@ -4,10 +4,9 @@ tags:
 ---
 Units can have the following properties:
 - [[Character Stats]]
-- [[Passive]]
-- [[Combat Job]]
+- [[Mob template]]
 - [[Faction]]
-- [[Race/Race]]
+- [[Race]]
 
 ## Construction
 **TODO:** When they exist, list sources of creation.

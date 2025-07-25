@@ -31,3 +31,6 @@ How many cells horizontally a [[Unit]] can move. The vertical amount depends on 
 ### Intelligence
 - Boosts damage of some abilities by 75% of its value.
 - Boosts maximum energy by 25% of its value.
+
+### Actions
+Spread into Action, Sub Action, Reaction and Move. Each [[Ability]] can take any amount of any of these. These refresh every turn.

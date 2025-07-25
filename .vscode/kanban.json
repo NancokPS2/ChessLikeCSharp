@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "ActionEventTargeter should show which mobs are going to be affected",
+                    "id": "jk0k15ysbx8t1nwv09d9gbff"
+                },
+                {
                     "text": "First pass to PREPARATION mode, then have that use some UI element that allows proceeding to TURN_SELECTION",
                     "id": "d0ac9be1srj0kkyxshyfm8pi"
                 },
@@ -216,5 +220,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1753378142629
+    "timestamp": 1753463121547
 }
