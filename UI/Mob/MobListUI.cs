@@ -4,7 +4,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipButton, Mob>, ISceneDependency
+public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>, ISceneDependency
 {
 	public Mob? MobSelected;
 
@@ -15,7 +15,7 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 	[Export]
 	public Label NodeFactionNameLabel;
 
-	public PartyMobListUI() : base()
+	public MobListUI() : base()
 	{
 		ButtonVerticalFlags = SizeFlags.ExpandFill;
 	}
@@ -29,13 +29,13 @@ public partial class PartyMobListUI : BaseButtonMenu<PartyMobListUI.MobTooltipBu
 
 	public void Update(List<EFaction> factions)
 	{
-		List<Mob> list = new();
+		List<Mob> mobList = new();
 		foreach (EFaction fac in factions)
 		{
-			list.AddRange(Global.ManagerMob.GetPooledInFaction(fac));
+			mobList.AddRange(Global.ManagerMob.GetPooledInFaction(fac));
 		}
 		NodeFactionNameLabel.Text = $"Factions: {factions.ToStringList()}";
-		Update(list);
+		Update(mobList);
 	}
 
 	protected override void OnButtonCreated(MobTooltipButton button, Mob param)

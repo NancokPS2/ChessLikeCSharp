@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ds3ltw517h8gd" path="res://UI/Party/PartyGeneralUI.cs" id="1_imkr4"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
-[ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://UI/Party/PartyMobListUI.tscn" id="2_ospk4"]
+[ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://UI/Mob/MobListUI.tscn" id="2_ospk4"]
 [ext_resource type="PackedScene" uid="uid://dvcptks4lh3ps" path="res://UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
 [ext_resource type="PackedScene" uid="uid://c7lfcu2mi4uaj" path="res://UI/Party/PartyJobChangeUI.tscn" id="6_rogee"]
 [ext_resource type="PackedScene" uid="uid://cf8b0b72i4xse" path="res://UI/Base/MassInventoryUI.tscn" id="7_51nsv"]
@@ -37,6 +37,7 @@ anchors_preset = -1
 anchor_left = 0.777778
 anchor_top = 0.197531
 anchor_bottom = 0.91358
+script = null
 metadata/_edit_use_anchors_ = true
 
 [node name="PartyInventoryUI" type="Control" parent="." node_paths=PackedStringArray("EquipmentUI", "MassUI")]

@@ -49,7 +49,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         Update(_last_update);
     }
 
-    protected void Update(List<TAssociatedParam> parameter_list)
+    public void Update(List<TAssociatedParam> parameter_list)
     {
         Control used_container = Container ?? this;
         foreach (var item in ButtonInstances)

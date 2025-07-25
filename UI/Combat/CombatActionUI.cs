@@ -18,17 +18,12 @@ public partial class CombatActionUI : Control, ISceneDependency
     protected Mob? MobSelected;
     protected Mob? MobToUpdate;
 
-    public CombatActionUI()
-    {
-        EventBus.CombatStateChanged += OnBattleStateChanged;
-        EventBus.MobTurnStarted += OnMobTurnStarted;
-        EventBus.MobSelected += OnMobSelected;
-    }
-
-	public override void _Ready()
+    public override void _Ready()
     {
         base._Ready();
-        NodeActionContainer ??= (Control)FindChild("ActionContainer");
+        EventBus.CombatStateChanged += OnCombatStateChanged;
+        EventBus.MobTurnStarted += OnMobTurnStarted;
+        EventBus.MobSelected += OnMobSelected;
     }
 
     public override void _Process(double delta)
@@ -95,17 +90,15 @@ public partial class CombatActionUI : Control, ISceneDependency
     }
 
     #region Event Handling
-    private void OnBattleStateChanged(ECombatState state)
+    private void OnCombatStateChanged(ECombatState state)
     {
-        switch (state)
+        if (state == ECombatState.ACTION_INPUT)
         {
-            case ECombatState.ACTION_INPUT:
-                EnableActionButtons(true);
-                break;
-
-            default:
-                EnableActionButtons(false);
-                break;
+            EnableActionButtons(true);
+        }
+        else
+        {
+            EnableActionButtons(false);
         }
     }
 
