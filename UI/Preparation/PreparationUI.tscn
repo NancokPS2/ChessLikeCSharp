@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpxiarah531y4"]
+
+[ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://UI/Mob/MobListUI.tscn" id="1_cx55i"]
+[ext_resource type="Script" uid="uid://c57oh1edeybop" path="res://UI/Preparation/PreparationUI.cs" id="1_kycpm"]
+[ext_resource type="Script" uid="uid://155perffoofw" path="res://UI/Base/ConfirmationButton.cs" id="3_nlc0q"]
+
+[node name="PreparationUi" type="Control" node_paths=PackedStringArray("ConfirmationButtonNode")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kycpm")
+ConfirmationButtonNode = NodePath("ConfirmationButton")
+metadata/_custom_type_script = "uid://c57oh1edeybop"
+
+[node name="PartyUnitListUI" parent="." instance=ExtResource("1_cx55i")]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 1
+anchors_preset = 10
+anchor_bottom = 0.0
+grow_vertical = 1
+script = null
+
+[node name="ConfirmationButton" type="Button" parent="."]
+custom_minimum_size = Vector2(80, 64)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "ACCEPT"
+script = ExtResource("3_nlc0q")
+metadata/_custom_type_script = "uid://155perffoofw"

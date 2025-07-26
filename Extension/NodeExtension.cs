@@ -7,21 +7,38 @@ using Godot;
 
 public static class NodeExtension
 {
-    public static void RemoveSelf(this Node @this)
+	private const string META_KEY_ORIGINAL_PARENT = "NodeRemovedOriginalParent";
+
+	public static void RemoveSelf(this Node @this, bool recordParent = false)
     {
         Node parent = @this.GetParent();
         if (@parent is null){GD.PushWarning("Cannot remove self, it is an orphan."); return;}
 
+		if (recordParent) RecordOriginalParent(@this);
+
         parent.RemoveChild(@this);
     }
 
+	public static void RecordOriginalParent(this Node @this)
+		=> @this.SetMeta(META_KEY_ORIGINAL_PARENT, @this.GetParent());
+
+	public static void ReturnSelf(this Node @this)
+	{
+		if (!@this.HasMeta(META_KEY_ORIGINAL_PARENT))
+			throw new Exception("No original parent remembered.");
+		if (GodotObject.IsInstanceValid(@this.GetMeta(META_KEY_ORIGINAL_PARENT).As<Node>()))
+			throw new Exception("The parent is no longer valid.");
+
+		@this.GetMeta(META_KEY_ORIGINAL_PARENT).As<Node>().AddChild(@this);
+	}
+
     public static void FreeChildren(this Node @this)
-    {
-        foreach (var item in @this.GetChildren())
-        {
-            item.QueueFree();
-        }
-    }
+	{
+		foreach (var item in @this.GetChildren())
+		{
+			item.QueueFree();
+		}
+	}
 
     /// <summary>
     /// WARNING: Using this can lead to memory leaks.
