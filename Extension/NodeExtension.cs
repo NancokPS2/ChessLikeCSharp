@@ -26,7 +26,7 @@ public static class NodeExtension
 	{
 		if (!@this.HasMeta(META_KEY_ORIGINAL_PARENT))
 			throw new Exception("No original parent remembered.");
-		if (GodotObject.IsInstanceValid(@this.GetMeta(META_KEY_ORIGINAL_PARENT).As<Node>()))
+		if (!GodotObject.IsInstanceValid(@this.GetMeta(META_KEY_ORIGINAL_PARENT).As<Node>()))
 			throw new Exception("The parent is no longer valid.");
 
 		@this.GetMeta(META_KEY_ORIGINAL_PARENT).As<Node>().AddChild(@this);

@@ -55,9 +55,9 @@ public partial class TurnManager : Node3D
         base._Process(delta);
         if (ReadyToStartTurn)
         {
+            StartTurn();
             if (CurrentTaker is null)
                 throw new Exception();
-            StartTurn();
         }
         else if (ReadyToEndTurn)
         {

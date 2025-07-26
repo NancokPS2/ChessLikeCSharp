@@ -22,7 +22,6 @@ metadata/_custom_type_script = "uid://dhfflpct4gbno"
 
 [node name="CombatStateOverlay" parent="." instance=ExtResource("2_g7cxo")]
 layout_mode = 1
-Styles = null
 
 [node name="CombatTurnUI" parent="." instance=ExtResource("2_h8ftk")]
 layout_mode = 1

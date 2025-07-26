@@ -41,16 +41,12 @@ metadata/_custom_type_script = "uid://cbukun27q6n85"
 
 [node name="GridNode" type="Node3D" parent="Singletons"]
 script = ExtResource("3_brs8u")
-grid = null
-CellSize = Vector3(1, 1, 1)
-InputEnabled = true
 metadata/_custom_type_script = "uid://md7uxykgpoyx"
 
 [node name="GridHoverCursor" parent="Singletons" instance=ExtResource("8_wmbcu")]
 
 [node name="MobSceneManager" type="Node3D" parent="Singletons"]
 script = ExtResource("4_e5xpt")
-CursorSpeed = null
 metadata/_custom_type_script = "uid://c3fqdxefdb0tc"
 
 [node name="TurnManager" type="Node3D" parent="Singletons"]
@@ -75,17 +71,6 @@ mesh = SubResource("PrismMesh_1a52j")
 transform = Transform3D(0.0409651, -0.445792, 0.894199, 0.0204012, 0.895137, 0.445325, -0.998952, 0, 0.045764, 42.5199, 12.0387, 0)
 current = true
 script = ExtResource("5_lnhn1")
-sensitivity_horizontal = null
-sensitivity_vertical = null
-sensitivity_directional = null
-pivot_point = null
-pivot_rotation = null
-pivot_distance = null
-pivot_elevation = null
-pivot_translation_snap = null
-pivot_translation_auto_delay = null
-pivot_rotation_only = null
-mode = null
 metadata/_custom_type_script = "uid://cav6lcd1dy6th"
 
 [node name="CombatGeneralUI" parent="." instance=ExtResource("7_e5xpt")]

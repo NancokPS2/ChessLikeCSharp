@@ -74,7 +74,7 @@ public partial class Camera : Camera3D
 
     public override void _Input(InputEvent @event)
     {
-        base._UnhandledInput(@event);
+        base._Input(@event);
 
         //Enable or disable the camera movement (toggle).
         if(Global.GInput.IsButtonPressed(Global.GInput.Button.SHOULDER_SUB_RT))
