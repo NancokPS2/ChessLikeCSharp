@@ -1,20 +1,12 @@
 {
-  "collapse-filter": true,
-  "search": "tag:#job OR file:Combat Job",
+  "collapse-filter": false,
+  "search": "tag:#character  ",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
   "collapse-color-groups": false,
-  "colorGroups": [
-    {
-      "query": "tag:#job  ",
-      "color": {
-        "a": 1,
-        "rgb": 14701138
-      }
-    }
-  ],
+  "colorGroups": [],
   "collapse-display": false,
   "showArrow": false,
   "textFadeMultiplier": 0,
@@ -25,6 +17,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 0.8560789647531739,
-  "close": true
+  "scale": 0.7823164678319244,
+  "close": false
 }

@@ -3,7 +3,7 @@ tags:
   - location
   - location/region
 ---
-Found all the way to the south. Despite being the smallest of the regions, it sports the largest swathe land governed by a single entity.
+Found all the way to the south. Despite being the smallest of the regions, it sports the largest swathe of land governed by a single entity.
 
 While the power is delegated across the entire region. Their power and secrecy is equally unmatched.
 
