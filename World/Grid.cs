@@ -57,22 +57,32 @@ public partial class Grid : Resource
         CellDictionary[position] = cell;
     }
 
+	public void FillCellWhere(GridCell cell, Func<Vector3i, bool> conditionFunc)
+	{
+		foreach (var item in Vector3i.CreateBox(Boundary))
+		{
+			bool condition = conditionFunc(item);
+			if (condition)
+				SetCell(item, cell);
+		}		
+	}
+
     public void FillCell(GridCell cell, bool emptyOnly)
-    {
-        for (int x = 0; x < Boundary.X; x++)
-        {
-            for (int y = 0; y < Boundary.Y; y++)
-            {
-                for (int z = 0; z < Boundary.Z; z++)
-                {
-                    Vector3i vector = new(x, y, z);
-                    if (emptyOnly && HasCell(vector)) continue;
-                    SetCell(vector, cell);
-                }
-            }
-            
-        }
-    }
+	{
+		for (int x = 0; x < Boundary.X; x++)
+		{
+			for (int y = 0; y < Boundary.Y; y++)
+			{
+				for (int z = 0; z < Boundary.Z; z++)
+				{
+					Vector3i vector = new(x, y, z);
+					if (emptyOnly && HasCell(vector)) continue;
+					SetCell(vector, cell);
+				}
+			}
+
+		}
+	}
 
     public GridCell GetCell(Vector3i position)
     {

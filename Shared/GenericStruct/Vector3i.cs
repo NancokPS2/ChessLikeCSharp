@@ -141,7 +141,7 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return X + Y + Z;
 	}
 
-	public static List<Vector3i> CreateCube(uint size)
+	public static List<Vector3i> CreateCubeFromCenter(uint size)
 	{
 		List<Vector3i> output = new();
 		int[] range = Enumerable.Range((int)-size, (int)size * 2 + 1).ToArray();
@@ -161,6 +161,22 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 			}
 		}
 
+		return output;
+	}
+
+	public static List<Vector3i> CreateBox(Vector3i size)
+	{
+		List<Vector3i> output = new();
+		foreach (var x in Enumerable.Range(0, size.X))
+		{
+			foreach (var y in Enumerable.Range(0, size.Y))
+			{
+				foreach (var z in Enumerable.Range(0, size.Z))
+				{
+					output.Add(new(x, y, z));
+				}
+			}
+		}
 		return output;
 	}
 

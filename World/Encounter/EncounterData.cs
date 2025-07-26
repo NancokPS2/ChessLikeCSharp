@@ -64,6 +64,16 @@ public partial class EncounterData : Resource
     {
         EncounterData encounter = new();
         encounter.Grid = GridTerrainGenerator.GenerateFlat(new(6));
+		encounter.Grid.FillCellWhere(
+			GridCell.Preset.Spawnpoint,
+			pos =>
+				//In the X border.
+				pos.X == encounter.Grid.Boundary.X - 1
+				//If it is in empty air.
+				&& encounter.Grid.GetCell(pos) == GridCell.Preset.Air
+				//If it has a floor below.
+				&& encounter.Grid.IsFlagInPosition(pos + Vector3i.DOWN, ECellFlag.SOLID)
+			);
 
 		MobTemplateBase templateBase =
 			Global.ManagerMobTemplate.GetResource<MobTemplateBase>(EPackIDMobTemplate.Default);

@@ -45,7 +45,7 @@ public partial class GridCell : Resource, IEquatable<GridCell>
 
     public bool Equals(GridCell? other)
     {
-        return Name == other?.Name && Flags == other.Flags && Selectable == other.Selectable;
+        return Name == other?.Name && Flags == other.Flags && Selectable == other.Selectable && FactionSpawn == other.FactionSpawn;
     }
     public override int GetHashCode()
     {
@@ -82,10 +82,11 @@ public partial class GridCell : Resource, IEquatable<GridCell>
             Selectable = true,
         };
         public static readonly GridCell Spawnpoint = new()
-        {
-            Name = "Spawnpoint",
-            Flags = new List<ECellFlag>() { ECellFlag.AIR, ECellFlag.PLAYER_SPAWNPOINT },
-            Selectable = false,
+		{
+			Name = "Spawnpoint",
+			Flags = new List<ECellFlag>() { ECellFlag.AIR },
+			Selectable = false,
+			FactionSpawn = EFaction.PLAYER
         };
         public static readonly GridCell Invalid = new()
         {

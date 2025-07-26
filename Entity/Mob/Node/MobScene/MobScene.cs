@@ -40,6 +40,7 @@ public partial class MobScene : Node3D
     {
         EventBus.MobMoved += OnMobMoved;
         EventBus.MobStatChanged += OnMobStatChanged;
+		EventBus.MobStatValueChanged += OnMobStatValueChanged;
         EventBus.MobTurnStarted += OnMobTurnStarted;
         EventBus.MobTurnEnded += OnMobTurnEnded;
         EventBus.MobSelected += OnMobSelected;
@@ -47,7 +48,7 @@ public partial class MobScene : Node3D
         EventBus.InventoryChanged += OnInventoryChanged;
     }
 
-    public override void _Ready()
+	public override void _Ready()
     {
         base._Ready();
         if (MobUsing is null) throw new Exception("Lacks a MobUsing");
@@ -217,25 +218,43 @@ public partial class MobScene : Node3D
             color = Colors.Green;
         }
 
+		color.A = 0.7f;
+        AnimatePopupText($"{stat}: {change}", color);
+    }
+
+	private void OnMobStatValueChanged(Mob mob, EValueName stat, float change)
+	{
+        if (mob != MobUsing) return;
+        string text;
+        Godot.Color color = Colors.White;
+        if (change < 0)
+        {
+            color = Colors.Red;
+        }
+        else if (change > 0)
+        {
+            color = Colors.Green;
+        }
+
         switch (stat)
         {
-            case EStatName.HEALTH:
+            case EValueName.HEALTH:
                 text = change.ToString();
                 break;
 
             default: break;
         }
         AnimatePopupText($"{stat}: {change}", color);
-    }
+	}
 
     private void OnMobTurnStarted(Mob mob)
-    {
-        if (mob != MobUsing) return;
-        mob.TurnActive = true;
-        mob.Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
-        AnimatePopupText("READY");
-        ToggleEffect(EMobSceneEffect.TURN_ACTIVE, true);
-    }
+	{
+		if (mob != MobUsing) return;
+		mob.TurnActive = true;
+		mob.Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
+		AnimatePopupText("READY");
+		ToggleEffect(EMobSceneEffect.TURN_ACTIVE, true);
+	}
 
     private void OnMobTurnEnded(Mob mob)
     {

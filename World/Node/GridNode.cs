@@ -264,12 +264,12 @@ public partial class GridNode : Node3D
         }
         EventBus.CellPositionInputReceived?.Invoke(
             componentPos + Vector3i.UP,
-            grid.GetCell(componentPos),
+            grid.GetCell(componentPos + Vector3i.UP),
             cellInput
             );
         EventBus.CellInputReceived?.Invoke(
             componentPos + Vector3i.UP,
-            grid.GetCell(componentPos),
+            grid.GetCell(componentPos + Vector3i.UP),
             cellInput
             );
     }

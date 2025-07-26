@@ -49,7 +49,7 @@ public partial class TargetingParameters : Resource
     public uint AoESize = 0;
 
     public List<Vector3i> GetTargetingShape()
-        => Vector3i.CreateCube(Range)
+        => Vector3i.CreateCubeFromCenter(Range)
             .Where(x => x.DistanceManhattanTo(Vector3i.ZERO) <= Range)
             .ToList();
 

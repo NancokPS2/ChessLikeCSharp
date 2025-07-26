@@ -4,24 +4,26 @@
 [ext_resource type="Script" uid="uid://c57oh1edeybop" path="res://UI/Preparation/PreparationUI.cs" id="1_kycpm"]
 [ext_resource type="Script" uid="uid://155perffoofw" path="res://UI/Base/ConfirmationButton.cs" id="3_nlc0q"]
 
-[node name="PreparationUi" type="Control" node_paths=PackedStringArray("ConfirmationButtonNode")]
+[node name="PreparationUi" type="Control" node_paths=PackedStringArray("MobListUINode", "ConfirmationButtonNode")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_kycpm")
+MobListUINode = NodePath("MobListUI")
 ConfirmationButtonNode = NodePath("ConfirmationButton")
 metadata/_custom_type_script = "uid://c57oh1edeybop"
 
-[node name="PartyUnitListUI" parent="." instance=ExtResource("1_cx55i")]
+[node name="MobListUI" parent="." instance=ExtResource("1_cx55i")]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 1
 anchors_preset = 10
 anchor_bottom = 0.0
 grow_vertical = 1
-script = null
+ButtonAnchors = Rect2(0, 0, 1, 0)
 
 [node name="ConfirmationButton" type="Button" parent="."]
 custom_minimum_size = Vector2(80, 64)

@@ -7,6 +7,9 @@ using System;
 public partial class PreparationUI : Control
 {
 	[Export]
+	protected MobListUI? MobListUINode;
+
+	[Export]
 	protected ConfirmationButton? ConfirmationButtonNode;
 
 	public override void _Ready()
@@ -15,21 +18,20 @@ public partial class PreparationUI : Control
 		if (ConfirmationButtonNode is null) throw new Exception();
 		EventBus.CombatStateChanged += OnCombatStateChanged;
 		ConfirmationButtonNode.Confirmed += OnConfirmed;
-
 	}
-
-
 
 	#region Event Handling
 	private void OnCombatStateChanged(ECombatState obj)
 	{
-		if (obj == ECombatState.PREPARATION && !IsInsideTree())
+		if (obj == ECombatState.PREPARATION)
 		{
-			this.ReturnSelf();
+			if (!IsInsideTree()) this.ReturnSelf();
+			(MobListUINode ?? throw new Exception())
+				.Update(Global.ManagerMob.GetPooledInFaction(ChessLike.Entity.EFaction.PLAYER));
 		}
 		else if (obj != ECombatState.PREPARATION && IsInsideTree())
 		{
-			this.RemoveSelf();
+			if (IsInsideTree()) this.RemoveSelf();
 		}
 	}
 
