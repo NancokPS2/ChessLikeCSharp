@@ -250,7 +250,7 @@ public partial class Mob : Resource
 
 	public override string ToString()
     {
-        string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {GetRaceNames()} \n";
+        string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {GetRaceNames().ToStringList()} \n";
 
         return output;
     }

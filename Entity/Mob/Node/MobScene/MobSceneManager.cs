@@ -16,6 +16,7 @@ public partial class MobSceneManager : Node3D
 
     protected List<MobScene> InstancedMobs = new();
 
+	protected Mob? SelectedMob;
     protected MobScene? SelectedMobScene;
     public MobSceneManager()
     {
@@ -33,56 +34,73 @@ public partial class MobSceneManager : Node3D
         EventBus.CellPositionSelected += OnCellSelected;
         EventBus.CellPositionHovered += OnCellHovered;
         EventBus.MobTurnStarted += OnMobTurnStarted;
+		EventBus.MobSelected += OnMobSelected;
 
         AddChild(NodeSelectionCursor);
         AddChild(NodeHoveringCursor);
     }
 
-    public override void _Process(double delta)
+	public override void _Process(double delta)
     {
         base._Process(delta);
-        Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero; ;
 
-        NodeSelectionCursor.Visible = SelectedMobScene is not null;
+		//Make the selected mob scene scene match the selected mob
+		SelectedMobScene = SelectedMob is null ? null : GetInstance(SelectedMob);
 
+		//Move the cursor to the target scene position
+        Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero;
         NodeSelectionCursor.GlobalPosition = NodeSelectionCursor.GlobalPosition.MoveToward(
             target, (float)(CursorSpeed * delta)
             );
+
+		//Make it visible if there is a mob scene.
+        NodeSelectionCursor.Visible = SelectedMobScene is not null;
+
     }
 
     private bool HasInstance(Mob mob)
         => InstancedMobs.Any(x => x.MobUsing == mob);
 
-    private MobScene GetInstance(Mob mob)
+    private MobScene? GetInstance(Mob? mob)
     {
         List<MobScene> instancesFound = InstancedMobs.FindAll(x => x.MobUsing == mob);
-        if (instancesFound.Count > 1)
-        {
-            throw new Exception($"Only one instance should exist. Found {instancesFound.Count}");
-        }
-        else if (instancesFound.Count == 0)
-        {
-            MobScene newInstance = Readonly.Scenes.SCENE_MOB;
-            newInstance.MobUsing = mob;
-            return newInstance;
-        }
-        else return instancesFound[0];
+		if (instancesFound.Count > 1)
+		{
+			throw new Exception($"Only one instance should exist. Found {instancesFound.Count}");
+		}
+		//If there is none, return null.
+		else if (instancesFound.Count == 0)
+		{
+			return null;
+		}
+		//If there is one, return that.
+		else
+		{
+			return instancesFound[0];
+		}
     }
+
+	protected MobScene CreateInstance(Mob mob)
+	{
+		MobScene newInstance = Readonly.Scenes.SCENE_MOB;
+		newInstance.MobUsing = mob;
+		return newInstance;
+	}
 
     private void AddInstance(Mob mob)
-    {
-        MobScene instance = GetInstance(mob);
+	{
+		MobScene instance = GetInstance(mob) ?? CreateInstance(mob);
 
-        InstancedMobs.Add(instance);
+		InstancedMobs.Add(instance);
 
-        AddChild(instance);
-        instance.MovementResetPosition();
-    }
+		AddChild(instance);
+		instance.MovementResetPosition();
+	}
 
     public void RemoveInstance(Mob mob)
     {
         if (!HasInstance(mob)) return;
-        MobScene instance = GetInstance(mob);
+        MobScene instance = GetInstance(mob) ?? throw new Exception("Inconsistency between HasInstance() and GetInstance()");
 
         RemoveChild(instance);
         InstancedMobs.Remove(instance);
@@ -108,8 +126,10 @@ public partial class MobSceneManager : Node3D
         MobScene? scene = GetInstanceByPosition(mob.GetPosition());
         if (scene is null) return;
 
-        SelectedMobScene = GetInstance(mob);
-        EventBus.MobSelected?.Invoke(scene.MobUsing);
+		//Unnecesary, OnMobSelected() handles this already.
+		//SelectedMobScene = GetInstance(mob);
+		
+		EventBus.MobSelected?.Invoke(scene.MobUsing);
     }
 
     protected void HoverMob(MobScene scene)
@@ -129,24 +149,29 @@ public partial class MobSceneManager : Node3D
         if (!HasInstance(mob)) throw new Exception();
     }
 
-    #region Event Handling
+	#region Event Handling
+	private void OnMobSelected(Mob obj)
+	{
+		SelectedMob = obj;
+	}
+
     private void OnMobStateChanged(Mob mob, EMobState state)
-    {
-        if (state == EMobState.COMBAT)
-        {
-            //Has an instance, skip and keep using that.
-            if (HasInstance(mob)) return;
-            //Add an instance for this mob.
-            AddInstance(mob);
-        }
-        else if (state == EMobState.BENCHED)
-        {
-            //Does not have an instance already, skip.
-            if (!HasInstance(mob)) return;
-            //Has an instance, remove it.
-            else RemoveInstance(mob);
-        }
-    }
+	{
+		if (state == EMobState.COMBAT)
+		{
+			//Has an instance, skip and keep using that.
+			if (HasInstance(mob)) return;
+			//Add an instance for this mob.
+			AddInstance(mob);
+		}
+		else if (state == EMobState.BENCHED)
+		{
+			//Does not have an instance already, skip.
+			if (!HasInstance(mob)) return;
+			//Has an instance, remove it.
+			else RemoveInstance(mob);
+		}
+	}
 
     private void OnCellSelected(Vector3i cellPos)
     {

@@ -10,6 +10,8 @@ namespace ChessLike.Animation;
 public abstract partial class AnimationComponent : Node3D
 {
 	protected bool Finished = false;
+	
+	[Export]
 	protected bool StopOnFinished = true;
 
 	public override void _Ready()

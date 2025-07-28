@@ -37,6 +37,7 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 		Update(mobList);
 	}
 
+	#region Event Handling - INTERNAL
 	protected override void OnButtonCreated(MobTooltipButton button, Mob param)
 	{
 		button.MobReference = param;
@@ -79,6 +80,7 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 			button.Modulate = Godot.Colors.White;
 		}
 	}
+	#endregion
 
 	public partial class MobTooltipButton : Button, ITooltip
 	{

@@ -47,6 +47,7 @@ metadata/_custom_type_script = "uid://md7uxykgpoyx"
 
 [node name="MobSceneManager" type="Node3D" parent="Singletons"]
 script = ExtResource("4_e5xpt")
+CursorSpeed = 22.0
 metadata/_custom_type_script = "uid://c3fqdxefdb0tc"
 
 [node name="TurnManager" type="Node3D" parent="Singletons"]

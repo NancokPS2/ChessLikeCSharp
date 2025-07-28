@@ -64,7 +64,8 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
     #region Boosts
     public string BoostGetListOfStatChanges(TStatEnum name)
     {
-        string output = $"{name} Boost \nBase: {StatDict[name]}\n";
+		string baseVal = StatDict[name] == float.MaxValue ? "UNLIMITED" : StatDict[name].ToString();
+        string output = $"{name} Boost \nBase: {baseVal}\n";
 
         foreach (StatBoost<TStatEnum> boost in Boosts.Values)
         {

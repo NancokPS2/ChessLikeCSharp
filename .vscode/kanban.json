@@ -5,16 +5,16 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "PREPARATION needs a way to access the party screen.",
+                    "id": "niqpooe9wnk50p2hra86wfhm"
+                },
+                {
                     "text": "Make a separate marker to display where the unit is, and un-hardcode the movement animation from the Mob.Move() function",
                     "id": "ouvrbgqndy7txt15hzj0ctgw"
                 },
                 {
                     "text": "ActionEventTargeter should show which mobs are going to be affected",
                     "id": "jk0k15ysbx8t1nwv09d9gbff"
-                },
-                {
-                    "text": "First pass to PREPARATION mode, then have that use some UI element that allows proceeding to TURN_SELECTION",
-                    "id": "d0ac9be1srj0kkyxshyfm8pi"
                 },
                 {
                     "text": "MobStatSet should allow for multiple option values (enum containers) and collections of them",
@@ -224,5 +224,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1753562072448
+    "timestamp": 1753738205734
 }

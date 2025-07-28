@@ -1,3 +1,4 @@
+using ChessLike.Entity;
 using ChessLike.UI.Base;
 using ExtendedXmlSerializer;
 using Godot;
@@ -10,6 +11,9 @@ public partial class PreparationUI : Control
 	protected MobListUI? MobListUINode;
 
 	[Export]
+	protected MobUI? MobUINode;
+
+	[Export]
 	protected ConfirmationButton? ConfirmationButtonNode;
 
 	public override void _Ready()
@@ -17,17 +21,24 @@ public partial class PreparationUI : Control
 		base._Ready();
 		if (ConfirmationButtonNode is null) throw new Exception();
 		EventBus.CombatStateChanged += OnCombatStateChanged;
+		EventBus.MobSelected += OnMobSelected;
 		ConfirmationButtonNode.Confirmed += OnConfirmed;
 	}
 
 	#region Event Handling
+	private void OnMobSelected(Mob obj)
+	{
+		if (!IsInsideTree()) (MobUINode ?? throw new Exception())
+			.Update(obj);
+	}
+
 	private void OnCombatStateChanged(ECombatState obj)
 	{
 		if (obj == ECombatState.PREPARATION)
 		{
 			if (!IsInsideTree()) this.ReturnSelf();
 			(MobListUINode ?? throw new Exception())
-				.Update(Global.ManagerFaction.ResourceGet( EPackIDFaction.Player.ToString(), true, true));
+				.Update(Global.ManagerFaction.ResourceGet(EPackIDFaction.Player.ToString(), true, true));
 		}
 		else if (obj != ECombatState.PREPARATION && IsInsideTree())
 		{
