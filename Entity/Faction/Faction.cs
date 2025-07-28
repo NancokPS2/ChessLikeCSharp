@@ -11,7 +11,7 @@ namespace ChessLike.Entity;
 
 //Factions can store groups of Mobs, their inventories and grant allegiance between mobs.
 [GlobalClass]
-public partial class Faction : Resource, ISerializable
+public partial class Faction : Resource
 {
     [Export]
     public string DisplayedName = "Unnamed Faction";
@@ -19,13 +19,21 @@ public partial class Faction : Resource, ISerializable
     [Export]
     public EFaction Identifier = EFaction.NEUTRAL;
 
+    public Dictionary<EFaction, float> RelationList = new();
     [Export]
     private Godot.Collections.Dictionary<EFaction, float> relationList
     {
         set => RelationList = new(value);
         get => new(RelationList);
     }
-    public Dictionary<EFaction, float> RelationList = new();
+
+    public List<Mob> Mobs = new();
+    [Export]
+    private Godot.Collections.Array<Mob> mobs
+    {
+        set => Mobs = new(value);
+        get => new(Mobs);
+    }
 
     [Export]
     public MassInventory Inventory = new();

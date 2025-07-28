@@ -20,19 +20,18 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 		ButtonVerticalFlags = SizeFlags.ExpandFill;
 	}
 
-	public void Update(EFaction faction)
+	public void Update(Faction faction)
 	{
-		var list = Global.ManagerMob.GetPooledInFaction(faction);
-		NodeFactionNameLabel.Text = $"Faction: {faction}";
-		Update(list);
+		NodeFactionNameLabel.Text = $"Faction: {faction.DisplayedName}";
+		Update(faction.Mobs);
 	}
 
-	public void Update(List<EFaction> factions)
+	public void Update(List<Faction> factions)
 	{
 		List<Mob> mobList = new();
-		foreach (EFaction fac in factions)
+		foreach (Faction fac in factions)
 		{
-			mobList.AddRange(Global.ManagerMob.GetPooledInFaction(fac));
+			mobList.AddRange(fac.Mobs);
 		}
 		NodeFactionNameLabel.Text = $"Factions: {factions.ToStringList()}";
 		Update(mobList);

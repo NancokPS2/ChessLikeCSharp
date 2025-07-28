@@ -14,9 +14,6 @@ theme = ExtResource("1_nk17s")
 script = ExtResource("1_la5gv")
 NodeFactionNameLabel = NodePath("FactionNameLabel")
 Container = NodePath("PortraitContainer")
-ButtonHorizontalFlags = null
-ButtonVerticalFlags = null
-ButtonAnchors = null
 metadata/_custom_type_script = "uid://khyr66d6toln"
 
 [node name="Panel" type="Panel" parent="."]

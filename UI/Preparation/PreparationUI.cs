@@ -27,7 +27,7 @@ public partial class PreparationUI : Control
 		{
 			if (!IsInsideTree()) this.ReturnSelf();
 			(MobListUINode ?? throw new Exception())
-				.Update(Global.ManagerMob.GetPooledInFaction(ChessLike.Entity.EFaction.PLAYER));
+				.Update(Global.ManagerFaction.ResourceGet( EPackIDFaction.Player.ToString(), true, true));
 		}
 		else if (obj != ECombatState.PREPARATION && IsInsideTree())
 		{

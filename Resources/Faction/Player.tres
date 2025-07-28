@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Faction" load_steps=9 format=3 uid="uid://djyh52u5w741b"]
+[gd_resource type="Resource" script_class="Faction" load_steps=11 format=3 uid="uid://djyh52u5w741b"]
 
 [ext_resource type="Script" uid="uid://cwewjc8svycgy" path="res://Inventory/MassInventory/MassInventory.cs" id="1_8fs8b"]
 [ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Inventory/ItemFilter.cs" id="1_rpm5k"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://c0ducr6ksvfmg" path="res://Entity/Faction/Faction.cs" id="2_rpm5k"]
 [ext_resource type="Resource" uid="uid://47qrkw2tk2ik" path="res://Resources/Item/Item_Gold.tres" id="3_0pol8"]
 [ext_resource type="Resource" uid="uid://7lijrftbpnjo" path="res://Resources/Item/Equip_Vest.tres" id="4_rvgvy"]
+[ext_resource type="Resource" uid="uid://wl1cfff83f7g" path="res://Resources/Mob/MC.tres" id="6_o0pgq"]
+[ext_resource type="Resource" uid="uid://ck4x374dn8evy" path="res://Resources/Mob/STARTER_MEMBER.tres" id="7_5wo64"]
 
 [sub_resource type="Resource" id="Resource_xh4ur"]
 script = ExtResource("1_rpm5k")
@@ -22,5 +24,7 @@ script = ExtResource("2_rpm5k")
 DisplayedName = "Player"
 Identifier = 0
 relationList = null
+mobs = Array[Object]([ExtResource("6_o0pgq"), ExtResource("7_5wo64")])
 Inventory = SubResource("Resource_0pol8")
 metadata/_custom_type_script = "uid://c0ducr6ksvfmg"
+metadata/persistent = true

@@ -16,14 +16,16 @@ public partial class Settings : Node
     const string DEFAULT_PATH = "user://settings.ini";
     const string FLOAT_KEY = "Floats";
     const string STRING_KEY = "Strings";
-    public enum KeyFloat {
+    public enum KeyFloat
+    {
         VOLUME,
-        PARTICLE_RATIO        
+        PARTICLE_RATIO
     }
-    public enum KeyString {
+    public enum KeyString
+    {
         LOCALE,
     }
-    public static Settings Instance;
+    protected static Settings Instance;
     private Dictionary<KeyFloat, float> Floats = new();
     private Dictionary<KeyString, string> Strings = new();
 
@@ -37,8 +39,7 @@ public partial class Settings : Node
     {
         base._Ready();
         Instance = this;
-        Reset();
-        SaveSettings();
+        LoadSettings();
     }
 
     public static void Reset()
@@ -88,31 +89,32 @@ public partial class Settings : Node
         {
             config.SetValue(STRING_KEY, nameof(item.Key), item.Value);
         }
-        config.Save(path);
+        var error = config.Save(path);
+        if (error != Error.Ok) throw new Exception();
     }
 
-    public static void LoadSettings(string path = DEFAULT_PATH )
+    public static void LoadSettings(string path = DEFAULT_PATH, bool allowNew = true)
     {
         ConfigFile config = new();
         Error error = config.Load(path);
-        if (error != Error.Ok)
+        if (error != Error.Ok && allowNew)
         {
             GD.PushWarning("Could not load a file. Creating a new one at path: " + path);
+            Reset();
             SaveSettings(path);
             config.Load(path);
         }
 
         foreach (var item in Enum.GetValues<KeyFloat>())
         {
-            if(!config.HasSectionKey(FLOAT_KEY, nameof(item))){throw new Exception("Missing entry.");}
             float val = (float)config.GetValue(FLOAT_KEY, nameof(item), 1f);
             Set(item, val);
         }
         foreach (var item in Enum.GetValues<KeyString>())
         {
-            if(!config.HasSectionKey(STRING_KEY, nameof(item))){throw new Exception("Missing entry.");}
             string val = (string)config.GetValue(STRING_KEY, nameof(item), "UNDEFINED");
             Set(item, val);
         }
     }
+    
 }
