@@ -7,6 +7,7 @@ using ChessLike.Turn;
 
 namespace Godot.Display;
 
+[GlobalClass]
 public partial class CombatTurnUI : Control, ISceneDependency
 {
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Combat/CombatTurnUI.tscn";
@@ -16,7 +17,7 @@ public partial class CombatTurnUI : Control, ISceneDependency
 
     protected Dictionary<Mob, Control> TurnDisplayInstances = new();
 
-    public CombatTurnUI()
+    public override void _Ready()
     {
         EventBus.MobStateChanged += OnMobStateChanged;
         EventBus.MobTurnStarted += OnMobTurnStarted;
@@ -42,7 +43,7 @@ public partial class CombatTurnUI : Control, ISceneDependency
             NodeTurnContainer.RemoveChild(instance);
         }
     }
-    
+
     protected void UpdateCurrentTurnTaker(Mob mob)
     {
         if (!TurnDisplayInstances.ContainsKey(mob)) throw new Exception();

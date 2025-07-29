@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ctsopt37vmsh1"]
 
-[ext_resource type="Script" uid="uid://dhg0mylj7rk7b" path="res://UI/Mob/MobActionUI.cs" id="1_jyy0w"]
+[ext_resource type="Script" uid="uid://dhg0mylj7rk7b" path="res://UI/Mob/MobActionUI.cs" id="1_m73wy"]
 
 [node name="MobActionUI" type="Control" node_paths=PackedStringArray("ActionGrid")]
 layout_mode = 3
@@ -9,8 +9,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jyy0w")
+script = ExtResource("1_m73wy")
 ActionGrid = NodePath("ActionGrid")
+metadata/_custom_type_script = "uid://dhg0mylj7rk7b"
 
 [node name="ActionGrid" type="GridContainer" parent="."]
 layout_mode = 1

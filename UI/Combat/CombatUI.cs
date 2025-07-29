@@ -21,7 +21,7 @@ public partial class CombatUI : Control
 		}
 		else if (!IsInsideTree())
 		{
-			this.ReturnSelf();
+			this.AddSelf();
 		}
 	}
 	#endregion

@@ -43,6 +43,7 @@ public partial class CombatScene : Node3D
 		EventBus.TargetingUsageParametersGenerated += OnTargetingUsageParametersGenerated;
 		EventBus.MobTurnStarted += OnMobTurnStarted;
 		EventBus.InputBack += OnInputBack;
+		EventBus.InputPause += OnInputPause;
 		EventBus.TargetingParametersDone += OnTargetingParametersDone;
 		EventBus.MobTurnEnded += OnMobTurnEnded;
 		EventBus.ActionAnimationQueueEnded += OnActionAnimationQueueEnded;
@@ -133,6 +134,18 @@ public partial class CombatScene : Node3D
 			default: break;
 		}
 	}
+
+    private void OnInputPause()
+    {
+		if (StateCurrent == ECombatState.PAUSED)
+		{
+			SetState(StatePrevious);
+		}
+		else
+		{
+			SetState(ECombatState.PAUSED);
+		}
+    }
 
 	private void OnMobTurnStarted(Mob mob)
 	{

@@ -43,7 +43,7 @@ public partial class PartyInventoryUI : Control
         base._Ready();
         EventBus.MobSelected += OnMobSelected;
 
-        MassUI.Update(Global.ManagerFaction.GetPooledByEnum(EFaction.PLAYER).Inventory);
+        MassUI.Update(Global.ManagerFaction.ResourceGet(EPackIDFaction.Player.ToString(), true, true).Inventory);
     }
 
     protected void ClearSelected()

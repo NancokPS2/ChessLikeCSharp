@@ -23,6 +23,7 @@ theme = ExtResource("1_ucgmu")
 script = ExtResource("1_imkr4")
 NodePartyListUI = NodePath("PartyUnitListUI")
 NodeDebugOptions = NodePath("MenuButton")
+metadata/_custom_type_script = "uid://ds3ltw517h8gd"
 
 [node name="PartyUnitListUI" parent="." instance=ExtResource("2_ospk4")]
 layout_mode = 1

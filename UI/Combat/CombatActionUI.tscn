@@ -11,6 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uuyc0")
 NodeActionContainer = NodePath("ActionPanel/ActionContainer")
+metadata/_custom_type_script = "uid://bwwhkbc35jeus"
 
 [node name="ActionPanel" type="Panel" parent="."]
 layout_mode = 1

@@ -16,6 +16,7 @@ mouse_filter = 2
 script = ExtResource("1_4fqjl")
 NodePanel = NodePath("Panel")
 StylePlaceholder = ExtResource("2_sabfv")
+metadata/_custom_type_script = "uid://3p8ep6m7eokc"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

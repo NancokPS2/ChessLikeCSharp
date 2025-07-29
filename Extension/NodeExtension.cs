@@ -22,7 +22,7 @@ public static class NodeExtension
 	public static void RecordOriginalParent(this Node @this)
 		=> @this.SetMeta(META_KEY_ORIGINAL_PARENT, @this.GetParent());
 
-	public static void ReturnSelf(this Node @this)
+	public static void AddSelf(this Node @this)
 	{
 		if (!@this.HasMeta(META_KEY_ORIGINAL_PARENT))
 			throw new Exception("No original parent remembered.");
@@ -32,13 +32,19 @@ public static class NodeExtension
 		@this.GetMeta(META_KEY_ORIGINAL_PARENT).As<Node>().AddChild(@this);
 	}
 
+    public static void ToggleFromScene(this Node @this)
+    {
+        if (@this.IsInsideTree()) @this.RemoveSelf();
+        else if (!@this.IsInsideTree()) @this.AddSelf();
+    }
+
     public static void FreeChildren(this Node @this)
-	{
-		foreach (var item in @this.GetChildren())
-		{
-			item.QueueFree();
-		}
-	}
+    {
+        foreach (var item in @this.GetChildren())
+        {
+            item.QueueFree();
+        }
+    }
 
     /// <summary>
     /// WARNING: Using this can lead to memory leaks.

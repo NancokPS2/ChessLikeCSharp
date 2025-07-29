@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b60n65v58uy2o"]
+[gd_scene load_steps=18 format=3 uid="uid://b60n65v58uy2o"]
 
 [ext_resource type="Script" uid="uid://chob4wygp866s" path="res://Godot/MainScenes/CombatScene/CombatScene.cs" id="1_polnf"]
 [ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cvgbi2pu0b73j" path="res://World/Node/GridHoverCursor.tscn" id="8_wmbcu"]
 [ext_resource type="Script" uid="uid://o3bontwo17yt" path="res://Godot/MainScenes/CombatScene/CombatPreparationManager.cs" id="11_xx6pq"]
 [ext_resource type="PackedScene" uid="uid://dpxiarah531y4" path="res://UI/Preparation/PreparationUI.tscn" id="15_16wa0"]
+[ext_resource type="PackedScene" uid="uid://bx6logjxthbt5" path="res://UI/PauseUI.tscn" id="16_04568"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
@@ -73,3 +74,5 @@ metadata/_custom_type_script = "uid://cav6lcd1dy6th"
 [node name="CombatGeneralUI" parent="." instance=ExtResource("7_e5xpt")]
 
 [node name="PreparationUi" parent="." instance=ExtResource("15_16wa0")]
+
+[node name="PauseUI" parent="." instance=ExtResource("16_04568")]

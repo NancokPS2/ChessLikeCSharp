@@ -2,19 +2,20 @@ using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using Godot;
 
+[GlobalClass]
 public partial class MobActionUI : Control, ISceneDependency
 {
 
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobEquipmentUI.tscn";
 
     [Export]
-	public Control? ActionGrid;
+    public Control? ActionGrid;
 
     public MobActionUI()
     {
-	}
+    }
 
-	public override void _Ready()
+    public override void _Ready()
     {
         base._Ready();
         EventBus.MobSelected += OnMobSelected;
@@ -22,15 +23,15 @@ public partial class MobActionUI : Control, ISceneDependency
 
     public void Update(Mob mob)
     {
-		if(ActionGrid is null) {throw new Exception("No ActionList");}
+        if (ActionGrid is null) { throw new Exception("No ActionList"); }
 
         ActionGrid.FreeChildren();
-		foreach (var item in mob.GetAbilities())
-		{
-			ActionLabel label = new(item){Text = item.Name, SizeFlagsHorizontal = SizeFlags.ExpandFill};
-			ActionGrid.AddChild(label);
+        foreach (var item in mob.GetAbilities())
+        {
+            ActionLabel label = new(item) { Text = item.Name, SizeFlagsHorizontal = SizeFlags.ExpandFill };
+            ActionGrid.AddChild(label);
 
-		}
+        }
     }
 
     #region Event Handling
