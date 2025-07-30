@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-UI="*res://Singleton/UI/UI.cs"
+UIManager="*res://Singleton/UI/UIManager.tscn"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 GlobalNode="res://Singleton/Global/Node/GlobalNode.cs"
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"

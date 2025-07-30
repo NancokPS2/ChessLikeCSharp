@@ -169,6 +169,7 @@ public partial class EventBus : Node
 
     #region UI
     public static ObjectChange<ActionEvent>? InputActionSelected;
+	public static ObjectChange<EPauseOption>? InputPauseOptionSelected;
     public static Event? InputTurnEnded;
     public static Event? InputBack;
     public static Event? InputPause;

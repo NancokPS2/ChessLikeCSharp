@@ -49,12 +49,16 @@ public partial class CombatScene : Node3D
 		EventBus.ActionAnimationQueueEnded += OnActionAnimationQueueEnded;
 	}
 
-    public override void _UnhandledInput(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
 		base._UnhandledInput(@event);
 		if (@event.IsActionPressed("cancel"))
 		{
 			EventBus.InputBack?.Invoke();
+		}
+		else if (@event.IsActionPressed("pause"))
+		{
+			EventBus.InputPause?.Invoke();
 		}
 	}
 
@@ -121,7 +125,7 @@ public partial class CombatScene : Node3D
 		switch (StateCurrent)
 		{
 			case ECombatState.PAUSED:
-				if (StatePrevious == ECombatState.PAUSED || StatePrevious == ECombatState.INVALID)
+				if (StatePrevious == ECombatState.PAUSED && StatePrevious == ECombatState.INVALID)
 					throw new Exception("The previous state is not valid!");
 
 				SetState(StatePrevious);

@@ -24,5 +24,5 @@ public interface ITooltip
         }
     }
 
-    public CanvasItem GetCanvasItem() => UI.GetLayerDrawTarget(UI.ELayer.TOOLTIP);
+    public CanvasItem GetCanvasItem() => UIManager.GetLayerDrawTarget(UIManager.ELayer.TOOLTIP);
 }

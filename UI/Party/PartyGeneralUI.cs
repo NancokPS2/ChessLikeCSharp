@@ -27,8 +27,14 @@ public partial class PartyGeneralUI : Control, ISceneDependency
 		NodeDebugOptions.GetPopup().IdPressed += OnIdPressed;
 		NodeDebugOptions.GetPopup().AddItem("SAVE", DEBUG_ACTION_SAVE_JOBS);
 		NodeDebugOptions.GetPopup().AddItem("Save Unit", DEBUG_ACTION_SAVE_UNIT);
-
 	}
+
+	public override void _EnterTree()
+	{
+		base._EnterTree();
+		Update();
+	}
+
 
 	[Obsolete("Remove dependencies to pause menu, then delete.")]
 	public void Update()

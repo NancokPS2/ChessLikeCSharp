@@ -33,8 +33,8 @@ public partial class DebugDisplay : Node
         NodeMenuDebugInfo.IdPressed += OnIdPressed;
 
         //Setup nodes
-        UI.GetLayer(UI.ELayer.DEBUG_DRAW).AddChild(NodeMenuDebugInfo);
-        UI.GetLayer(UI.ELayer.DEBUG_DRAW).AddChild(NodeDrawTarget);
+        UIManager.GetLayer(UIManager.ELayer.DEBUG_DRAW).AddChild(NodeMenuDebugInfo);
+        UIManager.GetLayer(UIManager.ELayer.DEBUG_DRAW).AddChild(NodeDrawTarget);
 
         NodeDrawTarget.Draw += DrawTarget;
     }

@@ -8,11 +8,6 @@ public partial class PauseUI : Control, ISceneDependency
 {
     string ISceneDependency.SCENE_PATH { get; } = "res://Godot/Display/UI/Pause.tscn";
 
-	private enum MenuOption {RESUME, PARTY}
-
-	[Export]
-	protected PartyGeneralUI PartyUINode;
-
 	[Export]
 	protected Button ButtonResume;
 
@@ -23,59 +18,17 @@ public partial class PauseUI : Control, ISceneDependency
 	{
 		base._Ready();
 
-		ButtonResume.Pressed += () => OnButtonPressed(MenuOption.RESUME);
-		ButtonParty.Pressed += () => OnButtonPressed(MenuOption.PARTY);
-
-		EventBus.CombatStateChanged += OnCombatStateChanged;
-
-		this.RemoveSelf(true);
-    }
-
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		base._UnhandledInput(@event);
-		if (@event.IsActionPressed("pause"))
-		{
-			InputPause();
-		}
+		ButtonResume.Pressed += () => OnButtonPressed(EPauseOption.RESUME);
+		ButtonParty.Pressed += () => OnButtonPressed(EPauseOption.PARTY);
     }
 
 
 	#region Event Handling
-	private void OnCombatStateChanged(ECombatState obj)
+    private void OnButtonPressed(EPauseOption button)
 	{
-		if (obj == ECombatState.PAUSED && !IsInsideTree())
-		{
-			this.AddSelf();
-		}
-		else if (IsInsideTree())
-		{
-			this.RemoveSelf();
-		}
-	}
+		if (button == EPauseOption.RESUME) this.RemoveSelf();
 
-    private void InputPause()
-	{
-		EventBus.InputPause?.Invoke();
-	}
-
-    private void OnButtonPressed(MenuOption button)
-	{
-		switch (button)
-		{
-			case MenuOption.RESUME:
-				this.RemoveSelf();
-				InputPause();
-				break;
-
-			case MenuOption.PARTY:
-				PartyUINode.ToggleFromScene();
-				if (PartyUINode.IsInsideTree()) PartyUINode?.Update();
-				break;
-			default:
-				break;
-		}
-		
+		EventBus.InputPauseOptionSelected?.Invoke(button);	
 	}
 	#endregion
 }

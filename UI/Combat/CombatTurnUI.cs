@@ -23,26 +23,27 @@ public partial class CombatTurnUI : Control, ISceneDependency
         EventBus.MobTurnStarted += OnMobTurnStarted;
     }
 
-    protected void UpdateInstancePool(Mob mob, bool entering)
-    {
-        if (NodeTurnContainer is null) throw new Exception();
 
-        if (!TurnDisplayInstances.ContainsKey(mob) && entering)
-        {
-            DelayContainer newInstance = new() { User = mob };
-            TurnDisplayInstances.Add(
-                mob,
-                newInstance
-                );
-            NodeTurnContainer.AddChild(newInstance);
-        }
-        else if (TurnDisplayInstances.ContainsKey(mob) && !entering)
-        {
-            Control instance = TurnDisplayInstances[mob];
-            TurnDisplayInstances.Remove(mob);
-            NodeTurnContainer.RemoveChild(instance);
-        }
-    }
+    protected void UpdateInstancePool(Mob mob, bool entering)
+	{
+		if (NodeTurnContainer is null) throw new Exception();
+
+		if (!TurnDisplayInstances.ContainsKey(mob) && entering)
+		{
+			DelayContainer newInstance = new() { User = mob };
+			TurnDisplayInstances.Add(
+				mob,
+				newInstance
+				);
+			NodeTurnContainer.AddChild(newInstance);
+		}
+		else if (TurnDisplayInstances.ContainsKey(mob) && !entering)
+		{
+			Control instance = TurnDisplayInstances[mob];
+			TurnDisplayInstances.Remove(mob);
+			NodeTurnContainer.RemoveChild(instance);
+		}
+	}
 
     protected void UpdateCurrentTurnTaker(Mob mob)
     {
@@ -78,41 +79,47 @@ public partial class CombatTurnUI : Control, ISceneDependency
             UpdateInstancePool(mob, false);
         }
     }
-    #endregion
+	#endregion
 
-    private partial class DelayContainer : TextureRect
-    {
-        public required ITurn User;
+	private partial class DelayContainer : TextureRect
+	{
+		public required ITurn User;
 
-        public DelayContainer()
-        {
-        }
+		private Label? label_name;
 
-        public override void _Ready()
-        {
-            base._Ready();
-            SetAnchorsPreset(LayoutPreset.FullRect);
-            SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		private Label? label_delay;
 
-            //Label and name
-            string name = "";
-            string delay = "0?";
-            if (User is Mob mob)
-            {
-                name = mob.DisplayedName;
-                delay = mob.DelayCurrent.ToString();
-            }
+		public DelayContainer()
+		{
+		}
 
-            Label label_name = new();
-            label_name.Text = name;
-            AddChild(label_name);
-            label_name.SetAnchorsPreset(LayoutPreset.TopWide);
+		public override void _Ready()
+		{
+			base._Ready();
+			SetAnchorsPreset(LayoutPreset.FullRect);
+			SizeFlagsHorizontal = SizeFlags.ExpandFill;
 
-            Label label_delay = new();
-            label_delay.Text = delay;
-            AddChild(label_delay);
-            label_delay.SetAnchorsPreset(LayoutPreset.BottomWide);
-        }
+			//Label and name
+			label_name = new();
+			AddChild(label_name);
+			label_name.SetAnchorsPreset(LayoutPreset.TopWide);
+
+			label_delay = new();
+			AddChild(label_delay);
+			label_delay.SetAnchorsPreset(LayoutPreset.BottomWide);
+		}
+
+		public override void _Process(double delta)
+		{
+			base._Process(delta);
+			(label_delay ?? throw new Exception())
+				.Text = User.DelayCurrent.ToString();
+
+			if (User is Mob mob)
+				(label_name ?? throw new Exception())
+					.Text = mob.DisplayedName;
+		}
+
 
     }
 }

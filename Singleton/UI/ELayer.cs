@@ -1,4 +1,4 @@
-public partial class UI
+public partial class UIManager
 {
     public enum ELayer {
         BASE_LAYER,

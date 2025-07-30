@@ -1,0 +1,9 @@
+public enum EUIScene
+{
+	NONE,
+	KEEP,
+	PARTY,
+	PAUSE,
+	PREPARATION,
+	COMBAT_GENERAL,
+}

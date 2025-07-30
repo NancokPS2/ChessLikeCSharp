@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class UI
+public partial class UIManager
 {
     public partial class CanvasWithTarget: CanvasLayer
     {

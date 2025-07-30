@@ -171,12 +171,8 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "PauseUI is not getting the pause input",
-                    "id": "rkaucci7x1mvg0awv9ba31yn"
-                },
-                {
-                    "text": "MobUI does not know what to do when a stat does not have a corresponding value",
-                    "id": "e6gkr9py0ivc0y0ekuh6jqp4"
+                    "text": "PartyGeneralUI is not showing the player's party.",
+                    "id": "zyknrdobe3w8njcl0m9z6r99"
                 },
                 {
                     "text": "Must test the party inventory UI after fixing",
@@ -228,5 +224,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1753798008752
+    "timestamp": 1753834013137
 }

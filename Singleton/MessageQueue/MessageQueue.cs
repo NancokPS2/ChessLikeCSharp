@@ -51,7 +51,7 @@ public partial class MessageQueue: Node
     {
         base._Ready();
         Instance = this;
-        Canvas = UI.GetLayer(UI.ELayer.MSG_QUEUE);
+        Canvas = UIManager.GetLayer(UIManager.ELayer.MSG_QUEUE);
 
         Canvas.AddChild(NodeContainer);
         NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);

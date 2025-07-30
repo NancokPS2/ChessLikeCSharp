@@ -11,6 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4qqtp")
 NodeTurnContainer = NodePath("TurnPanel/TurnContainer")
+metadata/_custom_type_script = "uid://d7wnoug6teta"
 
 [node name="TurnPanel" type="Panel" parent="."]
 layout_mode = 1

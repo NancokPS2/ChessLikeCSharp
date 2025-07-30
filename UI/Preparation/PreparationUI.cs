@@ -42,7 +42,7 @@ public partial class PreparationUI : Control
 		}
 		else if (obj != ECombatState.PREPARATION && IsInsideTree())
 		{
-			if (IsInsideTree()) this.RemoveSelf();
+			if (IsInsideTree()) this.RemoveSelf(true);
 		}
 	}
 

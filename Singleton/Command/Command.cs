@@ -26,7 +26,7 @@ public partial class Command: Node
         base._Ready();
         TextInput.TextSubmitted += OnTextSubmitted;
         TextInput.FocusExited += OnFocusExited;
-        UI.GetLayer(UI.ELayer.CHEAT_INPUT).AddChild(TextInput);
+        UIManager.GetLayer(UIManager.ELayer.CHEAT_INPUT).AddChild(TextInput);
     }
 
     private void HideShow(bool show)
