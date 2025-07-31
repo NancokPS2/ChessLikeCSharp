@@ -67,6 +67,9 @@ public partial class UIManager : Control, IDebugDisplay
 		return CanvasLayers.ToStringList();
 	}
 
+	public EUIScene GetCurrentUI()
+		=> Nodes.Keys.First(x => Nodes[x].IsInsideTree());
+
 	public static void ChangeToUI(EUIScene ui)
 	{
 		//Do nothing.
@@ -94,9 +97,9 @@ public partial class UIManager : Control, IDebugDisplay
 	{
 		EUIScene eUI = obj switch
 		{
-		ECombatState.PAUSED => EUIScene.PAUSE,
-		ECombatState.PREPARATION => EUIScene.PREPARATION,
-		ECombatState.ACTION_INPUT => EUIScene.COMBAT_GENERAL,
+			ECombatState.PAUSED => EUIScene.PAUSE,
+			ECombatState.PREPARATION => EUIScene.PREPARATION,
+			ECombatState.ACTION_INPUT => EUIScene.COMBAT_GENERAL,
 			_ => EUIScene.KEEP,
 		};
 
