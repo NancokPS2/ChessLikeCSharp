@@ -15,12 +15,21 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 
     [Export]
     public Control? Container;
+
     [Export]
     public SizeFlags ButtonHorizontalFlags = SizeFlags.ExpandFill;
-    [Export]
+
+	[Export]
     public SizeFlags ButtonVerticalFlags = SizeFlags.ShrinkBegin;
-    [Export]
-    public Rect2 ButtonAnchors = new Rect2(0,0,1,0);
+
+	[Export]
+    public Rect2 ButtonAnchors = new Rect2(0, 0, 1, 0);
+
+	[Export]
+	public bool ForceDisable;
+
+	[Export]
+	public bool AutoUpdateOnEnterTree;
 
     protected (TButton, TAssociatedParam)? TupleHovered;
 
@@ -36,10 +45,17 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         Container = container;
     }
 
+	public override void _EnterTree()
+	{
+		base._EnterTree();
+		if (AutoUpdateOnEnterTree) Update();
+	}
+
+
     public override void _Ready()
-    {
-        base._Ready();
-        ButtonCreated += OnButtonCreated;
+	{
+		base._Ready();
+		ButtonCreated += _ButtonCreated;
 	}
 
 
@@ -49,47 +65,53 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
         Update(_last_update);
     }
 
-    public void Update(List<TAssociatedParam> parameter_list)
-    {
-        Control used_container = Container ?? this;
-        foreach (var item in ButtonInstances)
-        {
-            ButtonDelete(item);
-        }
+	public void Update(List<TAssociatedParam> parameter_list)
+	{
+		Control used_container = Container ?? this;
+		foreach (var item in ButtonInstances)
+		{
+			ButtonDelete(item);
+		}
 
-        ButtonInstances.Clear();
+		ButtonInstances.Clear();
 
-        foreach (var parameter in parameter_list)
-        {
-            ButtonInstance button_instance = ButtonCreate(parameter);
-            ButtonCreated?.Invoke(button_instance.NodeReference, button_instance.ParameterReference);
-            used_container.AddChild(button_instance.NodeReference);
-        }
+		foreach (var parameter in parameter_list)
+		{
+			ButtonInstance button_instance = ButtonCreate(parameter);
+			ButtonCreated?.Invoke(button_instance.NodeReference, button_instance.ParameterReference);
+			used_container.AddChild(button_instance.NodeReference);
+		}
 
-        _last_update = parameter_list;
+		_Update();
+		_last_update = parameter_list;
     }
+
+	protected virtual void _Update(){}
 
     protected virtual ButtonInstance ButtonCreate(TAssociatedParam param)
-    {
-        TButton button = new(){
-            AnchorLeft = ButtonAnchors.Position.X, 
-            AnchorTop = ButtonAnchors.Position.Y, 
-            AnchorRight = ButtonAnchors.Size.X, 
-            AnchorBottom = ButtonAnchors.Size.Y, 
-            SizeFlagsHorizontal = ButtonHorizontalFlags,
-            SizeFlagsVertical = ButtonVerticalFlags
-        };
-        ButtonInstance output = new(button, param, this);
-        ButtonInstances.Add(output);
-        return output;
-    }
+	{
+		TButton button = new()
+		{
+			AnchorLeft = ButtonAnchors.Position.X,
+			AnchorTop = ButtonAnchors.Position.Y,
+			AnchorRight = ButtonAnchors.Size.X,
+			AnchorBottom = ButtonAnchors.Size.Y,
+			SizeFlagsHorizontal = ButtonHorizontalFlags,
+			SizeFlagsVertical = ButtonVerticalFlags
+		};
+		if (button is Button butt && ForceDisable) butt.Disabled = true;
+
+		ButtonInstance output = new(button, param, this);
+		ButtonInstances.Add(output);
+		return output;
+	}
 
     protected virtual void ButtonDelete(ButtonInstance instance)
     {
         instance.NodeReference.QueueFree();
     }
 
-    protected virtual void OnButtonPressed(TButton button, TAssociatedParam param)
+    protected virtual void _ButtonPressed(TButton button, TAssociatedParam param)
     {
         ButtonPressed?.Invoke(button, param);
     }
@@ -99,12 +121,12 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
     /// </summary>
     /// <param name="button">Button just created.</param>
     /// <param name="param">Object associated with it.</param>
-    protected virtual void OnButtonCreated(TButton button, TAssociatedParam param)
+    protected virtual void _ButtonCreated(TButton button, TAssociatedParam param)
     {
 
     }
 
-    protected virtual void OnButtonHovered(TButton button, TAssociatedParam param, bool hovered)
+    protected virtual void _ButtonHovered(TButton button, TAssociatedParam param, bool hovered)
     {
         TupleHovered = hovered ? (button, param) : null;
     }
@@ -126,14 +148,14 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
             NodeReference.Connect(Button.SignalName.FocusExited, Callable.From(OnFocusExited));
         }
 
-        public void OnPressed() => MenuReference.OnButtonPressed(NodeReference, ParameterReference);
+        public void OnPressed() => MenuReference._ButtonPressed(NodeReference, ParameterReference);
 
-        public void OnMouseEntered() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, true);
+        public void OnMouseEntered() => MenuReference._ButtonHovered(NodeReference, ParameterReference, true);
 
-        public void OnMouseExited() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, false);
+        public void OnMouseExited() => MenuReference._ButtonHovered(NodeReference, ParameterReference, false);
 
-        public void OnFocusEntered() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, true);
+        public void OnFocusEntered() => MenuReference._ButtonHovered(NodeReference, ParameterReference, true);
 
-        public void OnFocusExited() => MenuReference.OnButtonHovered(NodeReference, ParameterReference, false);
+        public void OnFocusExited() => MenuReference._ButtonHovered(NodeReference, ParameterReference, false);
     }
 }

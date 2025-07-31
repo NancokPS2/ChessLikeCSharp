@@ -6,6 +6,9 @@ using System;
 [GlobalClass]
 public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>, ISceneDependency
 {
+	[Export]
+	public EFaction FactionAssigned;
+
 	public Mob? MobSelected;
 
 	public Godot.Vector4 SelectBorderColor = new(0, 1, 0, 0.6f);
@@ -18,6 +21,12 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 	public MobListUI() : base()
 	{
 		ButtonVerticalFlags = SizeFlags.ExpandFill;
+	}
+
+	public override void _Ready()
+	{
+		base._Ready();
+		EventBus.InputPauseOptionSelected += OnInputPauseOptionSelected;
 	}
 
 	public void Update(Faction faction)
@@ -38,7 +47,7 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 	}
 
 	#region Event Handling - INTERNAL
-	protected override void OnButtonCreated(MobTooltipButton button, Mob param)
+	protected override void _ButtonCreated(MobTooltipButton button, Mob param)
 	{
 		button.MobReference = param;
 		button.Text = param.ToString();
@@ -46,7 +55,7 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 		(button.Material as ShaderMaterial)?.SetShaderParameter("border_color", Colors.Transparent);
 	}
 
-	protected override void OnButtonPressed(MobTooltipButton button, Mob param)
+	protected override void _ButtonPressed(MobTooltipButton button, Mob param)
 	{
 		MobSelected = param;
 		foreach (var item in ButtonInstances)
@@ -61,13 +70,13 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 			shader.SetShaderParameter("border_color", SelectBorderColor);
 		}
 
-		base.OnButtonPressed(button, param);
+		base._ButtonPressed(button, param);
 		EventBus.MobSelected?.Invoke(MobSelected);
 	}
 
-	protected override void OnButtonHovered(MobTooltipButton button, Mob param, bool hovered)
+	protected override void _ButtonHovered(MobTooltipButton button, Mob param, bool hovered)
 	{
-		base.OnButtonHovered(button, param, hovered);
+		base._ButtonHovered(button, param, hovered);
 		//Do not affect the modulate if this is the selected button.
 		if (param == MobSelected) { return; }
 
@@ -80,6 +89,22 @@ public partial class MobListUI : BaseButtonMenu<MobListUI.MobTooltipButton, Mob>
 			button.Modulate = Godot.Colors.White;
 		}
 	}
+	#endregion
+
+	#region Event Handling
+
+	private void OnInputPauseOptionSelected(EPauseOption obj)
+	{
+		string? identifier = Global.ManagerFaction.FindIdentifier(FactionAssigned);
+
+		if (identifier is null) throw new Exception();
+		
+		if (obj == EPauseOption.PARTY)
+		{
+			Update(Global.ManagerFaction.ResourceGet( identifier ));
+		}
+	}
+
 	#endregion
 
 	public partial class MobTooltipButton : Button, ITooltip

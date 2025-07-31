@@ -16,9 +16,9 @@ public partial class MassInventoryUI : BaseButtonMenu<Button, Item>
         Update(MassInventorySelected.GetItems());
     }
 
-    protected override void OnButtonCreated(Button button, Item param)
+    protected override void _ButtonCreated(Button button, Item param)
     {
-        base.OnButtonCreated(button, param);
+        base._ButtonCreated(button, param);
         button.Text = param.Name;
         button.TooltipText = param.ToString();
     }

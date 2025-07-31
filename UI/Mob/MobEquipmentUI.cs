@@ -30,7 +30,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmen
 		MobEquipmentInventorySelected = equipInventory;
 	}
 
-	protected override void OnButtonCreated(Button button, (Item?, MobEquipmentInventory.ESlot) param)
+	protected override void _ButtonCreated(Button button, (Item?, MobEquipmentInventory.ESlot) param)
 	{
 		button.Text = param.Item1?.Name ?? param.Item2.ToString();
 		button.TooltipText = param.Item1?.ToString() ?? param.Item2.ToString();

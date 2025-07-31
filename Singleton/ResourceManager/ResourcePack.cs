@@ -11,9 +11,9 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     public const string METAKEY_IDENTIFIER = "ResPackIdentifier";
     public const string TAG_PERSISTENT = "presistent";
 
-    private Dictionary<string, TRes> Contents = new();
-    private Dictionary<string, TRes> ContentsPersistent = new();
-    private List<TRes> Pooled = new();
+    protected Dictionary<string, TRes> Contents = new();
+    protected Dictionary<string, TRes> ContentsPersistent = new();
+    protected List<TRes> Pooled = new();
     public bool AutoPoolPersistent = true;
     public readonly string PackIdentifier = "";
 

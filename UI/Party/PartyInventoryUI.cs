@@ -10,95 +10,124 @@ using Godot;
 [GlobalClass]
 public partial class PartyInventoryUI : Control
 {
-    [Export]
-    protected MobEquipmentUI? EquipmentUI
-    {
-        get => equipmentUI;
-        set
-        {
-            if (equipmentUI is not null) equipmentUI.ButtonPressed -= OnEquipmentUIButtonPressed;
-            equipmentUI = value;
-            if (equipmentUI is not null) equipmentUI.ButtonPressed += OnEquipmentUIButtonPressed;
-        }
-    }
-    private MobEquipmentUI? equipmentUI;
+	[Export]
+	protected MobEquipmentUI? EquipmentUI
+	{
+		get => equipmentUI;
+		set
+		{
+			if (equipmentUI is not null) equipmentUI.ButtonPressed -= OnEquipmentUIButtonPressed;
+			equipmentUI = value;
+			if (equipmentUI is not null) equipmentUI.ButtonPressed += OnEquipmentUIButtonPressed;
+		}
+	}
+	private MobEquipmentUI? equipmentUI;
 
-    [Export]
-    protected MassInventoryUI MassUI
-    {
-        get => massUI;
-        set
-        {
-            if (massUI is not null) massUI.ButtonPressed -= OnMassUIButtonPressed;
-            massUI = value;
-            if (massUI is not null) massUI.ButtonPressed += OnMassUIButtonPressed;
-        }
-    }
-    private MassInventoryUI massUI;
+	[Export]
+	protected MassInventoryUI? MassUI
+	{
+		get => massUI;
+		set
+		{
+			if (massUI is not null) massUI.ButtonPressed -= OnMassUIButtonPressed;
+			massUI = value;
+			if (massUI is not null) massUI.ButtonPressed += OnMassUIButtonPressed;
+		}
+	}
+	private MassInventoryUI? massUI;
 
-    protected Item? MassInventoryItemSelected;
+	protected Item? MassInventoryItemSelected;
 
-    public override void _Ready()
-    {
-        base._Ready();
-        EventBus.MobSelected += OnMobSelected;
+	protected bool CanModify;
 
-        MassUI.Update(Global.ManagerFaction.ResourceGet(EPackIDFaction.Player.ToString(), true, true).Inventory);
-    }
+	public override void _Ready()
+	{
+		base._Ready();
+		if (MassUI is null || EquipmentUI is null) throw new Exception();
 
-    protected void ClearSelected()
-    {
-        MassInventoryItemSelected = null;
-    }
+		string? identifier = Global.ManagerFaction.FindIdentifier(EFaction.PLAYER);
+		MassUI.Update(Global.ManagerFaction.ResourceGet(
+			identifier ?? throw new Exception(),
+			true,
+			true).Inventory);
 
-    #region Event Handling
-    private void OnEquipmentUIButtonPressed(Button button, (Item?, MobEquipmentInventory.ESlot) param)
-    {
-        MobEquipmentInventory mobEquipInv = EquipmentUI.MobEquipmentInventorySelected;
-        MassInventory massInv = MassUI.MassInventorySelected;
-        Item? equipSelected = mobEquipInv.GetItem(param.Item2);
-        Item? massSelected = MassInventoryItemSelected;
+		EventBus.MobSelected += OnMobSelected;
+		EventBus.CombatPreparationStarted += OnCombatPreparationStarted;
+		EventBus.CombatEnded += OnCombatEnded;
+	}
 
-        //Transfer from mob equipment to mass inventory. itemSelected is not empty, none is selected in the mass inventory.
-        if (equipSelected is not null && massSelected is null)
-        {
-            if (mobEquipInv.GetItem(param.Item2) != equipSelected)
-                throw new Exception("This item is not from this mob's inventory or is not at this slot.");
+	protected void ClearSelected()
+	{
+		MassInventoryItemSelected = null;
+	}
 
-            mobEquipInv.UnequipItem(param.Item2);
-            massInv.AddItem(equipSelected);
-            ClearSelected();
-        }
-        //Transfer from mass inventory to mob equipment. The selected item is an empty slot, but there is a massSelected.
-        else if (equipSelected is null && massSelected is not null)
-        {
-            if (mobEquipInv.GetItem(param.Item2) is not null)
-                throw new Exception("This slot IS occupied. What!?");
+	#region Event Handling
+	private void OnEquipmentUIButtonPressed(Button button, (Item?, MobEquipmentInventory.ESlot) param)
+	{
+		if (MassUI is null || EquipmentUI is null) throw new Exception();
+		if (!CanModify) return;
 
-            if (!mobEquipInv.IsValidForSlot(massSelected, param.Item2))
-            {
-                MessageQueue.AddMessage("That slot is not valid for this item.");
-                return;
-            }
+		MobEquipmentInventory mobEquipInv = EquipmentUI.MobEquipmentInventorySelected;
+		MassInventory massInv = MassUI.MassInventorySelected;
+		Item? equipSelected = mobEquipInv.GetItem(param.Item2);
+		Item? massSelected = MassInventoryItemSelected;
 
-            massInv.RemoveItem(massSelected);
-            mobEquipInv.EquipItem(massSelected, param.Item2, false);
-            ClearSelected();
-        }
+		//Transfer from mob equipment to mass inventory. itemSelected is not empty, none is selected in the mass inventory.
+		if (equipSelected is not null && massSelected is null)
+		{
+			if (mobEquipInv.GetItem(param.Item2) != equipSelected)
+				throw new Exception("This item is not from this mob's inventory or is not at this slot.");
 
-        MassUI.Update(massInv);
-        EquipmentUI.Update(mobEquipInv);
-    }
+			mobEquipInv.UnequipItem(param.Item2);
+			massInv.AddItem(equipSelected);
+			ClearSelected();
+		}
+		//Transfer from mass inventory to mob equipment. The selected item is an empty slot, but there is a massSelected.
+		else if (equipSelected is null && massSelected is not null)
+		{
+			if (mobEquipInv.GetItem(param.Item2) is not null)
+				throw new Exception("This slot IS occupied. What!?");
 
-    private void OnMassUIButtonPressed(Button button, Item param)
-    {
-        MassInventoryItemSelected = param;
+			if (!mobEquipInv.IsValidForSlot(massSelected, param.Item2))
+			{
+				MessageQueue.AddMessage("That slot is not valid for this item.");
+				return;
+			}
 
-    }
+			massInv.RemoveItem(massSelected);
+			mobEquipInv.EquipItem(massSelected, param.Item2, false);
+			ClearSelected();
+		}
 
-    private void OnMobSelected(Mob mob)
-    {
-        EquipmentUI?.Update(mob.EquipmentInventory);
-    }
+		MassUI.Update(massInv);
+		EquipmentUI.Update(mobEquipInv);
+	}
+
+	private void OnMassUIButtonPressed(Button button, Item param)
+	{
+		MassInventoryItemSelected = param;
+
+	}
+
+	private void OnMobSelected(Mob mob)
+	{
+		EquipmentUI?.Update(mob.EquipmentInventory);
+	}
+
+	private void OnCombatPreparationStarted()
+	{
+		if (MassUI is null || EquipmentUI is null) throw new Exception();
+		CanModify = false;
+		MassUI.ForceDisable = true;
+		EquipmentUI.ForceDisable = true;
+	}
+
+	private void OnCombatEnded()
+	{
+		if (MassUI is null || EquipmentUI is null) throw new Exception();
+		CanModify = true;
+		MassUI.ForceDisable = false;
+		EquipmentUI.ForceDisable = false;
+	}
     #endregion
 }

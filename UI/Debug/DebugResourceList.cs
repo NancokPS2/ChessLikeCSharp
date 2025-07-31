@@ -54,14 +54,14 @@ public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , 
         NodeResourceTypeMenu?.GetPopup().AddItem("Abilities", ID_ABILITY);
     }
 
-    protected override void OnButtonCreated(Button button, IDescription param)
+    protected override void _ButtonCreated(Button button, IDescription param)
     {
         button.Text = param.GetDescriptiveName();
     }
 
-    protected override void OnButtonPressed(Button button, IDescription param)
+    protected override void _ButtonPressed(Button button, IDescription param)
     {
-        base.OnButtonPressed(button, param);
+        base._ButtonPressed(button, param);
         string resource_text = "";
         //If it is a resource
         if (param is Resource res)

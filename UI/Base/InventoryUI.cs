@@ -60,11 +60,11 @@ public partial class InventoryUI : BaseButtonMenu<Button, ItemFilter>, ISceneDep
 		Update(InventorySelected.GetSlots()); */
 	}
 
-	protected override void OnButtonPressed(Button button, ItemFilter slot)
+	protected override void _ButtonPressed(Button button, ItemFilter slot)
 	{
 		ButtonSelection(button, slot);
 
-		base.OnButtonPressed(button, slot);
+		base._ButtonPressed(button, slot);
 	}
 
 	public void ButtonSelection(Button button, ItemFilter slot)
@@ -95,13 +95,13 @@ public partial class InventoryUI : BaseButtonMenu<Button, ItemFilter>, ISceneDep
 		return;
 	}
 
-	protected override void OnButtonHovered(Button button, ItemFilter slot, bool hovered)
+	protected override void _ButtonHovered(Button button, ItemFilter slot, bool hovered)
 	{
-		base.OnButtonHovered(button, slot, hovered);
+		base._ButtonHovered(button, slot, hovered);
 		button.Modulate = hovered ? new Godot.Color(0.5f, 0.5f, 0.5f) : new Godot.Color(1, 1, 1);
 	}
 
-	protected override void OnButtonCreated(Button button, ItemFilter slot)
+	protected override void _ButtonCreated(Button button, ItemFilter slot)
 	{
 		if(slot.Item is not null) {button.Text = slot.Item.Name;}
 		else if (slot.FlagWhitelist.Count != 0) {button.Text = slot.FlagWhitelist[0].ToString();}
