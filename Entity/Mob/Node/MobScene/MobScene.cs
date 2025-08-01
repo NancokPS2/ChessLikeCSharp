@@ -8,246 +8,251 @@ using System.Diagnostics;
 [GlobalClass]
 public partial class MobScene : Node3D
 {
-    public Mob MobUsing;
+	public Mob MobUsing;
 
-    protected PackedScene FloatingIconScene = GD.Load<PackedScene>("uid://bmm3h2202bdkq");
+	protected PackedScene FloatingIconScene = GD.Load<PackedScene>("uid://bmm3h2202bdkq");
 
-    public StatusEffectIcon StatusEffectIcon { get => statusEffectIcon ?? throw new Exception(); set => statusEffectIcon = value; }
-    [Export]
-    private StatusEffectIcon? statusEffectIcon;
+	public StatusEffectIcon StatusEffectIcon { get => statusEffectIcon ?? throw new Exception(); set => statusEffectIcon = value; }
+	[Export]
+	private StatusEffectIcon? statusEffectIcon;
 
-    public Node3D MarkerOverhead { get => markerOverhead ?? throw new Exception(); set => markerOverhead = value; }
-    [Export]
-    private Node3D? markerOverhead;
+	public Node3D MarkerOverhead { get => markerOverhead ?? throw new Exception(); set => markerOverhead = value; }
+	[Export]
+	private Node3D? markerOverhead;
 
-    public Node3D MarkerCenterBody { get => markerCenterBody ?? throw new Exception(); set => markerCenterBody = value; }
-    [Export]
-    private Node3D? markerCenterBody;
+	public Node3D MarkerCenterBody { get => markerCenterBody ?? throw new Exception(); set => markerCenterBody = value; }
+	[Export]
+	private Node3D? markerCenterBody;
 
-    public Node3D MarkerBase { get => markerBase ?? throw new Exception(); set => markerBase = value; }
-    [Export]
-    private Node3D? markerBase;
+	public Node3D MarkerBase { get => markerBase ?? throw new Exception(); set => markerBase = value; }
+	[Export]
+	private Node3D? markerBase;
 
-    private Node3D? ModelScene;
-    private AnimationPlayer? AnimationPlayer;
+	private Node3D? ModelScene;
+	private AnimationPlayer? AnimationPlayer;
 
-    private List<Vector3i> MovementStored = new();
-    private int MovementCurrentIndex;
+	private List<Vector3i> MovementStored = new();
+	private int MovementCurrentIndex;
 
-    private Dictionary<EMobSceneEffect, Node3D> EffectNodes = new();
-
-    public MobScene()
-    {
-        EventBus.MobMoved += OnMobMoved;
-        EventBus.MobStatChanged += OnMobStatChanged;
-		EventBus.MobStatValueChanged += OnMobStatValueChanged;
-        EventBus.MobTurnStarted += OnMobTurnStarted;
-        EventBus.MobTurnEnded += OnMobTurnEnded;
-        EventBus.MobSelected += OnMobSelected;
-        EventBus.ActionUsed += OnActionUsed;
-        EventBus.InventoryChanged += OnInventoryChanged;
-    }
+	private Dictionary<EMobSceneEffect, Node3D> EffectNodes = new();
 
 	public override void _Ready()
-    {
-        base._Ready();
-        if (MobUsing is null) throw new Exception("Lacks a MobUsing");
-    }
+	{
+		base._Ready();
+		if (MobUsing is null) throw new Exception("Lacks a MobUsing");
 
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        MovementProcess();
-    }
+		EventBus.MobMoved += OnMobMoved;
+		EventBus.MobStatChanged += OnMobStatChanged;
+		EventBus.MobStatValueChanged += OnMobStatValueChanged;
+		EventBus.MobTurnStarted += OnMobTurnStarted;
+		EventBus.MobTurnEnded += OnMobTurnEnded;
+		EventBus.MobSelected += OnMobSelected;
+		EventBus.ActionUsed += OnActionUsed;
+		EventBus.InventoryChanged += OnInventoryChanged;
+		EventBus.InputCheatEntered += OnInputCheatEntered;
+	}
 
-    #region Particles
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		MovementProcess();
+	}
 
-    public void AnimatePopupText(string text, Godot.Color? color = null, Godot.Gradient? gradient = null)
-    {
-        PopupText3D popupText = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
-        popupText.Text = text;
-        popupText.Color = color ?? Colors.White;
-        popupText.ColorRamp = gradient;
-        popupText.Finished += popupText.QueueFree;
+	#region Particles
 
-        GetTree().Root.AddChild(popupText);
+	public void AnimatePopupText(string text, Godot.Color? color = null, Godot.Gradient? gradient = null)
+	{
+		PopupText3D popupText = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
+		popupText.Text = text;
+		popupText.Color = color ?? Colors.White;
+		popupText.ColorRamp = gradient;
+		popupText.Finished += popupText.QueueFree;
 
-        popupText.GlobalPosition = MarkerOverhead.GlobalPosition;
-        popupText.Emitting = true;
-    }
+		GetTree().Root.AddChild(popupText);
 
-    public void ToggleEffect(EMobSceneEffect effect, bool enabled)
-    {
-        Node3D? effectNode = EffectNodes.ContainsKey(effect) ? EffectNodes[effect] : null;
-        Node3D parentNode = MarkerCenterBody;
-        if (enabled)
-        {
-            effectNode?.QueueFree();
-            effectNode = effect switch
-            {
-                EMobSceneEffect.TURN_ACTIVE
-                    => Global.ManagerParticle
-                    .ResourceGet("HoveringStar")
-                    .Instantiate<Node3D>(),
+		popupText.GlobalPosition = MarkerOverhead.GlobalPosition;
+		popupText.Emitting = true;
+	}
 
-                EMobSceneEffect.TARGETED
-                    => Global.ManagerParticle
-                    .ResourceGet("InwardArrows")
-                    .Instantiate<Node3D>(),
+	public void AnimateDialogue(string text)
+	{
+		DialogueBubble bubble = Readonly.Scenes.DIALOGUE_BUBBLE;
+		bubble.SetText(text);
+		MarkerOverhead.AddChild(bubble);
+	}
 
-                _
-                    => throw new Exception("Invalid effect.")
-            };
+	public void ToggleEffect(EMobSceneEffect effect, bool enabled)
+	{
+		Node3D? effectNode = EffectNodes.ContainsKey(effect) ? EffectNodes[effect] : null;
+		Node3D parentNode = MarkerCenterBody;
+		if (enabled)
+		{
+			effectNode?.QueueFree();
+			effectNode = effect switch
+			{
+				EMobSceneEffect.TURN_ACTIVE
+					=> Global.ManagerParticle
+					.ResourceGet("HoveringStar")
+					.Instantiate<Node3D>(),
 
-            parentNode = effect switch
-            {
-                EMobSceneEffect.TURN_ACTIVE => MarkerOverhead,
-                EMobSceneEffect.TARGETED => MarkerCenterBody,
-                _ => MarkerOverhead
+				EMobSceneEffect.TARGETED
+					=> Global.ManagerParticle
+					.ResourceGet("InwardArrows")
+					.Instantiate<Node3D>(),
 
-            };
+				_
+					=> throw new Exception("Invalid effect.")
+			};
 
-            parentNode.AddChild(effectNode);
-            EffectNodes[effect] = effectNode;
-        }
-        else
-        {
-            effectNode?.QueueFree();
-            EffectNodes.Remove(effect);
-        }
-    }
+			parentNode = effect switch
+			{
+				EMobSceneEffect.TURN_ACTIVE => MarkerOverhead,
+				EMobSceneEffect.TARGETED => MarkerCenterBody,
+				_ => MarkerOverhead
+
+			};
+
+			parentNode.AddChild(effectNode);
+			EffectNodes[effect] = effectNode;
+		}
+		else
+		{
+			effectNode?.QueueFree();
+			EffectNodes.Remove(effect);
+		}
+	}
 
 
-    #endregion
+	#endregion
 
-    #region Model
-    public void SetBodyModel(EMobSceneBodyModel body)
-    {
-        MarkerCenterBody.FreeChildren();
+	#region Model
+	public void SetBodyModel(EMobSceneBodyModel body)
+	{
+		MarkerCenterBody.FreeChildren();
 
-        Node3D modelScene;
-        switch (body)
-        {
-            case EMobSceneBodyModel.HUMAN:
-                modelScene = Global.ManagerModel.GetInstance("BodyHuman");
-                break;
+		Node3D modelScene;
+		switch (body)
+		{
+			case EMobSceneBodyModel.HUMAN:
+				modelScene = Global.ManagerModel.GetInstance("BodyHuman");
+				break;
 
-            default: throw new Exception();
-        }
+			default: throw new Exception();
+		}
 
-        ModelScene = modelScene;
-        MarkerCenterBody.AddChild(ModelScene);
-    }
+		ModelScene = modelScene;
+		MarkerCenterBody.AddChild(ModelScene);
+	}
 
-    #endregion
+	#endregion
 
-    #region Movement
-    public void MovementProcess()
-    {
-        //If empty, skip.
-        if (MovementStored.Count == 0) return;
+	#region Movement
+	public void MovementProcess()
+	{
+		//If empty, skip.
+		if (MovementStored.Count == 0) return;
 
-        //Reached the end of the list, we are done.
-        if (MovementCurrentIndex >= MovementStored.Count)
-        {
-            MovementCurrentIndex = 0;
-            MovementStored.Clear();
-            MovementVerifyPosition();
-            return;
-        }
+		//Reached the end of the list, we are done.
+		if (MovementCurrentIndex >= MovementStored.Count)
+		{
+			MovementCurrentIndex = 0;
+			MovementStored.Clear();
+			MovementVerifyPosition();
+			return;
+		}
 
-        Vector3i currentGoal = MovementStored[MovementCurrentIndex];
+		Vector3i currentGoal = MovementStored[MovementCurrentIndex];
 
-        Godot.Vector3 currentGoalGlobal;
-        switch (MobUsing.MovementMode)
-        {
-            case EMobMovementMode.WALK:
-                currentGoalGlobal = CombatScene.GetGridNode().MapToGlobal(currentGoal);
-                break;
+		Godot.Vector3 currentGoalGlobal;
+		switch (MobUsing.MovementMode)
+		{
+			case EMobMovementMode.WALK:
+				currentGoalGlobal = CombatScene.GetGridNode().MapToGlobal(currentGoal);
+				break;
 
-            default:
-                throw new NotImplementedException($"Movement for {MobUsing.MovementMode} not implemented yet.");
-        }
+			default:
+				throw new NotImplementedException($"Movement for {MobUsing.MovementMode} not implemented yet.");
+		}
 
-        GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
+		GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
 
-        //If close enough, advance the index.
-        if (Mathf.IsZeroApprox(GlobalPosition.DistanceTo(currentGoalGlobal)))
-            MovementCurrentIndex++;
-    }
+		//If close enough, advance the index.
+		if (Mathf.IsZeroApprox(GlobalPosition.DistanceTo(currentGoalGlobal)))
+			MovementCurrentIndex++;
+	}
 
-    private float MovementGetSpeed()
-    {
-        float agility = Mathf.Clamp(MobUsing.Stats.GetStat(EStatName.AGILITY), 0, 200);
-        return 2f * (agility / 100);
-    }
+	private float MovementGetSpeed()
+	{
+		float agility = Mathf.Clamp(MobUsing.Stats.GetStat(EStatName.AGILITY), 0, 200);
+		return 2f * (agility / 100);
+	}
 
-    public void MovementResetPosition()
-    {
-        Godot.Vector3 vector = CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition());
-        GlobalPosition = vector;
-    }
+	public void MovementResetPosition()
+	{
+		Godot.Vector3 vector = CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition());
+		GlobalPosition = vector;
+	}
 
-    public void MovementVerifyPosition()
-    {
-        if (!Mathf.IsZeroApprox(CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
-        {
-            throw new Exception($"Position mismatch. Node:{GlobalPosition} | Mob:{MobUsing.GetPosition()}");
-        }
-    }
-    #endregion
+	public void MovementVerifyPosition()
+	{
+		if (!Mathf.IsZeroApprox(CombatScene.GetGridNode().MapToGlobal(MobUsing.GetPosition()).DistanceTo(GlobalPosition)))
+		{
+			throw new Exception($"Position mismatch. Node:{GlobalPosition} | Mob:{MobUsing.GetPosition()}");
+		}
+	}
+	#endregion
 
-    #region Event Handling
-    private void OnMobMoved(Mob mob, Vector3i from, Vector3i to)
-    {
-        if (mob != MobUsing) return;
-        MovementStored.Add(to);
-    }
+	#region Event Handling
+	private void OnMobMoved(Mob mob, Vector3i from, Vector3i to)
+	{
+		if (mob != MobUsing) return;
+		MovementStored.Add(to);
+	}
 
-    private void OnMobStatChanged(Mob mob, EStatName stat, float change)
-    {
-        if (mob != MobUsing) return;
-        string text;
-        Godot.Color color = Colors.White;
-        if (change < 0)
-        {
-            color = Colors.Red;
-        }
-        else if (change > 0)
-        {
-            color = Colors.Green;
-        }
+	private void OnMobStatChanged(Mob mob, EStatName stat, float change)
+	{
+		if (mob != MobUsing) return;
+		string text;
+		Godot.Color color = Colors.White;
+		if (change < 0)
+		{
+			color = Colors.Red;
+		}
+		else if (change > 0)
+		{
+			color = Colors.Green;
+		}
 
 		color.A = 0.7f;
-        AnimatePopupText($"{stat}: {change}", color);
-    }
+		AnimatePopupText($"{stat}: {change}", color);
+	}
 
 	private void OnMobStatValueChanged(Mob mob, EValueName stat, float change)
 	{
-        if (mob != MobUsing) return;
-        string text;
-        Godot.Color color = Colors.White;
-        if (change < 0)
-        {
-            color = Colors.Red;
-        }
-        else if (change > 0)
-        {
-            color = Colors.Green;
-        }
+		if (mob != MobUsing) return;
+		string text;
+		Godot.Color color = Colors.White;
+		if (change < 0)
+		{
+			color = Colors.Red;
+		}
+		else if (change > 0)
+		{
+			color = Colors.Green;
+		}
 
-        switch (stat)
-        {
-            case EValueName.HEALTH:
-                text = change.ToString();
-                break;
+		switch (stat)
+		{
+			case EValueName.HEALTH:
+				text = change.ToString();
+				break;
 
-            default: break;
-        }
-        AnimatePopupText($"{stat}: {change}", color);
+			default: break;
+		}
+		AnimatePopupText($"{stat}: {change}", color);
 	}
 
-    private void OnMobTurnStarted(Mob mob)
+	private void OnMobTurnStarted(Mob mob)
 	{
 		if (mob != MobUsing) return;
 		mob.TurnActive = true;
@@ -256,38 +261,61 @@ public partial class MobScene : Node3D
 		ToggleEffect(EMobSceneEffect.TURN_ACTIVE, true);
 	}
 
-    private void OnMobTurnEnded(Mob mob)
-    {
-        if (mob != MobUsing) return;
-        mob.TurnActive = false;
-        ToggleEffect(EMobSceneEffect.TURN_ACTIVE, false);
-    }
+	private void OnMobTurnEnded(Mob mob)
+	{
+		if (mob != MobUsing) return;
+		mob.TurnActive = false;
+		ToggleEffect(EMobSceneEffect.TURN_ACTIVE, false);
+	}
 
-    private void OnMobSelected(Mob mob)
-    {
-        if (mob != MobUsing) return;
+	private void OnMobSelected(Mob mob)
+	{
+		if (mob != MobUsing) return;
 
-    }
+	}
 
-    private void OnActionUsed(UsageParameters parameters)
-    {
-        if (parameters.OwnerRef != MobUsing) return;
-        if (MobUsing.TurnActive)
-            MobUsing.Stats.ChangeValue(EValueName.ACTION, -parameters.ActionRef.CostParams.Action);
-        else
-            MobUsing.Stats.ChangeValue(EValueName.REACTION, -parameters.ActionRef.CostParams.Reaction);
+	private void OnActionUsed(UsageParameters parameters)
+	{
+		if (parameters.OwnerRef != MobUsing) return;
+		if (MobUsing.TurnActive)
+			MobUsing.Stats.ChangeValue(EValueName.ACTION, -parameters.ActionRef.CostParams.Action);
+		else
+			MobUsing.Stats.ChangeValue(EValueName.REACTION, -parameters.ActionRef.CostParams.Reaction);
 
-        MobUsing.Stats.ChangeValue(EValueName.SUB_ACTION, -parameters.ActionRef.CostParams.Move);
+		MobUsing.Stats.ChangeValue(EValueName.SUB_ACTION, -parameters.ActionRef.CostParams.Move);
 
-        MobUsing.Stats.ChangeValue(EValueName.MOVE, -parameters.ActionRef.CostParams.Move);
-    }
-    
+		MobUsing.Stats.ChangeValue(EValueName.MOVE, -parameters.ActionRef.CostParams.Move);
+	}
+
 	private void OnInventoryChanged(MobEquipmentInventory obj)
-    {
-        if (obj != MobUsing.EquipmentInventory) return;
+	{
+		if (obj != MobUsing.EquipmentInventory) return;
 
-        MobUsing.UpdateEquipmentStatBoosts();
-    }
+		MobUsing.UpdateEquipmentStatBoosts();
+	}
+
+	private void OnInputCheatEntered(Command.ECheat obj)
+	{
+		if (!MobUsing.IsInCombat()) return;
+
+		switch (obj)
+		{
+			case Command.ECheat.ALL_HP_TO_ONE:
+				MobUsing.Stats.SetValue(EValueName.HEALTH, 1);
+				break;
+
+			case Command.ECheat.ALL_HP_FULL:
+				MobUsing.Stats.RefillValues([EValueName.HEALTH]);
+				break;
+
+			case Command.ECheat.TEST_DIALOGUE_BUBBLES:
+				AnimateDialogue("What did you say about me you little shit!\nYou shit!\nshit!\nwhat?");
+				break;
+
+			default:
+				break;
+		}
+	}
     #endregion
 
 }

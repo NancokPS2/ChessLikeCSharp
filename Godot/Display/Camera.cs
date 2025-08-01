@@ -100,7 +100,6 @@ public partial class Camera : Camera3D
         //Try to evaluate it as a directional action. Stop here if valid.
         base._Process(delta);
 
-        
         //The camera must be enabled.
         if (!(camera_move_held || camera_move_toggled)){return;}
 

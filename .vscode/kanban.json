@@ -5,10 +5,6 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "PREPARATION needs a way to access the party screen.",
-                    "id": "niqpooe9wnk50p2hra86wfhm"
-                },
-                {
                     "text": "Make a separate marker to display where the unit is, and un-hardcode the movement animation from the Mob.Move() function",
                     "id": "ouvrbgqndy7txt15hzj0ctgw"
                 },
@@ -224,5 +220,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1753834013137
+    "timestamp": 1754076024719
 }

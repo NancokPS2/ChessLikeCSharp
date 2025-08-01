@@ -8,18 +8,22 @@ using Microsoft.VisualBasic;
 
 public partial class Command: Node
 {
-    public LineEdit TextInput = new(){
-        MouseFilter = Control.MouseFilterEnum.Ignore,
-        FocusMode = Control.FocusModeEnum.None,
-        CustomMinimumSize = new Godot.Vector2(180,48),
-        SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter,
-        SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
-        AnchorTop = 0.5f,
-        AnchorBottom = 0.5f,
-        AnchorLeft = 0.5f,
-        AnchorRight = 0.5f,
-        Visible = false,
-        };
+	public enum ECheat { ALL_HP_TO_ONE, ALL_HP_FULL, FUCKYOU,
+		TEST_DIALOGUE_BUBBLES
+	}
+	public LineEdit TextInput = new()
+	{
+		MouseFilter = Control.MouseFilterEnum.Ignore,
+		FocusMode = Control.FocusModeEnum.None,
+		CustomMinimumSize = new Godot.Vector2(180, 48),
+		SizeFlagsHorizontal = Control.SizeFlags.ShrinkCenter,
+		SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
+		AnchorTop = 0.5f,
+		AnchorBottom = 0.5f,
+		AnchorLeft = 0.5f,
+		AnchorRight = 0.5f,
+		Visible = false,
+	};
 
     public override void _Ready()
     {
@@ -46,47 +50,40 @@ public partial class Command: Node
 
     private void OnFocusExited() => HideShow(false);
 
-    private void OnTextSubmitted(string text)
-    {
-        var label = MessageQueue.AddMessage("CHEAT ENABLED - ");
-        label.Modulate = Godot.Colors.Yellow;
-        switch (text)
-        {
-            case "ultima":
-                AllCombatUnitsSetHP(1);
-                label.Text += "Sudden death!";
-                break;
+	private void OnTextSubmitted(string text)
+	{
+		var label = MessageQueue.AddMessage("CHEAT ENABLED - ");
+		label.Modulate = Godot.Colors.Yellow;
+		ECheat cheat;
+		switch (text)
+		{
+			case "ultima":
+				label.Text += "Sudden death!";
+				cheat = ECheat.ALL_HP_TO_ONE;
+				break;
 
-            case "thesun":
-                AllCombatUnitsSetHP(99999);
-                label.Text += "Might they not perish.";
-                break;
+			case "thesun":
+				label.Text += "Might they not perish.";
+				cheat = ECheat.ALL_HP_FULL;
+				break;
 
-            case "notded":
-                if (GetHoveredUnit() is Mob mob_to_heal)
-                {
-                    mob_to_heal.Stats.SetValue(EValueName.HEALTH, 99999);
-                }
-                label.Text += "Good day.";
-                break;
+			case "merrykrismas":
+				label.Text = "Sing swears!";
+				cheat = ECheat.TEST_DIALOGUE_BUBBLES;
+				break;
 
-            case "ivefallen":
-                if (GetHoveredUnit() is Mob mob_to_hurt)
-                {
-                    mob_to_hurt.Stats.SetValue(EValueName.HEALTH, 1);
-                }
-                label.Text += "And don't get up!";
-                break;
+			case "fuckyou":
+				label.Text += "Because i say so.";
+				cheat = ECheat.FUCKYOU;
+				break;
 
-            case "fuckyou":
-                throw new NotImplementedException();
-                label.Text += "Because i say so.";
-                break;
+			default:
+				HideShow(false);
+				return;
+		}
 
-            default:
-                break;
-        }
-        HideShow(false);
+		HideShow(false);
+		EventBus.InputCheatEntered?.Invoke(cheat);
     }
 
     public override void _Input(InputEvent @event)

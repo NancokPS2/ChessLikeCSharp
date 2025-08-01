@@ -100,25 +100,25 @@ public partial class CombatScene : Node3D
 	public static List<Mob> GetMobsInCombat() => Global.ManagerMob.GetPooledInCombat();
 
 	#region Event Handling
-    private void OnCombatPreparationStarted()
-    {
+	private void OnCombatPreparationStarted()
+	{
 		SetState(ECombatState.PREPARATION);
-    }
+	}
 
 	private void OnCombatPreparationEnded()
 	{
 		EventBus.CombatStarted?.Invoke();
-    }
+	}
 
 	private void OnCombatStarted()
 	{
 		SetState(ECombatState.TURN_SELECTION);
 	}
 
-    private void OnCombatEnded()
-    {
+	private void OnCombatEnded()
+	{
 		SetState(ECombatState.END_COMBAT);
-    }
+	}
 
 	private void OnInputBack()
 	{
@@ -139,8 +139,8 @@ public partial class CombatScene : Node3D
 		}
 	}
 
-    private void OnInputPause()
-    {
+	private void OnInputPause()
+	{
 		if (StateCurrent == ECombatState.PAUSED)
 		{
 			SetState(StatePrevious);
@@ -149,7 +149,7 @@ public partial class CombatScene : Node3D
 		{
 			SetState(ECombatState.PAUSED);
 		}
-    }
+	}
 
 	private void OnMobTurnStarted(Mob mob)
 	{

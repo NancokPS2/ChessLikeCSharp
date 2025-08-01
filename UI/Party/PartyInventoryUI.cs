@@ -52,7 +52,7 @@ public partial class PartyInventoryUI : Control
 			true).Inventory);
 
 		EventBus.MobSelected += OnMobSelected;
-		EventBus.CombatPreparationStarted += OnCombatPreparationStarted;
+		EventBus.CombatStarted += OnCombatStarted;
 		EventBus.CombatEnded += OnCombatEnded;
 	}
 
@@ -114,7 +114,7 @@ public partial class PartyInventoryUI : Control
 		EquipmentUI?.Update(mob.EquipmentInventory);
 	}
 
-	private void OnCombatPreparationStarted()
+	private void OnCombatStarted()
 	{
 		if (MassUI is null || EquipmentUI is null) throw new Exception();
 		CanModify = false;

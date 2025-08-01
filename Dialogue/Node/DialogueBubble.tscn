@@ -6,38 +6,40 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_xkgql"]
 viewport_path = NodePath("SubViewport")
 
-[sub_resource type="LabelSettings" id="LabelSettings_1j2tp"]
+[sub_resource type="LabelSettings" id="LabelSettings_nt6ko"]
 font_size = 24
 font_color = Color(0, 0, 0, 1)
 
-[node name="DialogueBubble" type="Node3D"]
+[node name="DialogueBubble" type="Node3D" node_paths=PackedStringArray("LabelNode")]
 script = ExtResource("1_nt6ko")
+LabelNode = NodePath("SubViewport/TextureRect/Label")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.259411, 0)
+sorting_offset = 5.0
+pixel_size = 0.002
 billboard = 1
+fixed_size = true
 texture = SubResource("ViewportTexture_xkgql")
-region_enabled = true
 
 [node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(512, 256)
+render_target_update_mode = 4
 
-[node name="TextureRect" type="Panel" parent="SubViewport"]
-anchors_preset = 15
+[node name="TextureRect" type="PanelContainer" parent="SubViewport"]
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -38.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
 theme_override_styles/panel = ExtResource("1_1j2tp")
 
-[node name="MarginContainer" type="MarginContainer" parent="SubViewport/TextureRect"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="Label" type="Label" parent="SubViewport/TextureRect/MarginContainer"]
+[node name="Label" type="Label" parent="SubViewport/TextureRect"]
 layout_mode = 2
-text = "Lorem ipaapapapapa"
-label_settings = SubResource("LabelSettings_1j2tp")
+label_settings = SubResource("LabelSettings_nt6ko")
