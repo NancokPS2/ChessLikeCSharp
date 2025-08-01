@@ -4,7 +4,10 @@ using System;
 public partial class DialogueBubble : Node3D
 {
 	[Export]
-	protected Label LabelNode;
+	protected Label? LabelNode;
+
+	[Export]
+	protected Sprite3D? SpriteNode;
 
 	[Export]
 	protected float CharacterDelay = 0.1f;
@@ -27,7 +30,8 @@ public partial class DialogueBubble : Node3D
 
 	public void SetText(string text)
 	{
-		LabelNode.Text = "";
+		(LabelNode ?? throw new Exception())
+			.Text = "";
 		DirtyLabel = true;
 		NewTextIndex = 0;
 		NewText = text;
@@ -36,7 +40,8 @@ public partial class DialogueBubble : Node3D
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		//Position = new(Position.X, LabelNode.GetRect().Size.Y/2, Position.Z);
+		(SpriteNode ?? throw new Exception())
+			.Offset = new(0, (LabelNode ?? throw new Exception()).GetRect().Size.Y/2);
 
 		if (!DirtyLabel)
 			return;
