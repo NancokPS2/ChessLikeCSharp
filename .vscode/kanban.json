@@ -5,7 +5,7 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Make a separate marker to display where the unit is, and un-hardcode the movement animation from the Mob.Move() function",
+                    "text": "Un-hardcode the movement animation from the Mob.Move() function",
                     "id": "ouvrbgqndy7txt15hzj0ctgw"
                 },
                 {
@@ -132,10 +132,6 @@
             "title": "Doing",
             "tasks": [
                 {
-                    "text": "Introduce UI elements for PREPARATION and a way to emit EventBus.CombatPreparationEnded",
-                    "id": "m36grlornfuva2j3f6kt6ue3"
-                },
-                {
                     "text": "Make UI work with the new event system; Separate the UI elements from the \"General\" node they have.",
                     "id": "qyjohvf3qere1k4ltcv1plwg"
                 },
@@ -220,5 +216,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1754076024719
+    "timestamp": 1754168362561
 }

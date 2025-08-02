@@ -18,6 +18,11 @@ public class FactionResourcePack : ResourcePack<Faction>
 		return ResourceGet(output, true);
 	}
 
+	public Faction ResourceGet(EFaction faction)
+	{
+		return ResourceGet(FindIdentifier(faction) ?? throw new Exception(), false);
+	}
+
 	public string? FindIdentifier(EFaction faction)
 	{
 		foreach (var item in Contents)

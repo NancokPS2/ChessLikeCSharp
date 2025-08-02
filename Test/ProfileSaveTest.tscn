@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5qkeodqynvnc"]
+
+[ext_resource type="Script" uid="uid://2qm5fo33rx6f" path="res://Test/ProfileSaveTest.cs" id="1_k3gcc"]
+
+[node name="ProfileSaveTest" type="Node3D"]
+script = ExtResource("1_k3gcc")

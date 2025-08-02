@@ -1,0 +1,4 @@
+public enum EStoryFlag
+{
+	DUMMY
+}

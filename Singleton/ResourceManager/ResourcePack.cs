@@ -9,7 +9,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     private const string DEFAULT_CATEGORY = "unsorted";
     public const string METAKEY_TAG = "tag";
     public const string METAKEY_IDENTIFIER = "ResPackIdentifier";
-    public const string TAG_PERSISTENT = "presistent";
+    public const string TAG_PERSISTENT = "persistent";
 
     protected Dictionary<string, TRes> Contents = new();
     protected Dictionary<string, TRes> ContentsPersistent = new();
@@ -18,10 +18,10 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     public readonly string PackIdentifier = "";
 
 
-    public ResourcePack()
-    {
-        PackIdentifier = GetPackIdentifier();
-        PrepareDirectories();
+	public ResourcePack()
+	{
+		PackIdentifier = GetPackIdentifier();
+		PrepareDirectories();
     }
     public ResourcePack(string packIdentifier)
     {
@@ -40,8 +40,9 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         Pooled.Remove(res);
     }
 
+	[Obsolete("These pooled things are not being helpful.")]
     public List<TRes> PooledGetAll()
-        => new(Pooled);
+		=> new(Pooled);
 
     public List<TRes> PooledGetWithTag(string tag)
         => new(from res in Pooled where TagGet(res).Contains(tag) select res);
@@ -70,13 +71,21 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         contentsCollection.Remove(identifier);
     }
 
-    public bool HasResource(string identifier, bool persistent = false)
-    {
-        Dictionary<string, TRes> contentsCollection = persistent
-            ? ContentsPersistent : Contents;
+	public void ResourceClear(bool persistent)
+	{
+		if (persistent)
+			ContentsPersistent.Clear();
+		else
+			Contents.Clear();
+	}
 
-        return contentsCollection.ContainsKey(identifier);
-    }
+    public bool HasResource(string identifier, bool persistent = false)
+	{
+		Dictionary<string, TRes> contentsCollection = persistent
+			? ContentsPersistent : Contents;
+
+		return contentsCollection.ContainsKey(identifier);
+	}
 
     public TRes ResourceGet(string identifier, bool persistent = false, bool contentsFallback = true)
     {
@@ -174,42 +183,34 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         => res.HasMeta(METAKEY_TAG)
         && res.GetMeta(METAKEY_TAG).As<Collections.Array<string>>() is Collections.Array<string>;
 
-    #endregion
+	#endregion
 
-    #region Load
-    public void LoadContent(bool persistent = false, bool preClear = true)
-    {
-        //If it is going to replace everything, just go ahead.
-        if (persistent)
-        {
-            if (preClear)
-            {
-                ContentsPersistent = LoadGetAllInFolder(GetDirectory(persistent));
-                return;
-            }
+	#region Load
+	//Load all resources.
+	public void LoadContent(bool user = false)
+	{
+		//If it is going to replace everything, just go ahead.
+		if (user)
+		{
+			//Add the new elements.
+			foreach (var item in LoadGetAllInFolder(GetDirectory(true)))
+			{
+				ContentsPersistent.Add(item.Key, item.Value);
+			}
+		}
+		else
+		{
+			//Add the new elements.
+			foreach (var item in LoadGetAllInFolder(GetDirectory(false)))
+			{
+				Contents.Add(item.Key, item.Value);
 
-            //Otherwise add the new elements.
-            foreach (var item in LoadGetAllInFolder(GetDirectory(persistent)))
-            {
-                ContentsPersistent.Add(item.Key, item.Value);
-            }
-        }
-        else
-        {
-            if (preClear)
-            {
-                Contents = LoadGetAllInFolder(GetDirectory(persistent));
-                return;
-            }
-
-            //Otherwise add the new elements.
-            foreach (var item in LoadGetAllInFolder(GetDirectory(persistent)))
-            {
-                Contents.Add(item.Key, item.Value);
-            }
-            CreateEnums();
-        }
-    }
+				//If it is persistent, also put it in said dictionary.
+				if (item.Value.TagIn(TAG_PERSISTENT)) ContentsPersistent.Add(item.Key, item.Value);
+			}
+			//CreateEnums();
+		}
+	}
 
     public Dictionary<string, TRes> LoadGetAllInFolder(string path)
     {
@@ -291,50 +292,49 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         if (GetDefaultResource() is null) throw new Exception("Could not load a default resource.");
     }
 
+	[Obsolete("This is not a good approach.")]
     protected void CreateEnums()
-    {
-        if (!OS.HasFeature("editor")) return;
+	{
+		if (!OS.HasFeature("editor")) return;
 
-        string enumName = $"EPackID{GetPackIdentifier()}";
+		string enumName = $"EPackID{GetPackIdentifier()}";
 
-        DirAccess.MakeDirRecursiveAbsolute($"{GetBaseDirectory(false)}/ENUMS");
+		DirAccess.MakeDirRecursiveAbsolute($"{GetDirectory(false)}/ENUMS");
 
-        FileAccess file = FileAccess.Open(
-            $"{GetBaseDirectory(false)}/ENUMS/{enumName}.cs",
-            FileAccess.ModeFlags.WriteRead
-            );
+		FileAccess file = FileAccess.Open(
+			$"{GetDirectory(false)}/ENUMS/{enumName}.cs",
+			FileAccess.ModeFlags.WriteRead
+			);
 
-        string text =
-        $"public enum {enumName} \n"
-        + "{\n";
-        foreach (var item in Contents)
-        {
-            text += item.Key + ",\n";
-        }
-        text += "}";
+		string text =
+		$"public enum {enumName} \n"
+		+ "{\n";
+		foreach (var item in Contents)
+		{
+			text += item.Key + ",\n";
+		}
+		text += "}";
 
-        file.StoreString(text);
-        file.Flush();
-        file.Close();
-    }
+		file.StoreString(text);
+		file.Flush();
+		file.Close();
+	}
 
-    public string GetBaseDirectory(bool user)
-    {
-        if (user)
-        {
-            return $"user://Save/{DEFAULT_DIR}/";
-        }
-        else
-        {
-            return $"res://{DEFAULT_DIR}/";
-        }
-    }
-
-    public string GetDirectory(bool user)
-    {
-        string uniqueString = GetPackIdentifier();
-        return GetBaseDirectory(user) + uniqueString;
-    }
+	public string GetDirectory(bool user)
+	{
+		string uniqueString = GetPackIdentifier();
+		string output;
+		if (user)
+		{
+			output = $"{SaveProfile.GetProfilePath()}{DEFAULT_DIR}/{uniqueString}";
+		}
+		else
+		{
+			output = $"res://{DEFAULT_DIR}/{uniqueString}";
+		}
+		DirAccess.MakeDirRecursiveAbsolute(output);
+		return output;
+	}
 
     public virtual string GetExtension()
     {

@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3 uid="uid://dsomybklmhgee"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xomu0"]
+transparency = 1
+albedo_color = Color(0.258987, 0.655525, 0.757261, 0.898039)
+emission_enabled = true
+emission = Color(0.4793, 0.792305, 0.9747, 1)
+backlight = Color(0.366958, 0.683651, 0.82204, 1)
+disable_receive_shadows = true
+
+[sub_resource type="TorusMesh" id="TorusMesh_xomu0"]
+material = SubResource("StandardMaterial3D_xomu0")
+outer_radius = 0.6
+rings = 8
+ring_segments = 3
+
+[sub_resource type="Animation" id="Animation_ryfis"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CPUParticles3D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xomu0"]
+resource_name = "main"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CPUParticles3D:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.4, 1.4, 1.4), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ryfis"]
+_data = {
+&"RESET": SubResource("Animation_ryfis"),
+&"main": SubResource("Animation_xomu0")
+}
+
+[node name="CurrentlySelectedNode" type="Node3D"]
+
+[node name="CPUParticles3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("TorusMesh_xomu0")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ryfis")
+}
+autoplay = "main"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0514402, 0)
+light_color = Color(0.537613, 0.758074, 0.85458, 1)
+light_energy = 2.0
+light_size = 0.3
+light_bake_mode = 0
+omni_range = 1.0
+omni_attenuation = 1.5

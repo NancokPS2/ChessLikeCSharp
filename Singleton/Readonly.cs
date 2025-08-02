@@ -28,6 +28,10 @@ public partial class Readonly
 		{
 			get => GD.Load<PackedScene>("uid://bs3m3jeeg1cd2").Instantiate<DialogueBubble>();
 		}
-    }
-    
+	}
+
+	public static class FilePaths
+	{
+		public static string GetProfilePath(string profileName) => $"user://{profileName}/";
+	}
 }

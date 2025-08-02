@@ -13,6 +13,7 @@ public partial class MobSceneManager : Node3D
 	protected float CursorSpeed = 15;
 	protected Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
 	protected Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
+	protected Node3D NodeCurrentlySelected = GD.Load<PackedScene>("uid://dsomybklmhgee").Instantiate<Node3D>();
 
 	protected List<MobScene> InstancedMobs = new();
 
@@ -40,7 +41,7 @@ public partial class MobSceneManager : Node3D
 
 		AddChild(NodeSelectionCursor);
 		AddChild(NodeHoveringCursor);
-
+		AddChild(NodeCurrentlySelected);
 	}
 
 	public override void _Process(double delta)
@@ -58,6 +59,18 @@ public partial class MobSceneManager : Node3D
 
 		//Make it visible if there is a mob scene.
 		NodeSelectionCursor.Visible = SelectedMobScene is not null;
+
+		//Move the currently selected cursor to the mob's position
+
+		Godot.Vector3 currentSelectedTarget;
+		if (SelectedMobScene is not null)
+		{
+			currentSelectedTarget = CombatScene.GetGridNode().MapToGlobal(SelectedMobScene.MobUsing.GetPosition());
+			NodeCurrentlySelected.Show();
+			NodeCurrentlySelected.GlobalPosition = currentSelectedTarget;
+		}
+		else
+			NodeCurrentlySelected.Hide();
 
 		DialogueProcess(delta);
 	}

@@ -117,7 +117,8 @@ public partial class EncounterData : Resource
         persistentMob.DisplayedName = "Persistent MC";
         Global.ManagerMob.PooledAdd(persistentMob);
         Global.PackSave();
-        Global.ManagerMob.LoadContent(true, true);
+		Global.ManagerMob.ResourceClear(true);
+        Global.ManagerMob.LoadContent(true);
         Mob def_mob5 = Global.ManagerMob.ResourceGet("Persistent MC", true);
 
         encounter.MobPlacement = new();

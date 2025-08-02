@@ -27,4 +27,4 @@ relationList = null
 mobs = Array[Object]([ExtResource("6_o0pgq"), ExtResource("7_5wo64")])
 Inventory = SubResource("Resource_0pol8")
 metadata/_custom_type_script = "uid://c0ducr6ksvfmg"
-metadata/persistent = true
+metadata/tag = ["persistent"]

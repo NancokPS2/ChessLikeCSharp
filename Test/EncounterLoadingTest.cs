@@ -8,7 +8,7 @@ using ChessLike.World;
 using ChessLike.World.Encounter;
 using Godot;
 
-namespace Tests;
+namespace Test;
 
 public partial class EncounterLoadingTest : Node3D
 {

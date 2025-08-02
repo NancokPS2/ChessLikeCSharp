@@ -11,17 +11,18 @@ config_version=5
 [application]
 
 config/name="ChessLike"
+config/version="indev"
 run/main_scene="res://Godot/MainScenes/Combat.tscn"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
+SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 UIManager="*res://Singleton/UI/UIManager.tscn"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 GlobalNode="res://Singleton/Global/Node/GlobalNode.cs"
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
-SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
