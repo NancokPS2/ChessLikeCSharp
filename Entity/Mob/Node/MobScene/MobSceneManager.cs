@@ -9,61 +9,65 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobSceneManager : Node3D
 {
-    [Export]
-    protected float CursorSpeed = 15;
-    protected Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
-    protected Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
+	[Export]
+	protected float CursorSpeed = 15;
+	protected Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
+	protected Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
 
-    protected List<MobScene> InstancedMobs = new();
+	protected List<MobScene> InstancedMobs = new();
 
 	protected Mob? SelectedMob;
-    protected MobScene? SelectedMobScene;
-    public MobSceneManager()
-    {
-    }
+	protected MobScene? SelectedMobScene;
+	public MobSceneManager()
+	{
+	}
 
-    public override void _Ready()
-    {
-        base._Ready();
-        EventBus.MobStateChanged -= OnMobStateChanged;
-        EventBus.CellPositionSelected -= OnCellSelected;
-        EventBus.CellPositionHovered -= OnCellHovered;
-        EventBus.MobTurnStarted -= OnMobTurnStarted;
+	public override void _Ready()
+	{
+		base._Ready();
+		EventBus.MobStateChanged -= OnMobStateChanged;
+		EventBus.CellPositionSelected -= OnCellSelected;
+		EventBus.CellPositionHovered -= OnCellHovered;
+		EventBus.MobTurnStarted -= OnMobTurnStarted;
 
-        EventBus.MobStateChanged += OnMobStateChanged;
-        EventBus.CellPositionSelected += OnCellSelected;
-        EventBus.CellPositionHovered += OnCellHovered;
-        EventBus.MobTurnStarted += OnMobTurnStarted;
+		EventBus.MobStateChanged += OnMobStateChanged;
+		EventBus.CellPositionSelected += OnCellSelected;
+		EventBus.CellPositionHovered += OnCellHovered;
+		EventBus.MobTurnStarted += OnMobTurnStarted;
 		EventBus.MobSelected += OnMobSelected;
 
-        AddChild(NodeSelectionCursor);
-        AddChild(NodeHoveringCursor);
-    }
+		ConnectDialogue();
+
+		AddChild(NodeSelectionCursor);
+		AddChild(NodeHoveringCursor);
+
+	}
 
 	public override void _Process(double delta)
-    {
-        base._Process(delta);
+	{
+		base._Process(delta);
 
 		//Make the selected mob scene scene match the selected mob
 		SelectedMobScene = SelectedMob is null ? null : GetInstance(SelectedMob);
 
 		//Move the cursor to the target scene position
-        Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero;
-        NodeSelectionCursor.GlobalPosition = NodeSelectionCursor.GlobalPosition.MoveToward(
-            target, (float)(CursorSpeed * delta)
-            );
+		Godot.Vector3 target = SelectedMobScene?.GlobalPosition ?? Godot.Vector3.Zero;
+		NodeSelectionCursor.GlobalPosition = NodeSelectionCursor.GlobalPosition.MoveToward(
+			target, (float)(CursorSpeed * delta)
+			);
 
 		//Make it visible if there is a mob scene.
-        NodeSelectionCursor.Visible = SelectedMobScene is not null;
+		NodeSelectionCursor.Visible = SelectedMobScene is not null;
 
-    }
+		DialogueProcess(delta);
+	}
 
-    private bool HasInstance(Mob mob)
-        => InstancedMobs.Any(x => x.MobUsing == mob);
+	private bool HasInstance(Mob mob)
+		=> InstancedMobs.Any(x => x.MobUsing == mob);
 
-    private MobScene? GetInstance(Mob? mob)
-    {
-        List<MobScene> instancesFound = InstancedMobs.FindAll(x => x.MobUsing == mob);
+	private MobScene? GetInstance(Mob? mob)
+	{
+		List<MobScene> instancesFound = InstancedMobs.FindAll(x => x.MobUsing == mob);
 		if (instancesFound.Count > 1)
 		{
 			throw new Exception($"Only one instance should exist. Found {instancesFound.Count}");
@@ -78,7 +82,7 @@ public partial class MobSceneManager : Node3D
 		{
 			return instancesFound[0];
 		}
-    }
+	}
 
 	protected MobScene CreateInstance(Mob mob)
 	{
@@ -87,7 +91,7 @@ public partial class MobSceneManager : Node3D
 		return newInstance;
 	}
 
-    private void AddInstance(Mob mob)
+	private void AddInstance(Mob mob)
 	{
 		MobScene instance = GetInstance(mob) ?? CreateInstance(mob);
 
@@ -97,57 +101,57 @@ public partial class MobSceneManager : Node3D
 		instance.MovementResetPosition();
 	}
 
-    public void RemoveInstance(Mob mob)
-    {
-        if (!HasInstance(mob)) return;
-        MobScene instance = GetInstance(mob) ?? throw new Exception("Inconsistency between HasInstance() and GetInstance()");
+	public void RemoveInstance(Mob mob)
+	{
+		if (!HasInstance(mob)) return;
+		MobScene instance = GetInstance(mob) ?? throw new Exception("Inconsistency between HasInstance() and GetInstance()");
 
-        RemoveChild(instance);
-        InstancedMobs.Remove(instance);
-    }
+		RemoveChild(instance);
+		InstancedMobs.Remove(instance);
+	}
 
-    public MobScene? GetInstanceByPosition(Vector3i cellPos)
-    {
-        foreach (var instance in InstancedMobs)
-        {
-            if (instance.MobUsing.GetPosition() == cellPos)
-            {
-                return instance;
-            }
-        }
-        return null;
-    }
+	public MobScene? GetInstanceByPosition(Vector3i cellPos)
+	{
+		foreach (var instance in InstancedMobs)
+		{
+			if (instance.MobUsing.GetPosition() == cellPos)
+			{
+				return instance;
+			}
+		}
+		return null;
+	}
 
-    protected void SelectMob(MobScene scene)
-        => SelectMob(scene.MobUsing);
+	protected void SelectMob(MobScene scene)
+		=> SelectMob(scene.MobUsing);
 
-    protected void SelectMob(Mob mob)
-    {
-        MobScene? scene = GetInstanceByPosition(mob.GetPosition());
-        if (scene is null) return;
+	protected void SelectMob(Mob mob)
+	{
+		MobScene? scene = GetInstanceByPosition(mob.GetPosition());
+		if (scene is null) return;
 
 		//Unnecesary, OnMobSelected() handles this already.
 		//SelectedMobScene = GetInstance(mob);
-		
+
 		EventBus.MobSelected?.Invoke(scene.MobUsing);
-    }
+	}
 
-    protected void HoverMob(MobScene scene)
-        => HoverMob(scene.MobUsing);
-    protected void HoverMob(Mob mob)
-    {
-        MobScene? scene = GetInstanceByPosition(mob.GetPosition());
-        if (scene is null) return;
+	protected void HoverMob(MobScene scene)
+		=> HoverMob(scene.MobUsing);
+	protected void HoverMob(Mob mob)
+	{
+		MobScene? scene = GetInstanceByPosition(mob.GetPosition());
+		if (scene is null) return;
 
-        NodeHoveringCursor.GlobalPosition = scene.MarkerOverhead.GlobalPosition;
-        NodeHoveringCursor.Show();
-        EventBus.MobHovered?.Invoke(scene.MobUsing);
-    }
+		NodeHoveringCursor.GlobalPosition = scene.MarkerOverhead.GlobalPosition;
+		NodeHoveringCursor.Show();
+		EventBus.MobHovered?.Invoke(scene.MobUsing);
+	}
 
-    private void ThrowOnMissingInstance(Mob mob)
-    {
-        if (!HasInstance(mob)) throw new Exception();
-    }
+	private void ThrowOnMissingInstance(Mob mob)
+	{
+		if (!HasInstance(mob)) throw new Exception();
+	}
 
 	#region Event Handling
 	private void OnMobSelected(Mob obj)
@@ -155,7 +159,7 @@ public partial class MobSceneManager : Node3D
 		SelectedMob = obj;
 	}
 
-    private void OnMobStateChanged(Mob mob, EMobState state)
+	private void OnMobStateChanged(Mob mob, EMobState state)
 	{
 		if (state == EMobState.COMBAT)
 		{
@@ -173,38 +177,46 @@ public partial class MobSceneManager : Node3D
 		}
 	}
 
-    private void OnCellSelected(Vector3i cellPos)
-    {
-        //Do not select anything if in targeting state.
-        if (CombatScene.GetState() == ECombatState.TARGETING) return;
+	private void OnCellSelected(Vector3i cellPos)
+	{
+		//Do not select anything if in targeting state.
+		if (CombatScene.GetState() == ECombatState.TARGETING) return;
 
-        //Try to find an instance.
-        MobScene? scene = GetInstanceByPosition(cellPos);
-        if (scene is null) return;
+		//Try to find an instance.
+		MobScene? scene = GetInstanceByPosition(cellPos);
+		if (scene is null) return;
 
-        SelectMob(scene);
-    }
+		SelectMob(scene);
+	}
 
-    private void OnCellHovered(Vector3i cellPos)
-    {
-        //Try to find an instance.
-        MobScene? scene = GetInstanceByPosition(cellPos);
-        if (scene is not null)
-        {
-            HoverMob(scene);
-        }
-        else
-        {
-            NodeHoveringCursor.Hide();
-        }
+	private void OnCellHovered(Vector3i cellPos)
+	{
+		//Try to find an instance.
+		MobScene? scene = GetInstanceByPosition(cellPos);
+		if (scene is not null)
+		{
+			HoverMob(scene);
+		}
+		else
+		{
+			NodeHoveringCursor.Hide();
+		}
 
-    }
+	}
 
-    private void OnMobTurnStarted(Mob mob)
-    {
-        ThrowOnMissingInstance(mob);
+	private void OnMobTurnStarted(Mob mob)
+	{
+		ThrowOnMissingInstance(mob);
+		MobScene instance = GetInstance(mob) ?? throw new Exception();
 
-        SelectMob(mob);
-    }
+		//Turn Start
+		mob.TurnActive = true;
+		mob.Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
+		instance.AnimatePopupText("READY");
+		instance.ToggleEffect(MobScene.EMobSceneEffect.TURN_ACTIVE, true);
+
+		SelectMob(mob);
+	}
+
     #endregion
 }

@@ -15,11 +15,16 @@ public partial class DialogueBubble : Node3D
 	[Export(PropertyHint.MultilineText)]
 	protected string DefaultText = "";
 
+	[Export]
+	protected double DissapearanceDelay = 3;
+
 	protected bool DirtyLabel;
 
 	protected string NewText = "";
 	protected int NewTextIndex;
 	protected double NewTextTimeSince;
+
+	protected double TimeCompleted;
 
 	public override void _Ready()
 	{
@@ -43,20 +48,26 @@ public partial class DialogueBubble : Node3D
 		(SpriteNode ?? throw new Exception())
 			.Offset = new(0, (LabelNode ?? throw new Exception()).GetRect().Size.Y/2);
 
+		//Basically idle.
 		if (!DirtyLabel)
+		{
+			TimeCompleted += delta;
+			if (TimeCompleted > DissapearanceDelay) QueueFree();
 			return;
+		}
 
 		//Finished going trough the text.
 		if (NewTextIndex >= NewText.Count())
 		{
 			DirtyLabel = false;
+			NewTextIndex = 0;
 		}
 
 		while (NewTextTimeSince > CharacterDelay)
 		{
 			char newChar = NewText[NewTextIndex];
 			LabelNode.Text += newChar;
-			
+
 			NewTextTimeSince -= CharacterDelay;
 			NewTextIndex++;
 		}

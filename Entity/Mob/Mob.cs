@@ -158,7 +158,10 @@ public partial class Mob : Resource
 
     #region Faction
     public Faction GetFaction()
-        => Global.ManagerFaction.GetPooledByEnum(Faction);
+        => Global.ManagerFaction.ResourceGet(
+			Global.ManagerFaction.FindIdentifier(Faction) ?? throw new Exception(),
+			true,
+			true);
 
     #endregion
 

@@ -1,5 +1,6 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.Extension;
 using ChessLike.World;
 using Godot;
 using System;
@@ -44,7 +45,6 @@ public partial class MobScene : Node3D
 		EventBus.MobMoved += OnMobMoved;
 		EventBus.MobStatChanged += OnMobStatChanged;
 		EventBus.MobStatValueChanged += OnMobStatValueChanged;
-		EventBus.MobTurnStarted += OnMobTurnStarted;
 		EventBus.MobTurnEnded += OnMobTurnEnded;
 		EventBus.MobSelected += OnMobSelected;
 		EventBus.ActionUsed += OnActionUsed;
@@ -79,6 +79,15 @@ public partial class MobScene : Node3D
 		DialogueBubble bubble = Readonly.Scenes.DIALOGUE_BUBBLE;
 		bubble.SetText(text);
 		MarkerOverhead.AddChild(bubble);
+	}
+
+	public void AnimateDialogueChance(List<string> text, float chance)
+	{
+		if (chance > 1) throw new Exception("Chance must be within 0 and 1");
+		if (text.Count == 0) throw new Exception();
+
+		if (chance >= GD.Randf())
+			AnimateDialogue(text.GetRandom());
 	}
 
 	public void ToggleEffect(EMobSceneEffect effect, bool enabled)
@@ -250,15 +259,6 @@ public partial class MobScene : Node3D
 			default: break;
 		}
 		AnimatePopupText($"{stat}: {change}", color);
-	}
-
-	private void OnMobTurnStarted(Mob mob)
-	{
-		if (mob != MobUsing) return;
-		mob.TurnActive = true;
-		mob.Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
-		AnimatePopupText("READY");
-		ToggleEffect(EMobSceneEffect.TURN_ACTIVE, true);
 	}
 
 	private void OnMobTurnEnded(Mob mob)
