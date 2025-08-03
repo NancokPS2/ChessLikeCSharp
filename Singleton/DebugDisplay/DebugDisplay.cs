@@ -26,10 +26,11 @@ public partial class DebugDisplay : Node
     private PopupMenu NodeMenuDebugInfo = new();
     private Node2D NodeDrawTarget = new(){Name = "DebugDisplayDrawTarget"};
 
+	public DebugDisplay(){Instance = this;}
+	
     public override void _Ready()
     {
         base._Ready();
-        Instance = this;
         NodeMenuDebugInfo.IdPressed += OnIdPressed;
 
         //Setup nodes

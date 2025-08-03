@@ -18,9 +18,9 @@ public class FactionResourcePack : ResourcePack<Faction>
 		return ResourceGet(output, true);
 	}
 
-	public Faction ResourceGet(EFaction faction)
+	public Faction ResourceGet(EFaction faction, bool persistent)
 	{
-		return ResourceGet(FindIdentifier(faction) ?? throw new Exception(), false);
+		return ResourceGet(FindIdentifier(faction) ?? throw new Exception(), persistent);
 	}
 
 	public string? FindIdentifier(EFaction faction)

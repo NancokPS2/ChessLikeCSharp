@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Make UIManager work by stacking UIs to change trough.",
+                    "id": "a4qs8qqgh7ejkxqkmlge3qk8"
+                },
+                {
                     "text": "Un-hardcode the movement animation from the Mob.Move() function",
                     "id": "ouvrbgqndy7txt15hzj0ctgw"
                 },
@@ -144,14 +148,6 @@
                     "id": "w885wk1rv5ct4msnw7kxs4vl"
                 },
                 {
-                    "text": "TARGETING state mostly complete. Properly implement returning to AWAITING_ACTION and prompting to end the turn in said state if there's nothing else to do.",
-                    "id": "hgvs6kr90qwyiwu5nvbrdz84"
-                },
-                {
-                    "text": "BattleController.StateProcessing \n- Improve cursor movement, base it on camera \n- Flesh out the states\n",
-                    "id": "ps2yzq0z0scwdzsyo0fziuv5"
-                },
-                {
                     "text": "Player interface and controls",
                     "id": "vo1jtyp5vfz5qe1duh32md0t"
                 }
@@ -216,5 +212,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1754168362561
+    "timestamp": 1754234370860
 }

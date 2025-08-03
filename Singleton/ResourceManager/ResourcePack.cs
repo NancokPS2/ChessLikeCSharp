@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Godot;
@@ -99,8 +100,9 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         //If it does not exist, throw
         if (output is null) throw new Exception($"Resource {identifier} not found.");
 
-        //Make a copy if it is not persistent, otherwise just keep modifying it.
-        output = (TRes)output.Duplicate(true);
+		//Make a copy if it is not persistent, otherwise just keep modifying it.
+		if (!persistent)
+        	output = (TRes)output.Duplicate(true);
 
         return output;
     }
@@ -195,7 +197,8 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 			//Add the new elements.
 			foreach (var item in LoadGetAllInFolder(GetDirectory(true)))
 			{
-				ContentsPersistent.Add(item.Key, item.Value);
+				//When loading user content, it always override default stuff
+				ContentsPersistent[item.Key] = item.Value;
 			}
 		}
 		else
@@ -206,6 +209,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 				Contents.Add(item.Key, item.Value);
 
 				//If it is persistent, also put it in said dictionary.
+				//This may throw if it was already added in the user section, this should simply not run after loading user content
 				if (item.Value.TagIn(TAG_PERSISTENT)) ContentsPersistent.Add(item.Key, item.Value);
 			}
 			//CreateEnums();
@@ -233,24 +237,27 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     {
 
     }
-    #endregion
+	#endregion
 
-    #region Save
-    public void SavePersistent()
-    {
-        IEnumerable<TRes> toSave =
-            ContentsPersistent.Values.Where(x => TagIn(x, TAG_PERSISTENT))
-            .Concat(PooledGetWithTag(TAG_PERSISTENT));
+	#region Save
+	public bool SavePersistent()
+	{
+		bool success = true;
+		IEnumerable<TRes> toSave =
+			ContentsPersistent.Values.Where(x => TagIn(x, TAG_PERSISTENT))
+			.Concat(PooledGetWithTag(TAG_PERSISTENT));
 
-        foreach (var item in toSave)
-        {
-            string savePath = GetResourceSavePath(item);
-            var error = ResourceSaver.Save(
-                item,
-                savePath
-                );
-            if (error != Error.Ok) throw new Exception($"Cannot save {item} in path {savePath} due to error {error}");
-        }
+		foreach (var item in toSave)
+		{
+			string savePath = GetResourceSavePath(item);
+			var error = ResourceSaver.Save(
+				item,
+				savePath
+				);
+			Debug.Assert(error == Error.Ok, $"Cannot save {item} in path {savePath} due to error {error}");
+			if (error != Error.Ok) success = false;
+		}
+		return success;
     }
     #endregion
 

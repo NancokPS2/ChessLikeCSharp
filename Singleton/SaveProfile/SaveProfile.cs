@@ -19,21 +19,23 @@ public partial class SaveProfile : Node
 
 	const string CFSECTION_RESOURCE = "RESOURCE";
 	const string CFKEY_PLAYERFACTION = "PlayerFaction";
+	private const string SAVE_IDENTIFIER_DEFAULT = "__UNDEFINED";
 	private static SaveProfile? Instance;
 
-	public string ProfileCurrent = "__UNDEFINED";
+	protected string SaveIdentifier = SAVE_IDENTIFIER_DEFAULT;
+	protected string ProfileName = "Unnamed";
 
-	private Dictionary<EStoryFlag, bool> StoryFlags = new(){ {EStoryFlag.DUMMY, true} };
+	private Dictionary<EStoryFlag, bool> StoryFlags = new() { { EStoryFlag.DUMMY, true } };
 
 	protected Faction PlayerFaction;
 
 	public SaveProfile() { Instance = this; }
 
 
-	public static string GetProfilePath() => $"user://Save/{Instance?.ProfileCurrent}/";
-	private static string GetProfilePath(string profileOverride) => $"user://Save/{profileOverride}/";
+	public static string GetProfilePath() => $"user://Save/{Instance?.SaveIdentifier}/";
+	private static string GetProfilePath(string saveIdentifierOverride) => $"user://Save/{saveIdentifierOverride}/";
 
-	private static string GetProfileFile(string profileOverride) => $"{GetProfilePath(profileOverride)}/save.sav";
+	private static string GetProfileFile(string saveIdentifierOverride) => $"{GetProfilePath(saveIdentifierOverride)}/save.sav";
 
 	public static Faction GetPlayerFaction() => Instance?.PlayerFaction ?? throw new Exception();
 
@@ -42,21 +44,26 @@ public partial class SaveProfile : Node
 		base._Ready();
 		EventBus.InputSave += OnInputSave;
 		EventBus.InputLoad += OnInputLoad;
+		EventBus.InputPauseOptionSelected += OnInputPauseOptionSelected;
 	}
 
-	public static void SetProfile(string profile) => (Instance ?? throw new Exception()).ProfileCurrent = profile;
+	public static void SetProfileName(string profile)
+		=> (Instance ?? throw new Exception()).ProfileName = profile;
 
-	public static void Load(string profile)
+	public static void SetSaveIdentifier(string saveIdentifier)
+		=> (Instance ?? throw new Exception()).SaveIdentifier = saveIdentifier;
+
+	public static void Load(string saveIdentifier)
 	{
-		//Change the profile name
-		(Instance ?? throw new Exception()).ProfileCurrent = profile;
+		//Change the identifier
+		SetSaveIdentifier(saveIdentifier);
 
 		//Make sure the path exists, create it otherwise.
 		if (!DirAccess.DirExistsAbsolute(GetProfilePath()))
 		{
 			Global.PackInitialize();
-			Instance.PlayerFaction = Global.ManagerFaction.ResourceGet(EFaction.PLAYER);
-			Save();
+			Instance.PlayerFaction = Global.ManagerFaction.ResourceGet(EFaction.PLAYER, false);
+			Save(saveIdentifier);
 		}
 
 		//Load resources.
@@ -64,7 +71,10 @@ public partial class SaveProfile : Node
 
 		//Load ConfigFile
 		ConfigFile config = new();
-		config.Load(GetProfileFile(profile));
+		config.Load(GetProfileFile(saveIdentifier));
+
+		//Load profile name.
+		SetProfileName(config.GetValue(CFSECTION_MAIN, CFKEY_PROFILENAME).As<string>());
 
 		//Set story flags
 		Instance.StoryFlags = new();
@@ -75,23 +85,20 @@ public partial class SaveProfile : Node
 
 		//Get resources (NO!)
 		//Instance.PlayerFaction = config.GetValue(CFSECTION_RESOURCE, CFKEY_PLAYERFACTION).As<Faction>();
-
-		//Make sure the profile's config is the same as the folder (don't fuck with the config like that!)
-		if (config.GetValue(CFSECTION_MAIN, CFKEY_PROFILENAME).As<string>() != profile)
-			throw new Exception();
-
+		EventBus.LoadAttempted?.Invoke(true);
 	}
 
-	public static void Save() => Save((Instance ?? throw new Exception()).ProfileCurrent);
+	public static bool Save() => Save((Instance ?? throw new Exception()).SaveIdentifier);
 
-	public static void Save(string profileName)
+	public static bool Save(string saveIdentifier)
 	{
 		SaveProfile instance = Instance ?? throw new Exception();
-		Global.PackSave();
+		bool success = true;
+		if (!Global.PackSave()) success = false;
 		ConfigFile config = new();
 
 		//Main stuff
-		config.SetValue(CFSECTION_MAIN, CFKEY_PROFILENAME, profileName);
+		config.SetValue(CFSECTION_MAIN, CFKEY_PROFILENAME, instance.ProfileName);
 		config.SetValue(CFSECTION_MAIN, CFKEY_SAVEDATE, Time.GetUnixTimeFromSystem().ToString());
 		config.SetValue(CFSECTION_MAIN, CFKEY_VERSIONNAME, ProjectSettings.GetSettingWithOverride("application/config/version"));
 
@@ -104,12 +111,15 @@ public partial class SaveProfile : Node
 			config.SetValue(CSFSECTION_STORYFLAGS, ((int)item.Key).ToString(), item.Value);
 		}
 
-		config.Save(GetProfileFile(profileName));
+		if (config.Save(GetProfileFile(saveIdentifier)) != Error.Ok) success = false;
+		EventBus.SaveAttempted?.Invoke(success);
+		return success;
 	}
 
 	public static void ClearFile(string profile)
 	{
 		string path = GetProfilePath(profile).TrimSuffix("/");
+		SetSaveIdentifier(SAVE_IDENTIFIER_DEFAULT);
 		Error error = DirAccess.RemoveAbsolute(path);
 		if (error != Error.Ok)
 			OS.MoveToTrash(path);
@@ -129,6 +139,12 @@ public partial class SaveProfile : Node
 	private void OnInputSave()
 	{
 		Save();
+	}
+	
+	private void OnInputPauseOptionSelected(EPauseOption obj)
+	{
+		if (obj == EPauseOption.SAVE)
+			OnInputSave();
 	}
 	#endregion
 }

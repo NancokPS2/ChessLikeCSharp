@@ -24,11 +24,6 @@ public partial class MessageQueue: Node
     public MessageQueue()
     {
         Instance = this;
-
-        EventBus.MobTurnStarted += OnMobTurnStarted;
-        EventBus.CombatStateChanged += OnBattleStateChanged;
-        EventBus.MobStateChanged += OnMobStateChanged;
-        EventBus.CombatStarted += OnCombatStarted;
     }
 
 	public override void _Process(double delta)
@@ -47,20 +42,26 @@ public partial class MessageQueue: Node
         }
     }
 
-    public override void _Ready()
-    {
-        base._Ready();
-        Instance = this;
-        Canvas = UIManager.GetLayer(UIManager.ELayer.MSG_QUEUE);
+	public override void _Ready()
+	{
+		base._Ready();
+		Instance = this;
+		Canvas = UIManager.GetLayer(UIManager.ELayer.MSG_QUEUE);
 
-        Canvas.AddChild(NodeContainer);
-        NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+		Canvas.AddChild(NodeContainer);
+		NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
 
-        EventBus.MobCommandBroadcasted += AddMessageFromCommand;
+		EventBus.MobTurnStarted += OnMobTurnStarted;
+		EventBus.CombatStateChanged += OnBattleStateChanged;
+		EventBus.MobStateChanged += OnMobStateChanged;
+		EventBus.CombatStarted += OnCombatStarted;
+		EventBus.MobCommandBroadcasted += AddMessageFromCommand;
+		EventBus.SaveAttempted += OnSaveAttempted;
+		EventBus.LoadAttempted += OnLoadAttempted;
     }
 
-    private void AddMessageFromCommand(Dictionary<EInfo, string> dictionary)
+	private void AddMessageFromCommand(Dictionary<EInfo, string> dictionary)
     {
         string message = ChessLike.Entity.MobCommand.Command.ParseInfo(dictionary);
         AddMessage(message, message.Length/6);
@@ -105,19 +106,35 @@ public partial class MessageQueue: Node
 	{
         AddMessage("Combat starts.");
 	}
+
+	private void OnSaveAttempted(bool boolean)
+	{
+		if (boolean)
+			AddMessage("Saved successfuly");
+		else
+			AddMessage("Failed to save");
+	}
+
+	private void OnLoadAttempted(bool boolean)
+	{
+		if (boolean)
+			AddMessage("Loaded successfully");
+		else
+			AddMessage("L failed");
+	}
     #endregion
 
-    public partial class TemporaryLabel : Label
-    {
-        public double Duration;
+	public partial class TemporaryLabel : Label
+	{
+		public double Duration;
 
-        public TemporaryLabel()
-        {
-            SizeFlagsHorizontal = SizeFlags.ExpandFill;
-            SizeFlagsVertical = SizeFlags.ShrinkEnd;
-            FocusMode = Control.FocusModeEnum.None;
-            MouseFilter = Control.MouseFilterEnum.Ignore;
-            AddThemeStyleboxOverride("normal", new StyleBoxFlat() { BgColor = new(0, 0, 0, 0.1f) });
-        }
-    }
+		public TemporaryLabel()
+		{
+			SizeFlagsHorizontal = SizeFlags.ExpandFill;
+			SizeFlagsVertical = SizeFlags.ShrinkEnd;
+			FocusMode = Control.FocusModeEnum.None;
+			MouseFilter = Control.MouseFilterEnum.Ignore;
+			AddThemeStyleboxOverride("normal", new StyleBoxFlat() { BgColor = new(0, 0, 0, 0.1f) });
+		}
+	}
 }

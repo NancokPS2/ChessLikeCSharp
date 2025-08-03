@@ -38,18 +38,21 @@ public partial class Global
 		PackInitialize();
 	}
 
-	public static void PackSave()
+	public static bool PackSave()
 	{
-		ManagerAbility.SavePersistent();
-		ManagerMob.SavePersistent();
-		ManagerFaction.SavePersistent();
-		ManagerItem.SavePersistent();
-		ManagerModel.SavePersistent();
-		ManagerParticle.SavePersistent();
-		ManagerMaterial.SavePersistent();
-		ManagerFont.SavePersistent();
-		ManagerEncounter.SavePersistent();
-		ManagerMobTemplate.SavePersistent();
+		List<bool> success = new(){
+			ManagerAbility.SavePersistent(),
+			ManagerMob.SavePersistent(),
+			ManagerFaction.SavePersistent(),
+			ManagerItem.SavePersistent(),
+			ManagerModel.SavePersistent(),
+			ManagerParticle.SavePersistent(),
+			ManagerMaterial.SavePersistent(),
+			ManagerFont.SavePersistent(),
+			ManagerEncounter.SavePersistent(),
+			ManagerMobTemplate.SavePersistent(),
+		};
+		return success.All(x => x == true);
 	}
 	public static void PackLoad(bool user)
 	{

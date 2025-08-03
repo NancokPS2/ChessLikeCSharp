@@ -27,12 +27,13 @@ public partial class EventBus : Node
     public delegate void StringEvent(string text);
     public delegate void FloatEvent(float floating);
     public delegate void IntEvent(int integer);
+	public delegate void BoolEvent(bool boolean);
 
     public override void _Ready()
-    {
-        base._Ready();
-        Instance = this;
-    }
+	{
+		base._Ready();
+		Instance = this;
+	}
 
     //World map
     #region World Map
@@ -175,8 +176,13 @@ public partial class EventBus : Node
     public static Event? InputBack;
     public static Event? InputPause;
     public static Event? InputPreparationFinished;
+	#region Save - Load 
 	public static Event? InputSave;
 	public static StringEvent? InputLoad;
+	public static BoolEvent? SaveAttempted;
+	public static BoolEvent? LoadAttempted;
+	#endregion
+
 	public static ObjectChange<Mob>? MobSelected;
     public static ObjectChange<Mob>? MobHovered;
     #endregion

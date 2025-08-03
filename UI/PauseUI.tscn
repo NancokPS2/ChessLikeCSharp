@@ -16,7 +16,7 @@ corner_radius_bottom_left = 4
 [sub_resource type="LabelSettings" id="LabelSettings_3eesh"]
 font_size = 32
 
-[node name="PauseUI" type="Control" node_paths=PackedStringArray("ButtonResume", "ButtonParty")]
+[node name="PauseUI" type="Control" node_paths=PackedStringArray("ButtonResume", "ButtonParty", "ButtonSave")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,6 +26,7 @@ grow_vertical = 2
 script = ExtResource("1_brpxy")
 ButtonResume = NodePath("PanelContainer/VBoxContainer/RESUME")
 ButtonParty = NodePath("PanelContainer/VBoxContainer/PARTY")
+ButtonSave = NodePath("PanelContainer/VBoxContainer/SAVE")
 metadata/_custom_type_script = "uid://c3g2a2n7uef1d"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -63,6 +64,11 @@ auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 3
 text = "PARTY"
+
+[node name="SAVE" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "SAVE"
 
 [node name="OPTIONS" type="Button" parent="PanelContainer/VBoxContainer"]
 auto_translate_mode = 1

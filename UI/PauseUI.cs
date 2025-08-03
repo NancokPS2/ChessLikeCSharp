@@ -14,13 +14,17 @@ public partial class PauseUI : Control, ISceneDependency
 	[Export]
 	protected Button ButtonParty;
 
+	[Export]
+	protected Button ButtonSave;
+
 	public override void _Ready()
 	{
 		base._Ready();
 
 		ButtonResume.Pressed += () => OnButtonPressed(EPauseOption.RESUME);
 		ButtonParty.Pressed += () => OnButtonPressed(EPauseOption.PARTY);
-    }
+		ButtonSave.Pressed += () => OnButtonPressed(EPauseOption.SAVE);
+	}
 
 
 	#region Event Handling
