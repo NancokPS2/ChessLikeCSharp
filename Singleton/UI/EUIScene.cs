@@ -6,4 +6,5 @@ public enum EUIScene
 	PAUSE,
 	PREPARATION,
 	COMBAT_GENERAL,
+	SAVE_SELECT,
 }

@@ -129,6 +129,11 @@ public partial class SaveProfile : Node
 	=> (Instance ?? throw new Exception())
 			.StoryFlags[flag] = set;
 
+	public static string[] GetAllSaves()
+	{
+		return DirAccess.GetDirectoriesAt("user://Save");
+	}
+
 
 	#region Event Handling
 	private void OnInputLoad(string profile)

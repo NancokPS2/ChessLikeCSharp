@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://csrjjvk5oypse"]
+
+[ext_resource type="Script" uid="uid://da3eaalp1lcas" path="res://UI/MainMenu/SaveSlotUI.cs" id="1_4jcxv"]
+[ext_resource type="Texture2D" uid="uid://bmg5aorvrb6ki" path="res://icon.svg" id="1_5up3e"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4jcxv"]
+font_size = 18
+
+[node name="SaveSlot" type="Control"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 120.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_4jcxv")
+metadata/_custom_type_script = "uid://da3eaalp1lcas"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_5up3e")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Profile: ???
+Date: ???"
+label_settings = SubResource("LabelSettings_4jcxv")
+vertical_alignment = 1
