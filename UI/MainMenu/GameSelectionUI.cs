@@ -15,9 +15,10 @@ public partial class SaveSelectionUI : Control
 		SaveIdentifierEditNode.TextSubmitted += OnSaveTextSubmitted;
 	}
 
+	[Obsolete("Unfinished")]
 	private void OnSaveTextSubmitted(string newText)
 	{
-		SaveProfile.Load(newText);
+		SaveManager.Load(newText, 0);
 	}
 
 

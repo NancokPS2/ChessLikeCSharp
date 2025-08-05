@@ -189,31 +189,18 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
 	#region Load
 	//Load all resources.
-	public void LoadContent(bool user = false)
+	public void LoadContent()
 	{
-		//If it is going to replace everything, just go ahead.
-		if (user)
+		//Add the new elements.
+		foreach (var item in LoadGetAllInFolder(GetDirectory()))
 		{
-			//Add the new elements.
-			foreach (var item in LoadGetAllInFolder(GetDirectory(true)))
-			{
-				//When loading user content, it always override default stuff
-				ContentsPersistent[item.Key] = item.Value;
-			}
-		}
-		else
-		{
-			//Add the new elements.
-			foreach (var item in LoadGetAllInFolder(GetDirectory(false)))
-			{
-				Contents.Add(item.Key, item.Value);
+			Contents.Add(item.Key, item.Value);
 
-				//If it is persistent, also put it in said dictionary.
-				//This may throw if it was already added in the user section, this should simply not run after loading user content
-				if (item.Value.TagIn(TAG_PERSISTENT)) ContentsPersistent.Add(item.Key, item.Value);
-			}
-			//CreateEnums();
+			//If it is persistent, also put it in said dictionary.
+			//This may throw if it was already added in the user section, this should simply not run after loading user content
+			if (item.Value.TagIn(TAG_PERSISTENT)) ContentsPersistent.Add(item.Key, item.Value);
 		}
+		//CreateEnums();
 	}
 
     public Dictionary<string, TRes> LoadGetAllInFolder(string path)
@@ -240,7 +227,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 	#endregion
 
 	#region Save
-	public bool SavePersistent()
+	public bool SavePersistent(string baseFolder)
 	{
 		bool success = true;
 		IEnumerable<TRes> toSave =
@@ -249,11 +236,15 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
 		foreach (var item in toSave)
 		{
-			string savePath = GetResourceSavePath(item);
+			string profileName = SaveManager.SaveCurrent?.ProfileName ?? throw new Exception();
+			int slot = SaveManager.SaveSlotCurrent;
+			string savePath = $"{SaveFile.GetSaveResourceFolder(profileName, slot)}/{GetResourceIdentifier(item)}{GetExtension()}";
+
 			var error = ResourceSaver.Save(
 				item,
 				savePath
 				);
+				
 			Debug.Assert(error == Error.Ok, $"Cannot save {item} in path {savePath} due to error {error}");
 			if (error != Error.Ok) success = false;
 		}
@@ -263,14 +254,14 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
     #region Files
     private string GetDefaultResourcePath()
-        => $"{GetDirectory(false)}/Default{GetExtension()}";
+        => $"{GetDirectory()}/Default{GetExtension()}";
 
     public bool DefaultResourceExists() => GD.Load<TRes>(GetDefaultResourcePath()) is not null;
 
     protected void PrepareDirectories()
     {
-        string userDir = GetDirectory(true);
-        string resDir = GetDirectory(false);
+        string userDir = GetDirectory();
+        string resDir = GetDirectory();
         var userErr = DirAccess.MakeDirRecursiveAbsolute(userDir);
         var resErr = DirAccess.MakeDirRecursiveAbsolute(resDir);
 
@@ -286,7 +277,7 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         //Create a new one if there is not even a file there.
         if (OS.HasFeature("editor"))
         {
-            string path = $"{GetDirectory(false)}/Default{GetExtension()}";
+            string path = $"{GetDirectory()}/Default{GetExtension()}";
             Error result = ResourceSaver.Save(new TRes(), path);
             GD.PushError($"Resource creation finished with code '{result}' at path '{path}' of category '{GetPackIdentifier()}");
         }
@@ -306,10 +297,10 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
 		string enumName = $"EPackID{GetPackIdentifier()}";
 
-		DirAccess.MakeDirRecursiveAbsolute($"{GetDirectory(false)}/ENUMS");
+		DirAccess.MakeDirRecursiveAbsolute($"{GetDirectory()}/ENUMS");
 
 		FileAccess file = FileAccess.Open(
-			$"{GetDirectory(false)}/ENUMS/{enumName}.cs",
+			$"{GetDirectory()}/ENUMS/{enumName}.cs",
 			FileAccess.ModeFlags.WriteRead
 			);
 
@@ -327,18 +318,11 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 		file.Close();
 	}
 
-	public string GetDirectory(bool user)
+	public string GetDirectory()
 	{
 		string uniqueString = GetPackIdentifier();
 		string output;
-		if (user)
-		{
-			output = $"{SaveProfile.GetProfilePath()}{DEFAULT_DIR}/{uniqueString}";
-		}
-		else
-		{
-			output = $"res://{DEFAULT_DIR}/{uniqueString}";
-		}
+		output = $"res://{DEFAULT_DIR}/{uniqueString}";
 		DirAccess.MakeDirRecursiveAbsolute(output);
 		return output;
 	}
@@ -373,9 +357,6 @@ public class ResourcePack<TRes> where TRes : Resource, new()
         if (output == "") output = resource.GetMeta(METAKEY_IDENTIFIER, "").As<string>();
         return output;
     }
-
-    public string GetResourceSavePath(TRes resource)
-        => $"{GetDirectory(true)}/{GetResourceIdentifier(resource)}{GetExtension()}";
     #endregion
 }
 public static class ResourcePackExtension

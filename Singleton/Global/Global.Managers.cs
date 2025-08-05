@@ -38,53 +38,53 @@ public partial class Global
 		PackInitialize();
 	}
 
-	public static bool PackSave()
+	public static bool PackSave(string baseFolder)
 	{
 		List<bool> success = new(){
-			ManagerAbility.SavePersistent(),
-			ManagerMob.SavePersistent(),
-			ManagerFaction.SavePersistent(),
-			ManagerItem.SavePersistent(),
-			ManagerModel.SavePersistent(),
-			ManagerParticle.SavePersistent(),
-			ManagerMaterial.SavePersistent(),
-			ManagerFont.SavePersistent(),
-			ManagerEncounter.SavePersistent(),
-			ManagerMobTemplate.SavePersistent(),
+			ManagerAbility.SavePersistent(baseFolder),
+			ManagerMob.SavePersistent(baseFolder),
+			ManagerFaction.SavePersistent(baseFolder),
+			ManagerItem.SavePersistent(baseFolder),
+			ManagerModel.SavePersistent(baseFolder),
+			ManagerParticle.SavePersistent(baseFolder),
+			ManagerMaterial.SavePersistent(baseFolder),
+			ManagerFont.SavePersistent(baseFolder),
+			ManagerEncounter.SavePersistent(baseFolder),
+			ManagerMobTemplate.SavePersistent(baseFolder),
 		};
 		return success.All(x => x == true);
 	}
 	public static void PackLoad(bool user)
 	{
 		ManagerAbility.ResourceClear(true);
-		ManagerAbility.LoadContent(user);
+		ManagerAbility.LoadContent();
 
 		ManagerMob.ResourceClear(true);
-		ManagerMob.LoadContent(user);
+		ManagerMob.LoadContent();
 
 		ManagerFaction.ResourceClear(true);
-		ManagerFaction.LoadContent(user);
+		ManagerFaction.LoadContent();
 
 		ManagerItem.ResourceClear(true);
-		ManagerItem.LoadContent(user);
+		ManagerItem.LoadContent();
 
 		ManagerModel.ResourceClear(true);
-		ManagerModel.LoadContent(user);
+		ManagerModel.LoadContent();
 
 		ManagerParticle.ResourceClear(true);
-		ManagerParticle.LoadContent(user);
+		ManagerParticle.LoadContent();
 
 		ManagerMaterial.ResourceClear(true);
-		ManagerMaterial.LoadContent(user);
+		ManagerMaterial.LoadContent();
 
 		ManagerFont.ResourceClear(true);
-		ManagerFont.LoadContent(user);
+		ManagerFont.LoadContent();
 
 		ManagerEncounter.ResourceClear(true);
-		ManagerEncounter.LoadContent(user);
+		ManagerEncounter.LoadContent();
 
 		ManagerMobTemplate.ResourceClear(true);
-		ManagerMobTemplate.LoadContent(user);
+		ManagerMobTemplate.LoadContent();
 	}
 
 	public static void PackInitialize()
@@ -106,8 +106,7 @@ public partial class Global
 		resourcePack.CreateDefault();
 		resourcePack.ResourceClear(false);
 		resourcePack.ResourceClear(true);
-		resourcePack.LoadContent(false);
-		resourcePack.LoadContent(true);
+		resourcePack.LoadContent();
 		return resourcePack;
 	}
 }
