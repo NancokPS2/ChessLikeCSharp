@@ -1,3 +1,8 @@
+---
+tags:
+  - historic_event
+---
+
 # Early Dushe vs future Rasemblé
 The conflict with [[Dushe]] goes back a long time. When [[Dushe]] was still expanding in its earlier development, it started to find opposition from smaller settlements in its path of expansion. This then devolved into fighting. With many of the settlements in the borders banding together to oppose the advancement.
 [[Dushe]] is historically noted to have avoided conflict where possible, but found the constant opposition unreasonable, as settlements would often expand in unfoavorable directions for their advances or impose difficult requests as to how they should proceed with their advance.

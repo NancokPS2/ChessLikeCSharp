@@ -1,3 +1,8 @@
+---
+tags:
+  - mechanical/combat
+---
+
 # Balance
  Balance is spread accross the general options granted to [[Unit]]s. 
 ### Base numbers

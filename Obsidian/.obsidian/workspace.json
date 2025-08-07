@@ -4,35 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "a0d7fdeb70c10e31",
+        "id": "1a4b8b8c253df6ba",
         "type": "tabs",
         "children": [
           {
-            "id": "9d8bc6a210c26d01",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Main Character.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Main Character"
-            }
-          },
-          {
-            "id": "68dc015649ffc3db",
+            "id": "b2cd7c35cb6e992a",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -56,7 +32,7 @@
             }
           },
           {
-            "id": "d32a7d0a0687c486",
+            "id": "47923b3b900511f7",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -80,12 +56,12 @@
             }
           },
           {
-            "id": "c918b9ec46078a89",
+            "id": "61d5074c20bab307",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Northern Rasemble caretaker.md",
+                "file": "How magic works.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -100,16 +76,16 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Northern Rasemble caretaker"
+              "title": "How magic works"
             }
           },
           {
-            "id": "ee4e33c30642b17f",
+            "id": "11bac47aee472bc3",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "World Map/Rasemblé.md",
+                "file": "Manifestations of conscience.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -124,227 +100,10 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Rasemblé"
-            }
-          },
-          {
-            "id": "d3114c44dfd254a5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Rasemblé.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Rasemblé"
-            }
-          },
-          {
-            "id": "a68ea9d0bde37567",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Rasemblé.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Rasemblé"
-            }
-          },
-          {
-            "id": "c212b7a9b6ee75a3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Rasemblé.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Rasemblé"
-            }
-          },
-          {
-            "id": "2d6ccd3e6aee3ccf",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "World Map/Rasemblé.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Rasemblé"
-            }
-          },
-          {
-            "id": "426ba9b6acfd5316",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Wars.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Wars"
-            }
-          },
-          {
-            "id": "363781ff0b897e69",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Wars.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Wars"
-            }
-          },
-          {
-            "id": "8f401c2284bf3757",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Blood-borne Protector.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Blood-borne Protector"
-            }
-          },
-          {
-            "id": "778ed197c73ec5c8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Blood-borne Protector.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Blood-borne Protector"
-            }
-          },
-          {
-            "id": "fdf8be88d7eba8e8",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Ancient Town.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
-              "icon": "lucide-file",
-              "title": "Ancient Town"
+              "title": "Manifestations of conscience"
             }
           }
-        ],
-        "currentTab": 9
+        ]
       }
     ],
     "direction": "vertical"
@@ -376,7 +135,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#location/region",
+                "query": "tag:magic",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -476,13 +235,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Wars.md",
+                "file": "Blood-borne Protector.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Wars"
+              "title": "Outline of Blood-borne Protector"
             }
           }
         ],
@@ -503,15 +262,23 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "426ba9b6acfd5316",
+  "active": "b2cd7c35cb6e992a",
   "lastOpenFiles": [
+    "Ancient Town.md",
+    "Ancient Town II.md",
+    "Blood-borne Protector.md",
+    "Manifestations of conscience.md",
+    "How magic works.md",
+    "World Map/Ice Nomad Territory.md",
     "World Map/Rasemblé.md",
+    "World Map/Brojownie.md",
+    "World Map/Sub Region.md",
+    "Character Stats/Turn Delay.md",
+    "World Map/General map layout.canvas",
+    "Mechanics/Combat balance.md",
     "Wars.md",
     "World Map/Dushe.md",
-    "Ancient Town.md",
     "Northern Rasemble caretaker.md",
-    "Blood-borne Protector.md",
-    "World Map/General map layout.canvas",
     "Main Character.md",
     "Continent.md",
     "Celestial Priest.md",
@@ -524,16 +291,8 @@
     "Race/Race.md",
     "Mechanics/Mob Templates/Race Template.md",
     "Mechanics/Mob Templates/Job Template.md",
-    "Mechanics/Mob.md",
-    "Mechanics/UI/Ability Usage.md",
-    "Mechanics/Mob Templates/Identity Template.md",
-    "Character Stats/Turn Delay.md",
-    "Mechanics/Combat balance.md",
     "Character Stats",
     "Mechanics/Mob Templates",
-    "Mechanics/BattleController (Deleted).md",
-    "Phoenix Warrior.md",
-    "How magic works.md",
     "Assets/HealthEffectValues.png",
     "Assets/HealthEffectValues.ods",
     "Assets",

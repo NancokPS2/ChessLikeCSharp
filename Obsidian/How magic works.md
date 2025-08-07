@@ -15,3 +15,5 @@ This is why it is tought that magic itself is a manifestations of everyone's col
 
 The more easily a spell comes to someone, usually the safer it is. The more legendary and/or extreme spells tend to be more dangerous, regardless of expertise. With more grave possible side-effects should they be miss used or performed wrongly.
 
+## Inner workings
+Magic is directed by the [[Manifestations of conscience]]. Acting on behalf of the people that shaped them.
