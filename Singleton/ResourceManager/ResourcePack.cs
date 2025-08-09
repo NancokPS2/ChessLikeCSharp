@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Godot;
 
-public class ResourcePack<TRes> where TRes : Resource, new()
+public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 {
     public const string DEFAULT_DIR = "Resources";
     public const string INVALID_PACK_IDENTIFIER = "";
@@ -47,25 +47,29 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 
     public List<TRes> PooledGetWithTag(string tag)
         => new(from res in Pooled where TagGet(res).Contains(tag) select res);
-    #endregion
+	#endregion
 
-    #region Resource
-    public void AddResource(string identifier, TRes resource, bool replace = false, bool persistent = false)
-    {
-        Dictionary<string, TRes> contentsCollection = persistent
-            ? ContentsPersistent : Contents;
+	#region Resource
+	public void ResourceAddPersistent(string identifier, TRes resource)
+	{
+		ResourceAdd(identifier, resource, true, true);
+	}
+    protected void ResourceAdd(string identifier, TRes resource, bool replace = false, bool persistent = false)
+	{
+		Dictionary<string, TRes> contentsCollection = persistent
+			? ContentsPersistent : Contents;
 
-        if (contentsCollection.ContainsKey(identifier) && !replace)
-        {
-            throw new Exception("Resource already exists.");
-        }
+		if (contentsCollection.ContainsKey(identifier) && !replace)
+		{
+			throw new Exception("Resource already exists.");
+		}
 
-        contentsCollection[identifier] = resource;
+		contentsCollection[identifier] = resource;
 
-        _Loaded(identifier, resource);
-    }
+		_Loaded(identifier, resource);
+	}
 
-    public void RemoveResource(string identifier, bool persistent = false)
+    protected void RemoveResource(string identifier, bool persistent = false)
     {
         Dictionary<string, TRes> contentsCollection = persistent
             ? ContentsPersistent : Contents;
@@ -203,22 +207,36 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 		//CreateEnums();
 	}
 
+	public void LoadContentPersistent(string baseFolder)
+	{
+		foreach (var item in LoadGetAllInFolder($"{baseFolder}/{PackIdentifier}"))
+		{
+			//If it is persistent, also put it in said dictionary.
+			//This may throw if it was already added in the user section, this should simply not run after loading user content
+			if (!item.Value.TagIn(TAG_PERSISTENT))
+				throw new Exception($"Found content ({item.Value}) that is not set as persistent on the save file folder: {baseFolder}.");
+
+			//Content from the save file always overrides existing content
+			ContentsPersistent[item.Key] = item.Value;
+		}
+	}
+
     public Dictionary<string, TRes> LoadGetAllInFolder(string path)
-    {
-        Dictionary<string, TRes> output = new();
-        foreach (var item in ResourceLoader.ListDirectory(path))
-        {
-            string loadPath = path + "/" + item;
-            TRes res = GD.Load<TRes>(loadPath);
+	{
+		Dictionary<string, TRes> output = new();
+		foreach (var item in ResourceLoader.ListDirectory(path))
+		{
+			string loadPath = path + "/" + item;
+			TRes res = GD.Load<TRes>(loadPath);
 			if (res is null) throw new Exception($"Loaded resource at {loadPath} is null.");
-            string identifier = GetResourceIdentifier(res);
+			string identifier = GetResourceIdentifier(res);
 
-            if (identifier == "") throw new Exception("No identifier could be retrieved");
+			if (identifier == "") throw new Exception("No identifier could be retrieved");
 
-            output.Add(identifier, res);
-        }
-        return output;
-    }
+			output.Add(identifier, res);
+		}
+		return output;
+	}
 
     public virtual void _Loaded(string identifier, TRes res)
     {
@@ -230,23 +248,30 @@ public class ResourcePack<TRes> where TRes : Resource, new()
 	public bool SavePersistent(string baseFolder)
 	{
 		bool success = true;
-		IEnumerable<TRes> toSave =
+		List<TRes> toSave =
 			ContentsPersistent.Values.Where(x => TagIn(x, TAG_PERSISTENT))
-			.Concat(PooledGetWithTag(TAG_PERSISTENT));
+			.Concat(PooledGetWithTag(TAG_PERSISTENT)).ToList();
 
 		foreach (var item in toSave)
 		{
-			string profileName = SaveManager.SaveCurrent?.ProfileName ?? throw new Exception();
-			int slot = SaveManager.SaveSlotCurrent;
-			string savePath = $"{SaveFile.GetSaveResourceFolder(profileName, slot)}/{GetResourceIdentifier(item)}{GetExtension()}";
+			string profileName = SaveManager.GetCurrentSave()?.ProfileName ?? throw new Exception();
+			int slot = SaveManager.GetCurrentSlot();
+			//baseFolder = SaveFile.GetSaveResourceFolder(profileName, slot);
+			string savePath = $"{baseFolder}/{PackIdentifier}/{GetResourceIdentifier(item)}{GetExtension()}";
+
+			string dirPath = savePath.GetBaseDir();
+			Error dirError = DirAccess.MakeDirRecursiveAbsolute(dirPath);
+			if (dirError != Error.Ok)
+				throw new Exception($"Cannot make directory {dirPath} due to error {dirError}");
 
 			var error = ResourceSaver.Save(
 				item,
 				savePath
 				);
 				
-			Debug.Assert(error == Error.Ok, $"Cannot save {item} in path {savePath} due to error {error}");
 			if (error != Error.Ok) success = false;
+			if (!success)
+				throw new Exception($"Cannot save {item} in path {savePath} due to error {error}");
 		}
 		return success;
     }
@@ -359,6 +384,23 @@ public class ResourcePack<TRes> where TRes : Resource, new()
     }
     #endregion
 }
+
+#region Interface
+public interface IResourcePack
+{
+	public void LoadContent();
+
+	public void LoadContentPersistent(string baseFolder);
+
+	public bool SavePersistent(string baseFolder);
+
+	public void ResourceClear(bool persistent);
+
+	public void CreateDefault();
+}
+#endregion
+
+#region Extension
 public static class ResourcePackExtension
 {
 	public static void MakePersistent<TRes>(this TRes res) where TRes : Resource, new()
@@ -376,3 +418,4 @@ public static class ResourcePackExtension
 	public static bool TagIn<TRes>(this TRes res, string tag) where TRes : Resource, new()
 		=> ResourcePack<TRes>.TagIn(res, tag);
 }
+#endregion

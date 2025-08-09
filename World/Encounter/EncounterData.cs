@@ -111,15 +111,16 @@ public partial class EncounterData : Resource
         def_mob4.TemplateSet(templateHuman );
         def_mob4.TemplateUpdate(true, true);
 
-        //Test persistence
+		//Test persistence
+		SaveManager.NewSave("EncounterLoadingTest", 0);
         Mob persistentMob = Global.ManagerMob.ResourceGet("Default");
         persistentMob.MakePersistent();
         persistentMob.DisplayedName = "Persistent MC";
-        Global.ManagerMob.PooledAdd(persistentMob);
-        Global.PackSave();
-		Global.ManagerMob.ResourceClear(true);
-        Global.ManagerMob.LoadContent(true);
+        Global.ManagerMob.ResourceAddPersistent(persistentMob.DisplayedName, persistentMob);
+		SaveManager.Save(true);
+		SaveManager.ReloadSave();
         Mob def_mob5 = Global.ManagerMob.ResourceGet("Persistent MC", true);
+
 
         encounter.MobPlacement = new();
         encounter.MobPlacement[Vector3i.ONE] =  def_mob1;

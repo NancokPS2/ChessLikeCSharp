@@ -24,8 +24,8 @@ public partial class SaveManager : Node
 
 	public SaveManager() { Instance = this; }
 
-	public static SaveFile? SaveCurrent;
-	public static int SaveSlotCurrent;
+	protected static SaveFile? CurrentSave;
+	protected static int SaveSlot;
 
 	private static string GetSaveFolder(string saveIdentifierOverride) => $"user://Save/{saveIdentifierOverride}/";
 	public static string GetSaveFile(string saveIdentifierOverride) => $"{GetSaveFolder(saveIdentifierOverride)}/save.sav";
@@ -39,27 +39,65 @@ public partial class SaveManager : Node
 		EventBus.InputPauseOptionSelected += OnInputPauseOptionSelected;
 	}
 
-	public static SaveFile NewSave(string profileName, int slot)
+	protected static SaveFile GetNewSave(string profileName, int slot)
 	{
-		SaveFile.DeleteSave(profileName, slot);
-		SaveFile newSave = SaveFile.Load(profileName, slot, true);
-		SaveCurrent = newSave;
+		SaveFile newSave = new SaveFile(profileName);
+		SetCurrentSave(newSave, slot);
+		Save(true);
 		return newSave;
 	}
 
-	public static SaveFile Load(string profileName, int slot)
+	protected static SaveFile GetLoadedSave(string profileName, int slot)
 	{
 		SaveFile save = SaveFile.Load(profileName, slot, false);
 		return save;
 	}
 
-	public static bool Save(SaveFile file, int slot, bool overwrite)
+	public static SaveFile? GetCurrentSave() => CurrentSave;
+	public static int GetCurrentSlot() => SaveSlot;
+
+	public static void SetCurrentSave(SaveFile file, int slot)
 	{
-		if (!overwrite && SaveFile.IsSlotOccupied(file.ProfileName, slot))
+		CurrentSave = file;
+		SaveSlot = slot;
+	}
+
+	public static void NewSave(string profileName, int slot)
+	{
+		SetCurrentSave(GetNewSave(profileName, slot), slot);
+	}
+
+	public static void LoadSave(string profileName, int slot)
+	{
+		if (!SaveFile.IsSlotOccupied(profileName, slot))
+			throw new Exception($"Cannot load {profileName}, slot {slot}. It does not exist.");
+			
+		SetCurrentSave(GetLoadedSave(profileName, slot), slot);
+	}
+
+	public static void ReloadSave()
+	{
+		if (CurrentSave is null)
+			throw new Exception($"There is no SaveFile set.");
+		LoadSave(CurrentSave.ProfileName, SaveSlot);
+	}
+
+	public static void DeleteSave(string profileName, int slot)
+	{
+		SaveFile.DeleteSave(profileName, slot);
+	}
+
+	public static bool Save(bool overwrite)
+	{
+		if (CurrentSave is null) throw new Exception();
+
+		if (!overwrite && SaveFile.IsSlotOccupied(CurrentSave.ProfileName, SaveSlot))
 			throw new Exception("Cannot overwrite save file.");
 
-		return file.Save(slot);
+		bool success = CurrentSave.Save(SaveSlot);
+		return success;
 	}
+
 	#region Event Handling
 	private void OnInputLoad(string profile)
 	{

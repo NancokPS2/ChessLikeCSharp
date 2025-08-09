@@ -21,6 +21,23 @@ public partial class Global
 	public static ResourcePack<EncounterData> ManagerEncounter;
 	public static MobTemplateResourcePack ManagerMobTemplate;
 
+	public static List<IResourcePack> GetAllResourcePacks()
+	{
+		return new()
+		{
+			ManagerAbility,
+			ManagerMob,
+			ManagerFaction,
+			ManagerItem,
+			ManagerModel,
+			ManagerParticle,
+			ManagerMaterial,
+			ManagerFont,
+			ManagerEncounter,
+			ManagerMobTemplate,
+		};
+	}
+
 	public static void SetupManagers()
 	{
 		ManagerAbility = new();
@@ -40,73 +57,32 @@ public partial class Global
 
 	public static bool PackSave(string baseFolder)
 	{
-		List<bool> success = new(){
-			ManagerAbility.SavePersistent(baseFolder),
-			ManagerMob.SavePersistent(baseFolder),
-			ManagerFaction.SavePersistent(baseFolder),
-			ManagerItem.SavePersistent(baseFolder),
-			ManagerModel.SavePersistent(baseFolder),
-			ManagerParticle.SavePersistent(baseFolder),
-			ManagerMaterial.SavePersistent(baseFolder),
-			ManagerFont.SavePersistent(baseFolder),
-			ManagerEncounter.SavePersistent(baseFolder),
-			ManagerMobTemplate.SavePersistent(baseFolder),
-		};
+		List<bool> success = new();
+		foreach (var item in GetAllResourcePacks())
+		{
+			success.Add(item.SavePersistent(baseFolder));
+		}
 		return success.All(x => x == true);
 	}
-	public static void PackLoad(bool user)
+	public static void PackLoad(string userFolder)
 	{
-		ManagerAbility.ResourceClear(true);
-		ManagerAbility.LoadContent();
-
-		ManagerMob.ResourceClear(true);
-		ManagerMob.LoadContent();
-
-		ManagerFaction.ResourceClear(true);
-		ManagerFaction.LoadContent();
-
-		ManagerItem.ResourceClear(true);
-		ManagerItem.LoadContent();
-
-		ManagerModel.ResourceClear(true);
-		ManagerModel.LoadContent();
-
-		ManagerParticle.ResourceClear(true);
-		ManagerParticle.LoadContent();
-
-		ManagerMaterial.ResourceClear(true);
-		ManagerMaterial.LoadContent();
-
-		ManagerFont.ResourceClear(true);
-		ManagerFont.LoadContent();
-
-		ManagerEncounter.ResourceClear(true);
-		ManagerEncounter.LoadContent();
-
-		ManagerMobTemplate.ResourceClear(true);
-		ManagerMobTemplate.LoadContent();
+		foreach (var item in GetAllResourcePacks())
+		{
+			item.ResourceClear(false);
+			item.ResourceClear(true);
+			item.LoadContent();
+			item.LoadContentPersistent(userFolder);
+		}
 	}
 
 	public static void PackInitialize()
 	{
-		PackInitialize(ManagerAbility);
-		PackInitialize(ManagerMob);
-		PackInitialize(ManagerFaction);
-		PackInitialize(ManagerItem);
-		PackInitialize(ManagerModel);
-		PackInitialize(ManagerParticle);
-		PackInitialize(ManagerMaterial);
-		PackInitialize(ManagerFont);
-		PackInitialize(ManagerEncounter);
-		PackInitialize(ManagerMobTemplate);
-	}
-
-	public static ResourcePack<T> PackInitialize<T>(ResourcePack<T> resourcePack) where T : Resource, new()
-	{
-		resourcePack.CreateDefault();
-		resourcePack.ResourceClear(false);
-		resourcePack.ResourceClear(true);
-		resourcePack.LoadContent();
-		return resourcePack;
+		foreach (var item in GetAllResourcePacks())
+		{
+			item.CreateDefault();
+			item.ResourceClear(false);
+			item.ResourceClear(true);
+			item.LoadContent();
+		}
 	}
 }

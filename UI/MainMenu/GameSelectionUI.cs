@@ -18,7 +18,7 @@ public partial class SaveSelectionUI : Control
 	[Obsolete("Unfinished")]
 	private void OnSaveTextSubmitted(string newText)
 	{
-		SaveManager.Load(newText, 0);
+		SaveManager.LoadSave(newText, 0);
 	}
 
 

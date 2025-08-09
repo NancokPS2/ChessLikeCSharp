@@ -32,18 +32,33 @@ public partial class SaveFile : Resource
 	[Obsolete("Don't do it like this...")]
 	public Faction PlayerFaction;
 
+	public SaveFile()
+	{
+	}
+
+	public SaveFile(string profileName)
+	{
+		ProfileName = profileName;
+	}
+
 	protected static string GetSaveBaseFolder() => "user://Save";
+
 	public static bool IsSlotOccupied(string profileName, int slot) => Godot.FileAccess.FileExists($"{GetSaveFile(profileName, slot)}");
+	public bool IsSlotOccupied(int slot)
+		=> IsSlotOccupied(ProfileName, slot);
+
 	public static string GetSaveFolder(string profileName, int slot) => $"{GetSaveBaseFolder()}/{profileName + slot.ToString()}";
+	public string GetSaveFolder(int slot)
+		=> GetSaveFolder(ProfileName, slot);
+
 	public static string GetSaveFile(string profileName, int slot) => $"{GetSaveFolder(profileName, slot)}/save.sav";
+	public string GetSaveFile(int slot)
+		=> GetSaveFile(ProfileName, slot);
+
 	public static string GetSaveResourceFolder(string profileName, int slot)
 		=> $"{GetSaveFolder(profileName, slot)}/Resources";
 
-	protected void Load(int slot)
-		=> Load(ProfileName, slot, false);
 
-/* 		if (!IsSlotOccupied(save.ProfileName, slot))
-			throw new Exception($"Cannot load. \nProfile: {save.ProfileName}\nSlot: {slot}"); */
 	public static SaveFile Load(string profileName, int slot, bool createIfEmpty)
 	{
 		SaveFile save;
@@ -65,9 +80,8 @@ public partial class SaveFile : Resource
 		//Prepare to make a new one.
 		save = new();
 		
-
 		//Load resources.
-		Global.PackLoad(true);
+		Global.PackLoad(GetSaveResourceFolder(profileName, slot));
 
 		//Load ConfigFile
 		ConfigFile config = new();
@@ -76,7 +90,7 @@ public partial class SaveFile : Resource
 
 		//Make sure the slot has a save for this profile.
 		string loadedProfile = config.GetValue(CFSECTION_MAIN, CFKEY_PROFILENAME).As<string>();
-		if (profileName == loadedProfile)
+		if (profileName != loadedProfile)
 		{
 			throw new Exception($"This save file is not from this profile. \nThis profile: {profileName}\nProfile loaded: {loadedProfile}\nPath loaded: {configPath}");
 		}
@@ -91,6 +105,8 @@ public partial class SaveFile : Resource
 		EventBus.LoadAttempted?.Invoke(true);
 		return save;
 	}
+	public void Load(int slot)
+		=> Load(ProfileName, slot, false);
 
 	public static int GetEmptySlot(string profileName)
 	{
@@ -101,11 +117,8 @@ public partial class SaveFile : Resource
 		}
 		return slot;
 	}
-
-	public bool Save()
-	{
-		return Save(GetEmptySlot(ProfileName));
-	}
+	public int GetEmptySlot()
+		=> GetEmptySlot(ProfileName);
 
 	public bool Save(int slot)
 	{
@@ -131,16 +144,17 @@ public partial class SaveFile : Resource
 		EventBus.SaveAttempted?.Invoke(success);
 		return success;
 	}
+	public bool Save()
+	{
+		return Save(GetEmptySlot(ProfileName));
+	}
 
 	public static void DeleteSave(string profileName, int slot)
 	{
-		throw new NotImplementedException();
+		DirAccess.RemoveAbsolute(GetSaveFile(profileName, slot));
 	}
-
-	public static void DeleteSave(string profileName)
-	{
-
-	}
+	public void DeleteSave(int slot)
+		=> DeleteSave(ProfileName, slot);
 
 	public void SetStoryFlag(EStoryFlag flag, bool set)
 	=> StoryFlags[flag] = set;
