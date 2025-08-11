@@ -32,12 +32,11 @@ public partial class MainMenuScene : Control
 
 	private void OnLoadButtonPressed()
 	{
-		EventBus.InputLoad?.Invoke(SaveIdentifierLineNode.Text);
+		throw new NotImplementedException();
 	}
-
 
 	private void OnPlayButtonPressed()
 	{
-		throw new NotImplementedException();
+		UIManager.ChangeToUI(EUIScene.SAVE_SELECT);
 	}
 }

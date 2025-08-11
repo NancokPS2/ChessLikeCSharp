@@ -172,13 +172,14 @@ public partial class EventBus : Node
     public static ObjectChange<ActionEvent>? InputActionSelected;
 	public static ObjectChange<EPauseOption>? InputPauseOptionSelected;
 	public static ObjectChange<Command.ECheat>? InputCheatEntered;
+	public delegate void LoadSlotInput(string profile, int slot);
     public static Event? InputTurnEnded;
     public static Event? InputBack;
     public static Event? InputPause;
     public static Event? InputPreparationFinished;
 	#region Save - Load 
 	public static Event? InputSave;
-	public static StringEvent? InputLoad;
+	public static LoadSlotInput? InputLoad;
 	public static BoolEvent? SaveAttempted;
 	public static BoolEvent? LoadAttempted;
 	#endregion

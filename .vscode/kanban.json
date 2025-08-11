@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "MainMenuUI should transition to a different scene when creating or loading a new save",
+                    "id": "cd6z60bi0hykf3ppn9ufl943"
+                },
+                {
+                    "text": "Cave in and make SaveFile store the slot it came from too.",
+                    "id": "fry9nirwi6eqg5v3wpkyvn6l"
+                },
+                {
                     "text": "Make UIManager work by stacking UIs to change trough.",
                     "id": "a4qs8qqgh7ejkxqkmlge3qk8"
                 },
@@ -159,6 +167,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "ControlExtension.Activate() does not handle mouse_filter properly.",
+                    "id": "f3sy0vzzkozb887qngr5ax4t"
+                },
+                {
                     "text": "PartyGeneralUI is not showing the player's party.",
                     "id": "zyknrdobe3w8njcl0m9z6r99"
                 },
@@ -212,5 +224,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1754234370860
+    "timestamp": 1754882846353
 }

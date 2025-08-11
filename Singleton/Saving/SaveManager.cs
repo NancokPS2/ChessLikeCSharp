@@ -56,6 +56,28 @@ public partial class SaveManager : Node
 	public static SaveFile? GetCurrentSave() => CurrentSave;
 	public static int GetCurrentSlot() => SaveSlot;
 
+	public static List<(SaveFile, int)> GetAllSaves()
+	{
+		List<(SaveFile, int)> output = new();
+		foreach (var item in from dir in DirAccess.GetDirectoriesAt(SaveFile.GetSaveBaseFolderPath()) select dir.Split("_"))
+		{
+			if (item.Count() != 2)
+				throw new Exception($"Invalid save directory found {item.ToStringList()}");
+
+			if (!item[1].IsValidInt())
+				throw new Exception($"Not a valid integer slot on the directory {item[0]} {item[1]}.");
+
+			if (!SaveFile.IsSlotOccupied(item[0], item[1].ToInt()))
+				throw new Exception($"Could not determine that this directory is a proper occupied save slot {item[0]} {item[1]}");
+
+			string profile = item[0];
+			int slot = item[1].ToInt();
+
+			output.Add((SaveFile.Load(profile, slot, false), slot));
+		}
+		return output;
+	}
+
 	public static void SetCurrentSave(SaveFile file, int slot)
 	{
 		CurrentSave = file;
@@ -82,6 +104,9 @@ public partial class SaveManager : Node
 		LoadSave(CurrentSave.ProfileName, SaveSlot);
 	}
 
+	public static bool SaveExists(string profile, int slot)
+		=> SaveFile.IsSlotOccupied(profile, slot);
+
 	public static void DeleteSave(string profileName, int slot)
 	{
 		SaveFile.DeleteSave(profileName, slot);
@@ -99,8 +124,11 @@ public partial class SaveManager : Node
 	}
 
 	#region Event Handling
-	private void OnInputLoad(string profile)
+	private void OnInputLoad(string profile, int slot)
 	{
+		UIManager.ChangeToUI(EUIScene.SAVE_SELECT);
+		if (!SaveExists(profile, slot)) throw new Exception($"Tried to load not existant save {profile} {slot}");
+		LoadSave(profile, slot);
 	}
 
 	private void OnInputSave()

@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://c5ukv8hflufd6"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_4kb7t"]
-[ext_resource type="Script" uid="uid://bxnix54d00fe7" path="res://UI/MainMenu/GameSelectionUI.cs" id="2_jrn52"]
+[ext_resource type="Script" uid="uid://bxnix54d00fe7" path="res://UI/MainMenu/SaveSelectionUI.cs" id="2_4kb7t"]
 [ext_resource type="PackedScene" uid="uid://csrjjvk5oypse" path="res://UI/MainMenu/SaveSlotUI.tscn" id="3_6bdn0"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_767xy"]
 font_size = 42
 
-[node name="SaveSelectionUI" type="Control"]
+[node name="SaveSelectionUI" type="Control" node_paths=PackedStringArray("ButtonLoad", "ButtonDelete", "SaveContainerNode")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_4kb7t")
-script = ExtResource("2_jrn52")
+script = ExtResource("2_4kb7t")
+ButtonLoad = NodePath("VBoxContainer2/HBoxContainer/LOAD")
+ButtonDelete = NodePath("VBoxContainer2/HBoxContainer/DELETE")
+SaveContainerNode = NodePath("VBoxContainer2/SaveContainer")
+SaveSlotUIScene = ExtResource("3_6bdn0")
+metadata/_custom_type_script = "uid://bxnix54d00fe7"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -38,12 +43,13 @@ layout_mode = 2
 text = "Save Selection"
 label_settings = SubResource("LabelSettings_767xy")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer2"]
+[node name="SaveContainer" type="VBoxContainer" parent="VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SaveSlot" parent="VBoxContainer2/VBoxContainer" instance=ExtResource("3_6bdn0")]
+[node name="SaveSlot" parent="VBoxContainer2/SaveContainer" instance=ExtResource("3_6bdn0")]
 layout_mode = 2
+EmptySlot = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
 custom_minimum_size = Vector2(0, 32)

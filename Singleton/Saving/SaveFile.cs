@@ -32,6 +32,7 @@ public partial class SaveFile : Resource
 	[Obsolete("Don't do it like this...")]
 	public Faction PlayerFaction;
 
+	[Obsolete("DO NOT use this, it is only for Godot.")]
 	public SaveFile()
 	{
 	}
@@ -41,36 +42,35 @@ public partial class SaveFile : Resource
 		ProfileName = profileName;
 	}
 
-	protected static string GetSaveBaseFolder() => "user://Save";
-
-	public static bool IsSlotOccupied(string profileName, int slot) => Godot.FileAccess.FileExists($"{GetSaveFile(profileName, slot)}");
+	public static bool IsSlotOccupied(string profileName, int slot) => Godot.FileAccess.FileExists($"{GetSaveFilePath(profileName, slot)}");
 	public bool IsSlotOccupied(int slot)
 		=> IsSlotOccupied(ProfileName, slot);
 
-	public static string GetSaveFolder(string profileName, int slot) => $"{GetSaveBaseFolder()}/{profileName + slot.ToString()}";
-	public string GetSaveFolder(int slot)
-		=> GetSaveFolder(ProfileName, slot);
+	public static string GetSaveBaseFolderPath() => "user://Save";
 
-	public static string GetSaveFile(string profileName, int slot) => $"{GetSaveFolder(profileName, slot)}/save.sav";
-	public string GetSaveFile(int slot)
-		=> GetSaveFile(ProfileName, slot);
+	public static string GetSaveFolderPath(string profileName, int slot) => $"{GetSaveBaseFolderPath()}/{profileName}_{slot}";
+	public string GetSaveFolderPath(int slot)
+		=> GetSaveFolderPath(ProfileName, slot);
 
-	public static string GetSaveResourceFolder(string profileName, int slot)
-		=> $"{GetSaveFolder(profileName, slot)}/Resources";
+	public static string GetSaveFilePath(string profileName, int slot) => $"{GetSaveFolderPath(profileName, slot)}/save.sav";
+	public string GetSaveFilePath(int slot)
+		=> GetSaveFilePath(ProfileName, slot);
+
+	public static string GetSaveResourceFolderPath(string profileName, int slot)
+		=> $"{GetSaveFolderPath(profileName, slot)}/Resources";
 
 
 	public static SaveFile Load(string profileName, int slot, bool createIfEmpty)
 	{
 		SaveFile save;
 
-		bool saveExists = DirAccess.DirExistsAbsolute(GetSaveFolder(profileName, slot));
+		bool saveExists = DirAccess.DirExistsAbsolute(GetSaveFolderPath(profileName, slot));
 		
 		Global.PackInitialize();
 		//If a save already exists, load it.
 		if (!saveExists && createIfEmpty)
 		{
-			save = new();
-			save.ProfileName = profileName;
+			save = new(profileName);
 			save.PlayerFaction = Global.ManagerFaction.ResourceGet(EFaction.PLAYER, false);
 			save.Save(slot);
 			return save;
@@ -78,14 +78,14 @@ public partial class SaveFile : Resource
 		else if (!saveExists && !createIfEmpty) throw new Exception($"Save does not exist. \nProfile: {profileName}\nSlot: {slot}");
 
 		//Prepare to make a new one.
-		save = new();
+		save = new(profileName);
 		
 		//Load resources.
-		Global.PackLoad(GetSaveResourceFolder(profileName, slot));
+		Global.PackLoad(GetSaveResourceFolderPath(profileName, slot));
 
 		//Load ConfigFile
 		ConfigFile config = new();
-		string configPath = GetSaveFile(profileName, slot);
+		string configPath = GetSaveFilePath(profileName, slot);
 		config.Load(configPath);
 
 		//Make sure the slot has a save for this profile.
@@ -123,7 +123,7 @@ public partial class SaveFile : Resource
 	public bool Save(int slot)
 	{
 		bool success = true;
-		if (!Global.PackSave(GetSaveResourceFolder(ProfileName, slot))) success = false;
+		if (!Global.PackSave(GetSaveResourceFolderPath(ProfileName, slot))) success = false;
 		ConfigFile config = new();
 
 		//Main stuff
@@ -140,7 +140,7 @@ public partial class SaveFile : Resource
 			config.SetValue(CSFSECTION_STORYFLAGS, ((int)item.Key).ToString(), item.Value);
 		}
 
-		if (config.Save(GetSaveFile(ProfileName, slot)) != Error.Ok) success = false;
+		if (config.Save(GetSaveFilePath(ProfileName, slot)) != Error.Ok) success = false;
 		EventBus.SaveAttempted?.Invoke(success);
 		return success;
 	}
@@ -151,7 +151,7 @@ public partial class SaveFile : Resource
 
 	public static void DeleteSave(string profileName, int slot)
 	{
-		DirAccess.RemoveAbsolute(GetSaveFile(profileName, slot));
+		DirAccess.RemoveAbsolute(GetSaveFilePath(profileName, slot));
 	}
 	public void DeleteSave(int slot)
 		=> DeleteSave(ProfileName, slot);
@@ -165,6 +165,6 @@ public partial class SaveFile : Resource
 	/// <returns>All saves belonging to this profile.</returns>
 	public string[] GetAllSaves()
 	{
-		return DirAccess.GetDirectoriesAt(GetSaveBaseFolder()).Where( x => x.StartsWith(ProfileName)).ToArray();
+		return DirAccess.GetDirectoriesAt(GetSaveBaseFolderPath()).Where( x => x.StartsWith(ProfileName)).ToArray();
 	}
 }

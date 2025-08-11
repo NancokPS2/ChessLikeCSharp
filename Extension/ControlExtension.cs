@@ -8,7 +8,10 @@ namespace ChessLike;
 
 public static class ControlExtension
 {
-    public static void FitFontSizeToContainerSize(this Label @this, float ratio = 1.0f)
+	private const string META_KEY_OG_FILTER = "extension_og_filter";
+	private const string META_KEY_OG_FOCUS = "extension_og_focus";
+
+	public static void FitFontSizeToContainerSize(this Label @this, float ratio = 1.0f)
     {
         if (@this.LabelSettings is null){@this.LabelSettings = new();}
 
@@ -19,8 +22,8 @@ public static class ControlExtension
     {
         if (activate)
         {
-            int filter = (int)@this.GetMeta("og_filter");
-            int focus = (int)@this.GetMeta("og_focus");
+            int filter = (int)@this.GetMeta(META_KEY_OG_FILTER);
+            int focus = (int)@this.GetMeta(META_KEY_OG_FOCUS);
 
             if (filter == (int)Control.MouseFilterEnum.Ignore){filter = (int)Control.MouseFilterEnum.Pass;}
             if (focus == (int)Control.FocusModeEnum.None){focus = (int)Control.FocusModeEnum.All;}
@@ -33,8 +36,8 @@ public static class ControlExtension
         {
             int og_filter = (int)@this.MouseFilter;
             int og_focus = (int)@this.FocusMode;
-            @this.SetMeta("og_filter", og_filter);
-            @this.SetMeta("og_focus", og_focus);
+            @this.SetMeta(META_KEY_OG_FILTER, og_filter);
+            @this.SetMeta(META_KEY_OG_FOCUS, og_focus);
 
             @this.MouseFilter = Control.MouseFilterEnum.Ignore;
             @this.FocusMode = Control.FocusModeEnum.None;

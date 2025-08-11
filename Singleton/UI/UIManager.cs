@@ -16,6 +16,8 @@ public partial class UIManager : Control, IDebugDisplay
 
 	[Export]
 	protected Godot.Collections.Dictionary<EUIScene, PackedScene> Scenes = new();
+	[Export]
+	protected CanvasLayer? CanvasLayerNode;
 	protected Godot.Collections.Dictionary<EUIScene, Node> Nodes = new();
 
 	private Dictionary<ELayer, CanvasWithTarget> CanvasLayers = new();
@@ -32,7 +34,7 @@ public partial class UIManager : Control, IDebugDisplay
 		{
 			Node node = item.Value.Instantiate();
 			Nodes[item.Key] = node;
-			AddChild(node);
+			CanvasLayerNode.AddChild(node);
 		}
 		ChangeToUI(EUIScene.NONE);
 	}
@@ -77,14 +79,14 @@ public partial class UIManager : Control, IDebugDisplay
 
 		foreach (var item in Instance.Nodes.Values)
 		{
-			Instance.RemoveChild(item);
+			Instance.CanvasLayerNode.RemoveChild(item);
 		}
 
 		//Just hide all UI elements.
 		if (ui == EUIScene.NONE) return;
 
 		Node node = Instance.Nodes[ui];
-		Instance.AddChild(node);
+		Instance.CanvasLayerNode.AddChild(node);
 	}
 
 	#region Event Handling
