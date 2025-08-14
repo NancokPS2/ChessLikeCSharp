@@ -1,4 +1,6 @@
-namespace Godot.WorldMap;
+using Godot;
+
+namespace ChessLike.WorldMap;
 
 public partial class MapMarker3D : Node3D, ISelectable
 {
@@ -70,4 +72,10 @@ public partial class MapMarker3D : Node3D, ISelectable
             NodeLabel.Modulate = NodeLabel.Modulate = Colors.White;
         }
     }
+
+	public void SetResource(TravelMapLocation location)
+	{
+		throw new NotImplementedException();
+	}
+
 }

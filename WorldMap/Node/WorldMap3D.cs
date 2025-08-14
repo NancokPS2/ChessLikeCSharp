@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Godot;
 
-namespace Godot.WorldMap;
-
+namespace ChessLike.WorldMap;
+[Obsolete("We redoin it")]
 public partial class WorldMap3D : Node, ISelectableList<MapMarker3D>
 {
     private List<MapMarker3D> markers = new();
@@ -41,7 +42,7 @@ public partial class WorldMap3D : Node, ISelectableList<MapMarker3D>
         }
     }
 
-    private void OnMarkerInput(Node camera, InputEvent input_event, Vector3 event_pos, Vector3 normal, long shape_idx, MapMarker3D marker)
+    private void OnMarkerInput(Node camera, InputEvent input_event, Godot.Vector3 event_pos, Godot.Vector3 normal, long shape_idx, MapMarker3D marker)
     {
         if (input_event.IsActionPressed(Global.GInput.GetActionName(Global.GInput.Button.ACCEPT)))
         {

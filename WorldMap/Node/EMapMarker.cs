@@ -1,4 +1,4 @@
-namespace Godot.WorldMap;
+namespace ChessLike.WorldMap;
 
 public enum EMapMarker
 {
