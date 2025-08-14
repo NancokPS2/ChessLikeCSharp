@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Complete cycle:\nMainMenuScene (Starts game) > WorldMap (Enter encounter) > CombatScene (play out combat) > WorldMap (vibe)",
+                    "id": "os6cckb1drmmxam8j8h1eb3e"
+                },
+                {
                     "text": "MainMenuUI should transition to a different scene when creating or loading a new save",
                     "id": "cd6z60bi0hykf3ppn9ufl943"
                 },
@@ -25,52 +29,12 @@
                     "id": "jk0k15ysbx8t1nwv09d9gbff"
                 },
                 {
-                    "text": "MobStatSet should allow for multiple option values (enum containers) and collections of them",
-                    "id": "h3523mhw4h5oe2fh3y0bfhwj"
-                },
-                {
-                    "text": "Dialogue bubble",
-                    "id": "c5qfasdzb0bb0s2ngj6c8j9m"
-                },
-                {
-                    "text": "Add cost parameters to actions so you can use more than 1 per turn",
-                    "id": "goag6gljtkhpnydd857ah6h5"
-                },
-                {
-                    "text": "Move event receivers from Mob to MobSceneManager",
-                    "id": "s4wlbltlkyg66mg5y9bmjx0j"
-                },
-                {
                     "text": "InventoryUI needs to be re done.",
                     "id": "cz944ibemyuccz5yj6j70qxc"
                 },
                 {
-                    "text": "Make movement actions",
-                    "id": "uvzir6fmc4gmucahacidunyv"
-                },
-                {
-                    "text": "Make GridCell a Resource",
-                    "id": "p7qfapwu7ivdkr8dgx1xxmdi"
-                },
-                {
-                    "text": "Implement mob templates to automatically give gear, actions and stats to mobs.",
-                    "id": "epeuepz1rolnx21z2ikz6i2d"
-                },
-                {
-                    "text": "DurationParameters",
-                    "id": "i97ac4agicx0543y8ou4hjqk"
-                },
-                {
-                    "text": "BattleController IFSM should switch states on events.",
-                    "id": "berzltnffszxyc6aiwjy9zi5"
-                },
-                {
                     "text": "UI should queue its update to next frame to avoid overlapping calls from causing slowdowns.",
                     "id": "uzoz6siye7i7vw9h1d27fyyx"
-                },
-                {
-                    "text": "EncounterData should have variants for different win conditions.",
-                    "id": "uw3ay7ksqqgw4zk9e1z15nef"
                 },
                 {
                     "text": "Create preset identifiers for important characters. So they can be saved with Manager.ProfileSetContent()",
@@ -93,32 +57,12 @@
                     "id": "njvkfpznpdq99jg4hm37707j"
                 },
                 {
-                    "text": "Ending the turn must be an action. (Maybe, maybe not)",
-                    "id": "msgrxdq9x8t350t9egj6y7jv"
-                },
-                {
-                    "text": "Abilities:\n- Something must call Ability.Runner.PassiveTurnTick()\n",
-                    "id": "gq4mayam0jxuep2je50kfe3k"
-                },
-                {
                     "text": "PartyUI: Mob inventory.\n- Better display what kind of items each slot supports.",
                     "id": "mflla9xmd3tcphd3l7lwgzbn"
                 },
                 {
-                    "text": "UI for creating objects using reflection from typeof().*()",
-                    "id": "yjh6slb4s6brhpviz7aqmn7k"
-                },
-                {
-                    "text": "Improve models for showing the currently targeted cell and cells affected by AoE. Probably touch the lighting too.",
-                    "id": "iap2u1isrdufbcr4nb3hczp6"
-                },
-                {
                     "text": "System for constructing and gluing models togheter. For formign characters.\nSystem for randomizing terrain and its decorations.",
                     "id": "tdf1y9p7jsjr4jcfrkdc61fg"
-                },
-                {
-                    "text": "Something that handles which mobs enter combat.\nAnd let the BattleController add the ones from the encounter as well.\nThen remove the hack on \"public Mob()\"",
-                    "id": "c9gposjpxqly8a7rz8j68m2u"
                 },
                 {
                     "text": "Misc ideas:\n- Take snapshots of random moments during gameplay.\n- Remember fallen enemies/characters\n- \n",
@@ -143,10 +87,6 @@
         {
             "title": "Doing",
             "tasks": [
-                {
-                    "text": "Make UI work with the new event system; Separate the UI elements from the \"General\" node they have.",
-                    "id": "qyjohvf3qere1k4ltcv1plwg"
-                },
                 {
                     "text": "Command rework:\n- Ability that applies an interceptor for passive effects.\n- Ability that ends the turn.\n- Ability for moving.\n- Add the moving, end turn, and attack abilities as the default for all mobs.",
                     "id": "qb09zdbj4dady4tx2hs98j5e"
@@ -224,5 +164,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1754882846353
+    "timestamp": 1755203943397
 }
