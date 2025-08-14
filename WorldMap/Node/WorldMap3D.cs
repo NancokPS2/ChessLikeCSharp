@@ -5,77 +5,74 @@ using System.Threading.Tasks;
 using Godot;
 
 namespace ChessLike.WorldMap;
+
 [Obsolete("We redoin it")]
-public partial class WorldMap3D : Node, ISelectableList<MapMarker3D>
+public partial class WorldMap3D : Node3D
 {
-    private List<MapMarker3D> markers = new();
-    private int maxItemsSelected = 1;
-    private List<MapMarker3D> Markers { get => markers; set => MarkersSet(value); }
+	const string GROUP_TRAVEL_LOCATION_NODE = "group_travel_location";
 
-    public int MaxItemsSelected { get => maxItemsSelected; set => maxItemsSelected = value; }
+	private List<WorldMapMarker3D> Markers { get => markers; set => Markers = value; }
+	private List<WorldMapMarker3D> markers = new();
+	private int MaxItemsSelected = 1;
 
-    private void MarkersSet(ICollection<MapMarker3D> collection)
-    {
-        Markers = collection.ToList();
-        GetTree().ProcessFrame += UpdateNodes;
-    }
+	private void ClearMarkers()
+	{
+		List<WorldMapMarker3D> toDelete =
+			GetTree().GetNodesInGroup(GROUP_TRAVEL_LOCATION_NODE)
+			.OfType<WorldMapMarker3D>()
+			.ToList();
 
-    private void UpdateNodes()
-    {
-        //Clean nodes.
-        GetTree().ProcessFrame -= UpdateNodes;
+		foreach (var item in toDelete)
+			RemoveMarker(item);
+	}
 
-        foreach (var marker in Markers)
-        {
-            if (!marker.IsInsideTree())
-            {
-                AddChild(marker);
-            }
-            
+	public void AddMarker(WorldMapMarker3D element)
+	{
+		Markers.Add(element);
+		AddChild(element);
+		element.AddToGroup(GROUP_TRAVEL_LOCATION_NODE);
+		ConnectMarker(element);
+	}
 
-            //Input
-            Area3D area = marker.NodeArea;;
-            area.InputEvent += 
-                (cam, eve, pos, nor, idx) 
-                    => OnMarkerInput(cam, eve, pos, nor, idx, marker);
-            area.MouseEntered += () => OnMarkerHover(marker);
-        }
-    }
+	public void RemoveMarker(WorldMapMarker3D marker)
+	{
+		Markers.Remove(marker);
+		marker.QueueFree();
+	}
 
-    private void OnMarkerInput(Node camera, InputEvent input_event, Godot.Vector3 event_pos, Godot.Vector3 normal, long shape_idx, MapMarker3D marker)
-    {
-        if (input_event.IsActionPressed(Global.GInput.GetActionName(Global.GInput.Button.ACCEPT)))
-        {
-            EventBus.MarkerSelected?.Invoke(marker);
-        } else if (input_event is InputEventMouseMotion motion)
-        {
-            marker.Selected = true;
-        }
-    }
+	public List<WorldMapMarker3D> GetSelectedMarkers()
+		=> Markers.Where(x => x.Selected).ToList();
 
-    private void OnMarkerHover(MapMarker3D marker)
-    {
-        GetHovered().ForEach(x => x.Hovered = false);
-        marker.Hovered = true;
-    }
+	public List<WorldMapMarker3D> GetHoveredMarkers()
+		=> Markers.Where(x => x.Hovered).ToList();
 
-    public List<MapMarker3D> GetSelected() 
-        => Markers.Where(x => x.Selected).ToList();
+	public List<WorldMapMarker3D> GetMarkers() => Markers;
+	private void OnMarkerInput(Node camera, InputEvent input_event, Godot.Vector3 event_pos, Godot.Vector3 normal, long shape_idx, WorldMapMarker3D marker)
+	{
+		if (input_event.IsActionPressed(Global.GInput.GetActionName(Global.GInput.Button.ACCEPT)))
+		{
+			EventBus.MarkerSelected?.Invoke(marker);
+		}
+		else if (input_event is InputEventMouseMotion motion)
+		{
+			marker.Selected = true;
+		}
+	}
 
-    public List<MapMarker3D> GetHovered() 
-        => Markers.Where( x => x.Hovered ).ToList();
+	private void OnMarkerHover(WorldMapMarker3D marker)
+	{
+		GetHoveredMarkers().ForEach(x => x.Hovered = false);
+		marker.Hovered = true;
+	}
 
-    public List<MapMarker3D> GetElements() => Markers;
+    private void ConnectMarker(WorldMapMarker3D marker)
+	{
+		//Input
+		Area3D area = marker.NodeArea; ;
+		area.InputEvent +=
+			(cam, eve, pos, nor, idx)
+				=> OnMarkerInput(cam, eve, pos, nor, idx, marker);
+		area.MouseEntered += () => OnMarkerHover(marker);
+	}
 
-    public void AddElement(MapMarker3D element)
-    {
-        Markers.Add(element);
-        AddChild(element);
-    }
-
-    public void RemoveElement(MapMarker3D element)
-    {
-        Markers.Remove(element);
-        element.QueueFree();
-    }
 }

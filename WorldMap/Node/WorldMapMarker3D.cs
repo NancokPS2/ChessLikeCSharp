@@ -2,7 +2,7 @@ using Godot;
 
 namespace ChessLike.WorldMap;
 
-public partial class MapMarker3D : Node3D, ISelectable
+public partial class WorldMapMarker3D : Node3D, ISelectable
 {
     private string displayedName = "Unnamed Marker";
 
@@ -25,7 +25,7 @@ public partial class MapMarker3D : Node3D, ISelectable
     public Area3D NodeArea {get;set;} = new(){InputRayPickable = true};
     public CollisionShape3D NodeCollision = new();
 
-    public MapMarker3D()
+    public WorldMapMarker3D()
     {
         
     }

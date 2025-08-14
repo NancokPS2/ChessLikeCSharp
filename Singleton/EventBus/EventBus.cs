@@ -12,7 +12,6 @@ using ChessLike.World;
 using ChessLike.World.Encounter;
 using ChessLike.WorldMap;
 using Godot;
-using Godot.WorldMap;
 using static ChessLike.Entity.Action.ActionEvent;
 
 /// <summary>
@@ -38,7 +37,7 @@ public partial class EventBus : Node
 
     //World map
     #region World Map
-    public delegate void MapMarkerEvent(MapMarker3D marker);
+    public delegate void MapMarkerEvent(WorldMapMarker3D marker);
     public static MapMarkerEvent? MarkerSelected;
 
     //Save profile
