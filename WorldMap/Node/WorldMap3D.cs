@@ -6,21 +6,15 @@ using Godot;
 
 namespace ChessLike.WorldMap;
 
-[Obsolete("We redoin it")]
+[GlobalClass]
 public partial class WorldMap3D : Node3D
 {
 	const string GROUP_TRAVEL_LOCATION_NODE = "group_travel_location";
-
-	private List<WorldMapMarker3D> Markers { get => markers; set => Markers = value; }
-	private List<WorldMapMarker3D> markers = new();
 	private int MaxItemsSelected = 1;
 
 	private void ClearMarkers()
 	{
-		List<WorldMapMarker3D> toDelete =
-			GetTree().GetNodesInGroup(GROUP_TRAVEL_LOCATION_NODE)
-			.OfType<WorldMapMarker3D>()
-			.ToList();
+		List<WorldMapMarker3D> toDelete = GetMarkers();
 
 		foreach (var item in toDelete)
 			RemoveMarker(item);
@@ -28,51 +22,46 @@ public partial class WorldMap3D : Node3D
 
 	public void AddMarker(WorldMapMarker3D element)
 	{
-		Markers.Add(element);
-		AddChild(element);
+		if (!element.IsInsideTree()) AddChild(element);
 		element.AddToGroup(GROUP_TRAVEL_LOCATION_NODE);
 		ConnectMarker(element);
 	}
 
+	private void ConnectMarker(WorldMapMarker3D element)
+	{
+		element.MarkerSelected += OnMarkerSelected;
+		element.MarkerHovered += OnMarkerHovered;
+	}
+
+
 	public void RemoveMarker(WorldMapMarker3D marker)
 	{
-		Markers.Remove(marker);
 		marker.QueueFree();
 	}
 
 	public List<WorldMapMarker3D> GetSelectedMarkers()
-		=> Markers.Where(x => x.Selected).ToList();
+		=> GetMarkers().Where(x => x.Selected).ToList();
 
 	public List<WorldMapMarker3D> GetHoveredMarkers()
-		=> Markers.Where(x => x.Hovered).ToList();
+		=> GetMarkers().Where(x => x.Hovered).ToList();
 
-	public List<WorldMapMarker3D> GetMarkers() => Markers;
-	private void OnMarkerInput(Node camera, InputEvent input_event, Godot.Vector3 event_pos, Godot.Vector3 normal, long shape_idx, WorldMapMarker3D marker)
+	public List<WorldMapMarker3D> GetMarkers()
+		=> GetTree().GetNodesInGroup(GROUP_TRAVEL_LOCATION_NODE)
+			.OfType<WorldMapMarker3D>()
+			.ToList();
+
+	#region Event Handling
+	private void OnMarkerSelected(WorldMapMarker3D marker)
 	{
-		if (input_event.IsActionPressed(Global.GInput.GetActionName(Global.GInput.Button.ACCEPT)))
-		{
-			EventBus.MarkerSelected?.Invoke(marker);
-		}
-		else if (input_event is InputEventMouseMotion motion)
-		{
-			marker.Selected = true;
-		}
+		GetSelectedMarkers().ForEach(x => x.Select(false));
+		marker.Select(true);
 	}
 
-	private void OnMarkerHover(WorldMapMarker3D marker)
+	private void OnMarkerHovered(WorldMapMarker3D marker)
 	{
-		GetHoveredMarkers().ForEach(x => x.Hovered = false);
-		marker.Hovered = true;
+		GetHoveredMarkers().ForEach(x => x.Hover(false));
+		marker.Hover(true);
 	}
-
-    private void ConnectMarker(WorldMapMarker3D marker)
-	{
-		//Input
-		Area3D area = marker.NodeArea; ;
-		area.InputEvent +=
-			(cam, eve, pos, nor, idx)
-				=> OnMarkerInput(cam, eve, pos, nor, idx, marker);
-		area.MouseEntered += () => OnMarkerHover(marker);
-	}
+	#endregion
 
 }

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlck55dw3kdbf"]
+
+[ext_resource type="Script" uid="uid://dyf0qeqqfm4t6" path="res://WorldMap/Node/WorldMap3D.cs" id="1_fx4sl"]
+
+[node name="WorldMap" type="Node3D"]
+script = ExtResource("1_fx4sl")
+metadata/_custom_type_script = "uid://dyf0qeqqfm4t6"

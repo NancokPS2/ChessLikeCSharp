@@ -2,80 +2,100 @@ using Godot;
 
 namespace ChessLike.WorldMap;
 
+[GlobalClass]
 public partial class WorldMapMarker3D : Node3D, ISelectable
 {
-    private string displayedName = "Unnamed Marker";
+	public delegate void MarkerEvent(WorldMapMarker3D marker);
+	public event MarkerEvent MarkerSelected;
+	public event MarkerEvent MarkerHovered;
+	public string DisplayedName
+	{
+		get => displayedName;
+		set
+		{
+			displayedName = value;
+			if (IsInsideTree()) UpdateLabel();
+		}
+	}
+	private string displayedName = "Unnamed Marker";
 
-    public EMapMarker Type { get;set; }
-    public bool Selected { get;set; }
-    public bool Hovered { get;set; }
+	public EMapMarker Type { get; set; }
+	public bool Selected { get; set; }
+	public bool Hovered { get; set; }
 
-    public string DisplayedName
-    {
-        get => displayedName; 
-        set
-        {
-            NodeLabel.Text = value;
-            displayedName = value;
-        }
-    }
+	[Export]
+	public TravelMapLocation? Location;
 
-    public MeshInstance3D NodeMesh { get;set; } = new();
-    public Label3D NodeLabel {get;set;} = new();
-    public Area3D NodeArea {get;set;} = new(){InputRayPickable = true};
-    public CollisionShape3D NodeCollision = new();
+	[Export]
+	public Label3D LabelNode;
+	[Export]
+	public Area3D AreaNode;
 
-    public WorldMapMarker3D()
-    {
-        
-    }
+	public WorldMapMarker3D()
+	{
 
-    public List<Node> GetNodes() => new(){NodeMesh, NodeLabel, NodeArea};
+	}
 
-    public override void _EnterTree()
-    {
-        base._EnterTree();
-        GetNodes().ForEach(x => AddChild(x));
-        NodeArea.AddChild(NodeCollision);
+	public override void _Ready()
+	{
+		base._Ready();
+		AreaNode.InputEvent += OnAreaInputEvent;
 
-        UpdateNodes();
-    }
+		UpdateLabel();
+	}
 
-    public void UpdateNodes()
-    {
-        UpdateCollision();
-        UpdateLabel();
-    }
+	public void Select(bool select)
+	{
+		Selected = select;
+		UpdateLabel();
+	}
 
-    private void UpdateCollision()
-    {
-        Aabb mesh_aabb = NodeMesh.GetAabb();
-        NodeCollision.Shape = new SphereShape3D() { Radius = mesh_aabb.Size.X / 2 };
-    }
+	public void Hover(bool hover)
+	{
+		Hovered = hover;
+		UpdateLabel();
+	}
 
-    private void UpdateLabel()
-    {
-        NodeLabel.Text = DisplayedName;
-        Aabb mesh_aabb = NodeMesh.GetAabb();
-        NodeLabel.Position = new(0, -mesh_aabb.End.Y , 0);
+	private SphereShape3D GenerateCollisionShape(MeshInstance3D meshInst)
+	{
+		Aabb mesh_aabb = meshInst.GetAabb();
+		return new SphereShape3D() { Radius = mesh_aabb.Size.X / 2 };
+	}
 
-        if (Selected)
-        {
-            NodeLabel.Modulate = NodeLabel.Modulate = Colors.Green;
-        }
-        else if (Hovered)
-        {
-            NodeLabel.Modulate = NodeLabel.Modulate = Colors.Yellow;
-        }
-        else
-        {
-            NodeLabel.Modulate = NodeLabel.Modulate = Colors.White;
-        }
-    }
+	private void UpdateLabel()
+	{
+		LabelNode.Text = DisplayedName;
+
+		if (Selected)
+		{
+			LabelNode.Modulate = LabelNode.Modulate = Colors.Green;
+		}
+		else if (Hovered)
+		{
+			LabelNode.Modulate = LabelNode.Modulate = Colors.Yellow;
+		}
+		else
+		{
+			LabelNode.Modulate = LabelNode.Modulate = Colors.White;
+		}
+	}
 
 	public void SetResource(TravelMapLocation location)
 	{
-		throw new NotImplementedException();
+		Location = location;
 	}
 
+	#region Event Handling
+	private void OnAreaInputEvent(Node camera, InputEvent @event, Godot.Vector3 eventPosition, Godot.Vector3 normal, long shapeIdx)
+	{
+		if (@event.IsActionPressed(Readonly.InputActions.PRIMARY))
+		{
+			MarkerSelected?.Invoke(this);
+		}
+		else if (@event is InputEventMouseMotion)
+		{
+			MarkerHovered?.Invoke(this);
+		}
+	}
+	#endregion
 }

@@ -38,7 +38,8 @@ public partial class EventBus : Node
     //World map
     #region World Map
     public delegate void MapMarkerEvent(WorldMapMarker3D marker);
-    public static MapMarkerEvent? MarkerSelected;
+    public static MapMarkerEvent? TravelLocationSelected;
+	public static MapMarkerEvent? TravelLocationHovered;
 
     //Save profile
     public static StringEvent? ProfileNameChanged;

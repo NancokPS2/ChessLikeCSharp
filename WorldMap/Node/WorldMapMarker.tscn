@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpqgtt8ya8u11"]
+
+[ext_resource type="Script" uid="uid://i8mfd0g4xk6b" path="res://WorldMap/Node/WorldMapMarker3D.cs" id="1_aqiyp"]
+
+[node name="WorldMapMarker" type="Node3D" node_paths=PackedStringArray("LabelNode", "AreaNode")]
+script = ExtResource("1_aqiyp")
+LabelNode = NodePath("Label3D")
+AreaNode = NodePath("Area3D")
+metadata/_custom_type_script = "uid://i8mfd0g4xk6b"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Label3D" type="Label3D" parent="."]
