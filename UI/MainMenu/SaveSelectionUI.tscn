@@ -18,7 +18,7 @@ theme = ExtResource("1_4kb7t")
 script = ExtResource("2_4kb7t")
 ButtonLoad = NodePath("VBoxContainer2/HBoxContainer/LOAD")
 ButtonDelete = NodePath("VBoxContainer2/HBoxContainer/DELETE")
-SaveContainerNode = NodePath("VBoxContainer2/SaveContainer")
+SaveContainerNode = NodePath("VBoxContainer2/ScrollContainer/SaveContainer")
 SaveSlotUIScene = ExtResource("3_6bdn0")
 metadata/_custom_type_script = "uid://bxnix54d00fe7"
 
@@ -43,11 +43,16 @@ layout_mode = 2
 text = "Save Selection"
 label_settings = SubResource("LabelSettings_767xy")
 
-[node name="SaveContainer" type="VBoxContainer" parent="VBoxContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SaveSlot" parent="VBoxContainer2/SaveContainer" instance=ExtResource("3_6bdn0")]
+[node name="SaveContainer" type="VBoxContainer" parent="VBoxContainer2/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SaveSlot" parent="VBoxContainer2/ScrollContainer/SaveContainer" instance=ExtResource("3_6bdn0")]
 layout_mode = 2
 EmptySlot = true
 

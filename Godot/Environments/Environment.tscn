@@ -13,4 +13,4 @@ ambient_light_energy = 0.2
 environment = SubResource("Environment_wnu7r")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.819152, -0.573576, 0, 0.573576, 0.819152, 0, 176, 0)
+transform = Transform3D(1, 0, 0, 0, 0.471381, 0.88193, 0, -0.88193, 0.471381, 0, 0, 0)

@@ -35,14 +35,17 @@ public partial class EventBus : Node
 		Instance = this;
 	}
 
+	#region Scene Change
+	public static ObjectChange<Node>? SceneChanged;
+	#endregion
+
     //World map
-    #region World Map
-    public delegate void MapMarkerEvent(WorldMapMarker3D marker);
-    public static MapMarkerEvent? TravelLocationSelected;
-	public static MapMarkerEvent? TravelLocationHovered;
+	#region World Map
+	public static ObjectChange<TravelMapLocation>? MapLocationSelected;
+	public static ObjectChange<TravelMapLocation>? MapLocationConfirmed;
 
     //Save profile
-    public static StringEvent? ProfileNameChanged;
+	public static StringEvent? ProfileNameChanged;
     #endregion
 
     #region Grid
@@ -195,6 +198,8 @@ public partial class EventBus : Node
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;
 	#endregion
+
+
 
 
 

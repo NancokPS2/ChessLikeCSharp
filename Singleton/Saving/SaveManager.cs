@@ -78,7 +78,7 @@ public partial class SaveManager : Node
 		return output;
 	}
 
-	public static void SetCurrentSave(SaveFile file, int slot)
+	private static void SetCurrentSave(SaveFile file, int slot)
 	{
 		CurrentSave = file;
 		SaveSlot = slot;
@@ -93,8 +93,10 @@ public partial class SaveManager : Node
 	{
 		if (!SaveFile.IsSlotOccupied(profileName, slot))
 			throw new Exception($"Cannot load {profileName}, slot {slot}. It does not exist.");
-			
+
 		SetCurrentSave(GetLoadedSave(profileName, slot), slot);
+
+		EventBus.LoadAttempted?.Invoke(true);
 	}
 
 	public static void ReloadSave()
@@ -120,6 +122,7 @@ public partial class SaveManager : Node
 			throw new Exception("Cannot overwrite save file.");
 
 		bool success = CurrentSave.Save(SaveSlot);
+		EventBus.SaveAttempted?.Invoke(success);
 		return success;
 	}
 
@@ -133,6 +136,7 @@ public partial class SaveManager : Node
 
 	private void OnInputSave()
 	{
+		CurrentSave?.Save(SaveSlot);
 	}
 	
 	private void OnInputPauseOptionSelected(EPauseOption obj)

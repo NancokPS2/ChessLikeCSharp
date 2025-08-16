@@ -1,0 +1,50 @@
+[gd_scene load_steps=13 format=3 uid="uid://ct6gl8ha8xn84"]
+
+[ext_resource type="Script" uid="uid://dyf0qeqqfm4t6" path="res://WorldMap/Node/WorldMap3D.cs" id="1_8ct0k"]
+[ext_resource type="Script" uid="uid://bwtfoou1cq7pm" path="res://WorldMap/Node/TravelMapScene.cs" id="1_rus3b"]
+[ext_resource type="PackedScene" uid="uid://4cikkiw1mfd" path="res://Entity/Mob/Node/CharacterSelectionCursor.tscn" id="2_8lqkv"]
+[ext_resource type="Texture2D" uid="uid://w0i8mg0ehwte" path="res://assets/Texture/worldmap/mapdummy.png" id="2_cvupo"]
+[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="3_vyfkp"]
+[ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="4_2nl65"]
+[ext_resource type="PackedScene" uid="uid://bpqgtt8ya8u11" path="res://WorldMap/Node/WorldMapMarker.tscn" id="5_pua1n"]
+[ext_resource type="Resource" path="res://Resources/EncounterData/Default.tres" id="6_p5tg4"]
+[ext_resource type="Script" uid="uid://dd04mrljehag8" path="res://WorldMap/TravelMapLocation.cs" id="6_u2rg5"]
+
+[sub_resource type="Resource" id="Resource_p5tg4"]
+script = ExtResource("6_u2rg5")
+DisplayName = "Fight Zone "
+CombatEncounter = ExtResource("6_p5tg4")
+metadata/_custom_type_script = "uid://dd04mrljehag8"
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8ct0k"]
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vyfkp"]
+albedo_texture = ExtResource("2_cvupo")
+texture_filter = 0
+
+[node name="TravelMapNode" type="Node3D" node_paths=PackedStringArray("WorldMap")]
+script = ExtResource("1_rus3b")
+WorldMap = NodePath("WorldMap3D")
+metadata/_custom_type_script = "uid://bwtfoou1cq7pm"
+
+[node name="WorldMap3D" type="Node3D" parent="."]
+script = ExtResource("1_8ct0k")
+SelectedMarkerScene = ExtResource("2_8lqkv")
+metadata/_custom_type_script = "uid://dyf0qeqqfm4t6"
+
+[node name="WorldMapMarker" parent="WorldMap3D" instance=ExtResource("5_pua1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.411876, -1.44025)
+Location = SubResource("Resource_p5tg4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_8ct0k")
+surface_material_override/0 = SubResource("StandardMaterial3D_vyfkp")
+
+[node name="Outside" parent="." instance=ExtResource("3_vyfkp")]
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.21671, 1.24388)
+current = true
+script = ExtResource("4_2nl65")
+metadata/_custom_type_script = "uid://cav6lcd1dy6th"

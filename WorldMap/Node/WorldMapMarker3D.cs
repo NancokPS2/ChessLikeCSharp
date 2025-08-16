@@ -42,6 +42,9 @@ public partial class WorldMapMarker3D : Node3D, ISelectable
 		AreaNode.InputEvent += OnAreaInputEvent;
 
 		UpdateLabel();
+
+		if (Location is not null)
+			SetResource(Location);
 	}
 
 	public void Select(bool select)
@@ -83,6 +86,8 @@ public partial class WorldMapMarker3D : Node3D, ISelectable
 	public void SetResource(TravelMapLocation location)
 	{
 		Location = location;
+		DisplayedName = Location.DisplayName;
+		UpdateLabel();
 	}
 
 	#region Event Handling

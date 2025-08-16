@@ -101,8 +101,6 @@ public partial class SaveFile : Resource
 		{
 			save.SetStoryFlag((EStoryFlag)key.ToInt(), config.GetValue(CSFSECTION_STORYFLAGS, key).As<bool>());
 		}
-
-		EventBus.LoadAttempted?.Invoke(true);
 		return save;
 	}
 	public void Load(int slot)
@@ -141,7 +139,6 @@ public partial class SaveFile : Resource
 		}
 
 		if (config.Save(GetSaveFilePath(ProfileName, slot)) != Error.Ok) success = false;
-		EventBus.SaveAttempted?.Invoke(success);
 		return success;
 	}
 	public bool Save()

@@ -29,6 +29,7 @@ public partial class UIManager : Control, IDebugDisplay
 
 		EventBus.InputPauseOptionSelected += OnInputPauseOptionSelected;
 		EventBus.CombatStateChanged += OnCombatStateChanged;
+		EventBus.SceneChanged += OnSceneChange;
 
 		foreach (var item in Scenes)
 		{
@@ -77,7 +78,7 @@ public partial class UIManager : Control, IDebugDisplay
 		//Do nothing.
 		if (ui == EUIScene.KEEP) return;
 
-		foreach (var item in Instance.Nodes.Values)
+		foreach (var item in Instance.Nodes.Values.Where( x => x.IsInsideTree()))
 		{
 			Instance.CanvasLayerNode.RemoveChild(item);
 		}
@@ -106,6 +107,11 @@ public partial class UIManager : Control, IDebugDisplay
 		};
 
 		ChangeToUI(eUI);
+	}
+
+	private void OnSceneChange(Node node)
+	{
+		ChangeToUI(EUIScene.NONE);
 	}
 	#endregion
 }

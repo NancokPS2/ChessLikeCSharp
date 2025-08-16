@@ -12,12 +12,13 @@ config_version=5
 
 config/name="ChessLike"
 config/version="indev"
-run/main_scene="res://Godot/MainScenes/Combat.tscn"
+run/main_scene="uid://ban8qtdiy2sm0"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
+EventBus="*res://Singleton/EventBus/EventBus.cs"
 SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 GlobalNode="res://Singleton/Global/Node/GlobalNode.cs"
 UIManager="*res://Singleton/UI/UIManager.tscn"
@@ -25,7 +26,7 @@ DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
 MsgQueue="*res://Singleton/MessageQueue/MessageQueue.cs"
-EventBus="*res://Singleton/EventBus/EventBus.cs"
+SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
 Command="*res://Singleton/Command/Command.cs"
 
@@ -48,6 +49,10 @@ folder_colors={
 [filesystem]
 
 import/blender/enabled=false
+
+[global_group]
+
+group_travel_location="Group for WorldMap3D markers"
 
 [input]
 

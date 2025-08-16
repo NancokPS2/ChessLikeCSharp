@@ -34,11 +34,8 @@ public partial class ProfileSaveTest : Node3D
 		newSave.PlayerFaction = faction;
 
 		//Save it.
-		SaveManager.SetCurrentSave(newSave, 0);
-		SaveManager.Save(true);
-		SaveManager.ReloadSave();
-
-
+		newSave.Save(0);
+		SaveManager.LoadSave(newSave.ProfileName, 0);
 	}
 
 }

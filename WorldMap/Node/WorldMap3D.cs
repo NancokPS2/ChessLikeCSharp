@@ -9,8 +9,45 @@ namespace ChessLike.WorldMap;
 [GlobalClass]
 public partial class WorldMap3D : Node3D
 {
+	const string GROUP_SELECTION_MARKER = "group_selection_marker";
 	const string GROUP_TRAVEL_LOCATION_NODE = "group_travel_location";
 	private int MaxItemsSelected = 1;
+
+	private bool SelectionDirty = true;
+
+	[Export]
+	public PackedScene SelectedMarkerScene;
+
+	public override void _EnterTree()
+	{
+		base._EnterTree();
+		ChildEnteredTree += OnChildEnteredTree;
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		if (SelectionDirty)
+		{
+			UpdateSelectionVisuals();
+		}
+	}
+
+	private void UpdateSelectionVisuals()
+	{
+		SelectionDirty = false;
+		foreach (var item in GetTree().GetNodesInGroup(GROUP_SELECTION_MARKER))
+		{
+			item.QueueFree();
+		}
+
+		foreach (var marker in GetSelectedMarkers())
+		{
+			Node3D newNode = SelectedMarkerScene.Instantiate<Node3D>();
+			AddChild(newNode);
+			newNode.GlobalPosition = marker.GlobalPosition + (Godot.Vector3.Up * 0.5f);
+		}
+	}
 
 	private void ClearMarkers()
 	{
@@ -53,14 +90,34 @@ public partial class WorldMap3D : Node3D
 	#region Event Handling
 	private void OnMarkerSelected(WorldMapMarker3D marker)
 	{
-		GetSelectedMarkers().ForEach(x => x.Select(false));
-		marker.Select(true);
+		List<WorldMapMarker3D> selectedMarkers = GetSelectedMarkers();
+		bool alreadySelected = selectedMarkers.Contains(marker);
+
+		if (alreadySelected)
+		{
+			EventBus.MapLocationConfirmed?.Invoke(marker.Location);
+			marker.Select(false);
+		}
+		else
+		{
+			GetSelectedMarkers().ForEach(x => x.Select(false));
+			marker.Select(true);
+			EventBus.MapLocationSelected?.Invoke(marker.Location);
+		}
+
+		SelectionDirty = true;
 	}
 
 	private void OnMarkerHovered(WorldMapMarker3D marker)
 	{
 		GetHoveredMarkers().ForEach(x => x.Hover(false));
 		marker.Hover(true);
+	}
+
+	private void OnChildEnteredTree(Node node)
+	{
+		if (node is WorldMapMarker3D marker)
+			AddMarker(marker);
 	}
 	#endregion
 

@@ -1,5 +1,7 @@
-public enum EPauseOption {
+public enum EPauseOption
+{
 	RESUME,
 	PARTY,
 	SAVE,
+	QUIT,
 }
