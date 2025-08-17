@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://blyj424ba78o5"]
+
+[ext_resource type="Script" uid="uid://md7uxykgpoyx" path="res://World/Node/GridNode.cs" id="1_wdtry"]
+[ext_resource type="Resource" uid="uid://522wy8p2na3a" path="res://Resources/GridRandom.tres" id="2_0hfdm"]
+
+[node name="GridDisplay" type="Node3D"]
+
+[node name="GridNode" type="Node3D" parent="."]
+script = ExtResource("1_wdtry")
+EditorGrid = ExtResource("2_0hfdm")
+metadata/_custom_type_script = "uid://md7uxykgpoyx"

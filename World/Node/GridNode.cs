@@ -27,7 +27,27 @@ public partial class GridNode : Node3D
     }
     private readonly Layer[] ALL_LAYERS = Enum.GetValues<Layer>();
 
-    private Grid grid;
+	[Export]
+	private Grid? EditorGrid
+	{
+		set
+		{
+			if (value is not null && Engine.IsEditorHint())
+				SetGrid(value);
+		}
+		get
+		{
+			return grid;
+		}
+	}
+
+	[ExportToolButton("Reload")]
+	private Callable ReloadCall
+	{
+		get => Callable.From(() => EditorGrid = EditorGrid);
+	}
+
+	private Grid grid;
     private Dictionary<Vector3i, CellComponent> CellComponents = new();
 
     //public Vector3i PositionSelected { get => PositionCollidedSelected + Vector3i.UP; }
@@ -280,24 +300,24 @@ public partial class GridNode : Node3D
     }
     #endregion
 
-    #region Cell Component
-    protected class CellComponent
-    {
-        public Dictionary<Layer, MeshInstance3D> MeshInstances = new();
-        public StaticBody3D CollisionBody = new() { InputRayPickable = true };
-        public CollisionShape3D CollisionShape = new() { Shape = new BoxShape3D() };
+	#region Cell Component
+	protected class CellComponent
+	{
+		public Dictionary<Layer, MeshInstance3D> MeshInstances = new();
+		public StaticBody3D CollisionBody = new() { InputRayPickable = true };
+		public CollisionShape3D CollisionShape = new() { Shape = new BoxShape3D() };
 
-        public CellComponent(GridCell cell)
-        {
-            MeshInstances.Add(Layer.BASE, new MeshInstance3D());
+		public CellComponent(GridCell cell)
+		{
+			MeshInstances.Add(Layer.BASE, new MeshInstance3D());
 
-            if (cell.Flags.Contains(ECellFlag.SOLID))
-            {
-                MeshInstances[Layer.BASE].Mesh = Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL);
-            }
-        }
+			if (cell.Flags.Contains(ECellFlag.SOLID))
+			{
+				MeshInstances[Layer.BASE].Mesh = Global.Resources.GetMesh(Global.Resources.MeshIdent.CELL_FULL);
+			}
+		}
 
-    }
+	}
 
     #endregion
 }

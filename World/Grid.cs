@@ -11,28 +11,34 @@ namespace ChessLike.World;
 [GlobalClass, Tool]
 public partial class Grid : Resource
 {
-    public static Godot.Vector3 CellSize = new(1, 1, 1);
+    public readonly static Godot.Vector3 CellSize = new(1, 1, 1);
 
     public Vector3i Boundary = new(10, 10, 10);
     [Export]
     private Vector3I boundary
-    {
-        set => Boundary = new(value);
-        get => Boundary.ToGVector3I();
-    }
+	{
+		set
+		{
+			Boundary = new(value);
+			EmitSignal(SignalName.Changed);
+		}
 
-    public Dictionary<Vector3i, GridCell> CellDictionary = new();
+		get => Boundary.ToGVector3I();
+	}
+
+	public Dictionary<Vector3i, GridCell> CellDictionary = new();
     [Export]
     private Godot.Collections.Dictionary<Godot.Vector3I, GridCell> cellDictionary
     {
-        set
-        {
-            Dictionary<Vector3i, GridCell> input = new();
-            foreach (var item in value)
-            {
-                input[new(item.Key)] = item.Value;
-            }
-            CellDictionary = input;
+		set
+		{
+			Dictionary<Vector3i, GridCell> input = new();
+			foreach (var item in value)
+			{
+				input[new(item.Key)] = item.Value;
+			}
+			CellDictionary = input;
+			EmitSignal(SignalName.Changed);
         }
         get
         {
@@ -91,8 +97,26 @@ public partial class Grid : Resource
         return cell;
     }
 
+	/// <summary>
+	/// Finds the first empty spot in a column.
+	/// </summary>
+	/// <param name="pos">The position of the column to check, the Y axis is ignored.</param>
+	/// <returns>A position that does not have the SOLID flag, or Vector3i.INVALID if none could be found.</returns>
+	public Vector3i FindFirstNonSolidPositionVertical(Vector3i pos)
+	{
+		for (int y = 0; y < Boundary.Y; y++)
+		{
+			Vector3i candidate = new(pos.X, y, pos.Z);
+			if (!IsFlagInPosition(new(pos.X, y, pos.Z), ECellFlag.SOLID))
+			{
+				return candidate;
+			}
+		}
+		return Vector3i.INVALID;
+	}
+
     public bool HasCell(Vector3i position)
-        => CellDictionary.ContainsKey(position);
+		=> CellDictionary.ContainsKey(position) && CellDictionary[position] is not null;
 
     public ICollection<GridCell> GetCells()
     {
@@ -124,26 +148,43 @@ public partial class Grid : Resource
         return CellDictionary.Keys.ToArray();
     }
 
+	public List<Vector3i> GetInboundPositions()
+	{
+		List<Vector3i> output = new();
+		for (int x = 0; x < Boundary.X; x++)
+		{
+			for (int y = 0; y < Boundary.Y; y++)
+			{
+				for (int z = 0; z < Boundary.Z; z++)
+				{
+					output.Add(new(x, y, z));
+				}
+			}
+		}
+
+		return output;
+	}
+
     public List<Vector3i> GetShapeCube(Vector3i origin, uint max_distance)
-    {
-        List<Vector3i> output = new();
+	{
+		List<Vector3i> output = new();
 
-        int[] range = Enumerable.Range((int)-max_distance, (int)max_distance * 2 + 1).ToArray();
+		int[] range = Enumerable.Range((int)-max_distance, (int)max_distance * 2 + 1).ToArray();
 
-        foreach (var x in range)
-        {
-            foreach (var z in range)
-            {
-                foreach (var y in range)
-                {
-                    Vector3i vector = new Vector3i(x, y, z) + origin;
-                    output.Add(vector);
-                }
-            }
-        }
-        output = output.Where(x => IsPositionInbounds(x)).ToList();
-        return output;
-    }
+		foreach (var x in range)
+		{
+			foreach (var z in range)
+			{
+				foreach (var y in range)
+				{
+					Vector3i vector = new Vector3i(x, y, z) + origin;
+					output.Add(vector);
+				}
+			}
+		}
+		output = output.Where(x => IsPositionInbounds(x)).ToList();
+		return output;
+	}
     #endregion
 
     public EFaction GetFactionSpawn(Vector3i pos)

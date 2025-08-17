@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://dslo3iy2wc5fx"]
+[gd_scene load_steps=7 format=3 uid="uid://dslo3iy2wc5fx"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ygt2u"]
 [ext_resource type="PackedScene" uid="uid://g4dsvmknbvc" path="res://UI/Combat/StateOverlay/CombatStateOverlay.tscn" id="2_g7cxo"]
 [ext_resource type="PackedScene" uid="uid://cet44dt4p4srd" path="res://UI/Combat/CombatTurnUI.tscn" id="2_h8ftk"]
-[ext_resource type="Script" path="res://UI/Combat/CombatUI.cs" id="2_o1ard"]
 [ext_resource type="PackedScene" uid="uid://b3msvq7mc7i1q" path="res://UI/Mob/MobUI.tscn" id="4_dpm2i"]
 [ext_resource type="PackedScene" uid="uid://c8akfo35olah2" path="res://UI/Combat/CombatActionUI.tscn" id="5_yxc47"]
 [ext_resource type="PackedScene" uid="uid://d3406ij1go4n0" path="res://UI/Combat/CombatConfirmationUI.tscn" id="6_v4hac"]
@@ -17,7 +16,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 theme = ExtResource("1_ygt2u")
-script = ExtResource("2_o1ard")
 metadata/_custom_type_script = "uid://dhfflpct4gbno"
 
 [node name="CombatStateOverlay" parent="." instance=ExtResource("2_g7cxo")]

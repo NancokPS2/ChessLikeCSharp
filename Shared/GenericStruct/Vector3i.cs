@@ -419,5 +419,20 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		|| Z < -2147483630 || Z > 2147483630);
 	}
 
+	public static List<Vector3i> Range(int maxX, int maxY, int maxZ)
+	{
+		List<Vector3i> output = new();
+		for (int x = 0; x < maxX; x++)
+		{
+			for (int y = 0; y < maxY; y++)
+			{
+				for (int z = 0; z < maxZ; z++)
+				{
+					output.Add(new(x, y, z));
+				}
+			}
+		}
+		return output;
+	}
 }
 

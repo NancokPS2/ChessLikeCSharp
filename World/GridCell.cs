@@ -37,11 +37,19 @@ public partial class GridCell : Resource, IEquatable<GridCell>
     }
 
     public GridCell(string name, List<ECellFlag> flags, bool selectable)
-    {
-        Name = name;
-        Flags = flags;
-        Selectable = selectable;
-    }
+	{
+		Name = name;
+		Flags = flags;
+		Selectable = selectable;
+	}
+
+	public GridCell(GridCell other)
+	{
+		Name = other.Name;
+		Flags = other.Flags;
+		Selectable = other.Selectable;
+		FactionSpawn = other.FactionSpawn;
+	}
 
     public bool Equals(GridCell? other)
     {
