@@ -30,7 +30,6 @@ public static class GridTerrainGenerator
 		foreach (var item in Vector3i.Range(grid.Boundary.X, grid.Boundary.Y, grid.Boundary.Z))
 		{
 			float noiseVal = Mathf.Abs(noise.GetNoise2Dv(new(item.X, item.Z)));
-			GD.Print($"MaxHeight: {maxHeight} | Value: {maxHeight * noiseVal} | Y: {item.Y}");
 			if (maxHeight * noiseVal >= item.Y)
 				grid.SetCell(item, cellToApply);
 		}

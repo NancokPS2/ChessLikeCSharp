@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Storage;
@@ -95,18 +96,24 @@ public static class ICollectionExtension
         }
         return output;
     }
+	public static TColl PopRandom<TColl>(this List<TColl> collection)
+	{
+		var output = collection.GetRandom();
+		collection.Remove(output);
+		return output;
+	}
 
     //Get a random value from a NULLABLE collection
-    public static TColl? GetRandom<TColl>(this List<TColl> collection) where TColl : class?
-    {
-        if (collection.Count() == 0) return null;
-        RandomNumberGenerator rng = new();
-        int index = rng.RandiRange(0, collection.Count-1);
-        return collection[index];
-    }
+	public static TColl? GetRandom<TColl>(this List<TColl> collection)
+	{
+		if (collection.Count() == 0) return default;
+		RandomNumberGenerator rng = new();
+		int index = rng.RandiRange(0, collection.Count - 1);
+		return collection[index];
+	}
 
     //Godot converter
-    public static TColl? GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection) where TColl : class?
+    public static TColl? GetRandom<[MustBeVariant] TColl>(this Godot.Collections.Array<TColl> collection)
         => GetRandom(new List<TColl>(collection));
 
     //Get a random value from a NON NULLABLE collection

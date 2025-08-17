@@ -19,8 +19,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventBus="*res://Singleton/EventBus/EventBus.cs"
-SaveProfile="*res://Singleton/SaveProfile/SaveProfile.cs"
 GlobalNode="res://Singleton/Global/Node/GlobalNode.cs"
+Save="res://Singleton/Saving/SaveManager.cs"
 UIManager="*res://Singleton/UI/UIManager.tscn"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"

@@ -1,4 +1,5 @@
-using ChessLike.World.Encounter;
+using ChessLike.Extension;
+using ChessLike.WorldMap;
 using Godot;
 
 namespace ChessLike.WorldMap;
@@ -11,4 +12,11 @@ public partial class TravelMapLocation : Resource
 
 	[Export]
 	public EncounterData? CombatEncounter;
+
+	[Export]
+	public Godot.Collections.Array<EStoryFlag> FlagWhitelist = new();
+
+	[Export]
+	public Godot.Collections.Array<EStoryFlag> FlagBlacklist = new();
+
 }

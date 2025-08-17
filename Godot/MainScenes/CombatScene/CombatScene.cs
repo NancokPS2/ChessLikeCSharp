@@ -5,8 +5,10 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.Extension;
+using ChessLike.Storage;
 using ChessLike.World;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using Godot;
 
 [GlobalClass]
@@ -66,16 +68,36 @@ public partial class CombatScene : Node3D
 	{
 		EncounterData = encounterToLoad;
 
+		if (EncounterData.Grid is GridRandom rand) rand.Randomize();
+
 		EventBus.EncounterLoading?.Invoke(encounterToLoad);
 
-		foreach (KeyValuePair<Vector3i, Mob> pair in encounterToLoad.MobPlacement)
+		//Find all spawn points
+		List<Vector3i> spawnPoints = (from pair in GetGrid().CellDictionary where pair.Value.FactionSpawn != EFaction.INVALID select pair.Key).ToList();
+
+		//Place mobs in combat
+
+		foreach (MobSpawn spawn in encounterToLoad.MobSpawns)
 		{
-			Mob mob = pair.Value;
-			if (mob is null) return;
+			//Generate the Mob
+			Mob mob;
+
+			if (spawn.Mob is not null)
+			{
+				mob = spawn.Mob;
+			}
+			else
+			{
+				mob = spawn.GetNewMob();
+			}
 
 			mob.MobState = ChessLike.Entity.EMobState.COMBAT;
+
+			//Find where to place it
+			Vector3i pos = spawnPoints.PopRandom();
+
 			//WIP This should be used automatically
-			mob.Move(new(pair.Key));
+			mob.Move(pos);
 		}
 
 		//Everything must be loaded by now.

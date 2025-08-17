@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using ChessLike.WorldMap;
 using Godot;
 

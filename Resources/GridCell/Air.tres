@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GridCell" load_steps=2 format=3 uid="uid://46md73wtcmup"]
+
+[ext_resource type="Script" uid="uid://dmiuqa6liu2f7" path="res://World/GridCell.cs" id="1_f2d88"]
+
+[resource]
+script = ExtResource("1_f2d88")
+Name = "AIR"
+flags = Array[int]([3])
+Selectable = false
+FactionSpawn = -1
+metadata/_custom_type_script = "uid://dmiuqa6liu2f7"

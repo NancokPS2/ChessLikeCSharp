@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Storage;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
+using ChessLike.WorldMap;
 using Godot;
 
 public partial class Global

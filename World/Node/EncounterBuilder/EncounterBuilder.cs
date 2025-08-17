@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.World;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using Godot;
 
 [GlobalClass, Tool]
@@ -37,17 +37,6 @@ public partial class EncounterBuilder : Node3D
 
     [Export(PropertyHint.SaveFile, "*.tres")]
     protected string EncounterSavePath = "user://SavedEncounter.tres";
-
-    [ExportToolButton("Save Encounter")]
-    protected Callable SaveEncounterCall
-    {
-        get => Callable.From(SaveEncounter);
-    }
-
-    private void SaveEncounter()
-    {
-        EncounterLoaded.MobPlacement = MobPlacementDictionary;
-    }
 
     [ExportCategory("Mob Placement")]
 

@@ -1,4 +1,6 @@
 public enum EStoryFlag
 {
-	DUMMY
+	DUMMY,
+	FOUND_FIGHT_ZONE,
+	TUTORIAL_COMPLETE,
 }

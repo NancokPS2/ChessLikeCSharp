@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Animation;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using Godot;
 using static ChessLike.Entity.Action.AnimatedSceneParameters;
 

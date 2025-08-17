@@ -154,14 +154,20 @@ public partial class SaveFile : Resource
 		=> DeleteSave(ProfileName, slot);
 
 	public void SetStoryFlag(EStoryFlag flag, bool set)
-	=> StoryFlags[flag] = set;
-			
+		=> StoryFlags[flag] = set;
+
+	public bool GetStoryFlag(EStoryFlag flag)
+	{
+		StoryFlags.TryGetValue(flag, out bool output);
+		return output;
+	}
+
 	/// <summary>
 	/// Gets all saves from this profile in the saves folder.
 	/// </summary>
 	/// <returns>All saves belonging to this profile.</returns>
 	public string[] GetAllSaves()
 	{
-		return DirAccess.GetDirectoriesAt(GetSaveBaseFolderPath()).Where( x => x.StartsWith(ProfileName)).ToArray();
+		return DirAccess.GetDirectoriesAt(GetSaveBaseFolderPath()).Where(x => x.StartsWith(ProfileName)).ToArray();
 	}
 }

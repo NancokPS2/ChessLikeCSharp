@@ -126,6 +126,11 @@ public partial class SaveManager : Node
 		return success;
 	}
 
+	public static bool IsStoryFlagSet(EStoryFlag flag)
+	{
+		return CurrentSave?.GetStoryFlag(flag) ?? throw new Exception();
+	}
+
 	#region Event Handling
 	private void OnInputLoad(string profile, int slot)
 	{
@@ -136,7 +141,7 @@ public partial class SaveManager : Node
 
 	private void OnInputSave()
 	{
-		CurrentSave?.Save(SaveSlot);
+		Save(true);
 	}
 	
 	private void OnInputPauseOptionSelected(EPauseOption obj)

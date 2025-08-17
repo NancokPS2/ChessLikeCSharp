@@ -13,7 +13,7 @@ using ChessLike.Entity;
 using Action = ChessLike.Entity.Action;
 using Godot;
 using ChessLike.World;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 
 public static partial class Global
 {

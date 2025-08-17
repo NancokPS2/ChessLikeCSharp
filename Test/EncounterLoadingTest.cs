@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.World;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using Godot;
 
 namespace Test;
@@ -15,9 +15,9 @@ public partial class EncounterLoadingTest : Node3D
     public override void _Ready()
     {
         base._Ready();
-        CombatScene scene = Readonly.Scenes.MAIN_COMBAT;
-        AddChild(scene);
-        scene.Setup(EncounterData.GetDefault());
+        CombatScene combatScene = Readonly.Scenes.MAIN_COMBAT;
+        AddChild(combatScene);
+        combatScene.Setup(EncounterData.GetDefault());
     }
 
     public override void _Input(InputEvent @event)

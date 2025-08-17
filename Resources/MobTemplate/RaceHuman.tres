@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="MobTemplateRace" load_steps=7 format=3 uid="uid://c2cnylvo0o16q"]
 
 [ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_duayp"]
-[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_a4jqw"]
 [ext_resource type="Resource" uid="uid://b8xl71j5rj1h" path="res://Resources/Ability/Attack.tres" id="2_k82kr"]
 [ext_resource type="Script" uid="uid://unt05ws8ip6w" path="res://Entity/Mob/Template/MobTemplateRace.cs" id="3_k82kr"]
 [ext_resource type="Resource" uid="uid://uqy62um3owdf" path="res://Resources/Ability/Move.tres" id="3_xywra"]
 [ext_resource type="Resource" uid="uid://fvux70sanp8w" path="res://Resources/Ability/ThrowRock.tres" id="4_xywra"]
+[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="5_xywra"]
 
 [resource]
 script = ExtResource("3_k82kr")
 Abilities = Array[ExtResource("1_duayp")]([ExtResource("3_xywra"), ExtResource("2_k82kr"), ExtResource("4_xywra")])
-StatBoosts = Array[ExtResource("2_a4jqw")]([])
+StatBoosts = Array[ExtResource("5_xywra")]([])
 TemplateName = "Human"
 metadata/_custom_type_script = "uid://unt05ws8ip6w"

@@ -9,7 +9,7 @@ using ChessLike.Entity.MobCommand;
 using ChessLike.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using ChessLike.WorldMap;
 using Godot;
 using static ChessLike.Entity.Action.ActionEvent;

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GridCell" load_steps=2 format=3 uid="uid://dlosubmcwxovh"]
+
+[ext_resource type="Script" uid="uid://dmiuqa6liu2f7" path="res://World/GridCell.cs" id="1_pur5p"]
+
+[resource]
+script = ExtResource("1_pur5p")
+Name = "DEFAULT"
+flags = Array[int]([1])
+Selectable = true
+FactionSpawn = -1
+metadata/_custom_type_script = "uid://dmiuqa6liu2f7"

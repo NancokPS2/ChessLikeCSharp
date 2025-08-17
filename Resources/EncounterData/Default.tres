@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cgai8boh5rrm1" path="res://World/GridRandom.cs" id="1_7nmup"]
 [ext_resource type="Script" uid="uid://dmiuqa6liu2f7" path="res://World/GridCell.cs" id="1_cca6x"]
-[ext_resource type="Script" uid="uid://cfhm8ksi08g1x" path="res://World/Encounter/EncounterData.cs" id="2_cca6x"]
+[ext_resource type="Script" uid="uid://cfhm8ksi08g1x" path="res://WorldMap/Encounter/EncounterData.cs" id="2_cca6x"]
 
 [sub_resource type="Resource" id="Resource_uhi3v"]
 script = ExtResource("1_cca6x")
@@ -28,8 +28,9 @@ FactionSpawn = -1
 [sub_resource type="Resource" id="Resource_cca6x"]
 script = ExtResource("1_7nmup")
 Type = 0
+TerrainFillHoles = true
 TerrainHeightRatio = 0.5
-TerrainGridCells = []
+TerrainGridCells = Array[ExtResource("1_cca6x")]([])
 boundary = Vector3i(10, 12, 10)
 cellDictionary = Dictionary[Vector3i, ExtResource("1_cca6x")]({
 Vector3i(0, 0, 0): SubResource("Resource_uhi3v"),
@@ -1238,4 +1239,4 @@ metadata/_custom_type_script = "uid://cgai8boh5rrm1"
 [resource]
 script = ExtResource("2_cca6x")
 Grid = SubResource("Resource_cca6x")
-mobPlacement = null
+mobSpawns = null

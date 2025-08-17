@@ -49,7 +49,7 @@ public partial class WorldMap3D : Node3D
 		}
 	}
 
-	private void ClearMarkers()
+	public void ClearMarkers()
 	{
 		List<WorldMapMarker3D> toDelete = GetMarkers();
 
@@ -57,12 +57,39 @@ public partial class WorldMap3D : Node3D
 			RemoveMarker(item);
 	}
 
-	public void AddMarker(WorldMapMarker3D element)
+	public void AddMarker(WorldMapMarker3D marker)
 	{
-		if (!element.IsInsideTree()) AddChild(element);
-		element.AddToGroup(GROUP_TRAVEL_LOCATION_NODE);
-		ConnectMarker(element);
+		bool canShow = CanShowMarker(marker);
+
+		if (!canShow)
+		{
+			marker.RemoveSelf();
+			return;
+		}
+
+		if (!marker.IsInsideTree()) AddChild(marker);
+		marker.AddToGroup(GROUP_TRAVEL_LOCATION_NODE);
+		ConnectMarker(marker);
 	}
+
+	private bool CanShowMarker(WorldMapMarker3D marker)
+	{
+		if (marker.Location is null) return true;
+
+		//Make sure that all the story flags have been met to show this location.
+		foreach (var item in marker.Location.FlagWhitelist)
+		{
+			if (!SaveManager.IsStoryFlagSet(item)) return false;
+		}
+
+		foreach (var item in marker.Location.FlagBlacklist)
+		{
+			if (SaveManager.IsStoryFlagSet(item)) return false;
+		}
+
+		return true;
+	}
+
 
 	private void ConnectMarker(WorldMapMarker3D element)
 	{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ct6gl8ha8xn84"]
+[gd_scene load_steps=17 format=3 uid="uid://ct6gl8ha8xn84"]
 
 [ext_resource type="Script" uid="uid://dyf0qeqqfm4t6" path="res://WorldMap/Node/WorldMap3D.cs" id="1_8ct0k"]
 [ext_resource type="Script" uid="uid://bwtfoou1cq7pm" path="res://WorldMap/Node/TravelMapScene.cs" id="1_rus3b"]
@@ -7,13 +7,24 @@
 [ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="3_vyfkp"]
 [ext_resource type="Script" uid="uid://cav6lcd1dy6th" path="res://Godot/Display/Camera.cs" id="4_2nl65"]
 [ext_resource type="PackedScene" uid="uid://bpqgtt8ya8u11" path="res://WorldMap/Node/WorldMapMarker.tscn" id="5_pua1n"]
-[ext_resource type="Resource" path="res://Resources/EncounterData/Default.tres" id="6_p5tg4"]
+[ext_resource type="Resource" uid="uid://c87egcgtqdgus" path="res://Resources/EncounterData/Default.tres" id="6_p5tg4"]
 [ext_resource type="Script" uid="uid://dd04mrljehag8" path="res://WorldMap/TravelMapLocation.cs" id="6_u2rg5"]
+[ext_resource type="Resource" uid="uid://cvpay4bur5ofc" path="res://Resources/EncounterData/BootCamp.tres" id="7_s7bse"]
 
 [sub_resource type="Resource" id="Resource_p5tg4"]
 script = ExtResource("6_u2rg5")
 DisplayName = "Fight Zone "
 CombatEncounter = ExtResource("6_p5tg4")
+FlagWhitelist = Array[int]([])
+FlagBlacklist = Array[int]([])
+metadata/_custom_type_script = "uid://dd04mrljehag8"
+
+[sub_resource type="Resource" id="Resource_8fm3d"]
+script = ExtResource("6_u2rg5")
+DisplayName = "Boot Camp"
+CombatEncounter = ExtResource("7_s7bse")
+FlagWhitelist = Array[int]([])
+FlagBlacklist = Array[int]([])
 metadata/_custom_type_script = "uid://dd04mrljehag8"
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_8ct0k"]
@@ -22,6 +33,13 @@ size = Vector2(20, 20)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vyfkp"]
 albedo_texture = ExtResource("2_cvupo")
 texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_s7bse"]
+size = Vector2(1000, 1000)
+center_offset = Vector3(0, -1, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s7bse"]
+albedo_color = Color(0.47451, 0.941176, 0.960784, 1)
 
 [node name="TravelMapNode" type="Node3D" node_paths=PackedStringArray("WorldMap")]
 script = ExtResource("1_rus3b")
@@ -37,6 +55,10 @@ metadata/_custom_type_script = "uid://dyf0qeqqfm4t6"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.411876, -1.44025)
 Location = SubResource("Resource_p5tg4")
 
+[node name="WorldMapMarker2" parent="WorldMap3D" instance=ExtResource("5_pua1n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.50774, 0.184953, -3.67283)
+Location = SubResource("Resource_8fm3d")
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_8ct0k")
 surface_material_override/0 = SubResource("StandardMaterial3D_vyfkp")
@@ -48,3 +70,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.2
 current = true
 script = ExtResource("4_2nl65")
 metadata/_custom_type_script = "uid://cav6lcd1dy6th"
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_s7bse")
+surface_material_override/0 = SubResource("StandardMaterial3D_s7bse")

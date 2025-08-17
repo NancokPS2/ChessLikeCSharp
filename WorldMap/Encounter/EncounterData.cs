@@ -3,7 +3,7 @@ using ChessLike.Storage;
 using ChessLike.World;
 using Godot;
 
-namespace ChessLike.World.Encounter;
+namespace ChessLike.WorldMap;
 
 [GlobalClass]
 public partial class EncounterData : Resource
@@ -11,27 +11,17 @@ public partial class EncounterData : Resource
     [Export]
     public Grid Grid = new();
 
-    public Dictionary<Vector3i, Mob> MobPlacement = new();
+    public List<MobSpawn> MobSpawns = new();
     [Export]
-    private Godot.Collections.Dictionary<Godot.Vector3I, Mob> mobPlacement
+    private Godot.Collections.Array<MobSpawn> mobSpawns
     {
         set
         {
-            MobPlacement = value
-                .ToDictionary(
-                    x => new Vector3i(x.Key),
-                    y => y.Value
-                    );
+			MobSpawns = new(value);
         }
         get
         {
-            return new(
-                MobPlacement
-                .ToDictionary(
-                    x => x.Key.ToGVector3I(),
-                    y => y.Value
-                    )
-                );
+            return new(MobSpawns);
         }
 
     }
@@ -82,34 +72,20 @@ public partial class EncounterData : Resource
         MobTemplateJob templateWizard =
             Global.ManagerMobTemplate.GetResource<MobTemplateJob>(EPackIDMobTemplate.JobWizard);
 
-        Mob def_mob1 = new Mob().ChainName("PlayerFac").ChainFaction(EFaction.PLAYER);
-        def_mob1.Move(Vector3i.ONE);
-		def_mob1.TemplateSet(templateBase);
-        def_mob1.TemplateSet(templateHuman);
-        def_mob1.TemplateUpdate(true, true);
-        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
+        MobSpawn mobSpawn1 = new();
+		mobSpawn1.TemplatesBase.Add(templateBase);
+        mobSpawn1.TemplatesRace.Add(templateHuman);
+		//def_mob1.TemplateUpdate(true, true);
 
-        Mob def_mob2 = new Mob().ChainName("HumanTemplate").ChainFaction(EFaction.PLAYER);
-        def_mob2.Move(Vector3i.ONE+Vector3i.FORWARD);
-		def_mob2.TemplateSet(templateBase);
-        def_mob2.TemplateSet(templateHuman );
-        def_mob2.TemplateUpdate(true, true);
-        
-        //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
+        MobSpawn mobSpawn2 = new();
+		mobSpawn2.TemplatesBase.Add(templateBase);
+        mobSpawn2.TemplatesRace.Add(templateHuman);
 
-        Mob def_mob3 = new Mob().ChainName("Bandit").ChainFaction(EFaction.NEUTRAL);
-        def_mob3.Move(Vector3i.ONE+Vector3i.LEFT);
-		def_mob3.TemplateSet(templateBase);
-        def_mob3.TemplateSet(templateHuman);
-        def_mob3.TemplateSet(templateWizard);
-        def_mob3.TemplateUpdate(true, true);
+        MobSpawn mobSpawn3 = new();
+		mobSpawn3.TemplatesBase.Add(templateBase);
+        mobSpawn3.TemplatesRace.Add(templateHuman);
+        mobSpawn3.TemplatesJob.Add(templateWizard);
         //.ChainEquipment(Global.ManagerItem.GetFromEnum(ChessLike.Storage.EItem.SWORD));
-
-        Mob def_mob4 = new Mob().ChainName("Neutral Wizard").ChainFaction(EFaction.NEUTRAL);
-        def_mob4.Move(Vector3i.ONE+Vector3i.FORWARD+Vector3i.FORWARD);
-		def_mob4.TemplateSet(templateBase);
-        def_mob4.TemplateSet(templateHuman );
-        def_mob4.TemplateUpdate(true, true);
 
 		//Test persistence
 		SaveManager.NewSave("EncounterLoadingTest", 0);
@@ -122,12 +98,12 @@ public partial class EncounterData : Resource
         Mob def_mob5 = Global.ManagerMob.ResourceGet("Persistent MC", true);
 
 
-        encounter.MobPlacement = new();
-        encounter.MobPlacement[Vector3i.ONE] =  def_mob1;
-        encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD] = def_mob2;
-        encounter.MobPlacement[Vector3i.ONE+Vector3i.LEFT] = def_mob3;
-        encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD*2] = def_mob4;
-        encounter.MobPlacement[Vector3i.ONE+Vector3i.FORWARD*4] = def_mob5;
+        encounter.MobSpawns = new(){
+			mobSpawn1,
+			mobSpawn2,
+			mobSpawn3,
+			new(){Mob = def_mob5}
+		};
         return encounter;
     }
 

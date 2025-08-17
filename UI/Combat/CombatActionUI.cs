@@ -1,7 +1,7 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.UI.Base;
-using ChessLike.World.Encounter;
+using ChessLike.WorldMap;
 using Godot;
 using System;
 

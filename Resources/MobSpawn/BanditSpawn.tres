@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MobSpawn" load_steps=10 format=3 uid="uid://bwywxo84a8vfb"]
+
+[ext_resource type="Script" uid="uid://bs8etr8fphshs" path="res://Entity/Mob/Template/MobTemplateBase.cs" id="1_3hdg2"]
+[ext_resource type="Resource" uid="uid://7btkf10h82tr" path="res://Resources/MobTemplate/Default.tres" id="2_8jn0k"]
+[ext_resource type="Script" uid="uid://bu3hmnfj7dnh0" path="res://Entity/Mob/Template/MobTemplateIdentity.cs" id="3_gpnw2"]
+[ext_resource type="Resource" uid="uid://mtkp7mgk8uj2" path="res://Resources/MobTemplate/IdentityBandit.tres" id="4_kvnbe"]
+[ext_resource type="Script" uid="uid://dw1wcfbf5rr8e" path="res://Entity/Mob/Template/MobTemplateJob.cs" id="5_s5fc7"]
+[ext_resource type="Resource" uid="uid://2whr8ii52bei" path="res://Resources/MobTemplate/JobWizard.tres" id="6_8jn0k"]
+[ext_resource type="Script" uid="uid://unt05ws8ip6w" path="res://Entity/Mob/Template/MobTemplateRace.cs" id="6_i3ghc"]
+[ext_resource type="Resource" uid="uid://c2cnylvo0o16q" path="res://Resources/MobTemplate/RaceHuman.tres" id="7_teeoq"]
+[ext_resource type="Script" uid="uid://sedf8wlowlff" path="res://WorldMap/Encounter/MobSpawn.cs" id="8_mufuh"]
+
+[resource]
+script = ExtResource("8_mufuh")
+TemplatesBase = Array[ExtResource("1_3hdg2")]([ExtResource("2_8jn0k")])
+TemplatesRace = Array[ExtResource("6_i3ghc")]([ExtResource("7_teeoq")])
+TemplatesIdentity = Array[ExtResource("3_gpnw2")]([ExtResource("4_kvnbe")])
+TemplatesJob = Array[ExtResource("5_s5fc7")]([ExtResource("6_8jn0k")])
+Faction = 0
+metadata/_custom_type_script = "uid://sedf8wlowlff"

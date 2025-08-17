@@ -52,24 +52,31 @@ public partial class Camera : Camera3D
     [Export]
     public Mode mode = Mode.DELEGATED_PIVOT;
 
-    public Camera()
-    {
+	public override void _Ready()
+	{
+		base._Ready();
         EventBus.CombatStateChanged += OnBattleStateChanged;
-    }
+	}
+
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		EventBus.CombatStateChanged -= OnBattleStateChanged;
+	}
 
     private void OnBattleStateChanged(ECombatState state)
-    {
-        switch (state)
-        {
-            case ECombatState.PAUSED:
-                SetControl(false);
-                break;
-                
-            default:
-                SetControl(true);
-                break;
-        }
-    }
+	{
+		switch (state)
+		{
+			case ECombatState.PAUSED:
+				SetControl(false);
+				break;
+
+			default:
+				SetControl(true);
+				break;
+		}
+	}
 
 
     public override void _Input(InputEvent @event)
@@ -301,6 +308,7 @@ public partial class Camera : Camera3D
 
     public void SetControl(bool enable)
     {
+		if (!GodotObject.IsInstanceValid(this)) return;
         SetProcessUnhandledInput(enable);
         SetProcess(enable);
     }

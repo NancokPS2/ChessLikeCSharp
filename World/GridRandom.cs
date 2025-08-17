@@ -73,8 +73,6 @@ public partial class GridRandom : Grid
 
 		//Place spawn points
 		this.GenerationPassPlaceSpawnpointsOppositeEnds(Entity.EFaction.PLAYER, Entity.EFaction.NEUTRAL);
-
-		GD.Print("Randomized!!!");
 	}
 }
 
