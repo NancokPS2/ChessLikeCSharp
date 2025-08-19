@@ -14,7 +14,7 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_4jcxv"]
 font_size = 18
 
-[node name="SaveSlot" type="Control" node_paths=PackedStringArray("LabelNewNode", "LineEditProfileNameNode", "ButtonSelect")]
+[node name="SaveSlot" type="Control" node_paths=PackedStringArray("LabelNewNode", "LineEditProfileNameNode", "LabelDateNode", "ButtonSelect")]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 3
 anchors_preset = 10
@@ -26,6 +26,7 @@ size_flags_vertical = 0
 script = ExtResource("1_4jcxv")
 LabelNewNode = NodePath("HBoxContainer/TextureRect/Label")
 LineEditProfileNameNode = NodePath("HBoxContainer/VBoxContainer/LineEdit")
+LabelDateNode = NodePath("HBoxContainer/VBoxContainer/Date")
 ButtonSelect = NodePath("HBoxContainer/TextureRect/Button")
 metadata/_custom_type_script = "uid://da3eaalp1lcas"
 
@@ -84,7 +85,7 @@ placeholder_text = "Profile Name:"
 emoji_menu_enabled = false
 flat = true
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Date" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Date: ???"

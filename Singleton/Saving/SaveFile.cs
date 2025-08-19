@@ -22,6 +22,9 @@ public partial class SaveFile : Resource
 	public string ProfileName = "Unnamed";
 
 	[Export]
+	public long Date = 0;
+
+	[Export]
 	protected Godot.Collections.Dictionary<EStoryFlag, bool> storyFlags
 	{
 		set => StoryFlags = new(value);
@@ -94,6 +97,9 @@ public partial class SaveFile : Resource
 		{
 			throw new Exception($"This save file is not from this profile. \nThis profile: {profileName}\nProfile loaded: {loadedProfile}\nPath loaded: {configPath}");
 		}
+
+		//Load date
+		save.Date = config.GetValue(CFSECTION_MAIN, CFKEY_SAVEDATE).As<long>();
 
 		//Set story flags
 		save.StoryFlags = new();

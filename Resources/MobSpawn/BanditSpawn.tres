@@ -16,5 +16,4 @@ TemplatesBase = Array[ExtResource("1_3hdg2")]([ExtResource("2_8jn0k")])
 TemplatesRace = Array[ExtResource("6_i3ghc")]([ExtResource("7_teeoq")])
 TemplatesIdentity = Array[ExtResource("3_gpnw2")]([ExtResource("4_kvnbe")])
 TemplatesJob = Array[ExtResource("5_s5fc7")]([ExtResource("6_8jn0k")])
-Faction = 0
 metadata/_custom_type_script = "uid://sedf8wlowlff"

@@ -15,7 +15,7 @@ public partial class SaveSlotUI : Control
 			emptySlot = value;
 			if (!IsInsideTree()) return;
 
-			UpdateEmptySlotMode();
+			Update();
 
 		}
 	}
@@ -37,6 +37,7 @@ public partial class SaveSlotUI : Control
 		}
 
 	}
+	public long Date;
 	public int Slot = 0;
 
 	private bool emptySlot;
@@ -48,12 +49,15 @@ public partial class SaveSlotUI : Control
 	public LineEdit? LineEditProfileNameNode;
 
 	[Export]
+	public Label? LabelDateNode;
+
+	[Export]
 	public Button? ButtonSelect;
 
 	public override void _Ready()
 	{
 		base._Ready();
-		UpdateEmptySlotMode();
+		Update();
 		ButtonSelect.Pressed += OnButtonSelectPressed;
 	}
 
@@ -69,17 +73,19 @@ public partial class SaveSlotUI : Control
 		Modulate = SelectedSlot == this ? Colors.Green : Colors.White;
 	}
 
-	private void UpdateEmptySlotMode()
+	private void Update()
 	{
 		LabelNewNode.Visible = EmptySlot;
 		if (EmptySlot)
 		{
 			LineEditProfileNameNode.Text = "";
+			LabelDateNode.Text = "Date: ???";
 			LineEditProfileNameNode.Editable = true;
 		}
 		else
 		{
-			LineEditProfileNameNode.Text = ProfileName;
+			LineEditProfileNameNode.Text = ProfileName + "-" + Slot.ToString();
+			LabelDateNode.Text = $"Date: {Time.GetDatetimeStringFromUnixTime(Date).Replace("T", " ")}";
 			LineEditProfileNameNode.Editable = false;
 		}
 	}
@@ -88,6 +94,7 @@ public partial class SaveSlotUI : Control
 	{
 		EmptySlot = false;
 		ProfileName = item.ProfileName;
+		Date = item.Date;
 		SaveFileSet = item;
 		Slot = slot;
 	}

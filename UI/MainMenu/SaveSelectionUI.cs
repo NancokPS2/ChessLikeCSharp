@@ -51,6 +51,12 @@ public partial class SaveSelectionUI : Control
 
 	public void PopulateSaveEntries()
 	{
+		//Remove existing ones.
+		foreach (var item in SaveContainerNode.GetChildren().Where(x => x is SaveSlotUI save && !save.EmptySlot))
+		{
+			item.QueueFree();
+		}
+
 		var saves = SaveManager.GetAllSaves();
 		foreach (var item in saves)
 		{
@@ -73,6 +79,7 @@ public partial class SaveSelectionUI : Control
 			if (SaveManager.SaveExists(profile, slot)) throw new Exception($"Save already exists {profile} {slot}");
 
 			SaveManager.NewSave(profile, slot);
+			SaveManager.LoadSave(profile, slot);
 		}
 		else
 			SaveManager.LoadSave(SaveSlotUI.SelectedSlot.ProfileName, SaveSlotUI.SelectedSlot.Slot);
