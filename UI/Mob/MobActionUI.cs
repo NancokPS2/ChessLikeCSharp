@@ -3,7 +3,7 @@ using ChessLike.Entity.Action;
 using Godot;
 
 [GlobalClass]
-public partial class MobActionUI : Control, ISceneDependency
+public partial class MobActionUI : BaseMobUI, ISceneDependency
 {
 
     public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobEquipmentUI.tscn";
@@ -11,18 +11,10 @@ public partial class MobActionUI : Control, ISceneDependency
     [Export]
     public Control? ActionGrid;
 
-    public MobActionUI()
+    protected override void Update(Mob mob)
     {
-    }
+		base.Update(mob);
 
-    public override void _Ready()
-    {
-        base._Ready();
-        EventBus.MobSelected += OnMobSelected;
-    }
-
-    public void Update(Mob mob)
-    {
         if (ActionGrid is null) { throw new Exception("No ActionList"); }
 
         ActionGrid.FreeChildren();
@@ -33,13 +25,6 @@ public partial class MobActionUI : Control, ISceneDependency
 
         }
     }
-
-    #region Event Handling
-    private void OnMobSelected(Mob mob)
-    {
-        Update(mob);
-    }
-    #endregion
 
     private partial class ActionLabel : Label, ITooltip
     {

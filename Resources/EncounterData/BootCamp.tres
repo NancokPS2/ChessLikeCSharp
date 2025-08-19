@@ -1,28 +1,11 @@
-[gd_resource type="Resource" script_class="EncounterData" load_steps=9 format=3 uid="uid://cvpay4bur5ofc"]
+[gd_resource type="Resource" script_class="EncounterData" load_steps=4 format=3 uid="uid://cvpay4bur5ofc"]
 
-[ext_resource type="Resource" uid="uid://46md73wtcmup" path="res://Resources/GridCell/Air.tres" id="1_6wfjc"]
-[ext_resource type="Script" uid="uid://dmiuqa6liu2f7" path="res://World/GridCell.cs" id="1_pby6u"]
-[ext_resource type="Script" uid="uid://cgai8boh5rrm1" path="res://World/GridRandom.cs" id="2_pby6u"]
-[ext_resource type="Resource" uid="uid://1a88uky3u32c" path="res://Resources/GridCell/Floor.tres" id="3_0wsgg"]
+[ext_resource type="Resource" uid="uid://cqrpphyidivn" path="res://Resources/Grid/GridRandomDefault.tres" id="1_pby6u"]
 [ext_resource type="Script" uid="uid://cfhm8ksi08g1x" path="res://WorldMap/Encounter/EncounterData.cs" id="3_pby6u"]
 [ext_resource type="Resource" uid="uid://bwywxo84a8vfb" path="res://Resources/MobSpawn/BanditSpawn.tres" id="5_0wsgg"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_6wfjc"]
-
-[sub_resource type="Resource" id="Resource_k3d3n"]
-script = ExtResource("2_pby6u")
-Type = 0
-EmptySpaceGridCell = ExtResource("1_6wfjc")
-TerrainNoise = SubResource("FastNoiseLite_6wfjc")
-TerrainFillHoles = true
-TerrainHeightRatio = 0.4
-TerrainGridCells = Array[ExtResource("1_pby6u")]([ExtResource("3_0wsgg")])
-boundary = Vector3i(10, 10, 10)
-cellDictionary = Dictionary[Vector3i, ExtResource("1_pby6u")]({})
-metadata/_custom_type_script = "uid://cgai8boh5rrm1"
-
 [resource]
 script = ExtResource("3_pby6u")
-Grid = SubResource("Resource_k3d3n")
+Grid = ExtResource("1_pby6u")
 mobSpawns = Array[Object]([ExtResource("5_0wsgg")])
 metadata/_custom_type_script = "uid://cfhm8ksi08g1x"

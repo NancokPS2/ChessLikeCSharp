@@ -27,6 +27,7 @@ FactionSpawn = -1
 
 [sub_resource type="Resource" id="Resource_cca6x"]
 script = ExtResource("1_7nmup")
+FactionsSupported = Array[int]([])
 Type = 0
 TerrainFillHoles = true
 TerrainHeightRatio = 0.5

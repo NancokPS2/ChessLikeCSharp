@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3msvq7mc7i1q"]
+[gd_scene load_steps=6 format=3 uid="uid://b3msvq7mc7i1q"]
 
 [ext_resource type="Script" uid="uid://ua5b0ju47xo8" path="res://UI/Mob/MobUI.cs" id="1_6t8gc"]
 [ext_resource type="PackedScene" uid="uid://dvcptks4lh3ps" path="res://UI/Mob/MobEquipmentUI.tscn" id="2_7qjr4"]
 [ext_resource type="PackedScene" uid="uid://b1e6jdci5byww" path="res://UI/Mob/MobStatsUI.tscn" id="3_lmckx"]
 [ext_resource type="PackedScene" uid="uid://ctsopt37vmsh1" path="res://UI/Mob/MobActionUI.tscn" id="4_m8yx4"]
+[ext_resource type="PackedScene" uid="uid://klv2l61nvwtb" path="res://UI/Mob/MobIdentityUI.tscn" id="5_q2syr"]
 
 [node name="MobUI" type="Control" node_paths=PackedStringArray("NodeTabContainer", "NodeEquipmentUI", "NodeActionUI", "NodeStatsUI", "NodeNameUI")]
 layout_mode = 3
@@ -42,6 +43,10 @@ metadata/_tab_index = 1
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="Identity" parent="TabContainer" instance=ExtResource("5_q2syr")]
+visible = false
+layout_mode = 2
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

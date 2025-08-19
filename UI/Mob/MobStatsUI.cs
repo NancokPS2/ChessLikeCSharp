@@ -4,27 +4,17 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class MobStatsUI : Control, ISceneDependency
+public partial class MobStatsUI : BaseMobUI
 {
-    public string SCENE_PATH { get; } = "res://Godot/Display/UI/Mob/MobStatsUI.tscn";
-
-
 	[Export]
 	Control? NodeStatContainer;
 
-	public MobStatsUI()
-	{
-	}
 
-	public override void _Ready()
+    protected override void Update(Mob mob)
 	{
-		base._Ready();
-		EventBus.MobSelected += OnMobSelected;
-	}
-
-    public void Update(Mob mob)
-	{
-		if(NodeStatContainer is null) {throw new Exception("Null NodeStatContainer");}
+		base.Update(mob);
+		
+		if (NodeStatContainer is null) { throw new Exception("Null NodeStatContainer"); }
 
 		NodeStatContainer.FreeChildren();
 		foreach (var item in mob.Stats.AllStats)

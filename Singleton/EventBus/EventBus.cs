@@ -63,7 +63,7 @@ public partial class EventBus : Node
     #region Battle Encounter
     //Encounter
     public static ObjectChange<Grid>? GridLoaded;
-    public static ObjectChange<EncounterData>? EncounterLoading;
+    public static ObjectChange<EncounterData>? EncounterLoaded;
 
     //Combat start and end
     public static Event? CombatPreparationStarted;

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Faction" load_steps=7 format=3 uid="uid://bu6krmnixdx"]
+
+[ext_resource type="Script" uid="uid://deyog8bgcxfdo" path="res://Inventory/ItemFilter.cs" id="1_5y4ye"]
+[ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="2_48fne"]
+[ext_resource type="Script" uid="uid://cwewjc8svycgy" path="res://Inventory/MassInventory/MassInventory.cs" id="3_mmvtl"]
+[ext_resource type="Script" uid="uid://c0ducr6ksvfmg" path="res://Entity/Faction/Faction.cs" id="4_vx6ei"]
+
+[sub_resource type="Resource" id="Resource_qvniw"]
+script = ExtResource("1_5y4ye")
+flagWhiteList = Array[int]([])
+flagBlacklist = Array[int]([])
+
+[sub_resource type="Resource" id="Resource_crn8f"]
+script = ExtResource("3_mmvtl")
+contents = Array[ExtResource("2_48fne")]([])
+Filter = SubResource("Resource_qvniw")
+
+[resource]
+script = ExtResource("4_vx6ei")
+DisplayedName = "Bandit"
+Identifier = 2
+relationList = Dictionary[int, float]({
+0: -9999.0
+})
+mobs = null
+Inventory = SubResource("Resource_crn8f")
+metadata/_custom_type_script = "uid://c0ducr6ksvfmg"

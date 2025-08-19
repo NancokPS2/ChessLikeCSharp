@@ -9,15 +9,17 @@ using Godot;
 
 public partial class MessageQueue: Node
 {
+	const string LOG_BASE_FOLDER = "user://LOG";
+	Godot.FileAccess LogFile;
     public static MessageQueue Instance;
     private CanvasLayer Canvas;
     private static VBoxContainer NodeContainer = new()
-    {
-        FocusMode = Control.FocusModeEnum.None,
-        MouseFilter = Control.MouseFilterEnum.Ignore,
-        AnchorRight = 1,
-        AnchorBottom = 1,   
-    };
+	{
+		FocusMode = Control.FocusModeEnum.None,
+		MouseFilter = Control.MouseFilterEnum.Ignore,
+		AnchorRight = 1,
+		AnchorBottom = 1,
+	};
 
     public static List<TemporaryLabel> Queue = new();
 
@@ -45,6 +47,11 @@ public partial class MessageQueue: Node
 	public override void _Ready()
 	{
 		base._Ready();
+		DirAccess.MakeDirAbsolute(LOG_BASE_FOLDER);
+		LogFile = Godot.FileAccess.Open(
+			$"{LOG_BASE_FOLDER}/log{Time.GetTicksMsec()}.txt",
+			Godot.FileAccess.ModeFlags.WriteRead);
+
 		Instance = this;
 		Canvas = UIManager.GetLayer(UIManager.ELayer.MSG_QUEUE);
 
@@ -61,11 +68,19 @@ public partial class MessageQueue: Node
 		EventBus.LoadAttempted += OnLoadAttempted;
     }
 
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		LogFile.Flush();
+		LogFile.Close();
+	}
+
+
 	private void AddMessageFromCommand(Dictionary<EInfo, string> dictionary)
-    {
-        string message = ChessLike.Entity.MobCommand.Command.ParseInfo(dictionary);
-        AddMessage(message, message.Length/6);
-    }
+	{
+		string message = ChessLike.Entity.MobCommand.Command.ParseInfo(dictionary);
+		LogGameMsg(message, new() { Duration = message.Length / 6 });
+	}
 
     public void SetAnchors(float left, float top, float right, float bottom)
     {
@@ -75,52 +90,82 @@ public partial class MessageQueue: Node
         NodeContainer.AnchorBottom = bottom;
     }
 
-    public static TemporaryLabel AddMessage(string text, double duration = 5)
-    {
-        TemporaryLabel new_label = new();
-        new_label.Text = text;
-        new_label.Duration = duration;
-        NodeContainer.AddChild(new_label);
-        Queue.Add(new_label);
-        Console.WriteLine("Game: " + text);
-        return new_label;
-    }
+
+	public static void Log(EMessageType type, string text, MessageProperties properties = default)
+	{
+		string prefix;
+		switch (type)
+		{
+			case EMessageType.INFO:
+				prefix = "INFO: ";
+				break;
+
+			case EMessageType.ERROR:
+				prefix = "ERROR: ";
+				break;
+
+			case EMessageType.GAMEPLAY:
+				prefix = "GAMEPLAY: ";
+				AddMessage(text, properties);
+				break;
+
+			default: throw new Exception();
+		}
+
+		Instance.LogFile.StoreString(prefix + text + "\n");
+		Instance.LogFile.Flush();
+	}
+
+	public static void LogGameMsg(string text, MessageProperties properties = default)
+		=> Log(EMessageType.GAMEPLAY, text, properties);
+
+    public static TemporaryLabel AddMessage(string text, MessageProperties properties = default)
+	{
+		TemporaryLabel new_label = new();
+		new_label.Text = text;
+		new_label.Duration = properties.Duration;
+		NodeContainer.AddChild(new_label);
+		Queue.Add(new_label);
+		Console.WriteLine("Game: " + text);
+
+		return new_label;
+	}
 
     #region Event Handling
 	private void OnBattleStateChanged(ECombatState state)
 	{
-        AddMessage($"State entered {state}");
+        LogGameMsg($"State entered {state}");
 	}
 
 	private void OnMobTurnStarted(Mob mob)
 	{
-        AddMessage($"{mob.DisplayedName}'s turn started.");
+        LogGameMsg($"{mob.DisplayedName}'s turn started.");
 	}
 
 	private void OnMobStateChanged(Mob mob, EMobState state)
 	{
-		AddMessage($"{mob.DisplayedName} entered combat.");
+		LogGameMsg($"{mob.DisplayedName} entered combat.");
 	}
 
     private void OnCombatStarted()
 	{
-        AddMessage("Combat starts.");
+        LogGameMsg("Combat starts.");
 	}
 
 	private void OnSaveAttempted(bool boolean)
 	{
 		if (boolean)
-			AddMessage("Saved successfuly");
+			LogGameMsg("Saved successfuly");
 		else
-			AddMessage("Failed to save");
+			LogGameMsg("Failed to save");
 	}
 
 	private void OnLoadAttempted(bool boolean)
 	{
 		if (boolean)
-			AddMessage("Loaded successfully");
+			LogGameMsg("Loaded successfully");
 		else
-			AddMessage("L failed");
+			LogGameMsg("L failed");
 	}
     #endregion
 

@@ -108,7 +108,7 @@ public static class ICollectionExtension
 	{
 		if (collection.Count() == 0) return default;
 		RandomNumberGenerator rng = new();
-		int index = rng.RandiRange(0, collection.Count - 1);
+		int index = rng.RandiRange(0, collection.Count() - 1);
 		return collection[index];
 	}
 

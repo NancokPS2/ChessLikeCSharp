@@ -4,7 +4,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class MobUI : Control, ISceneDependency
+public partial class MobUI : BaseMobUI, ISceneDependency
 {
 	[Export]
 	public TabContainer? NodeTabContainer;
@@ -23,21 +23,17 @@ public partial class MobUI : Control, ISceneDependency
 
 	private Mob? MobCurrent;
 
-	public MobUI()
-	{
-	}
-
 	public override void _Ready()
 	{
 		base._Ready();
-		EventBus.MobSelected += OnMobSelected;
-
 		NodeTabContainer.TabChanged += (x) => Update(MobCurrent);
 		DisplayDummy();
 	}
 
-	public void Update(Mob mob)
+	protected override void Update(Mob mob)
 	{
+		base.Update(mob);
+
 		if (NodeTabContainer is null) { throw new Exception("Null TabContainer"); }
 		if (mob is null) { return; }
 
@@ -51,12 +47,4 @@ public partial class MobUI : Control, ISceneDependency
 		Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
 		Update(mob);
 	}
-
-	#region Event Handling
-	private void OnMobSelected(Mob obj)
-    {
-		Update(obj);
-    }
-	#endregion
-
 }

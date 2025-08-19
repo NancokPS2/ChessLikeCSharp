@@ -21,17 +21,10 @@ public partial class PreparationUI : Control
 		base._Ready();
 		if (ConfirmationButtonNode is null) throw new Exception();
 		EventBus.CombatStateChanged += OnCombatStateChanged;
-		EventBus.MobSelected += OnMobSelected;
 		ConfirmationButtonNode.Confirmed += OnConfirmed;
 	}
 
 	#region Event Handling
-	private void OnMobSelected(Mob obj)
-	{
-		if (!IsInsideTree()) (MobUINode ?? throw new Exception())
-			.Update(obj);
-	}
-
 	private void OnCombatStateChanged(ECombatState obj)
 	{
 		if (obj == ECombatState.PREPARATION)

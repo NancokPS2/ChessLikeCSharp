@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MobStatBoost" load_steps=2 format=3 uid="uid://c38s7ly8sovjs"]
+
+[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="1_3163w"]
+
+[resource]
+script = ExtResource("1_3163w")
+maxAdditiveBonus = Dictionary[int, float]({})
+maxMultiplicativeBonus = null
+Source = ""
+metadata/_custom_type_script = "uid://r4d46yixqo3f"

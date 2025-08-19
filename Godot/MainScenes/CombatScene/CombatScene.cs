@@ -67,16 +67,12 @@ public partial class CombatScene : Node3D
 	public void Setup(EncounterData encounterToLoad)
 	{
 		EncounterData = encounterToLoad;
+		//SHITCODE
+		GetGridNode().SetGrid(EncounterData.Grid);
 
-		if (EncounterData.Grid is GridRandom rand) rand.Randomize();
-
-		EventBus.EncounterLoading?.Invoke(encounterToLoad);
-
-		//Find all spawn points
-		List<Vector3i> spawnPoints = (from pair in GetGrid().CellDictionary where pair.Value.FactionSpawn != EFaction.INVALID select pair.Key).ToList();
-
-		//Place mobs in combat
-
+		//Create mobs
+		List<EFaction> factionsPresent = new();
+		List<Mob> mobsToAdd = new();
 		foreach (MobSpawn spawn in encounterToLoad.MobSpawns)
 		{
 			//Generate the Mob
@@ -92,17 +88,57 @@ public partial class CombatScene : Node3D
 			}
 
 			mob.MobState = ChessLike.Entity.EMobState.COMBAT;
+			mobsToAdd.Add(mob);
+			if (!factionsPresent.Contains(mob.Faction))
+				factionsPresent.Add(mob.Faction);
+		}
 
-			//Find where to place it
-			Vector3i pos = spawnPoints.PopRandom();
+		//Setup the GridRandom if present.
+		//SHITCODE
+		if (!factionsPresent.Contains(EFaction.PLAYER))
+			factionsPresent.Add(EFaction.PLAYER);
+		SetupGridRandom(factionsPresent);
+
+		//Find all spawn points
+		List<(Vector3i, EFaction)> spawnPoints = (
+			from pair
+			in GetGrid().CellDictionary
+			where pair.Value.FactionSpawn != EFaction.INVALID
+			select (pair.Key, pair.Value.FactionSpawn)).ToList();
+
+		//Find where to place the mobs from MobSpawns
+		foreach (var mob in mobsToAdd)
+		{
+			Vector3i pos = spawnPoints
+				.Where(x => x.Item2 == mob.Faction)
+				.ToList()
+				.PopRandom()
+				.Item1;
+
+			//Make sure the mob can be there.
+			if (!mob.IsValidPositionToExist(GetGrid(), pos))
+				throw new Exception($"Mob {mob.DisplayedName} has been spawned in an invalid location {pos}");
 
 			//WIP This should be used automatically
 			mob.Move(pos);
 		}
 
+		EventBus.EncounterLoaded?.Invoke(encounterToLoad);
+
 		//Everything must be loaded by now.
 		EventBus.CombatPreparationStarted?.Invoke();
 	}
+
+	private static void SetupGridRandom(List<EFaction> factionsPresent)
+	{
+		if (GetGrid() is GridRandom rand)
+		{
+			//Update the map to support all the factions that will be in it.
+			rand?.SetFactionsSupported(factionsPresent);
+			rand?.Randomize();
+		}
+	}
+
 
 	public static ECombatState GetState() => StateCurrent;
 

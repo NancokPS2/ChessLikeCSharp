@@ -24,7 +24,7 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
     public ActionEventAnimator()
     {
         EventBus.ActionEventQueueFinished += OnActionEventQueueFinished;
-        EventBus.EncounterLoading += OnEncounterLoading;
+        EventBus.EncounterLoaded += OnEncounterLoaded;
     }
 
     #region Animation
@@ -254,7 +254,7 @@ public partial class ActionEventAnimator : Node3D, IDebugDisplay
         StartAnimationQueue(parameterList);
     }
 
-	private void OnEncounterLoading(EncounterData data)
+	private void OnEncounterLoaded(EncounterData data)
 	{
         CurrentGridNode = CombatScene.GetGridNode();
 	}

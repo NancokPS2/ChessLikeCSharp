@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity;
+using ChessLike.WorldMap;
 using Godot;
 
 namespace ChessLike.World;
@@ -13,6 +15,9 @@ public partial class GridRandom : Grid
 	{
 		OPPOSITE,
 	}
+
+	[Export]
+	protected Godot.Collections.Array<EFaction> FactionsSupported = new();
 
 	[Export]
 	protected ESpawnPointPlacement Type;
@@ -69,10 +74,16 @@ public partial class GridRandom : Grid
 			this.GenerationPassFillBottomHoles(TerrainGridCells.PickRandom());
 
 		//Fill empty space.
-			this.GenerationpPassFillEmpty(EmptySpaceGridCell);
+		this.GenerationpPassFillEmpty(EmptySpaceGridCell);
 
-		//Place spawn points
-		this.GenerationPassPlaceSpawnpointsOppositeEnds(Entity.EFaction.PLAYER, Entity.EFaction.NEUTRAL);
+		//Place spawn points, IF there are enough to choose from.
+		if (FactionsSupported.Count < 2) throw new Exception("Not enough factions designated in this Grid");
+		this.GenerationPassPlaceSpawnpointsOppositeEnds(FactionsSupported[0], FactionsSupported[1]);
+	}
+
+	public void SetFactionsSupported(List<EFaction> factions)
+	{
+		FactionsSupported = new(factions);
 	}
 }
 
