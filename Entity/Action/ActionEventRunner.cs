@@ -100,7 +100,7 @@ public partial class ActionEventRunner : Node3D
             //Use it
             EventBus.ActionPreUsed?.Invoke(parametersToUse);
             parametersToUse.ActionRef.Use(parametersToUse);
-            MessageQueue.AddMessage(parametersToUse.ActionRef.GetUseText(parametersToUse));
+            MsgLog.LogGameMsg(parametersToUse.ActionRef.GetUseText(parametersToUse));
         }
         EventBus.ActionEventQueueFinished?.Invoke(Queue);
 

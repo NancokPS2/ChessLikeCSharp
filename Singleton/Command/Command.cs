@@ -52,7 +52,7 @@ public partial class Command: Node
 
 	private void OnTextSubmitted(string text)
 	{
-		var label = MessageQueue.AddMessage("CHEAT ENABLED - ");
+		MsgLog.TemporaryLabel? label = MsgLog.AddMessage("CHEAT ENABLED - ");
 		label.Modulate = Godot.Colors.Yellow;
 		ECheat cheat;
 		switch (text)

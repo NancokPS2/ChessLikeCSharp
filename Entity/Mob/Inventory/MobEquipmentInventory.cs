@@ -60,7 +60,7 @@ public partial class MobEquipmentInventory : Resource, IInventory
 
         if (!IsValidForSlot(item, slot))
         {
-            MessageQueue.AddMessage($"{item.Name} does not fit in slot {slot}");
+            MsgLog.AddMessage($"{item.Name} does not fit in slot {slot}");
             return;
         }
 

@@ -112,23 +112,30 @@ public partial class Mob : Resource
         Templates.RemoveAll(x => x is TTemplate);
     }
 
-    public void TemplateUpdate(bool refillValues, bool startFromBase)
-    {
-        //Make sure there is only one base template
-        if (TemplateGet<MobTemplateBase>().Count() != 1)
-            throw new Exception(
-                $"More than one MobTemplateBase found ({TemplateGet<MobTemplateBase>().Count()})"
-                );
-        
-        if (startFromBase) TemplateGet<MobTemplateBase>().First().ApplyTemplate(this);
+	public void TemplateUpdate(bool refillValues, bool startFromBase)
+	{
+		//Make sure there is only one base template
+		if (TemplateGet<MobTemplateBase>().Count() != 1)
+			throw new Exception(
+				$"More than one MobTemplateBase found ({TemplateGet<MobTemplateBase>().Count()})"
+				);
 
-        TemplateGet<MobTemplateRace>().ForEach(x => x.ApplyTemplate(this));
+		if (startFromBase) TemplateGet<MobTemplateBase>().First().ApplyTemplate(this);
 
-        TemplateGet<MobTemplateJob>().ForEach(x => x.ApplyTemplate(this));
+		TemplateGet<MobTemplateRace>().ForEach(x => x.ApplyTemplate(this));
 
-        TemplateGet<MobTemplateIdentity>().ForEach(x => x.ApplyTemplate(this));
+		TemplateGet<MobTemplateJob>().ForEach(x => x.ApplyTemplate(this));
 
-        if (refillValues) Stats.RefillValues();
+		TemplateGet<MobTemplateIdentity>().ForEach(x => x.ApplyTemplate(this));
+
+		if (refillValues) Stats.RefillValues();
+
+		MsgLog.LogInfoMsg($"Updated templates for mob {DisplayedName} (Refilled? {refillValues})\n" 
+		+ $"Base: {TemplateGet<MobTemplateBase>().ToStringList()}|"
+		+ $"Race: {TemplateGet<MobTemplateRace>().ToStringList()}|"
+		+ $"Job: {TemplateGet<MobTemplateJob>().ToStringList()}|"
+		+ $"Identity: {TemplateGet<MobTemplateIdentity>().ToStringList()}"
+		);
     }
     #endregion
 

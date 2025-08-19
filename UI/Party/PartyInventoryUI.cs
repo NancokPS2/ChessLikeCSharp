@@ -90,7 +90,7 @@ public partial class PartyInventoryUI : Control
 
 			if (!mobEquipInv.IsValidForSlot(massSelected, param.Item2))
 			{
-				MessageQueue.AddMessage("That slot is not valid for this item.");
+				MsgLog.LogGameMsg("That slot is not valid for this item.");
 				return;
 			}
 

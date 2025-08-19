@@ -28,14 +28,14 @@ public partial class CombatPreparationManager : Node3D
         //The position must be valid for this mob.
         if (!selectedMob.IsValidPositionToExist(CombatScene.GetGrid(), cellPos))
         {
-            MessageQueue.AddMessage($"{selectedMob.DisplayedName} cannot stand there.");
+            MsgLog.AddMessage($"{selectedMob.DisplayedName} cannot stand there.");
             return false;
         }
 
         //Must be a valid spot to place mobs
         if (cell.FactionSpawn != selectedMob.Faction)
         {
-            MessageQueue.AddMessage($"{selectedMob.DisplayedName} cannot start there.");
+            MsgLog.AddMessage($"{selectedMob.DisplayedName} cannot start there.");
             return false;
         }
 
