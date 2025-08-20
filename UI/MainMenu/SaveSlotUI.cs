@@ -26,14 +26,8 @@ public partial class SaveSlotUI : Control
 	{
 		get
 		{
-			return LineEditProfileNameNode?.Text ?? "UNKNOWN";
-		}
-
-		set
-		{
-			if (LineEditProfileNameNode is null) throw new NullReferenceException();
-
-			LineEditProfileNameNode.Text = value;
+			if (EmptySlot) return LineEditProfileNameNode?.Text ?? "UNKNOWN";
+			else return SaveFileSet?.ProfileName ?? "NO_SAVE_STORED!!!";
 		}
 
 	}
@@ -84,7 +78,7 @@ public partial class SaveSlotUI : Control
 		}
 		else
 		{
-			LineEditProfileNameNode.Text = ProfileName + "-" + Slot.ToString();
+			LineEditProfileNameNode.Text = ProfileName + " - " + Slot.ToString();
 			LabelDateNode.Text = $"Date: {Time.GetDatetimeStringFromUnixTime(Date).Replace("T", " ")}";
 			LineEditProfileNameNode.Editable = false;
 		}
@@ -93,10 +87,10 @@ public partial class SaveSlotUI : Control
 	public void SetSaveFile(SaveFile item, int slot)
 	{
 		EmptySlot = false;
-		ProfileName = item.ProfileName;
 		Date = item.Date;
 		SaveFileSet = item;
 		Slot = slot;
+		Update();
 	}
 
 	private void OnButtonSelectPressed()

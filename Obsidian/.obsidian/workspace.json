@@ -37,7 +37,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Teronova's day of worldly connection..md",
+                "file": "templates/CombatJob.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -52,7 +52,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Teronova's day of worldly connection."
+              "title": "CombatJob"
             }
           },
           {
@@ -192,7 +192,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -260,13 +260,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Teronova's day of worldly connection..md",
+                "file": "templates/CombatJob.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Teronova's day of worldly connection."
+              "title": "Outline of CombatJob"
             }
           }
         ],
@@ -287,10 +287,10 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "292b87b9067f8b86",
+  "active": "58a5df14686a66a9",
   "lastOpenFiles": [
-    "The buried mannequins.md",
     "Teronova's day of worldly connection..md",
+    "The buried mannequins.md",
     "World Map/General map layout.canvas",
     "Blood-borne Protector.md",
     "Ancient Town.md",

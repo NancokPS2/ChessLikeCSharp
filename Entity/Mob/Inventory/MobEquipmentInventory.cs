@@ -10,13 +10,13 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobEquipmentInventory : Resource, IInventory
 {
-    public enum ESlot { LEFT_HAND, RIGHT_HAND, HELMET, ARMOR, ACCESSORY_1, ACCESSORY_2 }
+	public delegate void InventoryChange(MobEquipmentInventory inventory);
+	public event InventoryChange? InventoryChanged;
+    protected List<EMobEquipmentSlot> BlockedSlots = new();
 
-    protected List<ESlot> BlockedSlots = new();
-
-    protected Dictionary<ESlot, Item?> Contents;
+    protected Dictionary<EMobEquipmentSlot, Item?> Contents;
     [Export]
-    private Godot.Collections.Dictionary<ESlot, Item?> contents
+    private Godot.Collections.Dictionary<EMobEquipmentSlot, Item?> contents
     {
         set => Contents = new(value);
         get => new(Contents);
@@ -26,57 +26,61 @@ public partial class MobEquipmentInventory : Resource, IInventory
     {
         Contents = new()
         {
-            {ESlot.LEFT_HAND, null},
-            {ESlot.RIGHT_HAND, null},
-            {ESlot.HELMET, null},
-            {ESlot.ARMOR, null},
-            {ESlot.ACCESSORY_1, null},
-            {ESlot.ACCESSORY_2, null},
+            {EMobEquipmentSlot.LEFT_HAND, null},
+            {EMobEquipmentSlot.RIGHT_HAND, null},
+            {EMobEquipmentSlot.HELMET, null},
+            {EMobEquipmentSlot.ARMOR, null},
+            {EMobEquipmentSlot.ACCESSORY_1, null},
+            {EMobEquipmentSlot.ACCESSORY_2, null},
         };
     }
 
-    public bool CanUseSlot(ESlot slot)
+    public bool CanUseSlot(EMobEquipmentSlot slot)
         => !BlockedSlots.Contains(slot);
 
-    public bool IsValidForSlot(Item item, ESlot slot)
+    public bool IsValidForSlot(Item item, EMobEquipmentSlot slot)
         => slot switch
         {
-            ESlot.LEFT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
-            ESlot.RIGHT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
-            ESlot.HELMET => item.Flags.Contains(EItemFlag.HELMET),
-            ESlot.ARMOR => item.Flags.Contains(EItemFlag.ARMOR),
-            ESlot.ACCESSORY_1 => item.Flags.Contains(EItemFlag.ACCESSORY),
-            ESlot.ACCESSORY_2 => item.Flags.Contains(EItemFlag.ACCESSORY),
+            EMobEquipmentSlot.LEFT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
+            EMobEquipmentSlot.RIGHT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
+            EMobEquipmentSlot.HELMET => item.Flags.Contains(EItemFlag.HELMET),
+            EMobEquipmentSlot.ARMOR => item.Flags.Contains(EItemFlag.ARMOR),
+            EMobEquipmentSlot.ACCESSORY_1 => item.Flags.Contains(EItemFlag.ACCESSORY),
+            EMobEquipmentSlot.ACCESSORY_2 => item.Flags.Contains(EItemFlag.ACCESSORY),
             _ => false,
         };
 
-    public void EquipItem(Item item, ESlot slot, bool replace)
-    {
-        if (!CanUseSlot(slot))
-            throw new Exception();
+	public void EquipItem(Item item, EMobEquipmentSlot slot, bool replace)
+	{
+		if (!CanUseSlot(slot))
+			throw new Exception();
 
-        if (Contents[slot] is not null && !replace)
-            throw new Exception();
+		if (Contents[slot] is not null && !replace)
+			throw new Exception();
 
-        if (!IsValidForSlot(item, slot))
-        {
-            MsgLog.AddMessage($"{item.Name} does not fit in slot {slot}");
-            return;
-        }
+		if (!IsValidForSlot(item, slot))
+		{
+			MsgLog.AddMessage($"{item.Name} does not fit in slot {slot}");
+			return;
+		}
 
-        Contents[slot] = item;
+		Contents[slot] = item;
+		InventoryChanged?.Invoke(this);
     }
 
-    public void UnequipItem(ESlot slot)
-        => Contents[slot] = null;
+	public void UnequipItem(EMobEquipmentSlot slot)
+	{
+		Contents[slot] = null;
+		InventoryChanged?.Invoke(this);
+	}
 
-    public Item? GetItem(ESlot slot)
+	public Item? GetItem(EMobEquipmentSlot slot)
         => Contents[slot];
 
     public List<Item> GetItems()
         => [.. Contents.Values.Where(x => x is not null)];
 
-    public ESlot[] GetSlots()
-        => Enum.GetValues<ESlot>();
+    public EMobEquipmentSlot[] GetSlots()
+        => Enum.GetValues<EMobEquipmentSlot>();
 
 }

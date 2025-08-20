@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
@@ -12,9 +14,15 @@ namespace ChessLike.Entity.Action.Preset;
 [GlobalClass]
 public partial class AbilityAttack : Ability
 {
+	[Export]
+	public Godot.Collections.Dictionary<EStatName, float> StatModifiers = new();
+
+	[Export]
+	public float DamageBase = 0;
+
     public AbilityAttack() : base()
-    {
-    }
+	{
+	}
 
     public override void Use(UsageParameters usage_params)
     {
@@ -28,10 +36,21 @@ public partial class AbilityAttack : Ability
     }
 
 
-    public float GetDamage(UsageParameters usage)
-        => usage.OwnerRef.Stats.GetStat(EStatName.STRENGTH) / 2;
+	public float GetDamage(UsageParameters usage)
+	{
+		float total = DamageBase;
+		Mob owner = usage.OwnerRef;
+		
+		//Apply modifiers from stats
+		foreach (var item in StatModifiers)
+		{
+			total += owner.Stats.GetStat(item.Key) * item.Value;
+		}
 
-    public override string GetUseText(UsageParameters parameters)
+		return total;
+	}
+
+	public override string GetUseText(UsageParameters parameters)
     {
         string targets = (from mob in parameters.MobsTargeted select mob.DisplayedName).ToStringList(", ");
         return $"{Owner.DisplayedName} attacked {targets} for {GetDamage(parameters)} damage";

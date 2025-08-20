@@ -18,14 +18,14 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+MsgLog="*res://Singleton/MessageQueue/MsgLog.cs"
 EventBus="*res://Singleton/EventBus/EventBus.cs"
+UIManager="*res://Singleton/UI/UIManager.tscn"
 GlobalNode="res://Singleton/Global/Node/GlobalNode.cs"
 Save="res://Singleton/Saving/SaveManager.cs"
-UIManager="*res://Singleton/UI/UIManager.tscn"
 DebugDisplay="*res://Singleton/DebugDisplay/DebugDisplay.cs"
 NodeInterceptor="*res://Singleton/NodeInterceptor/NodeInterceptor.cs"
 Settings="*res://Singleton/Settings/Settings.cs"
-MsgLog="*res://Singleton/MessageQueue/MsgLog.cs"
 SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
 Command="*res://Singleton/Command/Command.cs"

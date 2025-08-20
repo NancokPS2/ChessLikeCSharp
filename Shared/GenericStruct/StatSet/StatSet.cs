@@ -122,7 +122,7 @@ public partial class StatSet<[MustBeVariant]TStatEnum> : Resource where TStatEnu
         {
             Boosts[source] = StatBoost<TStatEnum>.Combined(Boosts[source], boost);
         }
-
+		
     }
 
 

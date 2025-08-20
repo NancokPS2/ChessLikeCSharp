@@ -61,11 +61,6 @@ public partial class MsgLog : Node
 			fileName,
 			Godot.FileAccess.ModeFlags.WriteRead);
 		var err = Godot.FileAccess.GetOpenError();
-		Canvas = UIManager.GetLayer(UIManager.ELayer.MSG_QUEUE);
-
-		Canvas.AddChild(NodeContainer);
-		NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
-
 
 		EventBus.MobTurnStarted += OnMobTurnStarted;
 		EventBus.CombatStateChanged += OnBattleStateChanged;
@@ -78,6 +73,16 @@ public partial class MsgLog : Node
 		EventBus.ActionUsed += OnActionUsed;
 		EventBus.ActionPreQueued += OnActionPreQueued;
 		EventBus.ActionQueued += OnActionQueued;
+
+		Callable.From(PostReady).CallDeferred();
+	}
+
+	private void PostReady()
+	{
+		Canvas = UIManager.GetLayer(UIManager.ELayer.MSG_QUEUE);
+
+		Canvas.AddChild(NodeContainer);
+		NodeContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 	}
 
 	protected override void Dispose(bool disposing)

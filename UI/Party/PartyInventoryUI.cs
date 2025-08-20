@@ -62,7 +62,7 @@ public partial class PartyInventoryUI : Control
 	}
 
 	#region Event Handling
-	private void OnEquipmentUIButtonPressed(Button button, (Item?, MobEquipmentInventory.ESlot) param)
+	private void OnEquipmentUIButtonPressed(Button button, (Item?, EMobEquipmentSlot) param)
 	{
 		if (MassUI is null || EquipmentUI is null) throw new Exception();
 		if (!CanModify) return;

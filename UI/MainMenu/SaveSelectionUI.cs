@@ -82,7 +82,7 @@ public partial class SaveSelectionUI : Control
 			SaveManager.LoadSave(profile, slot);
 		}
 		else
-			SaveManager.LoadSave(SaveSlotUI.SelectedSlot.ProfileName, SaveSlotUI.SelectedSlot.Slot);
+			SaveManager.LoadSave(SaveSlotUI.SelectedSlot.SaveFileSet.ProfileName, SaveSlotUI.SelectedSlot.Slot);
 	}
 
 	private void OnButtonDeletePressed()

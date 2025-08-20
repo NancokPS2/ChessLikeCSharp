@@ -54,7 +54,7 @@ public partial class Mob : Resource
 
     }
 
-    public MobStatSet Stats = MobStatSet.GetDefault();
+	public MobStatSet Stats = MobStatSet.GetDefault();
 
     private Vector3i Position;
 
@@ -137,30 +137,52 @@ public partial class Mob : Resource
 		+ $"Identity: {TemplateGet<MobTemplateIdentity>().ToStringList()}"
 		);
     }
-    #endregion
+	#endregion
 
-    #region Inventory
-    [Export]
-    public MobEquipmentInventory EquipmentInventory = new();
+	#region Inventory
+	[Export]
+	public MobEquipmentInventory EquipmentInventory
+	{
+		get
+		{
+			return equipmentInventory;
+		}
 
-    public void UpdateEquipmentStatBoosts()
-    {
-        MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
+		set
+		{
+			equipmentInventory.InventoryChanged -= OnInventoryChanged;
+			equipmentInventory = value;
+			equipmentInventory.InventoryChanged += OnInventoryChanged;
+			UpdateEquipmentStatBoosts();
 
-        foreach (Item item in EquipmentInventory.GetItems())
-        {
-            ItemEquipment equipment;
+		}
+	}
 
-            //Make sure it is equipment
-            if (item is ItemEquipment _equip) equipment = _equip;
-            else throw new Exception($"This inventory is for equipment only. Found {item}");
+	private MobEquipmentInventory equipmentInventory = new();
 
-            outputStatBoost = (MobStatBoost)(outputStatBoost + equipment.StatBoost);
-        }
+	public void UpdateEquipmentStatBoosts()
+	{
+		MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
 
-        Stats.BoostAdd(outputStatBoost, true);
-    }
+		foreach (Item item in EquipmentInventory.GetItems())
+		{
+			ItemEquipment equipment;
 
+			//Make sure it is equipment
+			if (item is ItemEquipment _equip) equipment = _equip;
+			else throw new Exception($"This inventory is for equipment only. Found {item}");
+
+			outputStatBoost = outputStatBoost + equipment.StatBoost;
+		}
+
+		Stats.BoostAdd(outputStatBoost, true);
+		MsgLog.LogInfoMsg($"{DisplayedName} updated its inventory boost {outputStatBoost}");
+	}
+
+	private void OnInventoryChanged(MobEquipmentInventory inventory)
+	{
+		UpdateEquipmentStatBoosts();
+	}
     #endregion
 
     #region Faction

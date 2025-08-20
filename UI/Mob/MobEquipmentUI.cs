@@ -4,7 +4,7 @@ using Godot;
 using System;
 
 [GlobalClass]
-public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmentInventory.ESlot)>
+public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, EMobEquipmentSlot)>
 {
 	public MobEquipmentInventory MobEquipmentInventorySelected;
 	public MobEquipmentUI() : base()
@@ -21,7 +21,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmen
 
 	public void Update(MobEquipmentInventory equipInventory)
 	{
-		List<(Item?, MobEquipmentInventory.ESlot)> items = new();
+		List<(Item?, EMobEquipmentSlot)> items = new();
 		foreach (var slot in equipInventory.GetSlots())
 		{
 			items.Add((equipInventory.GetItem(slot), slot));
@@ -30,7 +30,7 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, MobEquipmen
 		MobEquipmentInventorySelected = equipInventory;
 	}
 
-	protected override void _ButtonCreated(Button button, (Item?, MobEquipmentInventory.ESlot) param)
+	protected override void _ButtonCreated(Button button, (Item?, EMobEquipmentSlot) param)
 	{
 		button.Text = param.Item1?.Name ?? param.Item2.ToString();
 		button.TooltipText = param.Item1?.ToString() ?? param.Item2.ToString();
