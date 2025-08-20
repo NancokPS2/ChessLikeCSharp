@@ -14,6 +14,7 @@ namespace ChessLike.Entity.Action.Preset;
 [GlobalClass]
 public partial class AbilityAttack : Ability
 {
+
 	[Export]
 	public Godot.Collections.Dictionary<EStatName, float> StatModifiers = new();
 
@@ -75,6 +76,17 @@ public partial class AbilityAttack : Ability
 
 	public override string GetDescription()
 	{
+		string output = base.GetDescription() + "\n";
+		output += Description.Format(
+			new Dictionary<string, string>()
+			{
+				{"StatModifiers", StatModifiers.ToStringList()},
+				{"ValueModifiers", ValueModifiers.ToStringList()},
+				{"DamageMinimum", DamageMinimum.ToString()},
+				{"DamageBase", DamageBase.ToString()},
+			}
+		);
+		return output;
 		return $"Attack a target with your weapon, dealing damage based on your {StatModifiers.Keys.ToStringList()} at {StatModifiers.Values.ToStringList()} ratios. For around {GetDamage()} damage";
 	}
 

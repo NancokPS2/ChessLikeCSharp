@@ -17,4 +17,11 @@ public partial class CostParameters : Resource
 	public int Reaction;
 	[Export]
 	public int Move;
+
+	public override string ToString()
+	{
+		return $"{(Action != 0 ? Action.ToString()+"\n" : "")}{(SubAction != 0 ? SubAction.ToString()+"\n" : "")}{(Reaction != 0 ? Reaction.ToString()+"\n" : "")}{(Move != 0 ? Move.ToString()+"\n" : "")}";
+
+	}
+
 }
