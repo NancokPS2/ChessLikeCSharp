@@ -153,14 +153,14 @@ public partial class Mob : Resource
 			equipmentInventory.InventoryChanged -= OnInventoryChanged;
 			equipmentInventory = value;
 			equipmentInventory.InventoryChanged += OnInventoryChanged;
-			UpdateEquipmentStatBoosts();
+			EquipmentStatBoostsUpdate();
 
 		}
 	}
 
 	private MobEquipmentInventory equipmentInventory = new();
 
-	public void UpdateEquipmentStatBoosts()
+	public void EquipmentStatBoostsUpdate()
 	{
 		MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
 
@@ -181,7 +181,7 @@ public partial class Mob : Resource
 
 	private void OnInventoryChanged(MobEquipmentInventory inventory)
 	{
-		UpdateEquipmentStatBoosts();
+		EquipmentStatBoostsUpdate();
 	}
     #endregion
 

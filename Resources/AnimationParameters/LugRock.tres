@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AnimationParameters" load_steps=3 format=3 uid="uid://epkrj846syyu"]
+
+[ext_resource type="Resource" uid="uid://bxy8pwur6tswn" path="res://Resources/AnimationParameters/AnimatedSceneLugRock.tres" id="1_354gi"]
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/Animation/AnimationParameters.cs" id="2_3o02f"]
+
+[resource]
+script = ExtResource("2_3o02f")
+MaxDuration = 2.0
+sceneSpawns = Array[Object]([ExtResource("1_354gi")])
+animationFlags = Array[int]([])

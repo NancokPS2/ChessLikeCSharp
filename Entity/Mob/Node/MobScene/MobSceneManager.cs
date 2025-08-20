@@ -26,11 +26,6 @@ public partial class MobSceneManager : Node3D
 	public override void _Ready()
 	{
 		base._Ready();
-		EventBus.MobStateChanged -= OnMobStateChanged;
-		EventBus.CellPositionSelected -= OnCellSelected;
-		EventBus.CellPositionHovered -= OnCellHovered;
-		EventBus.MobTurnStarted -= OnMobTurnStarted;
-
 		EventBus.MobStateChanged += OnMobStateChanged;
 		EventBus.CellPositionSelected += OnCellSelected;
 		EventBus.CellPositionHovered += OnCellHovered;
@@ -43,6 +38,16 @@ public partial class MobSceneManager : Node3D
 		AddChild(NodeHoveringCursor);
 		AddChild(NodeCurrentlySelected);
 	}
+
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		EventBus.MobStateChanged -= OnMobStateChanged;
+		EventBus.CellPositionSelected -= OnCellSelected;
+		EventBus.CellPositionHovered -= OnCellHovered;
+		EventBus.MobTurnStarted -= OnMobTurnStarted;
+	}
+
 
 	public override void _Process(double delta)
 	{

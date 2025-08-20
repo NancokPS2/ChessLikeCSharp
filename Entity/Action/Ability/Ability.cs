@@ -28,6 +28,8 @@ public partial class Ability : ActionEvent
 	[Export]
 	public EAbility Identifier = EAbility.NULL;
 
+	[Export]
+	public string Description = "Mysterious action!";
 
 	public override void Use(UsageParameters usageParams)
 	{

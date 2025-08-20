@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="AbilityAttack" load_steps=13 format=3 uid="uid://cj6gtpi4q31de"]
+
+[ext_resource type="Script" uid="uid://djner218mvn0" path="res://Entity/Action/Parameters/Animation/AnimatedSceneParameters.cs" id="1_2g7jk"]
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/Animation/AnimationParameters.cs" id="2_cxjhe"]
+[ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="3_jjdiu"]
+[ext_resource type="Script" uid="uid://dlielvlkyy72u" path="res://Entity/Action/Parameters/CostParameters.cs" id="4_ibtdn"]
+[ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="5_xi721"]
+[ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="6_r1nge"]
+[ext_resource type="Script" uid="uid://b82ddu4nyhy72" path="res://Entity/Action/Ability/Presets/AbilityAttack.cs" id="7_5gq8k"]
+
+[sub_resource type="Resource" id="Resource_g5qea"]
+script = ExtResource("2_cxjhe")
+MaxDuration = 2.0
+sceneSpawns = Array[ExtResource("1_2g7jk")]([])
+animationFlags = Array[int]([])
+
+[sub_resource type="Resource" id="Resource_dje1i"]
+script = ExtResource("3_jjdiu")
+AutoActivationMode = 0
+AutoActivationMax = 0
+ActivatedAfterAction = false
+ActivatedOnlyIfTargetsMe = true
+ActivatedByActionWithFlags = Array[int]([])
+ActivatedEveryXTime = 100
+ActivatedByTurnStart = true
+ActivatedByTurnEnd = false
+ActivatedOnlyIfTurnIsMine = true
+
+[sub_resource type="Resource" id="Resource_lk1xp"]
+script = ExtResource("4_ibtdn")
+Action = 1
+SubAction = 0
+Reaction = 0
+Move = 0
+
+[sub_resource type="Resource" id="Resource_a24tn"]
+script = ExtResource("5_xi721")
+PickMobInTargetPos = true
+OnlyAffectOwner = false
+CannotAffectAlly = false
+CannotAffectEnemy = false
+MaximumHealthPercent = 1.0
+
+[sub_resource type="Resource" id="Resource_r15m8"]
+script = ExtResource("6_r1nge")
+Range = 1
+RangeStatBonus = -1
+MaxPositions = 1
+CanTargetWithMob = true
+CanTargetEmpty = false
+UsesPathing = false
+AoEShape = 0
+AoESize = 0
+
+[resource]
+script = ExtResource("7_5gq8k")
+StatModifiers = Dictionary[int, float]({
+0: 1.0
+})
+ValueModifiers = Dictionary[int, float]({
+0: -1.0
+})
+DamageBase = 0.0
+DamageMinimum = 0.0
+Identifier = 1
+Description = "Mysterious action!"
+Name = "Blood Want"
+flags = Array[int]([1, 2])
+commands = null
+TargetParams = SubResource("Resource_r15m8")
+AnimationParams = SubResource("Resource_g5qea")
+MobFilterParams = SubResource("Resource_a24tn")
+CostParams = SubResource("Resource_lk1xp")
+AutoActivationParams = SubResource("Resource_dje1i")
+metadata/_custom_type_script = "uid://b82ddu4nyhy72"

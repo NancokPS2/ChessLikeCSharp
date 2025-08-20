@@ -50,6 +50,9 @@ public partial class MobScene : Node3D
 		EventBus.ActionUsed += OnActionUsed;
 		EventBus.InventoryChanged += OnInventoryChanged;
 		EventBus.InputCheatEntered += OnInputCheatEntered;
+
+		MobUsing.TemplateUpdate(true, true);
+		MobUsing.EquipmentStatBoostsUpdate();
 	}
 
 	public override void _Process(double delta)
@@ -291,7 +294,7 @@ public partial class MobScene : Node3D
 	{
 		if (obj != MobUsing.EquipmentInventory) return;
 
-		MobUsing.UpdateEquipmentStatBoosts();
+		MobUsing.EquipmentStatBoostsUpdate();
 	}
 
 	private void OnInputCheatEntered(Command.ECheat obj)

@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="AbilityAttack" load_steps=11 format=3 uid="uid://lxeeydfxlhko"]
+
+[ext_resource type="Resource" uid="uid://epkrj846syyu" path="res://Resources/AnimationParameters/LugRock.tres" id="1_4hklj"]
+[ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="3_phrxx"]
+[ext_resource type="Script" uid="uid://dlielvlkyy72u" path="res://Entity/Action/Parameters/CostParameters.cs" id="4_bvvxj"]
+[ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="5_dbce4"]
+[ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="6_obyfl"]
+[ext_resource type="Script" uid="uid://b82ddu4nyhy72" path="res://Entity/Action/Ability/Presets/AbilityAttack.cs" id="7_uglwe"]
+
+[sub_resource type="Resource" id="Resource_7d4pj"]
+script = ExtResource("3_phrxx")
+AutoActivationMode = 0
+AutoActivationMax = 0
+ActivatedAfterAction = false
+ActivatedOnlyIfTargetsMe = true
+ActivatedByActionWithFlags = Array[int]([])
+ActivatedEveryXTime = 100
+ActivatedByTurnStart = true
+ActivatedByTurnEnd = false
+ActivatedOnlyIfTurnIsMine = true
+
+[sub_resource type="Resource" id="Resource_8ni0p"]
+script = ExtResource("4_bvvxj")
+Action = 1
+SubAction = 0
+Reaction = 0
+Move = 0
+
+[sub_resource type="Resource" id="Resource_qy717"]
+script = ExtResource("5_dbce4")
+PickMobInTargetPos = true
+OnlyAffectOwner = false
+CannotAffectAlly = false
+CannotAffectEnemy = false
+MaximumHealthPercent = 1.0
+
+[sub_resource type="Resource" id="Resource_iicqd"]
+script = ExtResource("6_obyfl")
+Range = 5
+RangeStatBonus = -1
+MaxPositions = 1
+CanTargetWithMob = true
+CanTargetEmpty = false
+UsesPathing = false
+AoEShape = 0
+AoESize = 0
+
+[resource]
+script = ExtResource("7_uglwe")
+StatModifiers = Dictionary[int, float]({
+5: 0.1
+})
+ValueModifiers = Dictionary[int, float]({})
+DamageBase = 5.0
+DamageMinimum = 0.0
+Identifier = 4
+Description = "Mysterious action!"
+Name = "Rock Fling"
+flags = Array[int]([2, 1])
+commands = null
+TargetParams = SubResource("Resource_iicqd")
+AnimationParams = ExtResource("1_4hklj")
+MobFilterParams = SubResource("Resource_qy717")
+CostParams = SubResource("Resource_8ni0p")
+AutoActivationParams = SubResource("Resource_7d4pj")
+metadata/_custom_type_script = "uid://b82ddu4nyhy72"

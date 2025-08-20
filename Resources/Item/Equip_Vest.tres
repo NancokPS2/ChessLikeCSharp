@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ItemEquipment" load_steps=4 format=3 uid="uid://7lijrftbpnjo"]
+[gd_resource type="Resource" script_class="ItemEquipment" load_steps=5 format=3 uid="uid://7lijrftbpnjo"]
 
+[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_ppbru"]
 [ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_xjv2x"]
 [ext_resource type="Script" uid="uid://cl830npf4tu4k" path="res://Inventory/ItemEquipment.cs" id="3_8erin"]
 
@@ -13,7 +14,7 @@ Source = ""
 
 [resource]
 script = ExtResource("3_8erin")
-AbilitiesGrantedToUser = []
+AbilitiesGrantedToUser = Array[ExtResource("1_ppbru")]([])
 StatBoost = SubResource("Resource_d0hun")
 Name = "Vest"
 Price = 0.0

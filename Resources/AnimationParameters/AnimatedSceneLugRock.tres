@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AnimatedSceneParameters" load_steps=3 format=3 uid="uid://bxy8pwur6tswn"]
+
+[ext_resource type="PackedScene" uid="uid://oni4d4rrl6r4" path="res://assets/Model/prop/rock.glb" id="1_878xj"]
+[ext_resource type="Script" uid="uid://djner218mvn0" path="res://Entity/Action/Parameters/Animation/AnimatedSceneParameters.cs" id="2_tyw8i"]
+
+[resource]
+script = ExtResource("2_tyw8i")
+scene = ExtResource("1_878xj")
+spawnCount = 1
+duration = 0.8
+spawnMode = 0
+motionMode = Array[int]([1, 2, 3])
+freeAfterDuration = true
+metadata/_custom_type_script = "uid://djner218mvn0"
