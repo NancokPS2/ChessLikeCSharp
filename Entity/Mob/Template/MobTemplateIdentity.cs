@@ -19,14 +19,15 @@ public partial class MobTemplateIdentity : MobTemplate
 	{
 	}
 
-    public override Mob ApplyTemplate(Mob mob)
-    {
-        //Abilities
-        ApplyNames(mob, Names);
+	public override Mob ApplyTemplate(Mob mob)
+	{
+		//Abilities
+		ApplyNames(mob, Names);
 
-        //StatBoosts
-        ApplyFactions(mob, Factions);
+		//StatBoosts
+		ApplyFactions(mob, Factions);
 
-        return mob;
-    }
+		return mob;
+	}
+
 }

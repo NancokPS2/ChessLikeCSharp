@@ -11,22 +11,23 @@ namespace ChessLike.Entity;
 public partial class MobTemplateRace : MobTemplate
 {
 
-    [Export]
-    protected Godot.Collections.Array<Ability> Abilities = new();
+	[Export]
+	protected Godot.Collections.Array<Ability> Abilities = new();
 
-    [Export]
-    protected Godot.Collections.Array<MobStatBoost> StatBoosts = new();
+	[Export]
+	protected Godot.Collections.Array<MobStatBoost> StatBoosts = new();
 
-    public MobTemplateRace() : base(ETemplateType.RACE)
-    {
-    }
+	public MobTemplateRace() : base(ETemplateType.RACE)
+	{
+	}
 
-    public override Mob ApplyTemplate(Mob mob)
-    {
-        ApplyAbilities(mob, Abilities);
+	public override Mob ApplyTemplate(Mob mob)
+	{
+		ApplyAbilities(mob, Abilities);
 
-        ApplyStatBoosts(mob, StatBoosts);
+		ApplyStatBoosts(mob, StatBoosts);
 
-        return mob;
-    }
+		return mob;
+	}
+
 }

@@ -85,11 +85,12 @@ public partial class Mob : Resource
     public void TemplateSet(MobTemplateIdentity template)
         => TemplateSet(new List<MobTemplateIdentity>(){template});
 
-    protected void TemplateSet<TTemplate>(List<TTemplate> template)
-    where TTemplate : MobTemplate
-    {
-        TemplateClear<TTemplate>();
-        Templates.AddRange(template);
+	protected void TemplateSet<TTemplate>(List<TTemplate> template)
+	where TTemplate : MobTemplate
+	{
+		TemplateClear<TTemplate>();
+		Templates.AddRange(template);
+		TemplateUpdate(false, true);
     }
 
     public List<TTemplate> TemplateGet<TTemplate>()
@@ -110,9 +111,10 @@ public partial class Mob : Resource
     where TTemplate : MobTemplate
     {
         Templates.RemoveAll(x => x is TTemplate);
+		TemplateUpdate(false, true);
     }
 
-	public void TemplateUpdate(bool refillValues, bool startFromBase)
+	public void TemplateUpdate(bool refillValues, bool reset = true)
 	{
 		//Make sure there is only one base template
 		if (TemplateGet<MobTemplateBase>().Count() != 1)
@@ -120,7 +122,9 @@ public partial class Mob : Resource
 				$"More than one MobTemplateBase found ({TemplateGet<MobTemplateBase>().Count()})"
 				);
 
-		if (startFromBase) TemplateGet<MobTemplateBase>().First().ApplyTemplate(this);
+		if (reset) MobTemplate.Reset(this);
+
+		TemplateGet<MobTemplateBase>().First().ApplyTemplate(this);
 
 		TemplateGet<MobTemplateRace>().ForEach(x => x.ApplyTemplate(this));
 
@@ -233,12 +237,12 @@ public partial class Mob : Resource
 
     public void AddAction(List<ActionEvent> actions)
     {
-        foreach (var action in actions)
-        {
-            ActionEvent newAction = (ActionEvent)action.Duplicate(true);
-            Actions.Add(newAction);
-            newAction.Owner = this;
-            EventBus.MobActionAdded?.Invoke(this, newAction);
+		foreach (var action in actions)
+		{
+			ActionEvent newAction = (ActionEvent)action.Duplicate(true);
+			Actions.Add(newAction);
+			newAction.Owner = this;
+			EventBus.MobActionAdded?.Invoke(this, newAction);
         }
     }
 
@@ -255,18 +259,21 @@ public partial class Mob : Resource
 
     }
 
-    public List<Ability> GetAbilities()
-    {
-        List<Ability> output = new();
-        foreach (var item in Actions)
-        {
-            if (item is Ability abil)
-            {
-                output.Add(abil);
-            }
-        }
-        return output;
-    }
+	public void ClearAction()
+		=> Actions.ForEach(x => RemoveAction(x));
+
+	public List<Ability> GetAbilities()
+	{
+		List<Ability> output = new();
+		foreach (var item in Actions)
+		{
+			if (item is Ability abil)
+			{
+				output.Add(abil);
+			}
+		}
+		return output;
+	}
 
     public List<Ability> GetPassives()
         => GetAbilities().Where(x => x.IsPassive()).ToList();
@@ -295,6 +302,13 @@ public partial class Mob : Resource
         output += $"---\nAbilities: {GetAbilities().ToStringList()}";
         //output += $"---\nPassives: {GetPassives().ToStringList()}";
         output += $"---\nTemplates: {Templates.ToStringList()}";
+        return output;
+    }
+
+	public static Mob GetDefault()
+    {
+        Mob output = new Mob();
+		output.DisplayedName = "DEFAULT MOB";
         return output;
     }
     #endregion

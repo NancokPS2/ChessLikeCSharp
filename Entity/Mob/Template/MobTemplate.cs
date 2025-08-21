@@ -38,19 +38,32 @@ public partial class MobTemplate : Resource
     {
     }
 
-    public virtual Mob ApplyTemplate(Mob mob) { throw new NotImplementedException(); }
+	public virtual Mob ApplyTemplate(Mob mob) 
+		=> throw new NotImplementedException();
 
-    protected void ApplyNames(Mob mob, Godot.Collections.Array<string> names)
-    {
-        mob.DisplayedName = names.GetRandom() ?? mob.DisplayedName;
-    }
+	public static Mob Reset(Mob mob)
+	{
+		mob.DisplayedName = "Unnamed mob from template";
+		mob.Faction = EFaction.INVALID;
+		mob.ClearAction();
+		foreach (var item in Enum.GetValues<ETemplateType>())
+		{
+			mob.Stats.BoostRemove(item.ToString());
+		}
+		return mob;
+	}
+
+	protected void ApplyNames(Mob mob, Godot.Collections.Array<string> names)
+	{
+		mob.DisplayedName = names.GetRandom() ?? mob.DisplayedName;
+	}
 
     protected void ApplyFactions(Mob mob, Array<EFaction> factions)
     {
         mob.Faction = factions.GetRandom(EFaction.INVALID);
     }
 
-    protected void ApplyAbilities(Mob mob, Godot.Collections.Array<Ability> abilities)
+    protected void ApplyAbilities(Mob mob, Array<Ability> abilities)
     {
         foreach (var item in abilities)
         {
@@ -72,7 +85,7 @@ public partial class MobTemplate : Resource
 
     protected void ApplyBaseStats(Mob mob, MobStatSet statSet)
     {
-        GD.Print($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
+        MsgLog.LogInfoMsg($"Replacing stats of {mob.DisplayedName} with stats from template {ResourcePath}");
         mob.Stats = statSet ?? mob.Stats;
     }
     public override string ToString()

@@ -44,7 +44,7 @@ public partial class MobUI : BaseMobUI, ISceneDependency
 
 	private void DisplayDummy()
 	{
-		Mob mob = Mob.CreatePrototype(EMobPrototype.HUMAN);
+		Mob mob = Mob.GetDefault();
 		Update(mob);
 	}
 }

@@ -73,6 +73,8 @@ public partial class MsgLog : Node
 		EventBus.ActionUsed += OnActionUsed;
 		EventBus.ActionPreQueued += OnActionPreQueued;
 		EventBus.ActionQueued += OnActionQueued;
+		EventBus.MobActionAdded += OnMobActionAdded;
+		EventBus.MobActionRemoved += OnMobActionRemoved;
 
 		Callable.From(PostReady).CallDeferred();
 	}
@@ -210,6 +212,16 @@ public partial class MsgLog : Node
 	private void OnEncounterLoaded(EncounterData obj)
 	{
 		LogInfoMsg($"Encounter loaded from path '{obj.ResourcePath}' with {obj.MobSpawns.Count} mobs in the following grid: {obj.Grid}");
+	}
+
+	private void OnMobActionAdded(Mob mob, ActionEvent action)
+	{
+		LogInfoMsg($"Added action {action} to {mob.DisplayedName}.");
+	}
+
+	private void OnMobActionRemoved(Mob mob, ActionEvent action)
+	{
+		LogInfoMsg($"Removed action {action} from {mob.DisplayedName}.");
 	}
 	#endregion
 
