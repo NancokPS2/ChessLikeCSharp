@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "The Mobs should be setup during the preparation stage, atm it only gets setup when the MobScene is added to the scene.",
+                    "id": "v5s3p59tjyel22uuvieilujy"
+                },
+                {
                     "text": "Complete cycle:\nMainMenuScene (Starts game) > WorldMap (Enter encounter) > CombatScene (play out combat) > WorldMap (vibe)",
                     "id": "os6cckb1drmmxam8j8h1eb3e"
                 },
@@ -164,5 +168,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1755379537532
+    "timestamp": 1755778376201
 }

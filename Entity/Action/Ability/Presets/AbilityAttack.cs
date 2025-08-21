@@ -77,8 +77,8 @@ public partial class AbilityAttack : Ability
 
 	public override string GetDescription(bool includeBasics = true)
 	{
-		string output = base.GetDescription() + "\n";
-		output += Description.Format(
+		string output = base.GetDescription();
+		output = output.Format(
 			new Dictionary<string, string>()
 			{
 				{"StatModifiers", StatModifiers.ToStringList()},

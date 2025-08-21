@@ -20,7 +20,7 @@ public partial class CostParameters : Resource
 
 	public override string ToString()
 	{
-		return $"{(Action != 0 ? Action.ToString()+"\n" : "")}{(SubAction != 0 ? SubAction.ToString()+"\n" : "")}{(Reaction != 0 ? Reaction.ToString()+"\n" : "")}{(Move != 0 ? Move.ToString()+"\n" : "")}";
+		return $"{(Action != 0 ? "Actions: " + Action.ToString()+"\n" : "")}{(SubAction != 0 ? "Sub Action: " + SubAction.ToString()+"\n" : "")}{(Reaction != 0 ? "Reaction: " + Reaction.ToString()+"\n" : "")}{(Move != 0 ? "Move: " + Move.ToString() : "")}";
 
 	}
 
