@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cgai8boh5rrm1" path="res://World/GridRandom.cs" id="4_0nxgm"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6wfjc"]
+frequency = 0.05
 
 [resource]
 script = ExtResource("4_0nxgm")

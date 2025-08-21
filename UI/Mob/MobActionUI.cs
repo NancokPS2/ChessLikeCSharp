@@ -28,9 +28,9 @@ public partial class MobActionUI : BaseMobUI, ISceneDependency
 
     private partial class ActionLabel : Label, ITooltip
     {
-        ActionEvent Action;
+        Ability Action;
 
-        public ActionLabel(ActionEvent action)
+        public ActionLabel(Ability action)
         {
             Action = action;
         }

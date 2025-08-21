@@ -29,6 +29,7 @@ public partial class AbilityAttack : Ability
 
 	public AbilityAttack() : base()
 	{
+		Description = "Attack a target with your weapon, dealing damage based on your {StatModifiers}. For around {Damage} damage";
 	}
 
 	public override void Use(UsageParameters usage_params)
@@ -74,7 +75,7 @@ public partial class AbilityAttack : Ability
 		return $"{Owner.DisplayedName} attacked {targets} for {GetDamage()} damage";
 	}
 
-	public override string GetDescription()
+	public override string GetDescription(bool includeBasics = true)
 	{
 		string output = base.GetDescription() + "\n";
 		output += Description.Format(
@@ -84,10 +85,11 @@ public partial class AbilityAttack : Ability
 				{"ValueModifiers", ValueModifiers.ToStringList()},
 				{"DamageMinimum", DamageMinimum.ToString()},
 				{"DamageBase", DamageBase.ToString()},
+				{"Damage", GetDamage().ToString()},
 			}
 		);
 		return output;
-		return $"Attack a target with your weapon, dealing damage based on your {StatModifiers.Keys.ToStringList()} at {StatModifiers.Values.ToStringList()} ratios. For around {GetDamage()} damage";
+		return "Attack a target with your weapon, dealing damage based on your {StatModifiers}. For around {Damage} damage";
 	}
 
 }

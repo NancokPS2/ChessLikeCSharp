@@ -28,13 +28,55 @@ public partial class Ability : ActionEvent
 	[Export]
 	public EAbility Identifier = EAbility.NULL;
 
-	[Export]
+	[Export(PropertyHint.MultilineText)]
 	public string Description = "Mysterious action!";
 
 	public override void Use(UsageParameters usageParams)
 	{
 		base.Use(usageParams);
 	}
+
+	public virtual string GetDescription(bool includeBasics = true)
+    {
+		string output = "";
+		if (includeBasics)
+		{
+			output = output.NewLine($"Range: {TargetParams.Range}");
+
+			//If the mode is in SINGLE, do not add anything.
+			TargetingParameters.AoEMode aoeMode = TargetParams.AoEShape;
+			output = output.NewLine(aoeMode != TargetingParameters.AoEMode.SINGLE ? $"AoE: {aoeMode}" : "");
+
+			//List costs
+			output = output.NewLine($"Costs: \n{CostParams}");
+
+			//List mob filters
+			string canHit;
+			if (MobFilterParams.PickMobInTargetPos)
+			{
+				canHit = "Can hit: "
+					+ (MobFilterParams.CannotAffectAlly ? "" : "Allies. ")
+					+ (MobFilterParams.CannotAffectEnemy ? "" : "Enemies.");
+			} else
+			{
+				canHit = "";
+			}
+			output = output.NewLine(canHit);
+		}
+		//It is not using the parent's GetDescription() method.
+		output += Description.Format(
+			new Dictionary<string, string>()
+			{
+				{"AbilityName", Name},
+				{"OwnerName", Owner.DisplayedName},
+			}
+		);
+
+
+		return output;
+    }
+
+    public string GetDescriptiveName() => Name;
 
 }
 

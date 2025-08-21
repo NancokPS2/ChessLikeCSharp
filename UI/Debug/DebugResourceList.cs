@@ -42,16 +42,16 @@ public partial class DebugResourceList : BaseButtonMenu<Button, IDescription> , 
         NodeResourceTypeMenu?.GetPopup().Clear(true);
 
         //Items
-        List<IDescription> items = new();
-        items.AddRange(Global.ManagerItem.PooledGetAll());
-        Entries.Add(ID_ITEM, items);
-        NodeResourceTypeMenu?.GetPopup().AddItem("Items", ID_ITEM);
+        //List<IDescription> items = new();
+        //items.AddRange(Global.ManagerItem.PooledGetAll());
+        //Entries.Add(ID_ITEM, items);
+        //NodeResourceTypeMenu?.GetPopup().AddItem("Items", ID_ITEM);
 
         //Abilities
-        List<IDescription> abilities = new();
-        abilities.AddRange(Global.ManagerAbility.PooledGetAll());
-        Entries.Add(ID_ABILITY, abilities);
-        NodeResourceTypeMenu?.GetPopup().AddItem("Abilities", ID_ABILITY);
+        //List<IDescription> abilities = new();
+        //abilities.AddRange(Global.ManagerAbility.PooledGetAll());
+        //Entries.Add(ID_ABILITY, abilities);
+        //NodeResourceTypeMenu?.GetPopup().AddItem("Abilities", ID_ABILITY);
     }
 
     protected override void _ButtonCreated(Button button, IDescription param)

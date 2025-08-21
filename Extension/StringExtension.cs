@@ -14,7 +14,7 @@ public static class StringExtension
 		string output = text;
 		foreach (var item in replacements)
 		{
-			text.Replace($"{delimiterStart}{item.Key}{delimitedEnd}", item.Value);
+			output = output.Replace($"{delimiterStart}{item.Key}{delimitedEnd}", item.Value);
 		}
 		return output;
     }

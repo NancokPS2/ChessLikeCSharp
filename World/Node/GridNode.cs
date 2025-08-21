@@ -62,22 +62,30 @@ public partial class GridNode : Node3D
 
     private List<Vector3i> PosDirty = new();
 
-    public GridNode()
-    {
-        EventBus.EncounterLoaded += OnEncounterLoaded;
-    }
+	public override void _Ready()
+	{
+		base._Ready();
+		EventBus.EncounterLoaded += OnEncounterLoaded;
+	}
+
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		EventBus.EncounterLoaded -= OnEncounterLoaded;
+	}
+
 
     #region Base
 
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        foreach (var item in PosDirty)
-        {
-            MeshRefresh(item);
-        }
-        PosDirty.Clear();
-    }
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		foreach (var item in PosDirty)
+		{
+			MeshRefresh(item);
+		}
+		PosDirty.Clear();
+	}
 
     public Grid GetGrid() => grid;
 
