@@ -113,6 +113,8 @@ public partial class Mob : Resource
 
 	public void TemplateUpdate(bool refillValues, bool reset = true)
 	{
+		if (Templates.Count == 0) return;
+
 		//Make sure there is only one base template
 		if (TemplateGet<MobTemplateBase>().Count() != 1)
 			throw new Exception(
@@ -309,7 +311,8 @@ public partial class Mob : Resource
     }
 
 	public void ClearAction()
-		=> Actions.ForEach(x => RemoveAction(x));
+		=> new List<ActionEvent>(Actions)
+		.ForEach(x => RemoveAction(x));
 
 	public List<Ability> GetAbilities()
 	{
