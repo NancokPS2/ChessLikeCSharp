@@ -16,9 +16,9 @@ public partial class Mob : IGridObject
     public bool IsValidMove(Grid grid, Vector3i from, Vector3i to)
     {
         int distance;
-        switch (MovementMode)
+        switch (MovementModes)
         {
-            case EMobMovementMode.WALK:
+            case EMobMovementMode.GROUNDED:
                 distance = from.DistanceManhattanWithToleranceTo(
                         to, 
                         new(0, (int)Stats.GetStat(EStatName.JUMP), 0)
@@ -37,24 +37,13 @@ public partial class Mob : IGridObject
 
     public bool IsValidPositionToExist(Grid grid, Vector3i position)
     {
-        bool can_exist;
-        bool can_stand_on;
-        switch (MovementMode)
-        {
-            case EMobMovementMode.WALK:
-                can_exist = grid.IsFlagInPosition(position, ECellFlag.AIR);
-
-                can_stand_on = grid.IsPositionInbounds(position + Vector3i.DOWN) 
-                && grid.IsFlagInPosition(position + Vector3i.DOWN, ECellFlag.SOLID);
-                
-                return can_exist && can_stand_on;
-                
-            default:
-                can_exist = grid.IsFlagInPosition(position, ECellFlag.AIR);
-                can_stand_on = grid.IsFlagInPosition(position + Vector3i.DOWN, ECellFlag.SOLID);
-                return can_exist && can_stand_on;
-        }
-        
+        bool canExist =
+			CellExistWhitelist.All(x => grid.IsFlagInPosition(position, x))
+			&& CellExistBlacklist.All(x => !grid.IsFlagInPosition(position, x));
+        bool canStandOn = 
+			CellStandWhitelist.All(x => grid.IsFlagInPosition(position + Vector3i.DOWN, x))
+			&& CellStandBlacklist.All(x => !grid.IsFlagInPosition(position + Vector3i.DOWN, x));
+        return canExist && canStandOn;
     }
 
     public int PathingGetHorizontalRange()

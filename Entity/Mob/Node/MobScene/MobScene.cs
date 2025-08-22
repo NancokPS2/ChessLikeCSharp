@@ -176,14 +176,14 @@ public partial class MobScene : Node3D
 		Vector3i currentGoal = MovementStored[MovementCurrentIndex];
 
 		Godot.Vector3 currentGoalGlobal;
-		switch (MobUsing.MovementMode)
+		switch (MobUsing.MovementModes)
 		{
-			case EMobMovementMode.WALK:
+			case EMobMovementMode.GROUNDED:
 				currentGoalGlobal = CombatScene.GetGridNode().MapToGlobal(currentGoal);
 				break;
 
 			default:
-				throw new NotImplementedException($"Movement for {MobUsing.MovementMode} not implemented yet.");
+				throw new NotImplementedException($"Movement for {MobUsing.MovementModes} not implemented yet.");
 		}
 
 		GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());

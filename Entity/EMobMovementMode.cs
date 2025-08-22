@@ -2,7 +2,7 @@ namespace ChessLike.Entity;
 
 public enum EMobMovementMode
 {
-    WALK,
+    GROUNDED,
     AMPHIBIOUS,
     FLY,
     TELEPORT,

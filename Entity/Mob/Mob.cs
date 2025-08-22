@@ -38,9 +38,6 @@ public partial class Mob : Resource
     [Export]
     public EFaction Faction = EFaction.NEUTRAL;
 
-    public EMobMovementMode MovementMode { set => SetMovementMode(value); get => movementMode; }
-    private EMobMovementMode movementMode;
-
     private EMobState mobState = EMobState.BENCHED;
     public EMobState MobState
     {
@@ -187,51 +184,103 @@ public partial class Mob : Resource
 	{
 		EquipmentStatBoostsUpdate();
 	}
-    #endregion
+	#endregion
 
-    #region Faction
+	#region Faction
+	public AStar3D Navigation;
     public Faction GetFaction()
-        => Global.ManagerFaction.ResourceGet(
+		=> Global.ManagerFaction.ResourceGet(
 			Global.ManagerFaction.FindIdentifier(Faction) ?? throw new Exception(),
 			true,
 			true);
 
-    #endregion
+	#endregion
 
-    #region Movement
-    public void Move(Vector3i to)
-    {
-        Vector3i original_pos = Position;
-        Position = to;
-        EventBus.MobMoved?.Invoke(this, original_pos, Position);
-    }
+	#region Movement
+	public List<EMobMovementMode> MovementModes
+	{
+		set
+		{
+			movementModes = new(value);
+			UpdateCellList();
+		}
+		get => new(movementModes);
+	}
+	protected List<EMobMovementMode> movementModes;
+	public List<ECellFlag> CellStandWhitelist = new();
+	public List<ECellFlag> CellStandBlacklist = new();
+	public List<ECellFlag> CellExistWhitelist = new();
+	public List<ECellFlag> CellExistBlacklist = new();
 
-    public void MoveRelative(Vector3i to)
-    {
-        Move(GetPosition() + to);
-    }
+	public void UpdateCellList()
+	{
+		CellStandWhitelist.Clear();
+		CellStandBlacklist.Clear();
+		CellExistWhitelist.Clear();
+		CellExistBlacklist.Clear();
 
-    public void MoveTroughPath(List<Vector3i> path)
+		//By default, can only exist in air, not in solid materials
+		CellExistWhitelist.Add(ECellFlag.AIR);
+		CellExistBlacklist.Add(ECellFlag.SOLID);
+		CellStandWhitelist.Add(ECellFlag.SOLID);
+
+		foreach(var moveMode in MovementModes)
+		{
+			switch(moveMode)
+			{
+				case EMobMovementMode.GROUNDED:
+					break;
+				
+				case EMobMovementMode.FLY:
+					CellStandWhitelist.Add(ECellFlag.AIR);
+					break;
+
+				case EMobMovementMode.AMPHIBIOUS:
+					CellExistWhitelist.Add(ECellFlag.LIQUID);
+					break;
+				
+				default: break;
+			}
+		}
+	}
+
+	public void Move(Grid grid, Vector3i to, EMobMovementMode mode)
+		=> Move(MoveGetPath(grid, GetPosition(), to), mode);
+
+	[Obsolete("WIP")]
+	public List<Vector3i> MoveGetPath(Grid grid, Vector3i from, Vector3i to)
+	{
+		List<Vector3i> output = new();
+
+		return output;
+	}
+	
+    public void Move(List<Vector3i> path, EMobMovementMode moveType)
+	{
+		if (path.Count == 0) MsgLog.Log(EMessageType.ERROR, "Received empty path.");
+		foreach (var position in path)
+		{
+			switch (moveType)
+			{
+				case EMobMovementMode.TELEPORT:
+					Vector3i original_pos = Position;
+					Position = position;
+					break;
+			}
+		}
+
+		//EventBus.MobMoved?.Invoke(this, original_pos, Position);
+		EventBus.MobFinishedPathMove?.Invoke(this, moveType, path);
+	}
+
+    public void MoveRelative(Vector3i to, EMobMovementMode mode)
     {
-        foreach (var item in path)
-        {
-            Move(item);
-        }
-        EventBus.MobFinishedPathMove?.Invoke(this, path);
+        Move(new(){GetPosition() + to}, mode);
     }
 
     #endregion
 
     #region Actions
-    private Ability _movement = new();
-
-    public void SetMovementMode(EMobMovementMode mode)
-    {
-        Actions.Remove(_movement);
-        _movement = new AbilityMove(EMobMovementMode.WALK);
-        AddAction(_movement);
-        movementMode = mode;
-    }
 
     public void AddAction(ActionEvent action) => AddAction(new List<ActionEvent>() { action });
 

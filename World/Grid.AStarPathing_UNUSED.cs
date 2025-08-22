@@ -87,7 +87,7 @@ public partial class AStarGridPathing
         bool liquid_here = grid.IsFlagInPosition(position, ECellFlag.LIQUID);
         switch (mode)
         {
-            case EMobMovementMode.WALK:
+            case EMobMovementMode.GROUNDED:
                 return solid_below && air_here;
             
 

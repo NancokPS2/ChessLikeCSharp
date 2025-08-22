@@ -27,6 +27,9 @@ public partial class AbilityAttack : Ability
 	[Export]
 	public float DamageMinimum = 0;
 
+	[Export(PropertyHint.Range, "0, 1, 0.05")]
+	public float DefensePiercing = 0;
+
 	public AbilityAttack() : base()
 	{
 		Description = "Attack a target with your weapon, dealing damage based on your {StatModifiers}. For around {Damage} damage";
@@ -36,7 +39,11 @@ public partial class AbilityAttack : Ability
 	{
 		base.Use(usage_params);
 		float damage = GetDamage();
-		MobCommandTakeDamage command = new MobCommandTakeDamage(damage);
+		MobCommandTakeDamage command = new MobCommandTakeDamage()
+		{
+			Damage = damage,
+			DefenseRatioAccounted = 1 - DefensePiercing,
+		};
 		foreach (var item in usage_params.MobsTargeted)
 		{
 			item.CommandProcess(command);
@@ -89,7 +96,6 @@ public partial class AbilityAttack : Ability
 			}
 		);
 		return output;
-		return "Attack a target with your weapon, dealing damage based on your {StatModifiers}. For around {Damage} damage";
 	}
 
 }

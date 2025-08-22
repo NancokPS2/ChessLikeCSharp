@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Storage;
-using ChessLike.Turn;
 using ChessLike.World;
 using ChessLike.WorldMap;
-using ChessLike.WorldMap;
 using Godot;
-using static ChessLike.Entity.Action.ActionEvent;
+
 
 /// <summary>
 /// This should be used ONLY for visual effects and other things detached from the direct logic loop.
@@ -20,7 +13,7 @@ using static ChessLike.Entity.Action.ActionEvent;
 /// </summary>
 public partial class EventBus : Node
 {
-    public static EventBus Instance;
+    public static EventBus Instance = null!;
     public delegate void Event();
     public delegate void ObjectChange<T>(T obj);
     public delegate void ObjectChangeFrom<TFromTo>(TFromTo old_obj, TFromTo new_obj);
@@ -111,7 +104,7 @@ public partial class EventBus : Node
 
     #region Mob - Movement
     public delegate void MobMovement(Mob mob, Vector3i from, Vector3i to);
-    public delegate void MobMovementPath(Mob mob, List<Vector3i> path);
+    public delegate void MobMovementPath(Mob mob, EMobMovementMode moveMode, List<Vector3i> path);
     public static MobMovement? MobMoved;
     public static MobMovementPath? MobFinishedPathMove;
     #endregion
