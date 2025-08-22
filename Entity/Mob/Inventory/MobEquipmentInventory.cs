@@ -12,6 +12,7 @@ public partial class MobEquipmentInventory : Resource, IInventory
 {
 	public delegate void InventoryChange(MobEquipmentInventory inventory);
 	public event InventoryChange? InventoryChanged;
+
     protected List<EMobEquipmentSlot> BlockedSlots = new();
 
     protected Dictionary<EMobEquipmentSlot, Item?> Contents;
@@ -35,9 +36,20 @@ public partial class MobEquipmentInventory : Resource, IInventory
         };
     }
 
+	/// <summary>
+	/// Checks if the slot is not blocked.
+	/// </summary>
+	/// <param name="slot">The slot to check.</param>
+	/// <returns>Wether the slot is valid to equip/unequip to/from</returns>
     public bool CanUseSlot(EMobEquipmentSlot slot)
-        => !BlockedSlots.Contains(slot);
+		=> !BlockedSlots.Contains(slot);
 
+	/// <summary>
+	/// Checks if the slot can hold the specified item.
+	/// </summary>
+	/// <param name="item">The item that is being checked.</param>
+	/// <param name="slot">The slot that is being checked.</param>
+	/// <returns>Wether or not the item can be put into the slot.</returns>
     public bool IsValidForSlot(Item item, EMobEquipmentSlot slot)
         => slot switch
         {
@@ -56,17 +68,17 @@ public partial class MobEquipmentInventory : Resource, IInventory
 			throw new Exception();
 
 		if (Contents[slot] is not null && !replace)
-			throw new Exception();
+			throw new Exception("Slot is already occupied, equipping failed.");
 
 		if (!IsValidForSlot(item, slot))
 		{
-			MsgLog.AddMessage($"{item.Name} does not fit in slot {slot}");
+			MsgLog.LogGameMsg($"{item.Name} does not fit in slot {slot}");
 			return;
 		}
 
 		Contents[slot] = item;
 		InventoryChanged?.Invoke(this);
-    }
+	}
 
 	public void UnequipItem(EMobEquipmentSlot slot)
 	{
@@ -77,8 +89,12 @@ public partial class MobEquipmentInventory : Resource, IInventory
 	public Item? GetItem(EMobEquipmentSlot slot)
         => Contents[slot];
 
+	/// <summary>
+	/// Get all items equipped in the inventory.
+	/// </summary>
+	/// <returns>Equipped items</returns>
     public List<Item> GetItems()
-        => [.. Contents.Values.Where(x => x is not null)];
+        => [.. Contents.Values.OfType<Item>().Where(x => x is not null)];
 
     public EMobEquipmentSlot[] GetSlots()
         => Enum.GetValues<EMobEquipmentSlot>();
