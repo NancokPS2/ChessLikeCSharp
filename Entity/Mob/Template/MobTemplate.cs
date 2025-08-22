@@ -43,8 +43,9 @@ public partial class MobTemplate : Resource
 
 	public static Mob Reset(Mob mob)
 	{
-		mob.DisplayedName = "Unnamed mob from template";
-		mob.Faction = EFaction.INVALID;
+		//Maybe do not reset this indiscriminately.
+		//mob.DisplayedName = "Unnamed mob from template";
+		//mob.Faction = EFaction.INVALID;
 		mob.ClearAction();
 		foreach (var item in Enum.GetValues<ETemplateType>())
 		{
