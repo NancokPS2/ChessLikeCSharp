@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://dwx0jhfj8ee72"]
 
-[ext_resource type="Script" uid="uid://cm38gvxt0ab1b" path="res://UI/Misc/LoadingScreen.cs" id="1_sefqg"]
+[ext_resource type="Script" uid="uid://cm38gvxt0ab1b" path="res://Singleton/LoadingScreen/LoadingScreen.cs" id="1_sefqg"]
 
 [sub_resource type="Gradient" id="Gradient_sefqg"]
 offsets = PackedFloat32Array(0.00862069, 1)
@@ -52,10 +52,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("GradientTexture2D_4vw53")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(544, 320)
+position = Vector2(288, 336)
 energy = 2.0
 texture = SubResource("GradientTexture2D_epkik")
 texture_scale = 3.0
@@ -75,13 +76,8 @@ vertical_alignment = 1
 
 [node name="Time" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
+anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = -38.0
-offset_top = -23.0
-grow_horizontal = 0
-grow_vertical = 0
+offset_right = 1.0
+grow_vertical = 2
 label_settings = SubResource("LabelSettings_4vw53")

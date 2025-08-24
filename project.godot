@@ -29,6 +29,7 @@ Settings="*res://Singleton/Settings/Settings.cs"
 SceneChanger="*res://Singleton/SceneChanger/SceneChanger.cs"
 TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
 Command="*res://Singleton/Command/Command.cs"
+LoadingScreen="res://Singleton/LoadingScreen/LoadingScreen.tscn"
 
 [debug]
 

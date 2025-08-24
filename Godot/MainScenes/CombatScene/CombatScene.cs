@@ -131,7 +131,7 @@ public partial class CombatScene : Node3D
 				throw new Exception($"Mob {mob.DisplayedName} has been spawned in an invalid location {pos}");
 
 			//WIP This should be used automatically
-			GetMobMovement().ForceMobPosition(mob, pos);;
+			GetMobMovement().ForceMobPosition(mob, pos);
 		}
 
 		EventBus.EncounterLoaded?.Invoke(encounterToLoad);

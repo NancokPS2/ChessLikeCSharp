@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://grm0bgpxy6ib"]
+[gd_scene load_steps=7 format=3 uid="uid://grm0bgpxy6ib"]
 
 [ext_resource type="Script" uid="uid://d1b4e4cjsitb4" path="res://Singleton/UI/UIManager.cs" id="1_2yh43"]
 [ext_resource type="PackedScene" uid="uid://byh0x8syok53h" path="res://UI/Party/PartyGeneralUI.tscn" id="2_g8ov2"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://dpxiarah531y4" path="res://UI/Preparation/PreparationUI.tscn" id="4_wvwis"]
 [ext_resource type="PackedScene" uid="uid://dslo3iy2wc5fx" path="res://UI/Combat/CombatUI.tscn" id="5_uth44"]
 [ext_resource type="PackedScene" uid="uid://c5ukv8hflufd6" path="res://UI/MainMenu/SaveSelectionUI.tscn" id="6_pw6g0"]
-[ext_resource type="PackedScene" uid="uid://dwx0jhfj8ee72" path="res://UI/Misc/LoadingScreen.tscn" id="7_tfo51"]
 
 [node name="UiManager" type="Control" node_paths=PackedStringArray("CanvasLayerNode")]
 physics_interpolation_mode = 0
@@ -23,8 +22,7 @@ Scenes = Dictionary[int, PackedScene]({
 3: ExtResource("3_wvwis"),
 4: ExtResource("4_wvwis"),
 5: ExtResource("5_uth44"),
-6: ExtResource("6_pw6g0"),
-7: ExtResource("7_tfo51")
+6: ExtResource("6_pw6g0")
 })
 CanvasLayerNode = NodePath("CanvasLayer")
 metadata/_custom_type_script = "uid://d1b4e4cjsitb4"
