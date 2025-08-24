@@ -111,6 +111,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Movement abilities are not ignoring the Y axis. Where it can climb to feels completely arbitrary",
+                    "id": "n3rf1pwozhagi1r9v0bvoas7"
+                },
+                {
                     "text": "ControlExtension.Activate() does not handle mouse_filter properly.",
                     "id": "f3sy0vzzkozb887qngr5ax4t"
                 },
@@ -168,5 +172,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1755778376201
+    "timestamp": 1755999847856
 }
