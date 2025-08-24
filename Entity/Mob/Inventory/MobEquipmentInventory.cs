@@ -13,35 +13,35 @@ public partial class MobEquipmentInventory : Resource, IInventory
 	public delegate void InventoryChange(MobEquipmentInventory inventory);
 	public event InventoryChange? InventoryChanged;
 
-    protected List<EMobEquipmentSlot> BlockedSlots = new();
+	protected List<EMobEquipmentSlot> BlockedSlots = new();
 
-    protected Dictionary<EMobEquipmentSlot, Item?> Contents;
-    [Export]
-    private Godot.Collections.Dictionary<EMobEquipmentSlot, Item?> contents
-    {
-        set => Contents = new(value);
-        get => new(Contents);
-    }
+	protected Dictionary<EMobEquipmentSlot, Item?> Contents;
+	[Export]
+	private Godot.Collections.Dictionary<EMobEquipmentSlot, Item?> contents
+	{
+		set => Contents = new(value);
+		get => new(Contents);
+	}
 
-    public MobEquipmentInventory()
-    {
-        Contents = new()
-        {
-            {EMobEquipmentSlot.LEFT_HAND, null},
-            {EMobEquipmentSlot.RIGHT_HAND, null},
-            {EMobEquipmentSlot.HELMET, null},
-            {EMobEquipmentSlot.ARMOR, null},
-            {EMobEquipmentSlot.ACCESSORY_1, null},
-            {EMobEquipmentSlot.ACCESSORY_2, null},
-        };
-    }
+	public MobEquipmentInventory()
+	{
+		Contents = new()
+		{
+			{EMobEquipmentSlot.LEFT_HAND, null},
+			{EMobEquipmentSlot.RIGHT_HAND, null},
+			{EMobEquipmentSlot.HELMET, null},
+			{EMobEquipmentSlot.ARMOR, null},
+			{EMobEquipmentSlot.ACCESSORY_1, null},
+			{EMobEquipmentSlot.ACCESSORY_2, null},
+		};
+	}
 
 	/// <summary>
 	/// Checks if the slot is not blocked.
 	/// </summary>
 	/// <param name="slot">The slot to check.</param>
 	/// <returns>Wether the slot is valid to equip/unequip to/from</returns>
-    public bool CanUseSlot(EMobEquipmentSlot slot)
+	public bool CanUseSlot(EMobEquipmentSlot slot)
 		=> !BlockedSlots.Contains(slot);
 
 	/// <summary>
@@ -50,17 +50,17 @@ public partial class MobEquipmentInventory : Resource, IInventory
 	/// <param name="item">The item that is being checked.</param>
 	/// <param name="slot">The slot that is being checked.</param>
 	/// <returns>Wether or not the item can be put into the slot.</returns>
-    public bool IsValidForSlot(Item item, EMobEquipmentSlot slot)
-        => slot switch
-        {
-            EMobEquipmentSlot.LEFT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
-            EMobEquipmentSlot.RIGHT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
-            EMobEquipmentSlot.HELMET => item.Flags.Contains(EItemFlag.HELMET),
-            EMobEquipmentSlot.ARMOR => item.Flags.Contains(EItemFlag.ARMOR),
-            EMobEquipmentSlot.ACCESSORY_1 => item.Flags.Contains(EItemFlag.ACCESSORY),
-            EMobEquipmentSlot.ACCESSORY_2 => item.Flags.Contains(EItemFlag.ACCESSORY),
-            _ => false,
-        };
+	public bool IsValidForSlot(Item item, EMobEquipmentSlot slot)
+		=> slot switch
+		{
+			EMobEquipmentSlot.LEFT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
+			EMobEquipmentSlot.RIGHT_HAND => item.Flags.Contains(EItemFlag.WEAPON),
+			EMobEquipmentSlot.HELMET => item.Flags.Contains(EItemFlag.HELMET),
+			EMobEquipmentSlot.ARMOR => item.Flags.Contains(EItemFlag.ARMOR),
+			EMobEquipmentSlot.ACCESSORY_1 => item.Flags.Contains(EItemFlag.ACCESSORY),
+			EMobEquipmentSlot.ACCESSORY_2 => item.Flags.Contains(EItemFlag.ACCESSORY),
+			_ => false,
+		};
 
 	public void EquipItem(Item item, EMobEquipmentSlot slot, bool replace)
 	{
@@ -87,16 +87,19 @@ public partial class MobEquipmentInventory : Resource, IInventory
 	}
 
 	public Item? GetItem(EMobEquipmentSlot slot)
-        => Contents[slot];
+		=> Contents[slot];
 
 	/// <summary>
 	/// Get all items equipped in the inventory.
 	/// </summary>
 	/// <returns>Equipped items</returns>
-    public List<Item> GetItems()
-        => [.. Contents.Values.OfType<Item>().Where(x => x is not null)];
+	public List<Item> GetItems()
+		=> [.. Contents.Values.OfType<Item>().Where(x => x is not null)];
 
-    public EMobEquipmentSlot[] GetSlots()
-        => Enum.GetValues<EMobEquipmentSlot>();
+	public EMobEquipmentSlot[] GetSlots()
+		=> Enum.GetValues<EMobEquipmentSlot>();
+
+	public (EMobEquipmentSlot, Item)[] GetSlotItemTuples()
+		=> (from pair in Contents where pair.Value is not null select (pair.Key, pair.Value)).ToArray();
 
 }

@@ -9,6 +9,8 @@ using System.Diagnostics;
 [GlobalClass]
 public partial class MobScene : Node3D
 {
+	const string MODEL_META_ATTACHED_NODE = "ATTACHED_MODEL_FROM_MobScene";
+
 	public Mob MobUsing;
 
 	protected PackedScene FloatingIconScene = GD.Load<PackedScene>("uid://bmm3h2202bdkq");
@@ -29,7 +31,8 @@ public partial class MobScene : Node3D
 	[Export]
 	private Node3D? markerBase;
 
-	private Node3D? ModelScene;
+	protected MobModel? ModelResource;
+	private Node3D? ModelNode;
 	private AnimationPlayer? AnimationPlayer;
 
 	private List<Vector3i> MovementStored = new();
@@ -37,6 +40,7 @@ public partial class MobScene : Node3D
 
 	private Dictionary<EMobSceneEffect, Node3D> EffectNodes = new();
 
+	[Obsolete("Fix the shitcode")]
 	public override void _Ready()
 	{
 		base._Ready();
@@ -55,6 +59,10 @@ public partial class MobScene : Node3D
 		MobUsing.EquipmentStatBoostsUpdate();
 
 		MovementResetPosition();
+
+		//WIP
+		ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
+		OnInventoryChanged(MobUsing.EquipmentInventory);
 	}
 
 
@@ -96,7 +104,7 @@ public partial class MobScene : Node3D
 			AnimateDialogue(text.GetRandom());
 	}
 
-	public void ToggleEffect(EMobSceneEffect effect, bool enabled)
+	public void AnimateAddEffect(EMobSceneEffect effect, bool enabled)
 	{
 		Node3D? effectNode = EffectNodes.ContainsKey(effect) ? EffectNodes[effect] : null;
 		Node3D parentNode = MarkerCenterBody;
@@ -141,22 +149,71 @@ public partial class MobScene : Node3D
 	#endregion
 
 	#region Model
-	public void SetBodyModel(EMobSceneBodyModel body)
+	public void ModelSet(MobModel model)
 	{
-		MarkerCenterBody.FreeChildren();
+		//Free the existing one.
+		ModelNode?.QueueFree();
 
-		Node3D modelScene;
-		switch (body)
+		//Set and add the new one.
+		ModelResource = model;
+		ModelNode = model.GetModel();
+
+		MarkerCenterBody.AddChild(ModelNode);
+	}
+
+	public Node3D[] GetBones(EMobModelBone bone)
+	{
+		if (ModelResource is null || ModelNode is null)
 		{
-			case EMobSceneBodyModel.HUMAN:
-				modelScene = Global.ManagerModel.GetInstance("BodyHuman");
-				break;
-
-			default: throw new Exception();
+			MsgLog.LogErrorMsg($"Tried to fetch {bone} bones from {MobUsing.DisplayedName} but... ({(ModelResource is null ? "there's no model" : "")}) | ({(ModelNode is null ? "there's no node" : "")}).");
+			return [];
 		}
 
-		ModelScene = modelScene;
-		MarkerCenterBody.AddChild(ModelScene);
+		return ModelResource.GetBones(ModelNode, bone);
+	}
+
+	protected Node3D? GetBone(EMobModelBone bone, int index)
+	{
+		Node3D[] boneNodes = GetBones(bone);
+
+		if (index >= boneNodes.Length)
+		{
+			MsgLog.LogErrorMsg($"Failed to get {bone} with index {index}. Out of range.");
+			return null;
+		}
+
+		return boneNodes[index];
+	}
+
+	public void ModelAttachNode(EMobModelBone bone, Node toAttach, int index)
+	{
+		Node3D? boneNode = GetBone(bone, index);
+		if (boneNode is null) return;
+
+		boneNode.AddChild(toAttach);
+		boneNode.SetMeta(MODEL_META_ATTACHED_NODE, true);
+	}
+
+	public Node3D[] ModelGetAttached(EMobModelBone bone)
+	{
+		return (from boneNode
+				in GetBones(bone)
+				where boneNode.GetMeta(MODEL_META_ATTACHED_NODE, false).As<bool>()
+				select boneNode)
+				.ToArray();
+	}
+
+	public void ModelClearAttached()
+		=> new List<EMobModelBone>(
+			Enum.GetValues<EMobModelBone>().Where(x => x != EMobModelBone.INVALID))
+			.ForEach(ModelClearAttached);
+
+	public void ModelClearAttached(EMobModelBone boneToRemove)
+	{
+		foreach (var node in ModelGetAttached(boneToRemove))
+		{
+			node.QueueFree();
+		}
 	}
 
 	#endregion
@@ -181,7 +238,7 @@ public partial class MobScene : Node3D
 				//Move to the goal
 				GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
 				break;
-			
+
 			case EMovementMode.PLACE:
 				GlobalPosition = currentGoalGlobal;
 				break;
@@ -291,7 +348,7 @@ public partial class MobScene : Node3D
 	{
 		if (mob != MobUsing) return;
 		mob.TurnActive = false;
-		ToggleEffect(EMobSceneEffect.TURN_ACTIVE, false);
+		AnimateAddEffect(EMobSceneEffect.TURN_ACTIVE, false);
 	}
 
 	private void OnMobSelected(Mob mob)
@@ -318,6 +375,28 @@ public partial class MobScene : Node3D
 		if (obj != MobUsing.EquipmentInventory) return;
 
 		MobUsing.EquipmentStatBoostsUpdate();
+
+		ModelClearAttached();
+
+		foreach (var slotItemPair in MobUsing.EquipmentInventory.GetSlotItemTuples())
+		{
+			//If the item does not have a model, skip.
+			if (slotItemPair.Item2.Model is null) continue;
+
+			//Decide which bone the item will attach to.
+			(EMobModelBone, int) boneIndexPair = slotItemPair.Item1 switch
+			{
+				EMobEquipmentSlot.LEFT_HAND => (EMobModelBone.HAND, 0),
+				EMobEquipmentSlot.RIGHT_HAND => (EMobModelBone.HAND, 1),
+				EMobEquipmentSlot.ARMOR => (EMobModelBone.TORSO, 0),
+				_ => (EMobModelBone.INVALID, 0)
+			};
+
+			//If no bone exists for this slot, skip.
+			if (boneIndexPair.Item1 == EMobModelBone.INVALID) continue;
+			Node toAttach = slotItemPair.Item2.Model.Instantiate<Node>();
+			ModelAttachNode(boneIndexPair.Item1, toAttach, boneIndexPair.Item2);
+		}
 	}
 
 	private void OnInputCheatEntered(Command.ECheat obj)

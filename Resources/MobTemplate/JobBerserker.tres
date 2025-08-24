@@ -19,6 +19,6 @@ metadata/_custom_type_script = "uid://r4d46yixqo3f"
 [resource]
 script = ExtResource("1_j34c6")
 Abilities = [ExtResource("1_05h7u"), ExtResource("2_kuips")]
-StatBoosts = Array[ExtResource("3_g6qpm")]([SubResource("Resource_6hh5x")])
+StatBoosts = [SubResource("Resource_6hh5x")]
 TemplateName = "Berserker"
 metadata/_custom_type_script = "uid://dw1wcfbf5rr8e"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MobModel" load_steps=3 format=3 uid="uid://c65sicnohqi20"]
+
+[ext_resource type="Script" uid="uid://clo0otoh4o5tc" path="res://Entity/Mob/Node/MobScene/MobModel.cs" id="1_d5gms"]
+[ext_resource type="PackedScene" uid="uid://bwf1thdonh1d1" path="res://assets/Model/character/humanoid/Human.tscn" id="1_w5ngq"]
+
+[resource]
+script = ExtResource("1_d5gms")
+Model = ExtResource("1_w5ngq")
+TorsoBone = NodePath("Skeleton3D/TORSO_ATTACH")
+HandBoneL = NodePath("Skeleton3D/HAND_L_ATTACH")
+HandBoneR = NodePath("Skeleton3D/HAND_R_ATTACH")
+HeadBone = NodePath("Skeleton3D/HEAD_ATTACH")
+metadata/_custom_type_script = "uid://clo0otoh4o5tc"

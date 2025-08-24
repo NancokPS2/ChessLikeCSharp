@@ -122,6 +122,7 @@ public partial class MsgLog : Node
 			case EMessageType.ERROR:
 				prefix = "ERROR: ";
 				GD.PushError(text);
+				Console.Error.Write(text);
 				break;
 
 			case EMessageType.GAMEPLAY:
@@ -138,6 +139,9 @@ public partial class MsgLog : Node
 		Instance.LogFile.StoreString(output);
 		Instance.LogFile.Flush();
 	}
+
+	public static void LogErrorMsg(string text, MessageProperties properties = default)
+		=> Log(EMessageType.ERROR, text, properties);
 
 	public static void LogGameMsg(string text, MessageProperties properties = default)
 		=> Log(EMessageType.GAMEPLAY, text, properties);

@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwf1thdonh1d1"]
+
+[ext_resource type="PackedScene" uid="uid://c8upch6etpftr" path="res://assets/Model/character/humanoid/Dummy.glb" id="1_5u4l3"]
+
+[node name="Human" instance=ExtResource("1_5u4l3")]
+
+[node name="HAND_R_ATTACH" type="BoneAttachment3D" parent="Skeleton3D" index="0"]
+transform = Transform3D(-5.10705e-08, -0.214205, 1.27676e-08, -0.00206462, 1.27676e-08, 0.214195, -0.214195, 3.83028e-08, -0.00206462, -0.181307, 0.319594, 2.44923e-08)
+bone_name = "Hand.r"
+bone_idx = 4
+
+[node name="HAND_L_ATTACH" type="BoneAttachment3D" parent="Skeleton3D" index="1"]
+transform = Transform3D(-5.10705e-08, 0.214205, -1.27676e-08, 0.00206462, 1.27676e-08, 0.214195, 0.214195, 3.83028e-08, -0.00206462, 0.181307, 0.319594, 2.44923e-08)
+bone_name = "Hand.l"
+bone_idx = 11
+
+[node name="TORSO_ATTACH" type="BoneAttachment3D" parent="Skeleton3D" index="2"]
+transform = Transform3D(0.214205, 0, 0, 0, 0.214205, 0, 0, 0, 0.214205, 0, 0.175043, 0)
+bone_name = "Torso"
+bone_idx = 1
+
+[node name="HEAD_ATTACH" type="BoneAttachment3D" parent="Skeleton3D" index="3"]
+transform = Transform3D(0.214205, 0, 0, 0, 0.214205, 0, 0, 0, 0.214205, 0, 0.330989, 0)
+bone_name = "Head"
+bone_idx = 8

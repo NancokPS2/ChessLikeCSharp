@@ -15,16 +15,27 @@ public partial class Item : Resource, IValuable, IDescription
     [Export]
     public float Price = 0;
 
+	[Export]
+	public PackedScene? Model;
+
+	[Export]
+	public Texture2D Texture;
+
     [Export]
     public Godot.Collections.Array<EItemFlag> Flags = new();
 
     [Export]
     public float Value { get => Price; set => Price = value; }
 
+	public Item()
+	{
+		Texture = new PlaceholderTexture2D(){Size = new(32,32)};
+	}
+
     public void ClearFlags()
-    {
-        Flags.Clear();
-    }
+	{
+		Flags.Clear();
+	}
 
     public void AddFlag(EItemFlag flag)
     {

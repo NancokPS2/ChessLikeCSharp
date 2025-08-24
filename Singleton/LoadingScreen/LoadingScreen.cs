@@ -18,6 +18,8 @@ public partial class LoadingScreen : Control
 
 	protected double TimeLoading;
 
+	protected bool IsLoading;
+
 	protected static List<Object> Loading = new();
 
 	public override void _Ready()
@@ -55,11 +57,11 @@ public partial class LoadingScreen : Control
 
 	private void UpdateScreen(double delta)
 	{
-		bool isLoading = Loading.Count != 0;
+		IsLoading = Loading.Count != 0;
 
 		//Visible = isLoading;
-		MouseFilter = isLoading ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
-		if (isLoading)
+		MouseFilter = IsLoading ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
+		if (IsLoading)
 		{
 			Modulate = Colors.White;
 			TimeLabelNode.Text = $"Time: {TimeLoading / 1000.0}\nLoading:\n{Loading.ToStringList("\n")}";
@@ -97,7 +99,7 @@ public partial class LoadingScreen : Control
 	#region Event Handling
 	private void OnGuiFocusChanged(Control node)
 	{
-		if (!IsInsideTree()) return;
+		if (!IsLoading) return;
 		GetViewport().GuiReleaseFocus();
 	}
 

@@ -231,7 +231,7 @@ public partial class MobSceneManager : Node3D
 		mob.TurnActive = true;
 		mob.Stats.RefillValues([EValueName.ACTION, EValueName.SUB_ACTION, EValueName.REACTION, EValueName.MOVE]);
 		instance.AnimatePopupText("READY");
-		instance.ToggleEffect(MobScene.EMobSceneEffect.TURN_ACTIVE, true);
+		instance.AnimateAddEffect(MobScene.EMobSceneEffect.TURN_ACTIVE, true);
 
 		SelectMob(mob);
 	}

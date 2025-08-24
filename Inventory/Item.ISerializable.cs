@@ -9,7 +9,7 @@ namespace ChessLike.Storage;
 
 public partial class Item : ISerializable
 {
-    public string GetFileName()
+	public string GetFileName()
     {
         string flags = "";
         foreach (var item in Flags)

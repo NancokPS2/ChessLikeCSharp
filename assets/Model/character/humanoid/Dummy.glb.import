@@ -13,12 +13,12 @@ dest_files=["res://.godot/imported/Dummy.glb-e1faad7081a1bb4ad48103e96d230ad7.sc
 
 [params]
 
-nodes/root_type="Spatial"
+nodes/root_type="Node3D"
 nodes/root_name="Human"
-nodes/apply_root_scale=true
+nodes/apply_root_scale=false
 nodes/root_scale=1.0
-nodes/import_as_skeleton_bones=false
-nodes/use_node_type_suffixes=true
+nodes/import_as_skeleton_bones=true
+nodes/use_node_type_suffixes=false
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true

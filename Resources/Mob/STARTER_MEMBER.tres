@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="Mob" load_steps=9 format=3 uid="uid://ck4x374dn8evy"]
+[gd_resource type="Resource" script_class="Mob" load_steps=10 format=3 uid="uid://ck4x374dn8evy"]
 
 [ext_resource type="Script" uid="uid://bi2n21248nh24" path="res://Inventory/Item.cs" id="1_tejvt"]
 [ext_resource type="Script" uid="uid://cdh3pq8hwu2w4" path="res://Entity/Mob/Inventory/MobEquipmentInventory.cs" id="2_iq3yr"]
 [ext_resource type="Resource" uid="uid://2uoqrajfi1t6" path="res://Resources/Item/Equip_Dagger.tres" id="2_ptslc"]
+[ext_resource type="Resource" uid="uid://7lijrftbpnjo" path="res://Resources/Item/Equip_Vest.tres" id="3_18i41"]
 [ext_resource type="Script" uid="uid://bodnw66lsmq04" path="res://Entity/Mob/Mob.cs" id="3_ys5bg"]
 [ext_resource type="Resource" uid="uid://7btkf10h82tr" path="res://Resources/MobTemplate/Default.tres" id="4_ys5bg"]
 [ext_resource type="Resource" uid="uid://c2cnylvo0o16q" path="res://Resources/MobTemplate/RaceHuman.tres" id="5_v5fqi"]
@@ -14,7 +15,7 @@ contents = Dictionary[int, ExtResource("1_tejvt")]({
 0: ExtResource("2_ptslc"),
 1: null,
 2: null,
-3: null,
+3: ExtResource("3_18i41"),
 4: null,
 5: null
 })
