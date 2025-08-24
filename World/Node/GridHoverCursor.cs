@@ -5,10 +5,18 @@ using System;
 [GlobalClass]
 public partial class GridHoverCursor : Node3D
 {
-	public GridHoverCursor()
+	public override void _Ready()
 	{
+		base._Ready();
 		EventBus.CellInputReceived += OnCellInputReceived;
 	}
+
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		EventBus.CellInputReceived -= OnCellInputReceived;
+	}
+
 
 	private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
 	{

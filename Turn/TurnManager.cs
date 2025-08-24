@@ -193,9 +193,17 @@ public partial class TurnManager : Node3D
         }
     }
 
-    private void ResetDelay(ITurn turn)
-    {
-        turn.DelayCurrent = turn.GetDelayBase() + turn.DelayToAddOnTurnEnd;
+	private void ResetDelay(ITurn turn)
+	{
+		turn.DelayCurrent = turn.GetDelayBase() + turn.DelayToAddOnTurnEnd;
+
+		//If there is only one, ignore this.
+		if (Participants.Count == 1) return;
+
+		//Make sure the delay of the one being reset ends up higher than at least another one.
+		float othersMinDelay = Participants.Where(x => x != turn).Min(x => x.DelayCurrent);
+		if (othersMinDelay >= turn.DelayCurrent)
+			turn.DelayCurrent = othersMinDelay + 1;
     }
 
     public void DelayAdd(ITurn turn, float delay)

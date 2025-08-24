@@ -67,6 +67,7 @@ public partial class MobMovement : Node3D
 		else if (createIfMissing)
 		{
 			AStars[key] = GetNewAStar(mob, moveMode);
+			ValidateAStarCache(mob, moveMode);
 			return GetAStar(mob, moveMode, false);
 		}
 		else
@@ -81,11 +82,13 @@ public partial class MobMovement : Node3D
 
 		MobAStar aStar = new();
 		//Reserve space first to speed it up.
+
 		aStar.ReserveSpace(
 			GridUsed.Boundary.X * GridUsed.Boundary.Y * GridUsed.Boundary.Z
 			);
 
 		//Add the points
+
 		foreach (var item in GridUsed.CellDictionary)
 		{
 			if (IsPositionValidToExist(mob, item.Key))
@@ -94,6 +97,7 @@ public partial class MobMovement : Node3D
 		aStar.CachePoints();
 
 		//Connect the points
+
 		foreach (var pointId in aStar.GetPointIds())
 		{
 			Vector3i point = aStar.GetPointPositionCached(pointId);
@@ -102,6 +106,7 @@ public partial class MobMovement : Node3D
 				Vector3i pointTarget = new(aStar.GetPointPositionCached(pointTargetId));
 
 				//If it can move there, connect it.
+
 				if (IsValidMove(mob, point, pointTarget, moveMode))
 					aStar.ConnectPoints(pointId, pointTargetId);
 			}
@@ -109,8 +114,21 @@ public partial class MobMovement : Node3D
 		return aStar;
 	}
 
-	public void AddAStar(Mob mob, EMovementMode moveMode)
-		=> AStars[(mob, moveMode)] = GetNewAStar(mob, moveMode);
+	public void ValidateAStarCache()
+	{
+		foreach (var item in AStars)
+		{
+			ValidateAStarCache(item.Key.Item1, item.Key.Item2);
+		}
+	}
+	public void ValidateAStarCache(Mob mob, EMovementMode moveMode)
+	{
+		foreach (var item in GetAStar(mob, moveMode).GetPointPositionsCached())
+		{
+			if (!IsPositionValidToExist(mob, item))
+				throw new Exception($"Invalid cache. {item} is not a valid position to be in for {mob.DisplayedName}.");
+		}
+	}
 
 	protected bool IsValidMove(Mob mob, Vector3i from, Vector3i to, EMovementMode mode)
 	{
@@ -172,6 +190,14 @@ public partial class MobMovement : Node3D
 		EventBus.MobMoved?.Invoke(mob, new List<Vector3i>() { where }, new(EMovementMode.PLACE));
 	}
 
+	private void UpdateAStar()
+	{
+		foreach (var item in AStars)
+		{
+			UpdateAStar(item.Key.Item1);
+		}
+	}
+
 	private void UpdateAStar(Mob mob, List<EMovementMode>? ignored = null)
 	{
 		ignored ??= new();
@@ -181,6 +207,7 @@ public partial class MobMovement : Node3D
 
 			MobAStar newAStar = GetNewAStar(mob, moveMode);
 			AStars[(mob, moveMode)] = newAStar;
+			ValidateAStarCache(mob, moveMode);
 		}
 	}
 
@@ -194,7 +221,7 @@ public partial class MobMovement : Node3D
 	private void OnGridChanged(Grid obj)
 	{
 		GridUsed = obj;
-
+		UpdateAStar();
 	}
 
 	private void OnMobStateChanged(Mob mob, EMobState state)

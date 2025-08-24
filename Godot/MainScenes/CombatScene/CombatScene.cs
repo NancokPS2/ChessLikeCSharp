@@ -135,7 +135,7 @@ public partial class CombatScene : Node3D
 		}
 
 		EventBus.EncounterLoaded?.Invoke(encounterToLoad);
-
+		EventBus.GridChanged?.Invoke(GetGrid());
 		//Everything must be loaded by now.
 		EventBus.CombatPreparationStarted?.Invoke();
 	}
@@ -147,7 +147,6 @@ public partial class CombatScene : Node3D
 			//Update the map to support all the factions that will be in it.
 			rand.SetFactionsSupported(factionsPresent);
 			rand.Randomize();
-			EventBus.GridChanged?.Invoke(rand);
 		}
 	}
 

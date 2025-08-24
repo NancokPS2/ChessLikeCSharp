@@ -62,6 +62,9 @@ public partial class MobAStar : AStar3D
 	public Dictionary<long, Vector3i> GetIdToPointDict()
 		=> PositionPointCacheDict.GetDictReverse();
 
+	public bool HasPoint(Vector3i point)
+		=> PositionPointCacheDict.ContainsKey(point);
+
 	protected Func<Vector3i, Vector3i, bool> GetConnectionCondition(Mob mobUsed, EMovementMode mode)
 	=> mode switch
 	{
