@@ -65,13 +65,13 @@ public partial class GridNode : Node3D
 	public override void _Ready()
 	{
 		base._Ready();
-		EventBus.EncounterLoaded += OnEncounterLoaded;
+		EventBus.GridChanged += OnGridChanged;
 	}
 
 	protected override void Dispose(bool disposing)
 	{
 		base.Dispose(disposing);
-		EventBus.EncounterLoaded -= OnEncounterLoaded;
+		EventBus.GridChanged -= OnGridChanged;
 	}
 
 
@@ -301,11 +301,12 @@ public partial class GridNode : Node3D
             cellInput
             );
     }
+	
+	private void OnGridChanged(Grid obj)
+	{
+		SetGrid(obj);
+	}
 
-    private void OnEncounterLoaded(EncounterData obj)
-    {
-        SetGrid(obj.Grid);
-    }
     #endregion
 
 	#region Cell Component

@@ -38,7 +38,7 @@ public partial class EncounterLoadingTest : Node3D
         Godot.Vector2 inputDirection = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
         Vector3i direction = new((int)float.Round(inputDirection.X), 0, (int)float.Round(inputDirection.Y));
         Mob mob = Global.ManagerMob.GetPooledInCombat()[0];
-        mob.MoveRelative(direction);
+        mob.MoveRelative(direction, new(EMovementMode.PLACE));
     }
 
     private static void TestMobMovement()
@@ -58,7 +58,7 @@ public partial class EncounterLoadingTest : Node3D
             tempPos += Vector3i.BACK;
             positions.Add(tempPos);
         }
-        mob.MoveTroughPath(positions);
+        mob.Move(positions, new(EMovementMode.GROUNDED));
 
         Debug.Assert(initialPos == mob.GetPosition());
     }

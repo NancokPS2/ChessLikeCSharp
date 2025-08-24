@@ -26,6 +26,16 @@ public partial class CombatScene : Node3D
 	}
 	protected static GridNode GridNode;
 
+	[Export]
+	private MobMovement mobMovement
+	{
+		set => MobMovementNode = value;
+		get => MobMovementNode;
+	}
+	protected static MobMovement MobMovementNode;
+
+	protected static Grid GridResource;
+
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 	public static UsageParameters? UsageParameters;
 
@@ -35,6 +45,7 @@ public partial class CombatScene : Node3D
 		get => stateCurrent;
 	}
 	private static ECombatState stateCurrent;
+
 
 	public override void _Ready()
 	{
@@ -67,8 +78,8 @@ public partial class CombatScene : Node3D
 	public void Setup(EncounterData encounterToLoad)
 	{
 		EncounterData = encounterToLoad;
-		//SHITCODE
-		GetGridNode().SetGrid(EncounterData.Grid);
+		GridResource = EncounterData.Grid;
+		EventBus.GridChanged?.Invoke(EncounterData.Grid);
 
 		//Create mobs
 		List<EFaction> factionsPresent = new();
@@ -94,7 +105,7 @@ public partial class CombatScene : Node3D
 		}
 
 		//Setup the GridRandom if present.
-		//SHITCODE
+		//WIP (should not force all GridRandoms to allow the PLAYER faction)
 		if (!factionsPresent.Contains(EFaction.PLAYER))
 			factionsPresent.Add(EFaction.PLAYER);
 		SetupGridRandom(factionsPresent);
@@ -116,11 +127,11 @@ public partial class CombatScene : Node3D
 				.Item1;
 
 			//Make sure the mob can be there.
-			if (!mob.IsValidPositionToExist(GetGrid(), pos))
+			if (!MobMovementNode.IsPositionValidToExist(mob, pos))
 				throw new Exception($"Mob {mob.DisplayedName} has been spawned in an invalid location {pos}");
 
 			//WIP This should be used automatically
-			mob.Move(pos);
+			GetMobMovement().ForceMobPosition(mob, pos);;
 		}
 
 		EventBus.EncounterLoaded?.Invoke(encounterToLoad);
@@ -134,8 +145,9 @@ public partial class CombatScene : Node3D
 		if (GetGrid() is GridRandom rand)
 		{
 			//Update the map to support all the factions that will be in it.
-			rand?.SetFactionsSupported(factionsPresent);
-			rand?.Randomize();
+			rand.SetFactionsSupported(factionsPresent);
+			rand.Randomize();
+			EventBus.GridChanged?.Invoke(rand);
 		}
 	}
 
@@ -151,11 +163,13 @@ public partial class CombatScene : Node3D
 
 	public static GridNode GetGridNode() => GridNode;
 
-	public static Grid GetGrid() => GridNode.GetGrid();
+	public static Grid GetGrid() => GridResource;
 
 	public static EncounterData GetEncounterData() => EncounterData;
 
 	public static List<Mob> GetMobsInCombat() => Global.ManagerMob.GetPooledInCombat();
+
+	public static MobMovement GetMobMovement() => MobMovementNode;
 
 	#region Event Handling
 	private void OnCombatPreparationStarted()

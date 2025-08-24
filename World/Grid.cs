@@ -92,7 +92,8 @@ public partial class Grid : Resource
 
     public GridCell GetCell(Vector3i position)
     {
-        if (!CellDictionary.TryGetValue(position, out GridCell cell)) { throw new Exception("Not found!"); }
+        if (!CellDictionary.TryGetValue(position, out GridCell cell)) {
+			throw new Exception($"Cell not found at position {position}"); }
         return cell is not null ? cell : throw new Exception("Null GridCell");
     }
 

@@ -45,11 +45,19 @@ public partial class ActionEventTargeter : Node3D
 
 	protected UsageParameters? UsageParametersCurrent;
 
-	public ActionEventTargeter()
+	public override void _Ready()
 	{
 		EventBus.CombatStateChanged += OnBattleStateChanged;
 		EventBus.CellInputReceived += OnCellInputReceived;
 	}
+
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		EventBus.CombatStateChanged -= OnBattleStateChanged;
+		EventBus.CellInputReceived -= OnCellInputReceived;
+	}
+
 
 	public void SetMarkers(List<Vector3i> targets, ETargetingType targetingType)
 	{
@@ -111,10 +119,10 @@ public partial class ActionEventTargeter : Node3D
 		PositionsTargeting = targets;
 	}
 
-	protected void UpdateAoECells(UsageParameters parameters)
+	protected void UpdateAffectedCells(UsageParameters parameters)
 	{
 		ActionEvent action = parameters.ActionRef;
-		List<List<Vector3i>> targetClusters = action.GetAoEVectors(
+		List<List<Vector3i>> targetClusters = action.GetAffectedVectors(
 			UsageParametersCurrent ?? throw new Exception("Tried to get targeting range without UsageParameters"),
 	PositionsSelected
 			);
@@ -259,9 +267,9 @@ public partial class ActionEventTargeter : Node3D
 		//There must be UsageParameters
 		if (UsageParametersCurrent is null) throw new Exception();
 
-		ActionEvent action = UsageParametersCurrent.ActionRef;
+/* 		ActionEvent action = UsageParametersCurrent.ActionRef;
 		Mob owner = UsageParametersCurrent.OwnerRef;
-		Grid grid = CombatScene.GetGrid();
+		Grid grid = CombatScene.GetGrid(); */
 
 
 		switch (input)
@@ -275,7 +283,7 @@ public partial class ActionEventTargeter : Node3D
 					//Must be a cell already set to be hit.
 					if (!IsCellTargeted(cellPos, ETargetingType.AOE)) break;
 
-					UpdateAoECells(UsageParametersCurrent);
+					UpdateAffectedCells(UsageParametersCurrent);
 					ConfirmSelection();
 				}
 				//There are selections left.
@@ -285,7 +293,7 @@ public partial class ActionEventTargeter : Node3D
 					if (!IsCellTargeted(cellPos, ETargetingType.TARGETING)) return;
 
 					AddSelectedCell(cellPos);
-					UpdateAoECells(UsageParametersCurrent);
+					UpdateAffectedCells(UsageParametersCurrent);
 				}
 				break;
 

@@ -39,10 +39,10 @@ where TValueEnum : notnull, Enum
         => ValueToStatDict[valKey] = stat;
 
     public TStatEnum GetAssociatedStat(TValueEnum val)
-        => HasStatAssociatedToValue(val) ? ValueToStatDict.Get(val) : INVALID_STAT_ENUM;
+        => HasStatAssociatedToValue(val) ? ValueToStatDict[val] : INVALID_STAT_ENUM;
 
     public TValueEnum GetAssociatedValue(TStatEnum stat)
-        => HasValueAssociatedToStat(stat) ? ValueToStatDict.GetReversed(stat) : INVALID_VALUE_ENUM;
+        => HasValueAssociatedToStat(stat) ? ValueToStatDict[stat] : INVALID_VALUE_ENUM;
 
     public bool HasStatAssociatedToValue(TValueEnum whichValue)
         => ValueToStatDict.ContainsKey(whichValue);

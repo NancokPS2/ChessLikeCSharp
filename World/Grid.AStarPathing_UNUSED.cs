@@ -15,7 +15,7 @@ public partial class AStarGridPathing
 {
     public MeshInstance3D DebugMesh = new();
     private Grid grid;
-    private Dictionary<EMobMovementMode, AStar3D> AStarGrids = new();
+    private Dictionary<EMovementMode, AStar3D> AStarGrids = new();
     private Dictionary<AStar3D, Dictionary<Vector3i, long>> AStarPositionToId = new();
 
     public AStarGridPathing(Grid grid)
@@ -27,7 +27,7 @@ public partial class AStarGridPathing
     {
         AStarGrids.Clear();
 
-        foreach (var move_mode in Enum.GetValues<EMobMovementMode>())
+        foreach (var move_mode in Enum.GetValues<EMovementMode>())
         {
             AStar3D aStar = new();
             AStarGrids[move_mode] = aStar;
@@ -80,21 +80,21 @@ public partial class AStarGridPathing
         }
     }
 
-    public bool IsPositionPathable(Vector3i position, EMobMovementMode mode)
+    public bool IsPositionPathable(Vector3i position, EMovementMode mode)
     {
         bool solid_below = grid.IsFlagInPosition(position + Vector3i.DOWN, ECellFlag.SOLID);
         bool air_here = grid.IsFlagInPosition(position, ECellFlag.AIR);
         bool liquid_here = grid.IsFlagInPosition(position, ECellFlag.LIQUID);
         switch (mode)
         {
-            case EMobMovementMode.GROUNDED:
+            case EMovementMode.GROUNDED:
                 return solid_below && air_here;
             
 
-            case EMobMovementMode.FLY:
+            case EMovementMode.FLY:
                 return air_here;
             
-            case EMobMovementMode.AMPHIBIOUS:
+            case EMovementMode.AMPHIBIOUS:
                 return liquid_here;
 
             default:

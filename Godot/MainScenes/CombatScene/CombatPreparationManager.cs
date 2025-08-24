@@ -26,7 +26,7 @@ public partial class CombatPreparationManager : Node3D
         if (selectedMob is null) return false;
 
         //The position must be valid for this mob.
-        if (!selectedMob.IsValidPositionToExist(CombatScene.GetGrid(), cellPos))
+        if (!CombatScene.GetMobMovement().IsPositionValidToExist(selectedMob, cellPos))
         {
             MsgLog.AddMessage($"{selectedMob.DisplayedName} cannot stand there.");
             return false;
@@ -45,7 +45,7 @@ public partial class CombatPreparationManager : Node3D
             selectedMob.MobState = EMobState.COMBAT;
         }
 
-        selectedMob.Move(cellPos);
+        CombatScene.GetMobMovement().ForceMobPosition(selectedMob, cellPos);
         return true;
     }
 

@@ -199,7 +199,17 @@ public partial class Mob : Resource
 	#endregion
 
 	#region Movement
-	public List<EMobMovementMode> MovementModes
+	public Vector3i GetPosition()
+    {
+        return Position;
+    }
+
+	public void SetPosition(Vector3i where)
+	{
+		Position = where;
+	}
+
+	public List<EMovementMode> MovementModes
 	{
 		set
 		{
@@ -208,7 +218,7 @@ public partial class Mob : Resource
 		}
 		get => new(movementModes);
 	}
-	protected List<EMobMovementMode> movementModes;
+	protected List<EMovementMode> movementModes = new(){EMovementMode.GROUNDED, EMovementMode.PLACE};
 	public List<ECellFlag> CellStandWhitelist = new();
 	public List<ECellFlag> CellStandBlacklist = new();
 	public List<ECellFlag> CellExistWhitelist = new();
@@ -230,14 +240,14 @@ public partial class Mob : Resource
 		{
 			switch(moveMode)
 			{
-				case EMobMovementMode.GROUNDED:
+				case EMovementMode.GROUNDED:
 					break;
 				
-				case EMobMovementMode.FLY:
+				case EMovementMode.FLY:
 					CellStandWhitelist.Add(ECellFlag.AIR);
 					break;
 
-				case EMobMovementMode.AMPHIBIOUS:
+				case EMovementMode.AMPHIBIOUS:
 					CellExistWhitelist.Add(ECellFlag.LIQUID);
 					break;
 				
@@ -245,39 +255,29 @@ public partial class Mob : Resource
 			}
 		}
 	}
-
-	public void Move(Grid grid, Vector3i to, EMobMovementMode mode)
-		=> Move(MoveGetPath(grid, GetPosition(), to), mode);
-
-	[Obsolete("WIP")]
-	public List<Vector3i> MoveGetPath(Grid grid, Vector3i from, Vector3i to)
-	{
-		List<Vector3i> output = new();
-
-		return output;
-	}
-	
-    public void Move(List<Vector3i> path, EMobMovementMode moveType)
+	public void Move(Vector3i to, MovementParameters moveParams)
+		=> Move(new List<Vector3i>(){to}, moveParams);
+    public void Move(List<Vector3i> path, MovementParameters moveParams)
 	{
 		if (path.Count == 0) MsgLog.Log(EMessageType.ERROR, "Received empty path.");
-		foreach (var position in path)
+
+		/* foreach (var position in path)
 		{
 			switch (moveType)
 			{
-				case EMobMovementMode.TELEPORT:
+				case EMovementMode.TELEPORT:
 					Vector3i original_pos = Position;
 					Position = position;
 					break;
 			}
 		}
-
-		//EventBus.MobMoved?.Invoke(this, original_pos, Position);
-		EventBus.MobFinishedPathMove?.Invoke(this, moveType, path);
+ */
+		EventBus.MobMovementPathRequested?.Invoke(this, path, moveParams);
 	}
 
-    public void MoveRelative(Vector3i to, EMobMovementMode mode)
+    public void MoveRelative(Vector3i relative, MovementParameters moveParams)
     {
-        Move(new(){GetPosition() + to}, mode);
+        Move(GetPosition() + relative, moveParams);
     }
 
     #endregion

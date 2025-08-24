@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b60n65v58uy2o"]
+[gd_scene load_steps=16 format=3 uid="uid://b60n65v58uy2o"]
 
 [ext_resource type="Script" uid="uid://chob4wygp866s" path="res://Godot/MainScenes/CombatScene/CombatScene.cs" id="1_polnf"]
 [ext_resource type="Script" uid="uid://bhoxiv0m5j3kk" path="res://Entity/Action/ActionEventRunner.cs" id="2_tppsp"]
@@ -13,12 +13,14 @@
 [ext_resource type="PackedScene" uid="uid://cg45vppi3yf5h" path="res://assets/Model/cell_object/AoEMarker.tscn" id="6_wmbcu"]
 [ext_resource type="PackedScene" uid="uid://cvgbi2pu0b73j" path="res://World/Node/GridHoverCursor.tscn" id="8_wmbcu"]
 [ext_resource type="Script" uid="uid://o3bontwo17yt" path="res://Godot/MainScenes/CombatScene/CombatPreparationManager.cs" id="11_xx6pq"]
+[ext_resource type="Script" uid="uid://c3xq26m12g23v" path="res://Entity/Mob/Movement/MobMovement.cs" id="12_xx6pq"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_1a52j"]
 
-[node name="Combat" type="Node3D" node_paths=PackedStringArray("gridNode")]
+[node name="Combat" type="Node3D" node_paths=PackedStringArray("gridNode", "mobMovement")]
 script = ExtResource("1_polnf")
 gridNode = NodePath("Singletons/GridNode")
+mobMovement = NodePath("Singletons/MobMovement")
 metadata/_custom_type_script = "uid://chob4wygp866s"
 
 [node name="Singletons" type="Node3D" parent="."]
@@ -56,7 +58,9 @@ metadata/_custom_type_script = "uid://cs0et8n4nl2xx"
 script = ExtResource("11_xx6pq")
 metadata/_custom_type_script = "uid://o3bontwo17yt"
 
-[node name="Node3D" type="Node3D" parent="Singletons"]
+[node name="MobMovement" type="Node3D" parent="Singletons"]
+script = ExtResource("12_xx6pq")
+metadata/_custom_type_script = "uid://c3xq26m12g23v"
 
 [node name="Compass" type="MeshInstance3D" parent="."]
 transform = Transform3D(25, 0, 0, 0, -4.37114e-06, -1, 0, 100, -4.37114e-08, 0, -20, 0)

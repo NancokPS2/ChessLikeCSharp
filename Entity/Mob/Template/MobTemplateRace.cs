@@ -17,6 +17,9 @@ public partial class MobTemplateRace : MobTemplate
 	[Export]
 	protected Godot.Collections.Array<MobStatBoost> StatBoosts = new();
 
+	[Export]
+	protected Godot.Collections.Array<EMovementMode> MovementModes = new();
+
 	public MobTemplateRace() : base(ETemplateType.RACE)
 	{
 	}

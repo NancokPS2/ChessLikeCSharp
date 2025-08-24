@@ -72,23 +72,23 @@ public partial class MobLoadingTest : Node3D
         Console.WriteLine(path);
 
         EventBus.MobMoved += TestMovementReportMove;
-        mob.MoveTroughPath(path);
+        mob.Move(path, new(EMovementMode.PLACE));
         EventBus.MobMoved -= TestMovementReportMove;
 
         TestChange("Movement", false);
     }
 
-    private void TestMovementReportMove(Mob mob, Vector3i from, Vector3i to)
-    {
-        Console.WriteLine($"Mob {mob.DisplayedName} moved from {from} to {to}");
-    }
+	private void TestMovementReportMove(Mob mob, List<Vector3i> path, MovementParameters moveParams)
+	{
+        Console.WriteLine($"Mob {mob.DisplayedName} moved from {path.First()} to {path.Last()}");
+	}
 
     public void TestMobCommands()
     {
         TestChange("Mob Commands", true);
 
         float damageAmount = 10;
-        MobCommandTakeDamage damage = new(damageAmount);
+        MobCommandTakeDamage damage = new(){Damage = damageAmount};
 
         float health = mob.Stats.GetValue(EValueName.HEALTH);
         Console.WriteLine($"Health before damage: {health}");

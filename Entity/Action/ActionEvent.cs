@@ -111,9 +111,9 @@ public partial class ActionEvent : Resource
         List<Vector3i> output = new();
 
         //If it uses pathing, just query that directly and move on.
-        if (TargetParams.UsesPathing)
+        if (TargetParams.TargetingUsesPathing != EMovementMode.INVALID)
         {
-            output = grid.NavGetPathablePositions(owner);
+            output = CombatScene.GetMobMovement().GetPathablePositions(owner, TargetParams.TargetingUsesPathing);
             return output;
         }
 
@@ -137,59 +137,76 @@ public partial class ActionEvent : Resource
         return output;
     }
 
-    public List<List<Vector3i>> GetAoEVectors(UsageParameters usageParams, List<Vector3i> selectedPositions)
+    public List<List<Vector3i>> GetAffectedVectors(UsageParameters usageParams, List<Vector3i> targetedPositions)
     {
         if (usageParams.ActionRef != this) throw new Exception();
-        if (selectedPositions.Count == 0) throw new Exception("No position to use AoE in.");
+        if (targetedPositions.Count == 0) throw new Exception("No position to use AoE in.");
 
         Vector3i origin = usageParams.OwnerRef.GetPosition();
         Grid grid = usageParams.GridRef;
         Mob owner = usageParams.OwnerRef;
         List<List<Vector3i>> output = new();
 
-        foreach (Vector3i selected in selectedPositions)
-        {
-            List<Vector3i> subOutput = new();
+		//Pathing based AoE
+		if (TargetParams.TargetingUsesPathing != EMovementMode.INVALID && TargetParams.AoEUsesPathing == EMovementMode.INVALID)
+			throw new Exception("I don't know how to handle the Targeting using Pathing but not the AoE!");
+			
+		if (TargetParams.AoEUsesPathing != EMovementMode.INVALID)
+		{
+			if (targetedPositions.Count != 1)
+				MsgLog.Log(EMessageType.ERROR, $"{Name} uses pathing but also used {targetedPositions.Count} targets, can't move to multiple locations!");
 
-            //Get the rotation to look from the owner to the target. This is relative to the user, so ZERO atm.
-            Vector3i.Rotation rotation = Vector3i.ZERO.GetRotationToLookAt(selected, true);
+			CombatScene.GetMobMovement()
+				.GetAStar(Owner, TargetParams.TargetingUsesPathing)
+				.GetPath(Owner.GetPosition(), targetedPositions.First());
+		}
 
-            //Get the shape.
-            subOutput = TargetParams.GetAoEShape(rotation);
+		//Regular AoE checks
+			foreach (Vector3i selected in targetedPositions)
+			{
+				List<Vector3i> subOutput = new();
 
-            //Convert the list to be relative to the selection position.
-            subOutput = subOutput.Select(x => x + selected).ToList();
+				//Get the rotation to look from the owner to the target. This is relative to the user, so ZERO atm.
+				Vector3i.Rotation rotation = Vector3i.ZERO.GetRotationToLookAt(selected, true);
 
-            //Make sure they are inbounds
-            subOutput = subOutput
-                .Where(x => grid.IsPositionInbounds(x))
-                .ToList();
+				//Get the shape.
+				subOutput = TargetParams.GetAoEShape(rotation);
 
-            //Select positions within range and filter them.
-            uint maxRange = GetTotalRange(owner);
-            subOutput = subOutput
-                .Where(x => x.DistanceManhattanTo(origin) <= maxRange)
-                .ToList();
+				//Convert the list to be relative to the selection position.
+				subOutput = subOutput.Select(x => x + selected).ToList();
 
-            //Add new entries that are not duplicated to output.
-            foreach (var cluster in output)
-            {
-                subOutput = subOutput
-                    .Where(x => cluster.Contains(x))
-                    .ToList();
-            }
+				//Make sure they are inbounds
+				subOutput = subOutput
+					.Where(x => grid.IsPositionInbounds(x))
+					.ToList();
 
-            output.Add(subOutput);
-        }
+				//Select positions within range and filter them.
+				uint maxRange = GetTotalRange(owner);
+				subOutput = subOutput
+					.Where(x => x.DistanceManhattanTo(origin) <= maxRange)
+					.ToList();
+
+				//Add new entries that are not duplicated to output.
+				foreach (var cluster in output)
+				{
+					subOutput = subOutput
+						.Where(x => cluster.Contains(x))
+						.ToList();
+				}
+
+				output.Add(subOutput);
+			}
 
         return output;
     }
 
+	
+
     #endregion
 
-    #region Mob Filter
-    public List<Mob> GetValidMobs(List<Mob> mobPositions)
-        => mobPositions.Where(x => IsMobValid(x)).ToList();
+	#region Mob Filter
+	public List<Mob> GetValidMobs(List<Mob> mobPositions)
+		=> mobPositions.Where(x => IsMobValid(x)).ToList();
 
     public bool IsMobValid(Mob mob)
     {

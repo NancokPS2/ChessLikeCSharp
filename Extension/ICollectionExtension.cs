@@ -96,12 +96,31 @@ public static class ICollectionExtension
         }
         return output;
     }
-	public static TColl PopRandom<TColl>(this List<TColl> collection)
+
+	private enum EPopMode {FIRST, LAST, RANDOM}
+
+	private static TColl Pop<TColl>(this List<TColl> collection, EPopMode mode)
 	{
-		var output = collection.GetRandom();
-		collection.Remove(output);
+		if (collection.Count == 0) throw new Exception("The List is empty, can't pop out anything.");
+		int index = mode switch
+		{
+			EPopMode.FIRST => 0,
+			EPopMode.LAST => collection.Count - 1,
+			EPopMode.RANDOM => Random.Shared.Next(collection.Count - 1),
+			_ => throw new Exception(),
+		};
+		TColl output = collection[index];
+		collection.RemoveAt(index);
 		return output;
 	}
+	public static TColl PopRandom<TColl>(this List<TColl> collection)
+		=> Pop(collection, EPopMode.RANDOM);
+
+	public static TColl PopFirst<TColl>(this List<TColl> collection)
+		=> Pop(collection, EPopMode.FIRST);
+
+	public static TColl PopLast<TColl>(this List<TColl> collection)
+		=> Pop(collection, EPopMode.LAST);
 
     //Get a random value from a NULLABLE collection
 	public static TColl? GetRandom<TColl>(this List<TColl> collection)

@@ -30,8 +30,11 @@ public partial class TargetingParameters : Resource
     [Export]
     public bool CanTargetEmpty = false;
 
+	/// <summary>
+	/// Replaces the targeting with a path from the MobMovement object.
+	/// </summary>
     [Export]
-    public bool UsesPathing = false;
+    public EMovementMode TargetingUsesPathing = EMovementMode.INVALID;
 
     //AoE
     public enum AoEMode
@@ -43,6 +46,13 @@ public partial class TargetingParameters : Resource
     }
     [Export]
     public AoEMode AoEShape = AoEMode.SINGLE;
+
+	/// <summary>
+	/// Replaces the selected AoEShape with a path from the user to the target location.
+	/// Set to INVALID to disable.
+	/// </summary>
+	[Export]
+	public EMovementMode AoEUsesPathing = EMovementMode.INVALID;
 
     [Export]
     //Area when in SINGLE mode.

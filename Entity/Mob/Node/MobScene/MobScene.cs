@@ -33,7 +33,7 @@ public partial class MobScene : Node3D
 	private AnimationPlayer? AnimationPlayer;
 
 	private List<Vector3i> MovementStored = new();
-	private int MovementCurrentIndex;
+	private EMovementMode MovementModeCurrent;
 
 	private Dictionary<EMobSceneEffect, Node3D> EffectNodes = new();
 
@@ -53,7 +53,10 @@ public partial class MobScene : Node3D
 
 		MobUsing.TemplateUpdate(true, true);
 		MobUsing.EquipmentStatBoostsUpdate();
+
+		MovementResetPosition();
 	}
+
 
 	public override void _Process(double delta)
 	{
@@ -161,42 +164,61 @@ public partial class MobScene : Node3D
 	#region Movement
 	public void MovementProcess()
 	{
-		//If empty, skip.
-		if (MovementStored.Count == 0) return;
-
 		//Reached the end of the list, we are done.
-		if (MovementCurrentIndex >= MovementStored.Count)
+		if (MovementStored.Count == 0)
 		{
-			MovementCurrentIndex = 0;
-			MovementStored.Clear();
 			MovementVerifyPosition();
 			return;
 		}
 
-		Vector3i currentGoal = MovementStored[MovementCurrentIndex];
+		Vector3i currentGoal = MovementStored[0];
 
-		Godot.Vector3 currentGoalGlobal;
-		switch (MobUsing.MovementModes)
+		//Perform the movement
+		Godot.Vector3 currentGoalGlobal = CombatScene.GetGridNode().MapToGlobal(currentGoal);
+		switch (MovementModeCurrent)
 		{
-			case EMobMovementMode.GROUNDED:
-				currentGoalGlobal = CombatScene.GetGridNode().MapToGlobal(currentGoal);
+			case EMovementMode.GROUNDED:
+				//Move to the goal
+				GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
+				break;
+			
+			case EMovementMode.PLACE:
+				GlobalPosition = currentGoalGlobal;
+				break;
+
+			case EMovementMode.FLY:
+				if (GlobalPosition.DistanceTo(currentGoalGlobal) > 2)
+				{
+					GlobalPosition = new(
+						Mathf.MoveToward(GlobalPosition.X, currentGoalGlobal.X, MovementGetSpeed()),
+						Mathf.MoveToward(GlobalPosition.Y, currentGoalGlobal.Y + 1, MovementGetSpeed()),
+						Mathf.MoveToward(GlobalPosition.Z, currentGoalGlobal.Z, MovementGetSpeed())
+					);
+				}
+				else
+				{
+					GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
+				}
 				break;
 
 			default:
-				throw new NotImplementedException($"Movement for {MobUsing.MovementModes} not implemented yet.");
+				throw new NotImplementedException($"Movement for {MovementModeCurrent} not implemented yet.");
 		}
 
-		GlobalPosition = GlobalPosition.MoveToward(currentGoalGlobal, MovementGetSpeed());
 
-		//If close enough, advance the index.
+		//If close enough, change goal.
 		if (Mathf.IsZeroApprox(GlobalPosition.DistanceTo(currentGoalGlobal)))
-			MovementCurrentIndex++;
+		{
+			var popped = MovementStored.PopFirst();
+
+			if (popped != currentGoal) throw new Exception("This was supposed to remove the current goal.");
+		}
 	}
 
 	private float MovementGetSpeed()
 	{
 		float agility = Mathf.Clamp(MobUsing.Stats.GetStat(EStatName.AGILITY), 0, 200);
-		return 2f * (agility / 100);
+		return 0.8f * (agility / 100);
 	}
 
 	public void MovementResetPosition()
@@ -215,10 +237,11 @@ public partial class MobScene : Node3D
 	#endregion
 
 	#region Event Handling
-	private void OnMobMoved(Mob mob, Vector3i from, Vector3i to)
+	private void OnMobMoved(Mob mob, List<Vector3i> path, MovementParameters moveParams)
 	{
 		if (mob != MobUsing) return;
-		MovementStored.Add(to);
+		MovementModeCurrent = moveParams.MovementMode;
+		MovementStored.AddRange(path);
 	}
 
 	private void OnMobStatChanged(Mob mob, EStatName stat, float change)

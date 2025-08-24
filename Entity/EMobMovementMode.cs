@@ -1,9 +1,18 @@
 namespace ChessLike.Entity;
 
-public enum EMobMovementMode
+public enum EMovementMode
 {
-    GROUNDED,
-    AMPHIBIOUS,
-    FLY,
-    TELEPORT,
+	INVALID = -1,
+	GROUNDED,
+	AMPHIBIOUS,
+	FLY,
+	/// <summary>
+	/// Move within range.
+	/// </summary>
+	TELEPORT,
+	/// <summary>
+	/// A form of teleportation without requirements.
+	/// </summary>
+	PLACE,
+
 }

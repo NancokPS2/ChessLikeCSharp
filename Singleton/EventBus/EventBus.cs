@@ -55,7 +55,7 @@ public partial class EventBus : Node
 
     #region Battle Encounter
     //Encounter
-    public static ObjectChange<Grid>? GridLoaded;
+    public static ObjectChange<Grid>? GridChanged;
     public static ObjectChange<EncounterData>? EncounterLoaded;
 
     //Combat start and end
@@ -103,14 +103,14 @@ public partial class EventBus : Node
     #endregion
 
     #region Mob - Movement
-    public delegate void MobMovement(Mob mob, Vector3i from, Vector3i to);
-    public delegate void MobMovementPath(Mob mob, EMobMovementMode moveMode, List<Vector3i> path);
-    public static MobMovement? MobMoved;
-    public static MobMovementPath? MobFinishedPathMove;
+    public delegate void MobMovementPath(Mob mob, List<Vector3i> path, MovementParameters moveParams);
+	public delegate void MobMovement(Mob mob, Vector3i target, MovementParameters moveParams);
+    public static MobMovementPath? MobMovementPathRequested;
+	public static MobMovementPath? MobMoved;
     #endregion
 
-    #region Mob - Command
-    public delegate void MobCommandBroadcast(Dictionary<EInfo, string> dict);
+	#region Mob - Command
+	public delegate void MobCommandBroadcast(Dictionary<EInfo, string> dict);
     public delegate void MobCommandEvent(ChessLike.Entity.MobCommand.Command command, Mob onWho);
     public static MobCommandBroadcast? MobCommandBroadcasted;
     public static MobCommandEvent? MobCommandUsed;

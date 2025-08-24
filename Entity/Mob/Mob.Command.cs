@@ -33,4 +33,5 @@ public partial class Mob
 
         command.UseCommand(this);
     }
+
 }

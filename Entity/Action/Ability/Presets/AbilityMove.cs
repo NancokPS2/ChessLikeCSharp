@@ -16,16 +16,12 @@ public partial class AbilityMove : Ability
     {
     }
 
-    public AbilityMove(EMobMovementMode variant) : base()
-    {
-    }
-
     public override void Use(UsageParameters usage_params)
     {
         base.Use(usage_params);
         Mob owner = usage_params.OwnerRef;
-        Vector3i target = usage_params.PositionsTargeted[0];
-        MobCommandTeleport command = new(target);
+        List<Vector3i> path = usage_params.PositionsTargeted;
+        MobCommandMove command = new(path, EMovementMode.GROUNDED);
         owner.CommandProcess(command);
     }
 
