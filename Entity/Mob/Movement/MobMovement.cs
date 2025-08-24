@@ -24,7 +24,18 @@ public partial class MobMovement : Node3D
 		EventBus.MobStateChanged += OnMobStateChanged;
 		EventBus.GridChanged += OnGridChanged;
 		EventBus.MobMovementPathRequested += OnMobMoveRequested;
+		EventBus.MobCellListChanged += OnMobCellListChanged;
 	}
+
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+		EventBus.MobStateChanged -= OnMobStateChanged;
+		EventBus.GridChanged -= OnGridChanged;
+		EventBus.MobMovementPathRequested -= OnMobMoveRequested;
+		EventBus.MobCellListChanged -= OnMobCellListChanged;
+	}
+
 
 	public List<Vector3i> GetPathablePositions(Mob mob, EMovementMode moveMode)
 	{
@@ -201,7 +212,7 @@ public partial class MobMovement : Node3D
 	private void UpdateAStar(Mob mob, List<EMovementMode>? ignored = null)
 	{
 		ignored ??= new();
-		foreach (var moveMode in mob.MovementModes)
+		foreach (var moveMode in mob.GetMovementModesFromAbilities())
 		{
 			if (ignored.Contains(moveMode)) continue;
 
@@ -213,7 +224,7 @@ public partial class MobMovement : Node3D
 
 	public void ErrorOnMissingMove(Mob mob, EMovementMode moveMode)
 	{
-		if (!mob.MovementModes.Contains(moveMode))
+		if (!mob.GetMovementModesFromAbilities().Contains(moveMode))
 			MsgLog.Log(EMessageType.ERROR, $"Making a MobAStar with mode {moveMode} for {mob.DisplayedName}. Which does not have that mode.");
 	}
 
@@ -245,6 +256,11 @@ public partial class MobMovement : Node3D
 		{
 			MsgLog.Log(EMessageType.ERROR, $"Issued a path movement for {mob.DisplayedName} that is not valid: {path.ToStringList(", ")}.");
 		}
+	}
+
+	private void OnMobCellListChanged(Mob obj)
+	{
+		UpdateAStar(obj);
 	}
 	#endregion
 }

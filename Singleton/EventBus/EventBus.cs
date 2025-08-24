@@ -107,6 +107,7 @@ public partial class EventBus : Node
 	public delegate void MobMovement(Mob mob, Vector3i target, MovementParameters moveParams);
     public static MobMovementPath? MobMovementPathRequested;
 	public static MobMovementPath? MobMoved;
+	public static ObjectChange<Mob>? MobCellListChanged;
     #endregion
 
 	#region Mob - Command
@@ -190,7 +191,9 @@ public partial class EventBus : Node
     public static ObjectChange<MobEquipmentInventory>? InventoryChanged;
     public static InventoryItemChange? InventoryItemAdded;
     public static InventoryItemChange? InventoryItemRemoved;
+
 	#endregion
+
 
 
 

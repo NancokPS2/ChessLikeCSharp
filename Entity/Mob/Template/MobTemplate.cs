@@ -47,24 +47,12 @@ public partial class MobTemplate : Resource
 		//mob.DisplayedName = "Unnamed mob from template";
 		//mob.Faction = EFaction.INVALID;
 		mob.ClearAction();
-		
-		mob.MovementModes.Clear(); mob.UpdateCellList();
 
 		foreach (var item in Enum.GetValues<ETemplateType>())
 		{
 			mob.Stats.BoostRemove(item.ToString());
 		}
 		return mob;
-	}
-
-	protected void ApplyMovement(Mob mob, Array<EMovementMode> moveModes)
-	{
-		mob.MovementModes.AddRange(
-			moveModes.Where(
-				x => !mob.MovementModes.Contains(x)
-				)
-			);
-		mob.UpdateCellList();
 	}
 
 	protected void ApplyNames(Mob mob, Godot.Collections.Array<string> names)

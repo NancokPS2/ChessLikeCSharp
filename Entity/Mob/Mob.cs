@@ -209,21 +209,23 @@ public partial class Mob : Resource
 		Position = where;
 	}
 
-	public List<EMovementMode> MovementModes
-	{
-		set
-		{
-			movementModes = new(value);
-			UpdateCellList();
-		}
-		get => new(movementModes);
-	}
-	protected List<EMovementMode> movementModes = new(){EMovementMode.GROUNDED, EMovementMode.PLACE};
+	public List<EMovementMode> GetMovementModesFromAbilities()
+		=> (from ability in GetAbilities() select ability.TargetParams.TargetingUsesPathing)
+			.Concat(from ability in GetAbilities() select ability.TargetParams.AoEUsesPathing)
+			.Distinct()
+			.Where(x => x != EMovementMode.INVALID)
+			.ToList();
+
 	public List<ECellFlag> CellStandWhitelist = new();
 	public List<ECellFlag> CellStandBlacklist = new();
 	public List<ECellFlag> CellExistWhitelist = new();
 	public List<ECellFlag> CellExistBlacklist = new();
 
+	/// <summary>
+	/// Reads current abilities to change what cells the Mob is allowed to be in.
+	/// If none are allowed, it defaults to EMovementMode.GROUNDED
+	/// </summary>
+	/// <param name="movementModes">The movement modes used to decide which cells are valid.</param>
 	public void UpdateCellList()
 	{
 		CellStandWhitelist.Clear();
@@ -236,13 +238,15 @@ public partial class Mob : Resource
 		CellExistBlacklist.Add(ECellFlag.SOLID);
 		CellStandWhitelist.Add(ECellFlag.SOLID);
 
-		foreach(var moveMode in MovementModes)
+		List<EMovementMode> movementModes = GetMovementModesFromAbilities();
+
+		foreach (var moveMode in movementModes)
 		{
-			switch(moveMode)
+			switch (moveMode)
 			{
 				case EMovementMode.GROUNDED:
 					break;
-				
+
 				case EMovementMode.FLY:
 					CellStandWhitelist.Add(ECellFlag.AIR);
 					break;
@@ -250,13 +254,15 @@ public partial class Mob : Resource
 				case EMovementMode.AMPHIBIOUS:
 					CellExistWhitelist.Add(ECellFlag.LIQUID);
 					break;
-				
+
 				default: break;
 			}
 		}
+		EventBus.MobCellListChanged?.Invoke(this);
 	}
+	
 	public void Move(Vector3i to, MovementParameters moveParams)
-		=> Move(new List<Vector3i>(){to}, moveParams);
+		=> Move(new List<Vector3i>() { to }, moveParams);
     public void Move(List<Vector3i> path, MovementParameters moveParams)
 	{
 		if (path.Count == 0) MsgLog.Log(EMessageType.ERROR, "Received empty path.");
@@ -286,15 +292,21 @@ public partial class Mob : Resource
 
     public void AddAction(ActionEvent action) => AddAction(new List<ActionEvent>() { action });
 
-    public void AddAction(List<ActionEvent> actions)
-    {
+	public void AddAction(List<ActionEvent> actions)
+	{
 		foreach (var action in actions)
 		{
 			ActionEvent newAction = (ActionEvent)action.Duplicate(true);
 			Actions.Add(newAction);
 			newAction.Owner = this;
 			EventBus.MobActionAdded?.Invoke(this, newAction);
-        }
+		}
+
+		//Update the cell list if any of the actions has movement.
+		if (actions.Any(
+			x => x.TargetParams.TargetingUsesPathing != EMovementMode.INVALID || x.TargetParams.AoEUsesPathing != EMovementMode.INVALID)
+			)
+			UpdateCellList();
     }
 
     public void RemoveAction(ActionEvent action) => RemoveAction(new List<ActionEvent>() { action });
