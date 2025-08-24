@@ -14,6 +14,12 @@ public partial class SceneChanger : Node
 
 	private static Node? CurrentScene;
 
+	public bool LoadingScreenEnabled = true;
+
+	private double TimePaused;
+
+	public bool IsCurrentSceneReady { protected set; get; }
+
 	public SceneChanger()
 	{
 		Instance = this;
@@ -25,6 +31,31 @@ public partial class SceneChanger : Node
 		EventBus.InputPauseOptionSelected += OnInputPauseOptionSelected;
 		EventBus.LoadAttempted += OnLoadAttempted;
 		EventBus.MapLocationConfirmed += OnMapLocationConfirmed;
+		EventBus.SceneChanged += OnSceneChanged;
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		UpdateScreen(delta);
+	}
+
+	private void UpdateScreen(double delta)
+	{
+		IsCurrentSceneReady = CurrentScene?.IsNodeReady() ?? false;
+		EUIScene? currentUI = UIManager.GetCurrentUI();
+
+		if (LoadingScreenEnabled && !IsCurrentSceneReady && currentUI != EUIScene.LOADING_SCREEN)
+		{
+			UIManager.ChangeToUI(EUIScene.LOADING_SCREEN);
+		}
+		else if ( TimePaused > 1 && (!LoadingScreenEnabled || IsCurrentSceneReady) && currentUI == EUIScene.LOADING_SCREEN )
+		{
+			UIManager.ChangeToUI(EUIScene.NONE);
+		}
+
+		if (currentUI == EUIScene.LOADING_SCREEN) TimePaused += delta;
+		else TimePaused = 0;
 	}
 
 	public Node? GetCurrentScene()
@@ -39,45 +70,59 @@ public partial class SceneChanger : Node
 		CurrentScene = null;
 	}
 
-	public static void ChangeToCombat(EncounterData data)
+	public static async void ChangeToCombat(EncounterData data)
 	{
+		UIManager.ChangeToUI(EUIScene.LOADING_SCREEN);
+
 		RemoveCurrent();
 
 		CombatScene node = Readonly.Scenes.MAIN_COMBAT;
 
-		GetCommonParent().AddChild(node);
-
-		EventBus.SceneChanged?.Invoke(node);
-
-		CurrentScene = node;
+		await AsyncSceneChange(node);
 
 		node.Setup(data);
 	}
 
-	private static void ChangeToTravelMap()
+	private static async void ChangeToTravelMap()
 	{
+		UIManager.ChangeToUI(EUIScene.LOADING_SCREEN);
+
 		RemoveCurrent();
 
 		TravelMapScene node = Readonly.Scenes.MAIN_TRAVEL_MAP;
 
-		GetCommonParent().AddChild(node);
-
-		EventBus.SceneChanged?.Invoke(node);
-
-		CurrentScene = node;
+		await AsyncSceneChange(node);
 	}
 
-	public static void ChangeToMainMenu()
+
+	public static async void ChangeToMainMenu()
 	{
+		UIManager.ChangeToUI(EUIScene.LOADING_SCREEN);
+
 		RemoveCurrent();
 
 		MainMenuScene node = Readonly.Scenes.MAIN_MENU;
 
-		GetCommonParent().CallDeferred("add_child", node);
-
-		EventBus.SceneChanged?.Invoke(node);
+		await AsyncSceneChange(node);
 
 		CurrentScene = node;
+	}
+
+	private static async Task AsyncSceneChange<TNode>(TNode node) where TNode : Node
+	{
+		await Task.Run(
+			async () =>
+			{
+				float time = Time.GetTicksMsec();
+				new Callable(GetCommonParent(), "add_child").CallDeferred(node);
+				await Instance.ToSignal(node, Node.SignalName.Ready);
+				MsgLog.LogInfoMsg($"Finished async {typeof(TNode).ToString().GetExtension()} load. Time passed: {(Time.GetTicksMsec() - time) / 1000}");
+
+				EventBus.SceneChanged?.Invoke(node);
+
+				CurrentScene = node;
+			}
+		);
 	}
 
 	#region Event Handling
@@ -97,6 +142,11 @@ public partial class SceneChanger : Node
 	{
 		if (obj.CombatEncounter is not null)
 			ChangeToCombat(obj.CombatEncounter);
+	}
+
+	private void OnSceneChanged(Node obj)
+	{
+		UpdateScreen(1.0/60.0);
 	}
 	#endregion
 }

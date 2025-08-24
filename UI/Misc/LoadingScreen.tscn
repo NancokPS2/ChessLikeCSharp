@@ -1,0 +1,87 @@
+[gd_scene load_steps=9 format=3 uid="uid://dwx0jhfj8ee72"]
+
+[ext_resource type="Script" uid="uid://cm38gvxt0ab1b" path="res://UI/Misc/LoadingScreen.cs" id="1_sefqg"]
+
+[sub_resource type="Gradient" id="Gradient_sefqg"]
+offsets = PackedFloat32Array(0.00862069, 1)
+colors = PackedColorArray(0.114897, 0.114897, 0.114897, 1, 0.0253638, 0.0253638, 0.0253638, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4vw53"]
+gradient = SubResource("Gradient_sefqg")
+width = 512
+height = 512
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_4vw53"]
+offsets = PackedFloat32Array(0, 0.508621, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.831897, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_epkik"]
+gradient = SubResource("Gradient_4vw53")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sefqg"]
+light_mode = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_sefqg"]
+font_size = 180
+
+[sub_resource type="LabelSettings" id="LabelSettings_4vw53"]
+font_size = 24
+
+[node name="LoadingScreen" type="Control" node_paths=PackedStringArray("LightNode", "TimeLabelNode")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sefqg")
+LightNode = NodePath("PointLight2D")
+TimeLabelNode = NodePath("Time")
+metadata/_custom_type_script = "uid://cm38gvxt0ab1b"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_4vw53")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(544, 320)
+energy = 2.0
+texture = SubResource("GradientTexture2D_epkik")
+texture_scale = 3.0
+
+[node name="Label" type="Label" parent="."]
+material = SubResource("CanvasItemMaterial_sefqg")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "LOADING"
+label_settings = SubResource("LabelSettings_sefqg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Time" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_4vw53")

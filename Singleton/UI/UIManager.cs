@@ -70,8 +70,12 @@ public partial class UIManager : Control, IDebugDisplay
 		return CanvasLayers.ToStringList();
 	}
 
-	public EUIScene GetCurrentUI()
-		=> Nodes.Keys.First(x => Nodes[x].IsInsideTree());
+	public static EUIScene? GetCurrentUI()
+	{
+		EUIScene found = Instance.Nodes.Keys.FirstOrDefault(x => Instance.Nodes[x].IsInsideTree());
+		return found;
+	}
+
 
 	public static void ChangeToUI(EUIScene ui)
 	{
