@@ -8,11 +8,12 @@ using Vector2 = Godot.Vector2;
 public partial class TooltipServer : Node
 {
     public static TooltipServer? Instance;
+	private bool ShouldUpdate;
 
     public TooltipServer()
-    {
-        Instance = this;
-    }
+	{
+		Instance = this;
+	}
 
     private List<ITooltip> TooltipUsers = new();
     //private Dictionary<ITooltip, Action> LambdaDict = new();
@@ -25,13 +26,20 @@ public partial class TooltipServer : Node
 
     }
 
+	public override void _Input(InputEvent @event)
+	{
+		base._Input(@event);
+		ShouldUpdate = true;
+	}
+
+
     private void OnNodeEntered(Node node)
-    {
-        if (node is ITooltip tool)
-        {
-            AddUser(tool);
-        }
-    }
+	{
+		if (node is ITooltip tool)
+		{
+			AddUser(tool);
+		}
+	}
 
     private void AddUser(ITooltip node)
     {
@@ -47,21 +55,36 @@ public partial class TooltipServer : Node
         //LambdaDict.Remove(node);
     }
 
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-        foreach (var item in TooltipUsers)
-        {
-            if (item.IsDirty())
-            {
-                item.GetCanvasItem().QueueRedraw();
-            };
-        }
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		//Either it should update or this is about to get updated.
+		if (!ShouldUpdate) return;
+		else ShouldUpdate = false;
+
+		List<ITooltip> toRemove = new();
+		foreach (var item in TooltipUsers)
+		{
+			if (item is GodotObject obj && !IsInstanceValid(obj))
+			{
+				toRemove.Add(item);
+				continue;
+			}
+			if (item.IsDirty())
+			{
+				item.GetCanvasItem().QueueRedraw();
+			}
+
+		}
+		foreach (var item in toRemove)
+		{
+			TooltipUsers.Remove(item);
+		}
     }
 
     public void Draw(ITooltip user)
     {
-        if (!user.IsShown()){return;}
+        if (!user.ShouldShow()){return;}
 
         CanvasItem DrawTarget = user.GetCanvasItem();
         Vector2 mouse_pos = DrawTarget.GetLocalMousePosition() + (Vector2.One * 32);

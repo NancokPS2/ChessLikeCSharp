@@ -33,7 +33,8 @@ public partial class MobEquipmentUI : BaseButtonMenu<Button, (Item?, EMobEquipme
 	protected override void _ButtonCreated(Button button, (Item?, EMobEquipmentSlot) param)
 	{
 		button.Text = param.Item1?.Name ?? param.Item2.ToString();
-		button.TooltipText = param.Item1?.ToString() ?? param.Item2.ToString();
+		//button.TooltipText = param.Item1?.ToString() ?? param.Item2.ToString();
+		SetTooltip(button, param.Item1?.GetDescription() ?? "NO ITEM");
 	}
 
 	#region Event Handling

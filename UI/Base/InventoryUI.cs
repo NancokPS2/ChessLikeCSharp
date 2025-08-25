@@ -103,9 +103,21 @@ public partial class InventoryUI : BaseButtonMenu<Button, ItemFilter>, ISceneDep
 
 	protected override void _ButtonCreated(Button button, ItemFilter slot)
 	{
-		if(slot.Item is not null) {button.Text = slot.Item.Name;}
-		else if (slot.FlagWhitelist.Count != 0) {button.Text = slot.FlagWhitelist[0].ToString();}
-		else {button.Text = "EMPTY";}
+		base._ButtonCreated(button, slot);
+		//WIP: Missing tooltips
+		if (slot.Item is not null)
+		{
+			button.Text = slot.Item.Name;
+			SetTooltip(button, slot.Item.GetDescription());
+		}
+		else if (slot.FlagWhitelist.Count != 0)
+		{
+			button.Text = slot.FlagWhitelist[0].ToString();
+		}
+		else
+		{
+			button.Text = "EMPTY";
+		}
 	}
 
 	//TODO: handle deselecting slots once an operation happens.
@@ -177,7 +189,7 @@ public partial class InventoryUI : BaseButtonMenu<Button, ItemFilter>, ISceneDep
 		return Global.ManagerFont.ResourceGet("Regular");
 	}
 
-	public bool IsShown()
+	public bool ShouldShow()
 	{
 		return TupleHovered?.Item2?.Item is not null;
 	}

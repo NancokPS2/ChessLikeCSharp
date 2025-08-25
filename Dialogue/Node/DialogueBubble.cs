@@ -65,6 +65,7 @@ public partial class DialogueBubble : Node3D
 
 		while (NewTextTimeSince > CharacterDelay)
 		{
+			NewTextIndex = Math.Clamp(NewTextIndex, 0, NewText.Count()-1);
 			char newChar = NewText[NewTextIndex];
 			LabelNode.Text += newChar;
 

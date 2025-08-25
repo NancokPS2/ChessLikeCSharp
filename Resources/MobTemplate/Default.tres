@@ -33,5 +33,5 @@ valueDict = Dictionary[int, float]({
 resource_local_to_scene = true
 script = ExtResource("2_2ywx0")
 MobStats = SubResource("Resource_lrc2p")
-TemplateName = "Base Template"
+TemplateName = "Creature"
 metadata/_custom_type_script = "uid://bs8etr8fphshs"

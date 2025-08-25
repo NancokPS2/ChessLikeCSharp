@@ -6,5 +6,5 @@
 script = ExtResource("1_3cbyl")
 Names = Array[String](["Brutus", "Kain", "Pot"])
 Factions = Array[int]([2])
-TemplateName = "Unnamed Template"
+TemplateName = "Bandit"
 metadata/_custom_type_script = "uid://bu3hmnfj7dnh0"

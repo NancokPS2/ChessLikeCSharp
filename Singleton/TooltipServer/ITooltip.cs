@@ -9,14 +9,15 @@ public interface ITooltip
     public string GetText();
     public Godot.Font GetFont() => Global.ManagerFont.ResourceGet("Regular");
     public int GetFontSize() => 16;
+	public Godot.Vector2 GetOffset() => Godot.Vector2.Zero;
 
-    public Godot.Vector2 GetRectSize() => new(140,80);
+    public Godot.Vector2 GetRectSize() => new(140, 80);
     public bool IsDirty() => true;
-    bool IsShown()
+    public bool ShouldShow()
     {
-        if (this is Control control && GodotObject.IsInstanceValid(control) && control.IsVisibleInTree())
+        if (this is Control control)
         {
-            return control.GetGlobalRect().HasPoint(control.GetGlobalMousePosition());
+			return control.IsHovered();
         }
         else
         {

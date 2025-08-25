@@ -161,7 +161,7 @@ public partial class MobScene : Node3D
 		MarkerCenterBody.AddChild(ModelNode);
 	}
 
-	public Node3D[] GetBones(EMobModelBone bone)
+	public Node3D[] ModelGetBones(EMobModelBone bone)
 	{
 		if (ModelResource is null || ModelNode is null)
 		{
@@ -172,9 +172,9 @@ public partial class MobScene : Node3D
 		return ModelResource.GetBones(ModelNode, bone);
 	}
 
-	protected Node3D? GetBone(EMobModelBone bone, int index)
+	protected Node3D? ModelGetBone(EMobModelBone bone, int index)
 	{
-		Node3D[] boneNodes = GetBones(bone);
+		Node3D[] boneNodes = ModelGetBones(bone);
 
 		if (index >= boneNodes.Length)
 		{
@@ -187,7 +187,7 @@ public partial class MobScene : Node3D
 
 	public void ModelAttachNode(EMobModelBone bone, Node toAttach, int index)
 	{
-		Node3D? boneNode = GetBone(bone, index);
+		Node3D? boneNode = ModelGetBone(bone, index);
 		if (boneNode is null) return;
 
 		boneNode.AddChild(toAttach);
@@ -197,7 +197,7 @@ public partial class MobScene : Node3D
 	public Node3D[] ModelGetAttached(EMobModelBone bone)
 	{
 		return (from boneNode
-				in GetBones(bone)
+				in ModelGetBones(bone)
 				where boneNode.GetMeta(MODEL_META_ATTACHED_NODE, false).As<bool>()
 				select boneNode)
 				.ToArray();

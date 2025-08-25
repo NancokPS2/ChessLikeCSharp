@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bvls5upm1pmxc" path="res://UI/Mob/MobIdentityUI.cs" id="1_i5ich"]
 
-[node name="Identity" type="Control" node_paths=PackedStringArray("NodeName", "NodeFaction")]
+[node name="Identity" type="Control" node_paths=PackedStringArray("NodeName", "NodeFaction", "NodeRace", "NodeJobs", "NodeIdentity")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +12,9 @@ grow_vertical = 2
 script = ExtResource("1_i5ich")
 NodeName = NodePath("VBoxContainer/Name")
 NodeFaction = NodePath("VBoxContainer/Faction")
+NodeRace = NodePath("VBoxContainer/Race")
+NodeJobs = NodePath("VBoxContainer/Job")
+NodeIdentity = NodePath("VBoxContainer/Identity")
 metadata/_custom_type_script = "uid://bvls5upm1pmxc"
 metadata/_tab_index = 3
 
@@ -30,3 +33,15 @@ text = "NAME HERE"
 [node name="Faction" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "FACTION HERE"
+
+[node name="Race" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "RACE HERE"
+
+[node name="Job" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "JOB HERE"
+
+[node name="Identity" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "IDENTITY HERE"

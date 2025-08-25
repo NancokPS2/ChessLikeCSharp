@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="ItemEquipment" load_steps=7 format=3 uid="uid://2uoqrajfi1t6"]
+[gd_resource type="Resource" script_class="ItemEquipment" load_steps=6 format=3 uid="uid://2uoqrajfi1t6"]
 
-[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_47pof"]
 [ext_resource type="PackedScene" uid="uid://t5jrnkjru7gj" path="res://assets/Model/item/dagger/Dagger.glb" id="2_g428c"]
 [ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_s5de2"]
 [ext_resource type="Script" uid="uid://cl830npf4tu4k" path="res://Inventory/ItemEquipment.cs" id="3_g2a4r"]
@@ -16,7 +15,7 @@ Source = ""
 
 [resource]
 script = ExtResource("3_g2a4r")
-AbilitiesGrantedToUser = Array[ExtResource("1_47pof")]([])
+AbilitiesGrantedToUser = []
 StatBoost = SubResource("Resource_d0hun")
 Name = "Dagger"
 Price = 0.0
