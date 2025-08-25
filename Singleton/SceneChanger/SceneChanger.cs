@@ -85,9 +85,8 @@ public partial class SceneChanger : Node
 				await Instance.ToSignal(node, Node.SignalName.Ready);
 				MsgLog.LogInfoMsg($"Finished async {typeof(TNode).ToString().GetExtension()} load. Time passed: {(Time.GetTicksMsec() - time) / 1000}");
 
-				EventBus.SceneChanged?.Invoke(node);
-
 				CurrentScene = node;
+				EventBus.SceneChanged?.Invoke(node);
 			}
 		);
 	}

@@ -52,8 +52,7 @@ public partial class PartyInventoryUI : Control
 			true).Inventory);
 
 		EventBus.MobSelected += OnMobSelected;
-		EventBus.CombatStarted += OnCombatStarted;
-		EventBus.CombatEnded += OnCombatEnded;
+		EventBus.SceneChanged += OnSceneChanged;
 	}
 
 	protected void ClearSelected()
@@ -114,20 +113,22 @@ public partial class PartyInventoryUI : Control
 		EquipmentUI?.Update(mob.EquipmentInventory);
 	}
 
-	private void OnCombatStarted()
+	private void OnSceneChanged(Node obj)
 	{
 		if (MassUI is null || EquipmentUI is null) throw new Exception();
-		CanModify = false;
-		MassUI.ForceDisable = true;
-		EquipmentUI.ForceDisable = true;
+		if (obj is CombatScene)
+		{
+			CanModify = false;
+			MassUI.ForceDisable = true;
+			EquipmentUI.ForceDisable = true;
+		}
+		else
+		{
+			CanModify = true;
+			MassUI.ForceDisable = false;
+			EquipmentUI.ForceDisable = false;
+		}
 	}
 
-	private void OnCombatEnded()
-	{
-		if (MassUI is null || EquipmentUI is null) throw new Exception();
-		CanModify = true;
-		MassUI.ForceDisable = false;
-		EquipmentUI.ForceDisable = false;
-	}
     #endregion
 }

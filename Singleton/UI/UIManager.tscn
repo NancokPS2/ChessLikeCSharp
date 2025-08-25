@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://grm0bgpxy6ib"]
+[gd_scene load_steps=8 format=3 uid="uid://grm0bgpxy6ib"]
 
 [ext_resource type="Script" uid="uid://d1b4e4cjsitb4" path="res://Singleton/UI/UIManager.cs" id="1_2yh43"]
 [ext_resource type="PackedScene" uid="uid://byh0x8syok53h" path="res://UI/Party/PartyGeneralUI.tscn" id="2_g8ov2"]
+[ext_resource type="PackedScene" uid="uid://clsmir0oc3kd6" path="res://Singleton/UI/UIManagerBackground.tscn" id="2_tfo51"]
 [ext_resource type="PackedScene" uid="uid://bx6logjxthbt5" path="res://UI/PauseUI.tscn" id="3_wvwis"]
 [ext_resource type="PackedScene" uid="uid://dpxiarah531y4" path="res://UI/Preparation/PreparationUI.tscn" id="4_wvwis"]
 [ext_resource type="PackedScene" uid="uid://dslo3iy2wc5fx" path="res://UI/Combat/CombatUI.tscn" id="5_uth44"]
@@ -17,6 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_2yh43")
+BackgroundScene = ExtResource("2_tfo51")
 Scenes = Dictionary[int, PackedScene]({
 2: ExtResource("2_g8ov2"),
 3: ExtResource("3_wvwis"),
