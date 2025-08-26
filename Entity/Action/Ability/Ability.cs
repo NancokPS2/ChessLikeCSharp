@@ -25,9 +25,6 @@ namespace ChessLike.Entity.Action;
 public partial class Ability : ActionEvent
 {
 
-	[Export]
-	public EAbility Identifier = EAbility.NULL;
-
 	[Export(PropertyHint.MultilineText)]
 	public string Description = "Mysterious action!";
 
@@ -71,7 +68,6 @@ public partial class Ability : ActionEvent
 				{"OwnerName", Owner.DisplayedName},
 			}
 		);
-
 
 		return output;
     }

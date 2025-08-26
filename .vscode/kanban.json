@@ -92,6 +92,10 @@
             "title": "Doing",
             "tasks": [
                 {
+                    "text": " - Ability to TOGGLE an effect on the owner\n - Make sure Abilities that are auto activated CAN be removed after they run out.",
+                    "id": "l0blgse4yuvqmpz3mvuv6z19"
+                },
+                {
                     "text": "Command rework:\n- Ability that applies an interceptor for passive effects.\n- Ability that ends the turn.\n- Ability for moving.\n- Add the moving, end turn, and attack abilities as the default for all mobs.",
                     "id": "qb09zdbj4dady4tx2hs98j5e"
                 },
@@ -172,5 +176,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1755999847856
+    "timestamp": 1756178456152
 }

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AnimatedSceneParameters" load_steps=3 format=3 uid="uid://b6lq25tdioiah"]
+
+[ext_resource type="Script" uid="uid://djner218mvn0" path="res://Entity/Action/Parameters/Animation/AnimatedSceneParameters.cs" id="1_mmt7m"]
+[ext_resource type="PackedScene" uid="uid://coowne23kcbpa" path="res://Resources/Particle/Explosion.tscn" id="1_uaxlk"]
+
+[resource]
+script = ExtResource("1_mmt7m")
+scene = ExtResource("1_uaxlk")
+spawnCount = 1
+duration = 1.0
+spawnMode = 0
+motionMode = Array[int]([])
+freeAfterDuration = true
+metadata/_custom_type_script = "uid://djner218mvn0"

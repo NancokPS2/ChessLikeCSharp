@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AnimationParameters" load_steps=3 format=3 uid="uid://b64vb5gwcuhjt"]
+
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/Animation/AnimationParameters.cs" id="1_3sdo4"]
+[ext_resource type="Resource" uid="uid://b6lq25tdioiah" path="res://Resources/AnimationParameters/AnimatedSceneExplosion.tres" id="1_eymhb"]
+
+[resource]
+script = ExtResource("1_3sdo4")
+MaxDuration = 2.0
+sceneSpawns = Array[Object]([ExtResource("1_eymhb")])
+animationFlags = null
+metadata/_custom_type_script = "uid://c7u4meo8cdm7v"

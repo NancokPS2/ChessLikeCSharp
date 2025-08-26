@@ -14,7 +14,7 @@ public partial class AutoActivationParameters : Resource
     public EAutoActivationMode AutoActivationMode;
 
     [Export]
-    public int AutoActivationMax;
+    public int AutoActivationMax = 3;
 
     [ExportGroup("Reaction Activation")]
     [Export]

@@ -18,9 +18,11 @@ public partial class CostParameters : Resource
 	[Export]
 	public int Move;
 
+	public bool IsFree()
+		=> (Action + SubAction + Reaction + Move) <= 0;
 	public override string ToString()
 	{
-		return $"{(Action != 0 ? "Actions: " + Action.ToString()+"\n" : "")}{(SubAction != 0 ? "Sub Action: " + SubAction.ToString()+"\n" : "")}{(Reaction != 0 ? "Reaction: " + Reaction.ToString()+"\n" : "")}{(Move != 0 ? "Move: " + Move.ToString() : "")}";
+		return $"{(Action != 0 ? "Actions: " + Action.ToString() + "\n" : "")}{(SubAction != 0 ? "Sub Action: " + SubAction.ToString() + "\n" : "")}{(Reaction != 0 ? "Reaction: " + Reaction.ToString() + "\n" : "")}{(Move != 0 ? "Move: " + Move.ToString() : "")}";
 
 	}
 

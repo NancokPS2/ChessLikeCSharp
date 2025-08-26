@@ -13,19 +13,28 @@ public partial class MobFilterParameters : Resource
     //If a mob is standing in a targeted location, they are included in the mob list of the UsageParameters.
     [Export]
     public bool PickMobInTargetPos = true;
-    //Only the owner is a valid target. Should have a range of 0.
-    [Export]
-    public bool OnlyAffectOwner = false;
+	
+    /// <summary>
+	/// The target cannot be the owner.
+	/// </summary>
+	[Export]
+    public bool CannotAffectOwner = false;
 
-    //The target cannot be an ally.
+    /// <summary>
+	/// The target cannot be an ally.
+	/// </summary>
     [Export]
     public bool CannotAffectAlly = false;
 
-    //The target cannot be an enemy.
+    /// <summary>
+	/// The target cannot be an enemy.
+	/// </summary>
     [Export]
     public bool CannotAffectEnemy = false;
 
-    //The target must be below this health.
+    /// <summary>
+	/// The target must be below this health percentage.
+	/// </summary>
     [Export]
     public float MaximumHealthPercent = 1.0f;
 

@@ -181,7 +181,7 @@ public partial class ActionEventTargeter : Node3D
 		foreach (var mob in CombatScene.GetMobsInCombat())
 		{
 			if (!positionsAffected.Contains(mob.GetPosition())) continue;
-			if (!action.IsMobValid(mob)) continue;
+			if (!action.IsMobValidForAoE(mob)) continue;
 
 			UsageParametersCurrent.MobsTargeted.Add(mob);
 		}

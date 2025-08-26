@@ -206,14 +206,14 @@ public partial class ActionEvent : Resource
 
 	#region Mob Filter
 	public List<Mob> GetValidMobs(List<Mob> mobPositions)
-		=> mobPositions.Where(x => IsMobValid(x)).ToList();
+		=> mobPositions.Where(x => IsMobValidForAoE(x)).ToList();
 
-    public bool IsMobValid(Mob mob)
+    public bool IsMobValidForAoE(Mob mob)
     {
         Faction owner_fac = Global.ManagerFaction.ResourceGet(EPackIDFaction.Player);
 
-        //Must be the owner?
-        if (mob != Owner && MobFilterParams.OnlyAffectOwner)
+        //Can affect owner?
+        if (mob == Owner && MobFilterParams.CannotAffectOwner)
         {
             return false;
         }
@@ -252,6 +252,8 @@ public partial class ActionEvent : Resource
 
     protected int AutoActivationLeft;
 
+	public bool AutoActivationActive = false;
+
     public int GetAutoActivationsLeft() => AutoActivationLeft;
 
     public void AutoActivationReset()
@@ -261,7 +263,7 @@ public partial class ActionEvent : Resource
     }
 
     protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
-        => new(Owner, parameters.GridRef, this);
+		=> new(Owner, parameters.GridRef, this);
     protected virtual UsageParameters GetAutoActivationUsageParameters()
         => new(Owner, CombatScene.GetGrid(), this);
 
@@ -280,15 +282,9 @@ public partial class ActionEvent : Resource
         AutoActivationLeft -= 1;
         AutoActivationTimeSinceLast = 0;
     }
-
-
     #endregion
 
     #region General
-    public virtual string GetDescription()
-    {
-        return "Undefined action description.";
-    }
     public virtual string GetUseText(UsageParameters parameters)
     {
         return $"{Owner.DisplayedName ?? "ERROR"} did something mysterious to {parameters.MobsTargeted.ToStringList(", ")}";
