@@ -164,7 +164,10 @@ public struct Vector3i : IEquatable<Vector3i>, IComparer<Vector3i>
 		return output;
 	}
 
-	public static List<Vector3i> CreateBox(Vector3i size)
+	public List<Vector3i> GetVolume()
+		=>	GetVolume(this);
+
+	public static List<Vector3i> GetVolume(Vector3i size)
 	{
 		List<Vector3i> output = new();
 		foreach (var x in Enumerable.Range(0, size.X))

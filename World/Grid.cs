@@ -65,7 +65,7 @@ public partial class Grid : Resource
 
 	public void FillCellWhere(GridCell cell, Func<Vector3i, bool> conditionFunc)
 	{
-		foreach (var item in Vector3i.CreateBox(Boundary))
+		foreach (var item in Vector3i.GetVolume(Boundary))
 		{
 			bool condition = conditionFunc(item);
 			if (condition)
