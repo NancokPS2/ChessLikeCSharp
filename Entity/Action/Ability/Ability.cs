@@ -28,6 +28,12 @@ public partial class Ability : ActionEvent
 	[Export(PropertyHint.MultilineText)]
 	public string Description = "Mysterious action!";
 
+	public Ability() : base()
+	{
+
+	}
+
+
 	public override void Use(UsageParameters usageParams)
 	{
 		base.Use(usageParams);

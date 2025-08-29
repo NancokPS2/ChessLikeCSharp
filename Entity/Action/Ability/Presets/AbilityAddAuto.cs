@@ -10,20 +10,32 @@ public partial class AbilityAddAuto : Ability
 {
 	const string META_IMPRINTED = "AbilityToggleAutoIMPRINTED_IDENTIFIER";
 
-	[Export]
 	public Ability AddedAbility = null!;
+	[Export]
+	private Ability addedAbility
+	{
+		get => AddedAbility;
+		set
+		{
+			AddedAbility = value;
+			if (!Validate(AddedAbility))
+				throw new Exception("Test exception to make sure this is set correctly.");
+		}
+	}
 
 	[Export]
 	public int MaxStacks = 1;
 
 	protected List<Ability> StacksTracker = new();
 
+	public AbilityAddAuto() : base()
+	{
+
+	}
+	
 	public override void Use(UsageParameters usageParams)
 	{
 		base.Use(usageParams);
-
-		if (!Validate(AddedAbility))
-			throw new Exception("Test exception to make sure this is set correctly.");
 
 		foreach (var mob in usageParams.MobsTargeted)
 		{
@@ -67,3 +79,4 @@ public partial class AbilityAddAuto : Ability
 		return isAutoActivated && isFree;
 	}
 }
+		

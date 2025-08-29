@@ -248,11 +248,11 @@ public partial class ActionEvent : Resource
     }
     private AutoActivationParameters autoActivationParams = new();
 
+	public bool AutoActivationEnabled { protected set; get; } = true;
+
     protected float AutoActivationTimeSinceLast;
 
     protected int AutoActivationLeft;
-
-	public bool AutoActivationActive = false;
 
     public int GetAutoActivationsLeft() => AutoActivationLeft;
 
@@ -323,8 +323,12 @@ public partial class ActionEvent : Resource
 
     protected void OnAutoActivationProcessTurnStarted(Mob who)
     {
+		//Must be enabled to begin with.
+		if (!AutoActivationEnabled) return;
+		//MsgLog.LogInfoMsg($"{Name} could not activate since it has auto activation disabled.");
+		
         //Check if it activates on turn end or start.
-        if (!AutoActivationParams.ActivatedByTurnStart) return;
+		if (!AutoActivationParams.ActivatedByTurnStart) return;
 
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
@@ -340,6 +344,9 @@ public partial class ActionEvent : Resource
 
     protected void OnAutoActivationProcessTurnEnded(Mob who)
     {
+		//Must be enabled to begin with.
+		if (!AutoActivationEnabled) return;
+
         //Check if it activates on turn end or start.
         if (!AutoActivationParams.ActivatedByTurnEnd) return;
 
@@ -357,6 +364,9 @@ public partial class ActionEvent : Resource
 
     protected void OnAutoActivationProcessTimePassed(float number)
     {
+		//Must be enabled to begin with.
+		if (!AutoActivationEnabled) return;
+
         //Must be set to react to actions
         if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
 
