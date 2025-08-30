@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ItemEquipment" load_steps=6 format=3 uid="uid://7lijrftbpnjo"]
+[gd_resource type="Resource" script_class="ItemEquipment" load_steps=7 format=3 uid="uid://7lijrftbpnjo"]
 
+[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_8erin"]
 [ext_resource type="PackedScene" uid="uid://fvvvbvxy52tj" path="res://assets/Texture/armor/Bulky.dae" id="1_ppbru"]
 [ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_xjv2x"]
 [ext_resource type="Script" uid="uid://cl830npf4tu4k" path="res://Inventory/ItemEquipment.cs" id="3_8erin"]
@@ -15,7 +16,7 @@ Source = ""
 
 [resource]
 script = ExtResource("3_8erin")
-AbilitiesGrantedToUser = []
+AbilitiesGrantedToUser = Array[ExtResource("1_8erin")]([])
 StatBoost = SubResource("Resource_d0hun")
 Name = "Vest"
 Price = 0.0

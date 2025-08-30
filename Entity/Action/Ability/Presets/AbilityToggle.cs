@@ -6,6 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
+[GlobalClass]
 public partial class AbilityToggle : Ability
 {
 	public Ability ToggledAbility = null!;
@@ -61,7 +62,8 @@ public partial class AbilityToggle : Ability
 			.Format(
 				new()
 				{
-					{"enableOrDisable", IsEnabled() ? "disable" : "enable"}
+					{"enableOrDisable", IsEnabled() ? "disable" : "enable"},
+					{"toggledAbilityName", ToggledAbility is not null ? ToggledAbility.Name : "ERROR"},
 				}
 			);
 	}

@@ -36,7 +36,7 @@ Move = 0
 [sub_resource type="Resource" id="Resource_a24tn"]
 script = ExtResource("5_xi721")
 PickMobInTargetPos = true
-OnlyAffectOwner = false
+CannotAffectOwner = false
 CannotAffectAlly = false
 CannotAffectEnemy = false
 MaximumHealthPercent = 1.0
@@ -64,7 +64,7 @@ ValueModifiers = Dictionary[int, float]({
 DamageBase = 0.0
 DamageMinimum = 0.0
 DefensePiercing = 0.0
-Identifier = 1
+HealthLossPercent = 0.0
 Description = "\"Attack a target with your weapon, dealing damage based on your {StatModifiers}. For around {Damage} damage\""
 Name = "Blood Want"
 flags = Array[int]([1, 2])

@@ -6,6 +6,7 @@ using Godot;
 
 namespace ChessLike.Entity.Action;
 
+[GlobalClass]
 public partial class AbilityAddAuto : Ability
 {
 	const string META_IMPRINTED = "AbilityToggleAutoIMPRINTED_IDENTIFIER";
@@ -32,7 +33,7 @@ public partial class AbilityAddAuto : Ability
 	{
 
 	}
-	
+
 	public override void Use(UsageParameters usageParams)
 	{
 		base.Use(usageParams);

@@ -29,7 +29,7 @@ Move = 0
 [sub_resource type="Resource" id="Resource_qy717"]
 script = ExtResource("5_dbce4")
 PickMobInTargetPos = true
-OnlyAffectOwner = false
+CannotAffectOwner = false
 CannotAffectAlly = false
 CannotAffectEnemy = false
 MaximumHealthPercent = 1.0
@@ -55,7 +55,7 @@ ValueModifiers = Dictionary[int, float]({})
 DamageBase = 5.0
 DamageMinimum = 0.0
 DefensePiercing = 0.0
-Identifier = 4
+HealthLossPercent = 0.0
 Description = "\"Attack a target with your weapon, dealing damage based on your {StatModifiers}. For around {Damage} damage\""
 Name = "Rock Fling"
 flags = Array[int]([2, 1])

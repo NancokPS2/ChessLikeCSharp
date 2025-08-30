@@ -35,7 +35,7 @@ Move = 1
 [sub_resource type="Resource" id="Resource_86hu2"]
 script = ExtResource("4_gurlg")
 PickMobInTargetPos = false
-OnlyAffectOwner = false
+CannotAffectOwner = false
 CannotAffectAlly = false
 CannotAffectEnemy = false
 MaximumHealthPercent = 1.0
@@ -55,7 +55,7 @@ AoESize = 0
 [resource]
 resource_local_to_scene = true
 script = ExtResource("6_i8nk2")
-Identifier = 3
+MovementMode = 0
 Description = "Moves trough solid ground."
 Name = "Walk"
 flags = null
