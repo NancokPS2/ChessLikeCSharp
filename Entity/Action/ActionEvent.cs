@@ -12,8 +12,8 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class ActionEvent : Resource
 {
-    private Mob? owner;
-    public Mob Owner
+	private Mob? owner;
+	public Mob? Owner
 	{
 		get
 		{
@@ -26,131 +26,133 @@ public partial class ActionEvent : Resource
 	}
 
 	[Export]
-    public string Name = "Undefined Action";
+	public string Name = "Undefined Action";
 
-    [Export]
-    private Godot.Collections.Array<EActionFlag> flags
-    {
-        set => Flags = new(value);
-        get => new(Flags);
-    }
-    public List<EActionFlag> Flags = new();
+	[Export]
+	private Godot.Collections.Array<EActionFlag> flags
+	{
+		set => Flags = new(value);
+		get => new(Flags);
+	}
+	public List<EActionFlag> Flags = new();
 
-    [Export]
-    private Godot.Collections.Array<MobCommand.Command> commands
-    {
-        set => Commands = new(value);
-        get => new(Commands);
-    }
-    public List<MobCommand.Command> Commands = new();
+	[Export]
+	private Godot.Collections.Array<MobCommand.Command> commands
+	{
+		set => Commands = new(value);
+		get => new(Commands);
+	}
+	public List<MobCommand.Command> Commands = new();
 
-    [ExportGroup("Parameters")]
+	[ExportGroup("Parameters")]
 
-    [Export]
-    public TargetingParameters TargetParams = new();
+	[Export]
+	public TargetingParameters TargetParams = new();
 
-    [Export]
-    public AnimationParameters AnimationParams = new();
+	[Export]
+	public AnimationParameters AnimationParams = new();
 
-    [Export]
-    public MobFilterParameters MobFilterParams = new();
+	[Export]
+	public MobFilterParameters MobFilterParams = new();
 
 	[Export]
 	public CostParameters CostParams = new();
 
 
-    public ActionEvent()
+	public ActionEvent()
 	{
-		EventBus.ActionQueued += OnActionQueued;
-
-		EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
-
-		EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
-		EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
-
 		EventBus.InputActionSelected += OnInputActionSelected;
+		EventBus.MobActionAdded += OnMobActionAdded;
 	}
 
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-    }
 
-    #region Visual
-    public Texture2D GetAnimationFloatingTexture() => throw new NotImplementedException();
 
-    public virtual void AnimationRun(UsageParameters parameters)
-    {
-        if (parameters.ActionRef != this) throw new Exception();
-    }
 
-    #endregion
+	protected override void Dispose(bool disposing)
+	{
+		base.Dispose(disposing);
+	}
 
-    #region Targeting
-    public int GetMaxTargetingSelections()
-        => TargetParams.MaxPositions;
+	#region Visual
+	public Texture2D GetAnimationFloatingTexture() => throw new NotImplementedException();
 
-    public uint GetTotalRange(Mob owner)
-    {
-        uint output = TargetParams.Range;
-        if (TargetParams.RangeStatBonus is EStatName stat && stat != EStatName.NONE)
-        {
-            output += (uint)owner.Stats.GetStat(stat);
-        }
-        return output;
-    }
+	public virtual void AnimationRun(UsageParameters parameters)
+	{
+		if (parameters.ActionRef != this) throw new Exception();
+	}
 
-    //Returns the positions targetable by this action, relative to the owner.
-    public List<Vector3i> GetTargetVectors(UsageParameters usageParams)
-    {
-        if (usageParams.ActionRef != this) throw new Exception();
+	#endregion
 
-        Vector3i origin = usageParams.OwnerRef.GetPosition();
-        Grid grid = usageParams.GridRef;
-        Mob owner = usageParams.OwnerRef;
-        List<Vector3i> output = new();
+	#region Targeting
+	public int GetMaxTargetingSelections()
+		=> TargetParams.MaxPositions;
 
-        //If it uses pathing, just query that directly and move on.
-        if (TargetParams.TargetingUsesPathing != EMovementMode.INVALID)
-        {
-            output = CombatScene.GetMobMovement().GetPathablePositions(owner, TargetParams.TargetingUsesPathing);
-            return output;
-        }
+	public uint GetTotalRange(Mob owner)
+	{
+		uint output = TargetParams.Range;
+		if (TargetParams.RangeStatBonus is EStatName stat && stat != EStatName.NONE)
+		{
+			output += (uint)owner.Stats.GetStat(stat);
+		}
+		return output;
+	}
 
-        //Get the shape.
-        output = TargetParams.GetTargetingShape();
+	//Returns the positions targetable by this action, relative to the owner.
+	public List<Vector3i> GetTargetVectors(UsageParameters usageParams)
+	{
+		if (usageParams.ActionRef != this) throw new Exception();
 
-        //Convert the list to be relative to its owner position.
-        output = output.Select(x => x + Owner.GetPosition()).ToList();
+		if (Owner is null)
+			throw new Exception("Owner missing!");
 
-        //Make sure they are inbounds
-        output = output
-            .Where(x => grid.IsPositionInbounds(x))
-            .ToList();
+		Vector3i origin = usageParams.OwnerRef.GetPosition();
+		Grid grid = usageParams.GridRef;
+		Mob owner = usageParams.OwnerRef;
+		List<Vector3i> output = new();
 
-        //Select positions within range and filter them.
-        uint maxRange = GetTotalRange(owner);
-        output = output
-            .Where(x => x.DistanceManhattanTo(origin) <= maxRange)
-            .ToList();
+		//If it uses pathing, just query that directly and move on.
+		if (TargetParams.TargetingUsesPathing != EMovementMode.INVALID)
+		{
+			output = CombatScene.GetMobMovement().GetPathablePositions(owner, TargetParams.TargetingUsesPathing);
+			return output;
+		}
 
-        return output;
-    }
+		//Get the shape.
+		output = TargetParams.GetTargetingShape();
 
-    public List<List<Vector3i>> GetAffectedVectors(UsageParameters usageParams, List<Vector3i> targetedPositions)
-    {
-        if (usageParams.ActionRef != this) throw new Exception();
-        if (targetedPositions.Count == 0) throw new Exception("No position to use AoE in.");
+		//Convert the list to be relative to its owner position.
+		output = output.Select(x => x + Owner.GetPosition()).ToList();
 
-        Vector3i origin = usageParams.OwnerRef.GetPosition();
-        Grid grid = usageParams.GridRef;
-        Mob owner = usageParams.OwnerRef;
-        List<List<Vector3i>> output = new();
+		//Make sure they are inbounds
+		output = output
+			.Where(x => grid.IsPositionInbounds(x))
+			.ToList();
+
+		//Select positions within range and filter them.
+		uint maxRange = GetTotalRange(owner);
+		output = output
+			.Where(x => x.DistanceManhattanTo(origin) <= maxRange)
+			.ToList();
+
+		return output;
+	}
+
+	public List<List<Vector3i>> GetAffectedVectors(UsageParameters usageParams, List<Vector3i> targetedPositions)
+	{
+		if (Owner is null)
+			throw new Exception("Owner missing!");
+		if (usageParams.ActionRef != this) throw new Exception();
+		if (targetedPositions.Count == 0) throw new Exception("No position to use AoE in.");
+
+		Vector3i origin = usageParams.OwnerRef.GetPosition();
+		Grid grid = usageParams.GridRef;
+		Mob owner = usageParams.OwnerRef;
+		List<List<Vector3i>> output = new();
 
 		//Pathing based AoE
 		if (TargetParams.TargetingUsesPathing != EMovementMode.INVALID && TargetParams.AoEUsesPathing == EMovementMode.INVALID)
 			throw new Exception("I don't know how to handle the Targeting using Pathing but not the AoE!");
-			
+
 		if (TargetParams.AoEUsesPathing != EMovementMode.INVALID)
 		{
 			if (targetedPositions.Count != 1)
@@ -162,147 +164,157 @@ public partial class ActionEvent : Resource
 		}
 
 		//Regular AoE checks
-			foreach (Vector3i selected in targetedPositions)
+		foreach (Vector3i selected in targetedPositions)
+		{
+			List<Vector3i> subOutput = new();
+
+			//Get the rotation to look from the owner to the target. This is relative to the user, so ZERO atm.
+			Vector3i.Rotation rotation = Vector3i.ZERO.GetRotationToLookAt(selected, true);
+
+			//Get the shape.
+			subOutput = TargetParams.GetAoEShape(rotation);
+
+			//Convert the list to be relative to the selection position.
+			subOutput = subOutput.Select(x => x + selected).ToList();
+
+			//Make sure they are inbounds
+			subOutput = subOutput
+				.Where(x => grid.IsPositionInbounds(x))
+				.ToList();
+
+			//Select positions within range and filter them.
+			uint maxRange = GetTotalRange(owner);
+			subOutput = subOutput
+				.Where(x => x.DistanceManhattanTo(origin) <= maxRange)
+				.ToList();
+
+			//Add new entries that are not duplicated to output.
+			foreach (var cluster in output)
 			{
-				List<Vector3i> subOutput = new();
-
-				//Get the rotation to look from the owner to the target. This is relative to the user, so ZERO atm.
-				Vector3i.Rotation rotation = Vector3i.ZERO.GetRotationToLookAt(selected, true);
-
-				//Get the shape.
-				subOutput = TargetParams.GetAoEShape(rotation);
-
-				//Convert the list to be relative to the selection position.
-				subOutput = subOutput.Select(x => x + selected).ToList();
-
-				//Make sure they are inbounds
 				subOutput = subOutput
-					.Where(x => grid.IsPositionInbounds(x))
+					.Where(x => cluster.Contains(x))
 					.ToList();
-
-				//Select positions within range and filter them.
-				uint maxRange = GetTotalRange(owner);
-				subOutput = subOutput
-					.Where(x => x.DistanceManhattanTo(origin) <= maxRange)
-					.ToList();
-
-				//Add new entries that are not duplicated to output.
-				foreach (var cluster in output)
-				{
-					subOutput = subOutput
-						.Where(x => cluster.Contains(x))
-						.ToList();
-				}
-
-				output.Add(subOutput);
 			}
 
-        return output;
-    }
+			output.Add(subOutput);
+		}
 
-	
+		return output;
+	}
 
-    #endregion
+
+
+	#endregion
 
 	#region Mob Filter
 	public List<Mob> GetValidMobs(List<Mob> mobPositions)
 		=> mobPositions.Where(x => IsMobValidForAoE(x)).ToList();
 
-    public bool IsMobValidForAoE(Mob mob)
-    {
-        Faction owner_fac = Global.ManagerFaction.ResourceGet(EPackIDFaction.Player);
+	public bool IsMobValidForAoE(Mob mob)
+	{
+		Faction owner_fac = Global.ManagerFaction.ResourceGet(EPackIDFaction.Player);
 
-        //Can affect owner?
-        if (mob == Owner && MobFilterParams.CannotAffectOwner)
-        {
-            return false;
-        }
-        //If health is above the max percent, fail.
-        else if (mob.Stats.GetValuePrecent(EValueName.HEALTH) > MobFilterParams.MaximumHealthPercent)
-        {
-            return false;
-        }
-        //Check for faction
-        else if (owner_fac.IsAlly(mob.Faction) && MobFilterParams.CannotAffectAlly)
-        {
-            return false;
-        }
-        else if (owner_fac.IsEnemy(mob.Faction) && MobFilterParams.CannotAffectEnemy)
-        {
-            return false;
-        }
-        return true;
-    }
-    #endregion
+		//Can affect owner?
+		if (mob == Owner && MobFilterParams.CannotAffectOwner)
+		{
+			return false;
+		}
+		//If health is above the max percent, fail.
+		else if (mob.Stats.GetValuePrecent(EValueName.HEALTH) > MobFilterParams.MaximumHealthPercent)
+		{
+			return false;
+		}
+		//Check for faction
+		else if (owner_fac.IsAlly(mob.Faction) && MobFilterParams.CannotAffectAlly)
+		{
+			return false;
+		}
+		else if (owner_fac.IsEnemy(mob.Faction) && MobFilterParams.CannotAffectEnemy)
+		{
+			return false;
+		}
+		return true;
+	}
+	#endregion
 
-    #region  Auto Activation
-    [Export]
-    public AutoActivationParameters AutoActivationParams
-    {
-        get => autoActivationParams;
-        set
-        {
-            autoActivationParams = value;
-            AutoActivationReset();
-        }
-    }
-    private AutoActivationParameters autoActivationParams = new();
+	#region  Auto Activation
+	[Export]
+	public AutoActivationParameters AutoActivationParams
+	{
+		get => autoActivationParams;
+		set
+		{
+			autoActivationParams = value;
+			AutoActivationReset();
+		}
+	}
+	private AutoActivationParameters autoActivationParams = new();
 
 	public bool AutoActivationEnabled { protected set; get; } = true;
 
-    protected float AutoActivationTimeSinceLast;
+	protected float AutoActivationTimeSinceLast;
 
-    protected int AutoActivationLeft;
+	protected int AutoActivationLeft;
 
-    public int GetAutoActivationsLeft() => AutoActivationLeft;
+	private void AutoActivationSetup()
+	{
+		EventBus.ActionQueued += OnActionQueued;
 
-    public void AutoActivationReset()
-    {
-        AutoActivationLeft = AutoActivationParams.AutoActivationMax;
-        AutoActivationTimeSinceLast = 0;
-    }
+		EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
 
-    protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
-		=> new(Owner, parameters.GridRef, this);
-    protected virtual UsageParameters GetAutoActivationUsageParameters()
-        => new(Owner, CombatScene.GetGrid(), this);
+		EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
+		EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
+	}
 
-    protected void AutoActivationRequest(UsageParameters parameters)
-    {
-        //Can't activate if it ran out.
-        if (AutoActivationLeft <= 0)
-        {
-            throw new Exception("Should already be removed?");
-        }
+	public int GetAutoActivationsLeft() => AutoActivationLeft;
 
-        EventBus.ActionEventAutoActivated?.Invoke(
-            GetAutoActivationUsageParametersFromReaction(parameters),
-            parameters
-            );
-        AutoActivationLeft -= 1;
-        AutoActivationTimeSinceLast = 0;
-    }
-    #endregion
+	public void AutoActivationReset()
+	{
+		AutoActivationLeft = AutoActivationParams.AutoActivationMax;
+		AutoActivationTimeSinceLast = 0;
+	}
 
-    #region General
-    public virtual string GetUseText(UsageParameters parameters)
-    {
-        return $"{Owner.DisplayedName ?? "ERROR"} did something mysterious to {parameters.MobsTargeted.ToStringList(", ")}";
-    }
+	protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
+		=> new(Owner ?? throw new Exception("Owner missing!"), parameters.GridRef, this);
+	protected virtual UsageParameters GetAutoActivationUsageParameters()
+		=> new(Owner ?? throw new Exception("Owner missing!"), CombatScene.GetGrid(), this);
 
-    public virtual void Use(UsageParameters usageParams)
-    {
-        if (usageParams.ActionRef != this) throw new Exception();
+	protected void AutoActivationRequest(UsageParameters parameters)
+	{
+		//Can't activate if it ran out.
+		if (AutoActivationLeft <= 0)
+		{
+			throw new Exception("Should already be removed?");
+		}
 
-        foreach (var command in Commands)
-        {
-            foreach (var mob in usageParams.MobsTargeted)
-            {
-                command.UseCommand(mob);
-            }
-        }
-        EventBus.ActionUsed?.Invoke(usageParams);
-    }
+		EventBus.ActionEventAutoActivated?.Invoke(
+			GetAutoActivationUsageParametersFromReaction(parameters),
+			parameters
+			);
+		AutoActivationLeft -= 1;
+		AutoActivationTimeSinceLast = 0;
+	}
+	#endregion
+
+	#region General
+	public virtual string GetUseText(UsageParameters parameters)
+	{
+		return $"{Owner.DisplayedName ?? "ERROR"} did something mysterious to {parameters.MobsTargeted.ToStringList(", ")}";
+	}
+
+	public virtual void Use(UsageParameters usageParams)
+	{
+		if (usageParams.ActionRef != this) throw new Exception();
+
+		foreach (var command in Commands)
+		{
+			foreach (var mob in usageParams.MobsTargeted)
+			{
+				command.UseCommand(mob);
+			}
+		}
+		EventBus.ActionUsed?.Invoke(usageParams);
+	}
 
 	public static bool HasMobEnoughResources(ActionEvent action, Mob mob)
 	{
@@ -316,96 +328,145 @@ public partial class ActionEvent : Resource
 	public bool CanUse() => true;
 
 	public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
-    public override string ToString() => Name;
-    #endregion
+	public override string ToString() => Name;
+	#endregion
 
-    #region Event Handling
+	#region Event Handling
 
-    protected void OnAutoActivationProcessTurnStarted(Mob who)
-    {
+	protected void OnAutoActivationProcessTurnStarted(Mob who)
+	{
+		//Make sure it has an owner
+		if (Owner is null)
+			throw new Exception("Owner missing!");
+
 		//Must be enabled to begin with.
 		if (!AutoActivationEnabled) return;
 		//MsgLog.LogInfoMsg($"{Name} could not activate since it has auto activation disabled.");
-		
-        //Check if it activates on turn end or start.
+
+		//Check if it activates on turn end or start.
 		if (!AutoActivationParams.ActivatedByTurnStart) return;
 
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
+		//Must be set to react to actions
+		if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
 
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
+		//Make sure an owner is set
+		if (Owner is null)
+		{
+			MsgLog.LogErrorMsg($"Ability {Name}, which was just auto activated, does not have an owner.");
+			return;
+		}
 
-        //If it is only when THIS unit's turn changes, do nothing if false.
-        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
+		//The owner must be in combat.
+		if (!Owner.IsInCombat()) return;
 
-        AutoActivationRequest(GetAutoActivationUsageParameters());
-    }
+		//If it is only when THIS unit's turn changes, do nothing if false.
+		if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
 
-    protected void OnAutoActivationProcessTurnEnded(Mob who)
-    {
+		AutoActivationRequest(GetAutoActivationUsageParameters());
+	}
+
+	protected void OnAutoActivationProcessTurnEnded(Mob who)
+	{
+		//Make sure it has an owner
+		if (Owner is null)
+			throw new Exception("Owner missing!");
+
 		//Must be enabled to begin with.
 		if (!AutoActivationEnabled) return;
 
-        //Check if it activates on turn end or start.
-        if (!AutoActivationParams.ActivatedByTurnEnd) return;
+		//Check if it activates on turn end or start.
+		if (!AutoActivationParams.ActivatedByTurnEnd) return;
 
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
+		//Must be set to react to actions
+		if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.TURN_CHANGE) return;
 
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
+		//Make sure an owner is set
+		if (Owner is null)
+		{
+			MsgLog.LogErrorMsg($"Ability {Name}, which was just auto activated, does not have an owner.");
+			return;
+		}
 
-        //If it is only when THIS unit's turn changes, do nothing if false.
-        if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
+		//The owner must be in combat.
+		if (!Owner.IsInCombat()) return;
 
-        AutoActivationRequest(GetAutoActivationUsageParameters());
-    }
+		//If it is only when THIS unit's turn changes, do nothing if false.
+		if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && who != Owner) return;
 
-    protected void OnAutoActivationProcessTimePassed(float number)
-    {
+		AutoActivationRequest(GetAutoActivationUsageParameters());
+	}
+
+	protected void OnAutoActivationProcessTimePassed(float number)
+	{
+		//Make sure it has an owner
+		if (Owner is null)
+			throw new Exception("Owner missing!");
+
 		//Must be enabled to begin with.
 		if (!AutoActivationEnabled) return;
 
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
+		//Must be set to react to actions
+		if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.EVERY_X_TIME) return;
 
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
+		//Make sure an owner is set
+		if (Owner is null)
+		{
+			MsgLog.LogErrorMsg($"Ability {Name}, which was just auto activated, does not have an owner.");
+			return;
+		}
 
-        //Advance time.
-        AutoActivationTimeSinceLast += number;
+		//The owner must be in combat.
+		if (!Owner.IsInCombat()) return;
 
-        //If enough time passed, trigger.
-        if (AutoActivationTimeSinceLast > AutoActivationParams.ActivatedEveryXTime)
-            AutoActivationRequest(GetAutoActivationUsageParameters());
+		//Advance time.
+		AutoActivationTimeSinceLast += number;
 
-    }
+		//If enough time passed, trigger.
+		if (AutoActivationTimeSinceLast > AutoActivationParams.ActivatedEveryXTime)
+			AutoActivationRequest(GetAutoActivationUsageParameters());
 
-    protected void OnActionQueued(UsageParameters parameters)
-    {
-        //Must be set to react to actions
-        if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.ACTION_REACTION) return;
+	}
 
-        //The owner must be in combat.
-        if (!Owner.IsInCombat()) return;
+	protected void OnActionQueued(UsageParameters parameters)
+	{
+		//Make sure it has an owner
+		if (Owner is null)
+			throw new Exception("Owner missing!");
+			
+		//Must be enabled to begin with.
+		if (!AutoActivationEnabled) return;
+		
+		//Must be set to react to actions
+		if (AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.ACTION_REACTION) return;
 
-        //Must have the right flags.
-        if (!AutoActivationParams.IsActionWithValidFlags(parameters.ActionRef)) return;
+		//The owner must be in combat.
+		if (!Owner.IsInCombat()) return;
 
-        //Must be targeting the owner if the condition is true
-        if (AutoActivationParams.ActivatedOnlyIfTargetsMe && !parameters.MobsTargeted.Contains(Owner)) return;
+		//Must have the right flags.
+		if (!AutoActivationParams.IsActionWithValidFlags(parameters.ActionRef)) return;
 
-        AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
-    }
+		//Must be targeting the owner if the condition is true
+		if (AutoActivationParams.ActivatedOnlyIfTargetsMe && !parameters.MobsTargeted.Contains(Owner)) return;
 
-    private void OnInputActionSelected(ActionEvent obj)
-    {
-        if (obj != this) return;
+		AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
+	}
 
-        EventBus.TargetingUsageParametersGenerated?.Invoke(
-            new(Owner, CombatScene.GetGrid(), this)
-        );
+	private void OnInputActionSelected(ActionEvent obj)
+	{
+		if (obj != this) return;
+
+		EventBus.TargetingUsageParametersGenerated?.Invoke(
+			new(Owner ?? throw new Exception("Owner missing!"), CombatScene.GetGrid(), this)
+		);
+	}
+
+	private void OnMobActionAdded(Mob mob, ActionEvent action)
+	{
+		if (action != this) return;
+
+		AutoActivationSetup();
+
+		Owner = mob;
 	}
     #endregion
 }
