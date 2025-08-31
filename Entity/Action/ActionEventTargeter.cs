@@ -11,9 +11,11 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class ActionEventTargeter : Node3D
 {
-	public enum ETargetingType { AOE, TARGETING, SELECTED }
+
+	public enum ETargetingType { AFFECTED, CAN_BE_TARGETED, TARGETED }
 	const string TARGETING_NODE_GROUP = "ActionEventTargeterTARGETING_NODE_GROUP";
 	const string AoE_NODE_GROUP = "ActionEventTargeterAoE_NODE_GROUP";
+	const string META_KEY_MARKER_POSITION = "ActionEventTargeterMARKER_POSITION";
 	[Export]
 	protected PackedScene? SceneTargeting;
 	public Node3D NodeTargeting
@@ -39,10 +41,6 @@ public partial class ActionEventTargeter : Node3D
 		}
 	}
 
-	private List<Vector3i> PositionsTargeting = new();
-	private List<Vector3i> PositionsSelected = new();
-	private List<List<Vector3i>> PositionsAoE = new();
-
 	protected UsageParameters? UsageParametersCurrent;
 
 	public override void _Ready()
@@ -58,21 +56,27 @@ public partial class ActionEventTargeter : Node3D
 		EventBus.CellInputReceived -= OnCellInputReceived;
 	}
 
+	public void UpdateMarkers()
+	{
+		//SetMarkers(UsageParametersCurrent.PositionsTargeted, ETargetingType.TARGETED);
+		SetMarkers(UsageParametersCurrent.PositionsAffected, ETargetingType.AFFECTED);
+		SetMarkers(GetTargetableCells(UsageParametersCurrent), ETargetingType.CAN_BE_TARGETED);
+	}
 
 	public void SetMarkers(List<Vector3i> targets, ETargetingType targetingType)
 	{
 		ClearMarkers(targetingType);
 
-		foreach (var item in targets)
+		foreach (var gridPos in targets)
 		{
 			Node3D newNode = NodeTargeting;
 			switch (targetingType)
 			{
-				case ETargetingType.AOE:
+				case ETargetingType.AFFECTED:
 					newNode = NodeAoE;
 					break;
 
-				case ETargetingType.TARGETING:
+				case ETargetingType.CAN_BE_TARGETED:
 					newNode = NodeTargeting;
 					break;
 
@@ -80,138 +84,91 @@ public partial class ActionEventTargeter : Node3D
 			}
 
 			AddChild(newNode);
-			Godot.Vector3 pos = CombatScene.GetGridNode().MapToGlobal(item);
+			Godot.Vector3 pos = CombatScene.GetGridNode().MapToGlobal(gridPos);
+			newNode.SetMeta(META_KEY_MARKER_POSITION, gridPos.ToGVector3I());
 
 			newNode.GlobalPosition = pos;
 		}
 	}
 
-	protected void ClearMarkers(ETargetingType targetingType)
+	protected List<Node3D> GetMarkers(ETargetingType targetingType)
 	{
 		string group;
 		switch (targetingType)
 		{
-			case ETargetingType.TARGETING:
+			case ETargetingType.CAN_BE_TARGETED:
 				group = TARGETING_NODE_GROUP;
 				break;
 
-			case ETargetingType.AOE:
+			case ETargetingType.AFFECTED:
 				group = AoE_NODE_GROUP;
 				break;
 
+			case ETargetingType.TARGETED:
+				group = "ActionEventTargeterUNUSED_GROUP";
+				break;
 			default: throw new Exception();
 		}
 
-		Godot.Collections.Array<Node> nodes = GetTree().GetNodesInGroup(group);
-		foreach (var item in nodes)
+		List<Node3D> nodes = new(GetTree().GetNodesInGroup(group).OfType<Node3D>());
+		return new(nodes);
+	}
+
+	protected void ClearMarkers()
+	{
+		foreach (var item in Enum.GetValues<ETargetingType>())
+		{
+			ClearMarkers(item);
+		}
+	}
+
+	protected void ClearMarkers(ETargetingType targetingType)
+	{
+		foreach (var item in GetMarkers(targetingType))
 		{
 			item.QueueFree();
 		}
 	}
 
-	protected void SetTargetingCells(UsageParameters parameters)
+	protected bool IsMarkerAtPosition(ETargetingType targetingType, Vector3i pos)
+	{
+		foreach (var node in GetMarkers(targetingType))
+		{
+			Vector3I nodePos = node.GetMeta(META_KEY_MARKER_POSITION).As<Vector3I>();
+
+			if (nodePos == pos)
+				return true;
+		}
+		return false;
+	}
+
+	public List<Vector3i> GetTargetableCells(UsageParameters parameters)
 	{
 		ActionEvent action = parameters.ActionRef;
-		List<Vector3i> targets = action.GetTargetVectors(UsageParametersCurrent ?? throw new Exception("Tried to get targeting range without UsageParameters"));
-
-		//Display the positions
-		SetMarkers(targets, ETargetingType.TARGETING);
-		PositionsTargeting = targets;
+		List<Vector3i> targets = action.GetTargetVectors(parameters ?? throw new Exception("Tried to get targeting range without UsageParameters"));
+		return targets;
 	}
 
-	protected void UpdateAffectedCells(UsageParameters parameters)
+	protected void ConfirmParameters()
 	{
-		ActionEvent action = parameters.ActionRef;
-		List<List<Vector3i>> targetClusters = action.GetAffectedVectors(
-			UsageParametersCurrent ?? throw new Exception("Tried to get targeting range without UsageParameters"),
-	PositionsSelected
-			);
+		UsageParametersCurrent.UpdateAffectedCells();
+		UsageParametersCurrent.UpdateMobsTargeted();
 
-		List<Vector3i> markerPositions = new();
-		foreach (var item in targetClusters)
-		{
-			markerPositions.AddRange(item);
-		}
-		SetMarkers(markerPositions, ETargetingType.AOE);
-		PositionsAoE = targetClusters;
-	}
-
-	public void AddSelectedCell(Vector3i position)
-	{
-		PositionsSelected.Add(position);
-	}
-
-	protected void ClearTargetedCells(ETargetingType targetingType)
-	{
-		switch (targetingType)
-		{
-			case ETargetingType.TARGETING:
-				PositionsTargeting.Clear();
-				ClearMarkers(ETargetingType.TARGETING);
-				break;
-
-			case ETargetingType.AOE:
-				PositionsAoE.Clear();
-				ClearMarkers(ETargetingType.AOE);
-				break;
-
-			case ETargetingType.SELECTED:
-				PositionsSelected.Clear();
-				break;
-
-			default: throw new Exception();
-		}
-	}
-
-	protected void ConfirmSelection()
-	{
-		//Get the action and ensure there parameters are valid.
-		ActionEvent action = UsageParametersCurrent?.ActionRef ?? throw new Exception();
-
-		List<Vector3i> positionsAffected = new();
-		foreach (var item in PositionsAoE) positionsAffected.AddRange(item);
-
-		//Store all positions affected
-		foreach (var item in positionsAffected)
-		{
-			UsageParametersCurrent.PositionsTargeted.Add(item, false);
-		}
-
-		//All mobs that can be targeted, are added to the usage parameters.
-		foreach (var mob in CombatScene.GetMobsInCombat())
-		{
-			if (!positionsAffected.Contains(mob.GetPosition())) continue;
-			if (!action.IsMobValidForAoE(mob)) continue;
-
-			UsageParametersCurrent.MobsTargeted.Add(mob);
-		}
+		if (!UsageParametersCurrent.HasPositionsTargeted() || !UsageParametersCurrent.HasPositionsAffected())
+			throw new Exception();	
 
 		EventBus.TargetingParametersDone?.Invoke(UsageParametersCurrent);
-		Reset();
+		ClearMarkers();
 	}
 
-	public bool IsCellTargeted(Vector3i position, ETargetingType targetingType)
+	protected bool IsCellTargeted(Vector3i position)
 	{
-		switch (targetingType)
-		{
-			case ETargetingType.TARGETING:
-				return PositionsTargeting.Contains(position);
+		return UsageParametersCurrent.PositionsTargeted.Contains(position);
+	}
 
-			case ETargetingType.AOE:
-				foreach (var item in PositionsAoE)
-				{
-					if (item.Contains(position))
-					{
-						return true;
-					}
-				}
-				return false;
-
-			case ETargetingType.SELECTED:
-				return PositionsSelected.Contains(position);
-
-			default: throw new Exception();
-		}
+	protected bool IsCellAffected(Vector3i position)
+	{
+		return UsageParametersCurrent.PositionsAffected.Contains(position);
 	}
 
 	protected Mob? GetMobAtPosition(Vector3i pos)
@@ -233,27 +190,20 @@ public partial class ActionEventTargeter : Node3D
 	}
 
 	protected bool HasSelectionsLeft(UsageParameters parameters)
-		=> PositionsSelected.Count < parameters.ActionRef.GetMaxTargetingSelections();
+		=> UsageParametersCurrent.PositionsTargeted.Count < parameters.ActionRef.GetMaxTargetingSelections();
 
-	private void Reset()
-	{
-		ClearTargetedCells(ETargetingType.AOE);
-		ClearTargetedCells(ETargetingType.TARGETING);
-		ClearTargetedCells(ETargetingType.SELECTED);
-		UsageParametersCurrent = null;
-	}
 
 	#region Event Handling
 	private void OnBattleStateChanged(ECombatState state)
 	{
-		Reset();
-
 		if (state == ECombatState.TARGETING)
 		{
 			UsageParametersCurrent = CombatScene.UsageParameters ?? throw new Exception();
 
+			UsageParametersCurrent?.ResetTargets();
+
 			//Set which cells can be targeted.
-			SetTargetingCells(UsageParametersCurrent);
+			UpdateMarkers();
 		}
 
 	}
@@ -267,9 +217,9 @@ public partial class ActionEventTargeter : Node3D
 		//There must be UsageParameters
 		if (UsageParametersCurrent is null) throw new Exception();
 
-/* 		ActionEvent action = UsageParametersCurrent.ActionRef;
-		Mob owner = UsageParametersCurrent.OwnerRef;
-		Grid grid = CombatScene.GetGrid(); */
+		/* 		ActionEvent action = UsageParametersCurrent.ActionRef;
+				Mob owner = UsageParametersCurrent.OwnerRef;
+				Grid grid = CombatScene.GetGrid(); */
 
 
 		switch (input)
@@ -281,25 +231,26 @@ public partial class ActionEventTargeter : Node3D
 				if (!HasSelectionsLeft(UsageParametersCurrent))
 				{
 					//Must be a cell already set to be hit.
-					if (!IsCellTargeted(cellPos, ETargetingType.AOE)) break;
-
-					UpdateAffectedCells(UsageParametersCurrent);
-					ConfirmSelection();
+					if (IsCellAffected(cellPos))
+					{
+						ConfirmParameters();
+					}
 				}
 				//There are selections left.
 				else
 				{
 					//Before adding, make sure it isn't targeted already.
-					if (!IsCellTargeted(cellPos, ETargetingType.TARGETING)) return;
+					if (IsCellTargeted(cellPos)) return;
 
-					AddSelectedCell(cellPos);
-					UpdateAffectedCells(UsageParametersCurrent);
+					UsageParametersCurrent.PositionsTargeted.Add(cellPos);
+					UsageParametersCurrent.UpdateAffectedCells();
+					UpdateMarkers();
 				}
 				break;
 
 			case ECellInput.SECONDARY:
-				ClearTargetedCells(ETargetingType.SELECTED);
-				ClearTargetedCells(ETargetingType.AOE);
+				UsageParametersCurrent.ResetTargets();
+				UpdateMarkers();
 				break;
 
 			default: break;

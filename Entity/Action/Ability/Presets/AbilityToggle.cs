@@ -9,6 +9,8 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class AbilityToggle : Ability
 {
+	const string META_IMPRINTED = "AbilityToggleAutoIMPRINTED_IDENTIFIER";
+
 	public Ability ToggledAbility = null!;
 	[Export]
 	private Ability toggledAbility
@@ -17,6 +19,7 @@ public partial class AbilityToggle : Ability
 		set
 		{
 			ToggledAbility = (Ability)value.Duplicate(true);
+			Imprint(ToggledAbility, true);
 			if (!Validate(ToggledAbility))
 				throw new Exception("Test exception to make sure this is set correctly.");
 		}
@@ -38,14 +41,39 @@ public partial class AbilityToggle : Ability
 			throw new Exception($"AbilityToggle {Name} cannot affect its owner, but it is only meant for this purpose.");
 
 		if (IsEnabled())
-			Owner.RemoveAction(ToggledAbility);
+		{
+			Owner?.RemoveAction(ToggledAbility);
+		}
 		else
-			Owner.AddAction(ToggledAbility);
+		{
+			Owner?.AddAction(ToggledAbility, false);
+		}
 	}
 
 	protected bool IsEnabled()
-		=> Owner.GetAbilities().Contains(ToggledAbility);
+	{
+		if (Owner is null)
+			throw new Exception();
+		int count = Owner.GetAbilities().Count(x => IsImprinted(x));
 
+		if (count > 1)
+			throw new Exception("There should only be one toggled ability max.");
+		else
+			return count == 1;
+	}
+
+
+	protected void Imprint(Ability ability, bool imprint)
+	{
+		if (ability != ToggledAbility) throw new Exception();
+		ability.SetMeta(GetImprintMetaKey(), imprint);
+	}
+
+	protected bool IsImprinted(Ability ability)
+		=> ability.GetMeta(GetImprintMetaKey(), false).As<bool>();
+
+	protected string GetImprintMetaKey()
+		=> META_IMPRINTED + GetInstanceId().ToString();
 
 	protected bool Validate(Ability ability)
 	{

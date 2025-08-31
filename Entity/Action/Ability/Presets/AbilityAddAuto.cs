@@ -19,8 +19,6 @@ public partial class AbilityAddAuto : Ability
 		set
 		{
 			AddedAbility = value;
-			if (!Validate(AddedAbility))
-				throw new Exception("Test exception to make sure this is set correctly.");
 		}
 	}
 
@@ -40,6 +38,7 @@ public partial class AbilityAddAuto : Ability
 
 		foreach (var mob in usageParams.MobsTargeted)
 		{
+			Validate(AddedAbility);
 			Ability copy = (Ability)AddedAbility.Duplicate(true);
 			Imprint(copy);
 
@@ -77,7 +76,8 @@ public partial class AbilityAddAuto : Ability
 	{
 		bool isAutoActivated = ability.AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
 		bool isFree = ability.CostParams.IsFree();
-		return isAutoActivated && isFree;
+		bool ownerDiffers = Owner != ability.Owner;
+		return isAutoActivated && isFree && ownerDiffers;
 	}
 }
 		

@@ -17,7 +17,8 @@ public partial class ActionEvent : Resource
 	{
 		get
 		{
-			return owner ?? throw new Exception("Owner should be set before usage.");
+			if (owner is null) MsgLog.LogErrorMsg($"Missing owner for ability {Name}!");
+			return owner;
 		}
 		set
 		{
@@ -97,10 +98,17 @@ public partial class ActionEvent : Resource
 		return output;
 	}
 
-	//Returns the positions targetable by this action, relative to the owner.
+	/// <summary>
+	/// Returns the positions targetable by this action, relative to the owner.
+	/// </summary>
+	/// <param name="usageParams">The grid and owner are drawn from this</param>
+	/// <returns></returns>
+	/// <exception cref="Exception"></exception>
 	public List<Vector3i> GetTargetVectors(UsageParameters usageParams)
 	{
+		if (!usageParams.IsValid()) throw new Exception();
 		if (usageParams.ActionRef != this) throw new Exception();
+		if (usageParams.OwnerRef != Owner) throw new Exception();
 
 		if (Owner is null)
 			throw new Exception("Owner missing!");
@@ -137,12 +145,25 @@ public partial class ActionEvent : Resource
 		return output;
 	}
 
-	public List<List<Vector3i>> GetAffectedVectors(UsageParameters usageParams, List<Vector3i> targetedPositions)
+	/// <summary>
+	/// It must have selected positions before being used
+	/// </summary>
+	/// <param name="usageParams"></param>
+	/// <returns></returns>
+	/// <exception cref="Exception"></exception>
+	public List<List<Vector3i>> GetAffectedVectors(UsageParameters usageParams)
 	{
+		//Error checks
+		if (!usageParams.IsValid()) throw new Exception();
+
+		if (usageParams.ActionRef != this) throw new Exception();
+		if (usageParams.OwnerRef != Owner) throw new Exception();
+		if (usageParams.PositionsTargeted.Count == 0) throw new Exception("No position to use AoE in.");
+
 		if (Owner is null)
 			throw new Exception("Owner missing!");
-		if (usageParams.ActionRef != this) throw new Exception();
-		if (targetedPositions.Count == 0) throw new Exception("No position to use AoE in.");
+
+
 
 		Vector3i origin = usageParams.OwnerRef.GetPosition();
 		Grid grid = usageParams.GridRef;
@@ -155,16 +176,16 @@ public partial class ActionEvent : Resource
 
 		if (TargetParams.AoEUsesPathing != EMovementMode.INVALID)
 		{
-			if (targetedPositions.Count != 1)
-				MsgLog.Log(EMessageType.ERROR, $"{Name} uses pathing but also used {targetedPositions.Count} targets, can't move to multiple locations!");
+			if (usageParams.PositionsTargeted.Count != 1)
+				MsgLog.Log(EMessageType.ERROR, $"{Name} uses pathing but also used {usageParams.PositionsTargeted.Count} targets, can't move to multiple locations!");
 
 			CombatScene.GetMobMovement()
 				.GetAStar(Owner, TargetParams.TargetingUsesPathing)
-				.GetPath(Owner.GetPosition(), targetedPositions.First());
+				.GetPath(Owner.GetPosition(), usageParams.PositionsTargeted.First());
 		}
 
 		//Regular AoE checks
-		foreach (Vector3i selected in targetedPositions)
+		foreach (Vector3i selected in usageParams.PositionsTargeted)
 		{
 			List<Vector3i> subOutput = new();
 
@@ -275,9 +296,17 @@ public partial class ActionEvent : Resource
 	}
 
 	protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
-		=> new(Owner ?? throw new Exception("Owner missing!"), parameters.GridRef, this);
+		=> new(
+			Owner ?? throw new Exception("Owner missing!"),
+			parameters.GridRef,
+			this);
+			//{ PositionsTargeted = new(){Owner.GetPosition()}};
 	protected virtual UsageParameters GetAutoActivationUsageParameters()
-		=> new(Owner ?? throw new Exception("Owner missing!"), CombatScene.GetGrid(), this);
+		=> new(
+			Owner ?? throw new Exception("Owner missing!"),
+			CombatScene.GetGrid(),
+			this);
+			//{ PositionsTargeted = new(){Owner.GetPosition()}};
 
 	protected void AutoActivationRequest(UsageParameters parameters)
 	{
@@ -306,13 +335,16 @@ public partial class ActionEvent : Resource
 	{
 		if (usageParams.ActionRef != this) throw new Exception();
 
+		if (Owner is null)
+			throw new Exception();
+
 		foreach (var command in Commands)
-		{
-			foreach (var mob in usageParams.MobsTargeted)
 			{
-				command.UseCommand(mob);
+				foreach (var mob in usageParams.MobsTargeted)
+				{
+					command.UseCommand(mob);
+				}
 			}
-		}
 		EventBus.ActionUsed?.Invoke(usageParams);
 	}
 
@@ -329,6 +361,13 @@ public partial class ActionEvent : Resource
 
 	public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
 	public override string ToString() => Name;
+
+	public void ThrowOnMissingOwner()
+	{
+		if (Owner is null)
+			throw new Exception();
+	}
+
 	#endregion
 
 	#region Event Handling
@@ -432,7 +471,7 @@ public partial class ActionEvent : Resource
 		//Make sure it has an owner
 		if (Owner is null)
 			throw new Exception("Owner missing!");
-			
+
 		//Must be enabled to begin with.
 		if (!AutoActivationEnabled) return;
 		

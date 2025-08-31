@@ -289,15 +289,16 @@ public partial class Mob : Resource
 
     #region Actions
 
-    public void AddAction(ActionEvent action) => AddAction(new List<ActionEvent>() { action });
+    public void AddAction<T>(T action, bool copy = true) where T : ActionEvent
+		=> AddAction(new List<T>() { action }, copy);
 
-	public void AddAction(List<ActionEvent> actions)
+	public void AddAction<T>(List<T> actions, bool copy = true) where T : ActionEvent
 	{
 		foreach (var action in actions)
 		{
-			ActionEvent newAction = (ActionEvent)action.Duplicate(true);
-			Actions.Add(newAction);
+			ActionEvent newAction = copy ? (T)action.Duplicate(true) : action;
 			newAction.Owner = this;
+			Actions.Add(newAction);
 			EventBus.MobActionAdded?.Invoke(this, newAction);
 		}
 
