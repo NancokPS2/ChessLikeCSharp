@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Extension;
 using Godot;
 namespace ChessLike.Turn;
 
@@ -14,21 +15,9 @@ public partial class TurnManager : Node3D
 
     UniqueList<ITurn> Participants = new();
 
-    protected ITurn? CurrentTaker
-    {
-        get => currentTaker;
-        set
-        {
-            currentTaker = value;
-            Debug.Assert(currentTaker is not null);
-        }
-    }
-    ITurn? currentTaker;
+	List<ITurn> TurnOrder = new();
 
-    ITurn? _round_ender;
-
-    public ITurn? RoundEnder { get => _round_ender; set => _round_ender = value; }
-
+	ITurn? CurrentTurnOwner;
 
     bool ReadyToStartTurn;
     bool ReadyToEndTurn;
@@ -56,13 +45,9 @@ public partial class TurnManager : Node3D
         if (ReadyToStartTurn)
         {
             StartTurn();
-            if (CurrentTaker is null)
-                throw new Exception();
         }
         else if (ReadyToEndTurn)
         {
-            if (CurrentTaker is null)
-                throw new Exception();
             EndTurn();
         }
     }
@@ -95,135 +80,82 @@ public partial class TurnManager : Node3D
         return Participants;
     }
 
-    private void UpdateRoundEnder()
-    {
-        //If the ender is null or is no longer in the Participant list. Set a new one.
-        if (RoundEnder is null || !Participants.Contains(RoundEnder))
-        {
-            RoundEnder = GetWithHighestDelay();
-        }
-    }
+	private void SortByDelay(ref List<ITurn> iTurns)
+	{
+		iTurns.Sort((x, y) => (int)(y.DelayCurrent - x.DelayCurrent));
+		if (iTurns.Last().DelayCurrent != iTurns.Min(x => x.DelayCurrent))
+			throw new Exception("It was expected that the last element had the lowest delay.");
+	}
 
-    private ITurn GetWithLowestDelay() => GetByDelay(true);
-
-    public ITurn GetWithHighestDelay() => GetByDelay(false);
-
-    private ITurn GetByDelay(bool lowest)
-    {
-        if (Participants.Count == 0) { throw new Exception("No participants to iterate over."); }
-
-        ITurn output = Participants.First();
-
-        foreach (var item in Participants)
-        {
-            if (lowest)
-            {
-                if (item.DelayCurrent < output.DelayCurrent)
-                {
-                    output = item;
-                }
-
-            }
-            else
-            {
-                if (item.DelayCurrent > output.DelayCurrent)
-                {
-                    output = item;
-                }
-            }
-        }
-
-        return output;
-    }
-
-    public ITurn? GetCurrentTurnTaker()
-    {
-        return CurrentTaker is not null ? CurrentTaker : null; //throw new Exception("There is not taker at this time, calm down.");
-    }
-
-    public void StartTurn()
+	public void StartTurn()
     {
         ReadyToStartTurn = false;
 
-        //Whoever has the lowest delay takes it.
-        CurrentTaker = GetWithLowestDelay();
-        Debug.Assert(CurrentTaker is not null);
+		//Make sure there is a turn order.
+		if (TurnOrder.IsEmpty())
+		{
+			TurnOrder = new(Participants);
+			SortByDelay(ref TurnOrder);
 
-        float initial_delay = CurrentTaker.DelayCurrent;
+			//Make sure all of them have different delays.
+			int starter = TurnOrder.Count;
+			foreach (var item in TurnOrder)
+			{
+				item.DelayCurrent += starter;
+				starter--;
+			}
+		}
+		else
+		{
+			SortByDelay(ref TurnOrder);
+		}
 
-        //Reduce everyone's delay by until the taker's 0.
-        foreach (var item in Participants)
-        {
-            item.DelayCurrent -= initial_delay;
-        }
+		//Update who is taking the current turn.
+			ITurn lowestDelayITurn = TurnOrder.Last();
+		CurrentTurnOwner = lowestDelayITurn;
 
-        //Emit that time has passed.
-        EventBus.TurnTimePassed?.Invoke(initial_delay);
+		//Decrease the delay of all participants.
+		float delayToDecrease = lowestDelayITurn.DelayCurrent;
+		foreach (var item in Participants)
+		{
+			item.DelayCurrent -= delayToDecrease;
+		}
 
-        //Make sure the taker is at 0.
-        if (CurrentTaker.DelayCurrent != 0)
-        {
-            throw new Exception("Unexpected result.");
-        }
-        if (CurrentTaker is Mob mob)
-            EventBus.MobTurnStarted?.Invoke(mob);
+		//Emit stuff
+		Mob mob = lowestDelayITurn as Mob ?? throw new Exception();
 
-        UpdateRoundEnder();
+        EventBus.TurnTimePassed?.Invoke(delayToDecrease);
+		EventBus.MobTurnStarted?.Invoke(mob);
     }
 
     public void EndTurn()
     {
         ReadyToEndTurn = false;
 
-        if (CurrentTaker is null) { throw new Exception("No one is taking a turn at this moment."); }
+		if (CurrentTurnOwner is null)
+			throw new Exception($"Who ended the turn if there was no owner? {CurrentTurnOwner}");
+		if (TurnOrder.IsEmpty())
+			throw new Exception($"The turn order is empty, what is ending their turn!? Current owner {CurrentTurnOwner}");
 
-        //Reset the delay, the CurrentTaker should end up with a high delay.
-        ResetDelay(CurrentTaker);
+		ResetDelay(CurrentTurnOwner);
+		TurnOrder.Remove(CurrentTurnOwner);
 
-        if (CurrentTaker is Mob mob)
+		//Emit stuff.
+		if (CurrentTurnOwner is Mob mob)
+		{
+			EventBus.MobTurnEnded?.Invoke(mob);
+		}
+        //If the turn order ended up empty. The round ended.
+        if (TurnOrder.IsEmpty())
         {
-            EventBus.MobTurnEnded?.Invoke(mob);
-        }
-
-        //If the round ender just finished their turn, count that as the round ending.
-        if (CurrentTaker == RoundEnder)
-        {
-            RoundEnder = null;
             EventBus.RoundEnded?.Invoke();
         }
+
     }
 
 	private void ResetDelay(ITurn turn)
 	{
 		turn.DelayCurrent = turn.GetDelayBase() + turn.DelayToAddOnTurnEnd;
-
-		//If there is only one, ignore this.
-		if (Participants.Count == 1) return;
-
-		//Make sure the delay of the one being reset ends up higher than at least another one.
-		float othersMinDelay = Participants.Where(x => x != turn).Min(x => x.DelayCurrent);
-		if (othersMinDelay >= turn.DelayCurrent)
-			turn.DelayCurrent = othersMinDelay + 1;
-    }
-
-    public void DelayAdd(ITurn turn, float delay)
-    {
-        if (turn == CurrentTaker)
-        {
-            turn.DelayToAddOnTurnEnd -= delay;
-        }
-        else
-        {
-            turn.DelayCurrent -= delay;
-        }
-    }
-
-    public void AdvanceDelay(float time)
-    {
-        foreach (var item in Participants)
-        {
-            DelayAdd(item, time);
-        }
     }
 
     #region Event Handling
@@ -253,7 +185,7 @@ public partial class TurnManager : Node3D
     
     private void OnInputTurnEnded()
     {
-        Debug.Assert(CurrentTaker is not null);
+        Debug.Assert(CurrentTurnOwner is not null);
         ReadyToEndTurn = true;
     }
     #endregion
