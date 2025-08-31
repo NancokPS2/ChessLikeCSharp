@@ -257,10 +257,10 @@ public partial class ActionEvent : Resource
 		return true;
 	}
 	#endregion
-
+/* 
 	#region  Auto Activation
 	[Export]
-	public AutoActivationParameters AutoActivationParams
+	protected AutoActivationParameters AutoActivationParams
 	{
 		get => autoActivationParams;
 		set
@@ -271,12 +271,13 @@ public partial class ActionEvent : Resource
 	}
 	private AutoActivationParameters autoActivationParams = new();
 
-	public bool AutoActivationEnabled { protected set; get; } = true;
+	protected bool AutoActivationEnabled = true;
 
 	protected float AutoActivationTimeSinceLast;
 
 	protected int AutoActivationLeft;
 
+	[Obsolete("Defer all this to status effects.")]
 	private void AutoActivationSetup()
 	{
 		EventBus.ActionQueued += OnActionQueued;
@@ -287,9 +288,9 @@ public partial class ActionEvent : Resource
 		EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
 	}
 
-	public int GetAutoActivationsLeft() => AutoActivationLeft;
+	protected int GetAutoActivationsLeft() => AutoActivationLeft;
 
-	public void AutoActivationReset()
+	protected void AutoActivationReset()
 	{
 		AutoActivationLeft = AutoActivationParams.AutoActivationMax;
 		AutoActivationTimeSinceLast = 0;
@@ -324,7 +325,7 @@ public partial class ActionEvent : Resource
 		AutoActivationTimeSinceLast = 0;
 	}
 	#endregion
-
+ */
 	#region General
 	public virtual string GetUseText(UsageParameters parameters)
 	{
@@ -333,10 +334,14 @@ public partial class ActionEvent : Resource
 
 	public virtual void Use(UsageParameters usageParams)
 	{
-		if (usageParams.ActionRef != this) throw new Exception();
+		if (usageParams.ActionRef != this)
+			throw new Exception();
+
+		if (!usageParams.HasPositionsTargeted())
+			throw new Exception();
 
 		if (Owner is null)
-			throw new Exception();
+				throw new Exception();
 
 		foreach (var command in Commands)
 			{
@@ -358,8 +363,6 @@ public partial class ActionEvent : Resource
 	}
 
 	public bool CanUse() => true;
-
-	public bool IsPassive() => AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
 	public override string ToString() => Name;
 
 	public void ThrowOnMissingOwner()
@@ -371,7 +374,7 @@ public partial class ActionEvent : Resource
 	#endregion
 
 	#region Event Handling
-
+/* 
 	protected void OnAutoActivationProcessTurnStarted(Mob who)
 	{
 		//Make sure it has an owner
@@ -489,7 +492,7 @@ public partial class ActionEvent : Resource
 
 		AutoActivationRequest(GetAutoActivationUsageParametersFromReaction(parameters));
 	}
-
+ */
 	private void OnInputActionSelected(ActionEvent obj)
 	{
 		if (obj != this) return;
@@ -503,7 +506,7 @@ public partial class ActionEvent : Resource
 	{
 		if (action != this) return;
 
-		AutoActivationSetup();
+		//AutoActivationSetup();
 
 		Owner = mob;
 	}

@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Status effect related logs",
+                    "id": "i0dffrkr7jasc714h26awpds"
+                },
+                {
+                    "text": "Status effect entries in the UI need a tooltip",
+                    "id": "oxhmxxl7ulcdh3ap9tgblcqk"
+                },
+                {
                     "text": "The Mobs should be setup during the preparation stage, atm it only gets setup when the MobScene is added to the scene.",
                     "id": "v5s3p59tjyel22uuvieilujy"
                 },
@@ -176,5 +184,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1756178456152
+    "timestamp": 1756617753789
 }

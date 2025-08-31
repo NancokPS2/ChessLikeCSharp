@@ -1,6 +1,7 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.MobCommand;
+using ChessLike.StatusEffect;
 using ChessLike.Storage;
 using ChessLike.World;
 using ChessLike.WorldMap;
@@ -114,7 +115,7 @@ public partial class EventBus : Node
 	public delegate void MobCommandBroadcast(Dictionary<EInfo, string> dict);
     public delegate void MobCommandEvent(ChessLike.Entity.MobCommand.Command command, Mob onWho);
     public static MobCommandBroadcast? MobCommandBroadcasted;
-    public static MobCommandEvent? MobCommandUsed;
+    public static MobCommandEvent? MobCommandPreUse;
     #endregion
 
     #region Mob - Equipment
@@ -162,12 +163,18 @@ public partial class EventBus : Node
     public static ObjectChange<Mob>? MobActionChanged;
     public static MobActionChange? MobActionAdded;
     public static MobActionChange? MobActionRemoved;
-    #endregion
-    #endregion
+	#endregion
+	#endregion
 
+	#region Status Effect
+	public delegate void StatusChange(Mob mob, Status statusEffect);
+	public static StatusChange? StatusEffectAdded;
+	public static StatusChange? StatusEffectRemoved;
 
-    #region UI
-    public static ObjectChange<ActionEvent>? InputActionSelected;
+	#endregion
+
+	#region UI
+	public static ObjectChange<ActionEvent>? InputActionSelected;
 	public static ObjectChange<EPauseOption>? InputPauseOptionSelected;
 	public static ObjectChange<Command.ECheat>? InputCheatEntered;
 	public delegate void LoadSlotInput(string profile, int slot);

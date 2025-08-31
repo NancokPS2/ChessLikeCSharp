@@ -19,7 +19,7 @@ public abstract partial class Command : Resource
 
     public virtual void UseCommand(Mob mob)
     {
-        EventBus.MobCommandUsed?.Invoke(this, mob);
+        EventBus.MobCommandPreUse?.Invoke(this, mob);
     }
 
     public static string ParseInfo(Dictionary<EInfo, string> dictionary)

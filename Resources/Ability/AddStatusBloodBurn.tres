@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="AbilityAddStatus" load_steps=12 format=3 uid="uid://mdb67p1lesix"]
+
+[ext_resource type="Script" uid="uid://djner218mvn0" path="res://Entity/Action/Parameters/Animation/AnimatedSceneParameters.cs" id="1_0dtp7"]
+[ext_resource type="Script" uid="uid://c7u4meo8cdm7v" path="res://Entity/Action/Parameters/Animation/AnimationParameters.cs" id="2_curf1"]
+[ext_resource type="Script" uid="uid://dlielvlkyy72u" path="res://Entity/Action/Parameters/CostParameters.cs" id="3_ewo16"]
+[ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="4_tphaj"]
+[ext_resource type="Resource" uid="uid://c4pdm1ly6nhb4" path="res://Resources/StatusEffect/StatusBloodBurn.tres" id="5_0dtp7"]
+[ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="6_h55g2"]
+[ext_resource type="Script" uid="uid://doft40shdfevp" path="res://Entity/Action/Ability/Presets/AbilityAddStatus.cs" id="7_t5hb3"]
+
+[sub_resource type="Resource" id="Resource_2bxhw"]
+script = ExtResource("2_curf1")
+MaxDuration = 2.0
+sceneSpawns = Array[ExtResource("1_0dtp7")]([])
+animationFlags = Array[int]([])
+
+[sub_resource type="Resource" id="Resource_eew5l"]
+script = ExtResource("3_ewo16")
+Action = 1
+SubAction = 0
+Reaction = 0
+Move = 0
+
+[sub_resource type="Resource" id="Resource_e0t47"]
+script = ExtResource("4_tphaj")
+PickMobInTargetPos = true
+CannotAffectOwner = false
+CannotAffectAlly = false
+CannotAffectEnemy = false
+MaximumHealthPercent = 1.0
+
+[sub_resource type="Resource" id="Resource_mc0lr"]
+script = ExtResource("6_h55g2")
+Range = 1
+RangeStatBonus = -1
+MaxPositions = 1
+CanTargetWithMob = true
+CanTargetEmpty = false
+TargetingUsesPathing = -1
+AoEShape = 0
+AoEUsesPathing = -1
+AoESize = 0
+
+[resource]
+script = ExtResource("7_t5hb3")
+StatusEffectToApply = ExtResource("5_0dtp7")
+Description = "Applies the status effect."
+Name = "Blood Burn"
+flags = null
+commands = null
+TargetParams = SubResource("Resource_mc0lr")
+AnimationParams = SubResource("Resource_2bxhw")
+MobFilterParams = SubResource("Resource_e0t47")
+CostParams = SubResource("Resource_eew5l")
+metadata/_custom_type_script = "uid://doft40shdfevp"

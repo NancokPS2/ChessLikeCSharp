@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://s5x3n74afdil" path="res://UI/Mob/MobStatsUI.cs" id="1_1wlbk"]
 
-[node name="MobStatsUI" type="Control" node_paths=PackedStringArray("NodeStatContainer")]
+[node name="MobStatsUI" type="Control" node_paths=PackedStringArray("NodeStatContainer", "NodeStatusContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,17 +10,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1wlbk")
-NodeStatContainer = NodePath("ScrollContainer/StatsContainer")
+NodeStatContainer = NodePath("StatsScroll/StatsContainer")
+NodeStatusContainer = NodePath("StatusScroll/StatusContainer")
 metadata/_custom_type_script = "uid://s5x3n74afdil"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="StatsScroll" type="ScrollContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatsContainer" type="VBoxContainer" parent="StatsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="StatusScroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="StatsContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="StatusContainer" type="VBoxContainer" parent="StatusScroll"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 metadata/_edit_use_anchors_ = true

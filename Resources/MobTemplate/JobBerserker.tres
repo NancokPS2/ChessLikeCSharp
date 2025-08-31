@@ -3,7 +3,7 @@
 [ext_resource type="Resource" uid="uid://cj6gtpi4q31de" path="res://Resources/Ability/AttackLowHealthBoost.tres" id="1_05h7u"]
 [ext_resource type="Script" uid="uid://dw1wcfbf5rr8e" path="res://Entity/Mob/Template/MobTemplateJob.cs" id="1_j34c6"]
 [ext_resource type="Resource" uid="uid://lxeeydfxlhko" path="res://Resources/Ability/RockFling.tres" id="2_kuips"]
-[ext_resource type="Resource" uid="uid://d2y7eel1cleiw" path="res://Resources/Ability/ToggleBloodBurn.tres" id="3_6hh5x"]
+[ext_resource type="Resource" uid="uid://mdb67p1lesix" path="res://Resources/Ability/AddStatusBloodBurn.tres" id="3_6hh5x"]
 [ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="3_g6qpm"]
 
 [sub_resource type="Resource" id="Resource_6hh5x"]

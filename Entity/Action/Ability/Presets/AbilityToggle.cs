@@ -75,12 +75,14 @@ public partial class AbilityToggle : Ability
 	protected string GetImprintMetaKey()
 		=> META_IMPRINTED + GetInstanceId().ToString();
 
+	[Obsolete]
 	protected bool Validate(Ability ability)
 	{
-		bool isAutoActivated = ability.AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
-		bool isFree = ability.CostParams.IsFree();
-		bool autoActiveEnabled = ToggledAbility.AutoActivationEnabled;
-		return isAutoActivated && isFree && autoActiveEnabled;
+		//bool isAutoActivated = ability.AutoActivationParams.AutoActivationMode != Parameters.EAutoActivationMode.NONE;
+		//bool isFree = ability.CostParams.IsFree();
+		//bool autoActiveEnabled = ToggledAbility.AutoActivationEnabled;
+		//return isAutoActivated && isFree && autoActiveEnabled;
+		return false;
 	}
 
 	public override string GetDescription(bool includeBasics = true)

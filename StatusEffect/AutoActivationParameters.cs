@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChessLike.Entity.Action;
 using ChessLike.Entity.Action.Parameters;
 using Godot;
 
-namespace ChessLike.Entity.Action;
+namespace ChessLike.StatusEffect;
 
 [GlobalClass]
 public partial class AutoActivationParameters : Resource
@@ -51,7 +52,4 @@ public partial class AutoActivationParameters : Resource
         }
         return false;
     }
-
-    public bool TargetsMob(UsageParameters parameters, Mob expectedTarget)
-        => parameters.MobsTargeted.Contains(expectedTarget);
 }

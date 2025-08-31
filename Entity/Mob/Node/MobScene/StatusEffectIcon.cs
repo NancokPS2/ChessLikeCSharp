@@ -37,7 +37,7 @@ public partial class StatusEffectIcon : FloatingIcon3D
 
         ActionEvent actionCurrent = StatusEffects[currentIndex];
         SetTexture(actionCurrent.GetAnimationFloatingTexture() ?? new());
-        SetCount(actionCurrent.GetAutoActivationsLeft());
+        //SetCount(actionCurrent.GetAutoActivationsLeft());
         timeSinceLast += delta;
     }
 

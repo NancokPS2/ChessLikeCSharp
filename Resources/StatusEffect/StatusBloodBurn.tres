@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StatusActivateAbility" load_steps=5 format=3 uid="uid://c4pdm1ly6nhb4"]
+
+[ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://StatusEffect/AutoActivationParameters.cs" id="1_i50yo"]
+[ext_resource type="Resource" uid="uid://dy1xyuvu7g2xn" path="res://Resources/Ability/BloodBurn.tres" id="1_jijgr"]
+[ext_resource type="Script" uid="uid://fn3s6307o6n4" path="res://StatusEffect/Presets/StatusActivateAbility.cs" id="2_jijgr"]
+
+[sub_resource type="Resource" id="Resource_t7fa8"]
+script = ExtResource("1_i50yo")
+AutoActivationMode = 3
+AutoActivationMax = 3
+ActivatedAfterAction = false
+ActivatedOnlyIfTargetsMe = true
+ActivatedByActionWithFlags = Array[int]([])
+ActivatedEveryXTime = 100
+ActivatedByTurnStart = true
+ActivatedByTurnEnd = false
+ActivatedOnlyIfTurnIsMine = true
+
+[resource]
+script = ExtResource("2_jijgr")
+AbilityActivated = ExtResource("1_jijgr")
+Name = "Blood Burn"
+flags = null
+AutoActivationParams = SubResource("Resource_t7fa8")
+metadata/_custom_type_script = "uid://fn3s6307o6n4"

@@ -2,6 +2,7 @@ using ChessLike.Entity.Action;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
 using ChessLike.Shared;
+using ChessLike.StatusEffect;
 using ChessLike.Storage;
 using ChessLike.Turn;
 using ChessLike.World;
@@ -338,18 +339,43 @@ public partial class Mob : Resource
 		}
 		return output;
 	}
-
-    public List<Ability> GetPassives()
-        => GetAbilities().Where(x => x.IsPassive()).ToList();
     #endregion
 
     #region Per Turn Values
     public bool TurnActive;
-    #endregion
+	#endregion
 
-    #region Misc
-    
-    public bool IsInCombat() => mobState == EMobState.COMBAT;
+	#region Status Effects
+	protected UniqueList<Status> StatusEffectsApplied = new();
+	public void AddStatusEffect(Status status)
+	{
+		StatusEffectsApplied.Add(status, true);
+		status.TargetMob = this;
+		status.Setup();
+		EventBus.StatusEffectAdded?.Invoke(this, status);
+	}
+
+	public void RemoveStatusEffect(Status status)
+	{
+		status.UnSetup();
+		StatusEffectsApplied.Remove(status);
+		status.TargetMob = null;
+		EventBus.StatusEffectRemoved?.Invoke(this, status);
+	}
+
+	public void RemoveStatusEffect()
+	{
+		new List<Status>(StatusEffectsApplied).ForEach(x => RemoveStatusEffect(x));
+	}
+
+	public List<Status> GetAllStatusEffects()
+		=> new(StatusEffectsApplied);
+
+	#endregion
+
+	#region Misc
+
+	public bool IsInCombat() => mobState == EMobState.COMBAT;
 
 	public override string ToString()
     {

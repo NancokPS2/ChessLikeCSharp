@@ -97,10 +97,13 @@ public partial class ActionEventRunner : Node3D
             //Select the action to run.
             UsageParameters parametersToUse = Queue[queueIndex];
 
-            //Use it
-            EventBus.ActionPreUsed?.Invoke(parametersToUse);
-            parametersToUse.ActionRef.Use(parametersToUse);
-            MsgLog.LogGameMsg(parametersToUse.ActionRef.GetUseText(parametersToUse));
+			//Use it
+			if (!parametersToUse.Cancelled)
+			{
+				EventBus.ActionPreUsed?.Invoke(parametersToUse);
+				parametersToUse.ActionRef.Use(parametersToUse);
+            	MsgLog.LogGameMsg(parametersToUse.ActionRef.GetUseText(parametersToUse));
+			}
         }
         EventBus.ActionEventQueueFinished?.Invoke(Queue);
 

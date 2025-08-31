@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using ChessLike.Entity;
+using ChessLike.Extension;
 using ChessLike.World;
 using Godot;
 using Sprache;
@@ -31,6 +32,8 @@ public partial class UsageParameters
 	/// <returns></returns>
 	public UniqueList<Mob> MobsTargeted = new();
 
+	public bool Cancelled = false; 
+
 	public int Priority = 0;
 
 	public UsageParameters(Mob owner, Grid grid, ActionEvent action_reference)
@@ -45,18 +48,6 @@ public partial class UsageParameters
 		PositionsTargeted = parameters.PositionsTargeted;
 		MobsTargeted = parameters.MobsTargeted;
 		Priority = parameters.Priority;
-	}
-
-	public void UpdateMobsTargeted()
-	{
-		MobsTargeted.Clear();
-		foreach (var mob in CombatScene.GetMobsInCombat())
-		{
-			if (!PositionsAffected.Contains(mob.GetPosition())) continue;
-			if (!ActionRef.IsMobValidForAoE(mob)) continue;
-
-			MobsTargeted.Add(mob);
-		}
 	}
 
 	public void UpdateAffectedCells()
@@ -75,6 +66,21 @@ public partial class UsageParameters
 			{
 				PositionsAffected.Add(item, false);
 			}
+		}
+	}
+
+	public void UpdateMobsTargeted()
+	{
+		if (PositionsAffected.IsEmpty())
+			throw new Exception("Cannot update targeted mobs without any positions.");
+
+		MobsTargeted.Clear();
+		foreach (var mob in CombatScene.GetMobsInCombat())
+		{
+			if (!PositionsAffected.Contains(mob.GetPosition())) continue;
+			if (!ActionRef.IsMobValidForAoE(mob)) continue;
+
+			MobsTargeted.Add(mob);
 		}
 	}
 
