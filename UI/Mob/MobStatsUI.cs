@@ -1,4 +1,5 @@
 using ChessLike.Entity;
+using ChessLike.StatusEffect;
 using ExtendedXmlSerializer;
 using Godot;
 using System;
@@ -20,26 +21,46 @@ public partial class MobStatsUI : BaseMobUI
 		if (NodeStatusContainer is null) throw new Exception("Null NodeStatusContainer");
 
 		NodeStatContainer.FreeChildren();
-		foreach (var item in mob.Stats.AllStats)
+		foreach (var statName in mob.Stats.AllStats)
 		{
-			float current = mob.Stats.HasValueAssociatedToStat(item) ? mob.Stats.GetValueByStat(item) : float.MinValue;
-			float max = mob.Stats.GetStat(item);
+			float current = mob.Stats.HasValueAssociatedToStat(statName) ? mob.Stats.GetValueByStat(statName) : float.MinValue;
+			float max = mob.Stats.GetStat(statName);
 
-			string text = item.ToString() + ": ";
+			string text = statName.ToString() + ": ";
 			if (current == max || current == float.MinValue) { text += max.ToString(); }
 			else { text += current.ToString() + "/" + max.ToString(); }
 
-			StatsLabel label = new(mob.Stats, item) { Text = text, SizeFlagsHorizontal = SizeFlags.ExpandFill };
-			NodeStatContainer.AddChild(label);
+			NodeStatContainer.AddChild(
+				new StatsLabel(mob.Stats, statName) { Text = text }
+				);
 		}
 
 		NodeStatusContainer.FreeChildren();
-		foreach (var item in mob.GetAllStatusEffects())
+		foreach (var status in mob.GetAllStatusEffects())
 		{
 			NodeStatusContainer.AddChild(
-				new Label(){Text = item.Name}
+				new StatusLabel(status){Text = $"{status.Name} - {status.ActivationsLeft}"}
 			);
 		}
+
+	}
+
+	private partial class StatusLabel : Label, ITooltip
+	{
+		public Status StatusEffect;
+
+		public StatusLabel(Status status)
+		{
+			StatusEffect = status;
+			SizeFlagsHorizontal = SizeFlags.ExpandFill;
+		}
+
+		string ITooltip.GetText()
+		{
+			return StatusEffect.GetDescription();
+		}
+
+		Godot.Vector2 ITooltip.GetRectSize() => new(200, 80);
 
 	}
 
@@ -52,6 +73,7 @@ public partial class MobStatsUI : BaseMobUI
 		{
 			StatSet = stat_set;
 			Stat = stat;
+			SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		}
 		string ITooltip.GetText()
 		{

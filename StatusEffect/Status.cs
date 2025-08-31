@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
+using ChessLike.Entity.Action.Parameters;
+using ChessLike.Extension;
 using Godot;
 
 namespace ChessLike.StatusEffect;
@@ -24,8 +26,10 @@ public partial class Status : Resource
 	public bool Enabled = true;
 
 	[Export]
-	public string Name = "Unnamed Status";
+	public string Name = "Unnamed Status.";
 
+	[Export]
+	protected string Description = "Undefined description."; 
 
 	[Export]
 	protected Texture2D? Icon;
@@ -40,18 +44,29 @@ public partial class Status : Resource
 	}
 
 	[Export]
-	protected AutoActivationParameters AutoActivationParams = new();
+	protected AutoActivationParameters AutoParams = new();
 
-	public void Setup()
+	public int ActivationsLeft { protected set; get; }
+
+	protected UsageParameters? ReactedToUsageParams;
+
+	public virtual void Setup(Mob mob)
 	{
+		TargetMob = mob;
 		EventBus.MobTurnEnded += OnMobTurnEnded;
 		EventBus.MobTurnStarted += OnMobTurnStarted;
+		EventBus.ActionPreUsed += OnActionPreUsed;
+		EventBus.ActionUsed += OnActionUsed;
+		ResetActivationCounter(AutoParams.AutoActivationMode);
 	}
 
-	public void UnSetup()
+	public virtual void UnSetup()
 	{
 		EventBus.MobTurnEnded -= OnMobTurnEnded;
 		EventBus.MobTurnStarted -= OnMobTurnStarted;
+		EventBus.ActionPreUsed -= OnActionPreUsed;
+		EventBus.ActionUsed -= OnActionUsed;
+		TargetMob.RemoveStatusEffect(this);
 	}
 
 	protected override void Dispose(bool disposing)
@@ -62,24 +77,83 @@ public partial class Status : Resource
 
 	protected virtual void Use()
 	{
+		EventBus.StatusEffectUsed?.Invoke(TargetMob, this);
+	}
 
+	public virtual string GetDescription(bool includeBase = true)
+	{
+		string output = "";
+		string activationText = "";
+		switch (AutoParams.AutoActivationMode)
+		{
+			case EAutoActivationMode.TURN_CHANGE:
+				string targetOrAnyTurnChange = AutoParams.ActivatedOnlyIfTurnIsMine ? "the afflicted" : "someone";
+				string endOrStart = AutoParams.ActivatedByTurnEnd ? "ends their turn" : "starts their turn";
+				activationText = $"Triggers whenever {targetOrAnyTurnChange} {endOrStart}.";
+				break;
+
+			case EAutoActivationMode.ACTION_REACTION:
+				string flags = AutoParams.ActivatedByActionWithFlags.ToStringList(", ");
+				string targetOrAnyActionReaction = AutoParams.ActivatedOnlyIfTargetsMe ? "yourself" : "someone";
+				activationText = $"Triggers whenever an ability with the {flags} properties is used on {targetOrAnyActionReaction}.";
+				break;
+
+			case EAutoActivationMode.EVERY_X_TIME:
+				activationText = $"Triggers whenever {AutoParams.ActivatedEveryXTime} time passes.";
+				break;
+			
+			default: throw new Exception();
+		}
+
+		if (activationText != "")
+			output = output.NewLine(activationText);
+
+		output = output.NewLine(Description);
+		return output;
+	}
+
+	protected void ResetActivationCounter(EAutoActivationMode mode)
+		=> ActivationsLeft = AutoParams.AutoActivationMode switch
+		{
+			EAutoActivationMode.NONE => throw new Exception(),
+			_ => AutoParams.AutoActivationMax
+		};
+
+	private bool IsValidToUse()
+	{
+		if (TargetMob is null) throw new Exception();
+		if (ActivationsLeft < 1) return false;
+		return true;
 	}
 
 	protected virtual bool IsValidForTurnEnd(Mob mob)
 	{
-		if (TargetMob is null) throw new Exception();
-		if (AutoActivationParams.AutoActivationMode != Entity.Action.Parameters.EAutoActivationMode.TURN_CHANGE) return false;
-		if (!AutoActivationParams.ActivatedByTurnEnd) return false;
-		if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && (mob != TargetMob)) return false;
+		if (!IsValidToUse()) return false;
+		if (AutoParams.AutoActivationMode != Entity.Action.Parameters.EAutoActivationMode.TURN_CHANGE) return false;
+		if (!AutoParams.ActivatedByTurnEnd) return false;
+		if (AutoParams.ActivatedOnlyIfTurnIsMine && (mob != TargetMob)) return false;
 
 		return true;
 	}
+
 	protected virtual bool IsValidForTurnStart(Mob mob)
 	{
-		if (TargetMob is null) throw new Exception();
-		if (AutoActivationParams.AutoActivationMode != Entity.Action.Parameters.EAutoActivationMode.TURN_CHANGE) return false;
-		if (!AutoActivationParams.ActivatedByTurnStart) return false;
-		if (AutoActivationParams.ActivatedOnlyIfTurnIsMine && (mob != TargetMob)) return false;
+
+		if (!IsValidToUse()) return false;
+		if (AutoParams.AutoActivationMode != Entity.Action.Parameters.EAutoActivationMode.TURN_CHANGE) return false;
+		if (AutoParams.ActivatedByTurnEnd) return false;
+		if (AutoParams.ActivatedOnlyIfTurnIsMine && (mob != TargetMob)) return false;
+
+		return true;
+	}
+
+	protected virtual bool IsValidForActionActivation(UsageParameters parameters, bool after)
+	{
+		if (!IsValidToUse()) return false;
+		if (AutoParams.AutoActivationMode != EAutoActivationMode.ACTION_REACTION) return false;
+		if (AutoParams.IsActionWithValidFlags(parameters.ActionRef)) return false;
+		if (AutoParams.ActivatedAfterAction && !after) return false;
+		if (AutoParams.ActivatedOnlyIfTargetsMe && !parameters.MobsTargeted.Contains(TargetMob)) return false;
 
 		return true;
 	}
@@ -88,13 +162,42 @@ public partial class Status : Resource
 	protected virtual void OnMobTurnStarted(Mob mob)
 	{
 		if (!IsValidForTurnStart(mob)) return;
+		ActivationsLeft--;
 		Use();
 	}
 
 	protected virtual void OnMobTurnEnded(Mob mob)
 	{
+		//Remove all used up status effects on turn end.
+		if (!IsValidToUse())
+		{
+			UnSetup();
+			return;
+		}
+
 		if (!IsValidForTurnEnd(mob)) return;
+		ActivationsLeft--;
 		Use();
+	}
+
+	protected void OnActionUsed(UsageParameters parameters)
+	{
+		if (!IsValidForActionActivation(parameters, true)) return;
+		ActivationsLeft--;
+
+		ReactedToUsageParams = parameters;
+		Use();
+		ReactedToUsageParams = null;
+	}
+
+	private void OnActionPreUsed(UsageParameters parameters)
+	{
+		if (!IsValidForActionActivation(parameters, false)) return;
+		ActivationsLeft--;
+
+		ReactedToUsageParams = parameters;
+		Use();
+		ReactedToUsageParams = null;
 	}
 	#endregion
 }

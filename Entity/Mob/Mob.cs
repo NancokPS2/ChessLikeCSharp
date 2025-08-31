@@ -298,7 +298,7 @@ public partial class Mob : Resource
 		foreach (var action in actions)
 		{
 			ActionEvent newAction = copy ? (T)action.Duplicate(true) : action;
-			newAction.Owner = this;
+			newAction.Setup(this);
 			Actions.Add(newAction);
 			EventBus.MobActionAdded?.Invoke(this, newAction);
 		}
@@ -351,7 +351,7 @@ public partial class Mob : Resource
 	{
 		StatusEffectsApplied.Add(status, true);
 		status.TargetMob = this;
-		status.Setup();
+		status.Setup(this);
 		EventBus.StatusEffectAdded?.Invoke(this, status);
 	}
 

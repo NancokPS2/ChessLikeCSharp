@@ -31,7 +31,7 @@ MaximumHealthPercent = 1.0
 
 [sub_resource type="Resource" id="Resource_mc0lr"]
 script = ExtResource("6_h55g2")
-Range = 1
+Range = 0
 RangeStatBonus = -1
 MaxPositions = 1
 CanTargetWithMob = true
@@ -44,7 +44,7 @@ AoESize = 0
 [resource]
 script = ExtResource("7_t5hb3")
 StatusEffectToApply = ExtResource("5_0dtp7")
-Description = "Applies the status effect."
+Description = "Applies the {Status} status."
 Name = "Blood Burn"
 flags = null
 commands = null

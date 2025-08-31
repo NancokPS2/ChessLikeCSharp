@@ -13,7 +13,7 @@ public partial class PopupText3D : CpuParticles3D
         }
         get => font;
     }
-    private Godot.Font font;
+    private Godot.Font? font;
 
     [Export]
     public string Text
@@ -31,9 +31,11 @@ public partial class PopupText3D : CpuParticles3D
 
     public PopupText3D() { }
 
-    public override void _Ready()
-    {
-        base._Ready();
+	public override void _Ready()
+	{
+		base._Ready();
+		GetTextMesh().Text = Text;
+		if (Font is not null) GetTextMesh().Font = Font;
     }
 
     private TextMesh GetTextMesh() => (TextMesh)Mesh ?? throw new Exception("No TextMesh assigned.");

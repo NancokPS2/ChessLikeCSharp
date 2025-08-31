@@ -135,20 +135,20 @@ public partial class EventBus : Node
     #region ActionEvent Queue
     public static ActionUsageParametersEvent? ActionPreQueued;
     public static ActionUsageParametersEvent? ActionQueued;
+	public static ActionUsageParametersEvent? ActionQueueRequested;
 
     /// <summary>
-    /// When the <c>ActionEventRunner</c> finishes its Queue
-    /// </summary>
-    public static ActionUsageParametersListEvent? ActionEventQueueFinished;
+	/// When the <c>ActionEventRunner</c> finishes its Queue
+	/// </summary>
+	public static ActionUsageParametersListEvent? ActionEventQueueFinished;
 
     /// <summary>
     /// Invoked by <c>ActionEvent</c>s reacting to another activating. This adds the one activating to the queue
     /// </summary>
-    public static ActionAutoActivation? ActionEventAutoActivated;
-
     //Action usage
     public static ActionUsageParametersEvent? ActionPreUsed;
     public static ActionUsageParametersEvent? ActionUsed;
+	
 
     public static ActionUsageParametersEvent? ActionAnimationStarted;
     public static ActionUsageParametersEvent? ActionAnimationEnded;
@@ -170,6 +170,7 @@ public partial class EventBus : Node
 	public delegate void StatusChange(Mob mob, Status statusEffect);
 	public static StatusChange? StatusEffectAdded;
 	public static StatusChange? StatusEffectRemoved;
+	public static StatusChange? StatusEffectUsed;
 
 	#endregion
 
@@ -200,6 +201,7 @@ public partial class EventBus : Node
     public static InventoryItemChange? InventoryItemRemoved;
 
 	#endregion
+
 
 
 

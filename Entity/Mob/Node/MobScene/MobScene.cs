@@ -76,7 +76,7 @@ public partial class MobScene : Node3D
 
 	public void AnimatePopupText(string text, Godot.Color? color = null, Godot.Gradient? gradient = null)
 	{
-		PopupText3D popupText = Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT;
+		PopupText3D popupText = (PopupText3D)Readonly.Scenes.SCENE_PARTICLE_POPUP_TEXT.Duplicate(7);
 		popupText.Text = text;
 		popupText.Color = color ?? Colors.White;
 		popupText.ColorRamp = gradient;

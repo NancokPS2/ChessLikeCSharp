@@ -34,9 +34,6 @@ public partial class AutoActivationParameters : Resource
 
     [ExportGroup("Turn Activation")]
     [Export]
-    public bool ActivatedByTurnStart = true;
-
-    [Export]
     public bool ActivatedByTurnEnd = false;
 
     [Export]

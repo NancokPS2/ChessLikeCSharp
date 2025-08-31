@@ -68,26 +68,30 @@ public partial class AbilityAttack : Ability
 
 	public virtual float GetDamage()
 	{
-		return GetDamageOwner(Owner);
-	}
-
-	private float GetDamageOwner(Mob owner)
-	{
 		float total = DamageBase;
 
+		if (Owner is not null)
+			total = GetDamageOwner(Owner, total);
+
+		return Mathf.Max(total, DamageMinimum);
+	}
+
+	private float GetDamageOwner(Mob owner, float start)
+	{
 		//Apply modifiers from stats
 		foreach (var item in StatModifiers)
 		{
-			total += owner.Stats.GetStat(item.Key) * item.Value;
+			start += owner.Stats.GetStat(item.Key) * item.Value;
 		}
 
 		//Apply modifiers from stat values
 		foreach (var item in ValueModifiers)
 		{
-			total += owner.Stats.GetValue(item.Key) * item.Value;
+			start += owner.Stats.GetValue(item.Key) * item.Value;
 		}
 
-		return Mathf.Max(total, DamageMinimum);
+		return start;
+		
 	}
 
 
@@ -97,10 +101,10 @@ public partial class AbilityAttack : Ability
 		return $"{Owner.DisplayedName} attacked {targets} for {GetDamage()} damage";
 	}
 
-	public override string GetDescription(bool includeBasics = true)
+	public override string GetDescription(bool includeBasics = true, bool assumeIsSetup = true)
 	{
-		string output = base.GetDescription();
-		output = output.Format(
+		string output = base.GetDescription(includeBasics, assumeIsSetup);
+		Dictionary<string, string> formatDict = assumeIsSetup ?
 			new Dictionary<string, string>()
 			{
 				{"StatModifiers", StatModifiers.ToStringList()},
@@ -109,8 +113,17 @@ public partial class AbilityAttack : Ability
 				{"DamageBase", DamageBase.ToString()},
 				{"Damage", GetDamage().ToString()},
 				{"HealthLossPercent", HealthLossPercent.ToString()}
-			}
-		);
+			} :
+			new Dictionary<string, string>()
+			{
+				{"StatModifiers", StatModifiers.ToStringList()},
+				{"ValueModifiers", ValueModifiers.ToStringList()},
+				{"DamageMinimum", DamageMinimum.ToString()},
+				{"DamageBase", DamageBase.ToString()},
+				{"Damage", GetDamage().ToString()},
+				{"HealthLossPercent", HealthLossPercent.ToString()}
+			};
+		output = output.Format(formatDict);
 		return output;
 	}
 

@@ -1,33 +1,20 @@
-[gd_resource type="Resource" script_class="AbilityAttack" load_steps=11 format=3 uid="uid://dy1xyuvu7g2xn"]
+[gd_resource type="Resource" script_class="AbilityAttack" load_steps=9 format=3 uid="uid://dy1xyuvu7g2xn"]
 
-[ext_resource type="Resource" uid="uid://b64vb5gwcuhjt" path="res://Resources/AnimationParameters/Explosion.tres" id="1_i31yn"]
-[ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://Entity/Action/Parameters/AutoActivationParameters.cs" id="3_a31hd"]
-[ext_resource type="Script" uid="uid://dlielvlkyy72u" path="res://Entity/Action/Parameters/CostParameters.cs" id="4_g01tb"]
-[ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="5_l6a5k"]
-[ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="6_461k0"]
-[ext_resource type="Script" uid="uid://b82ddu4nyhy72" path="res://Entity/Action/Ability/Presets/AbilityAttack.cs" id="7_w4ka1"]
-
-[sub_resource type="Resource" id="Resource_yv1v3"]
-script = ExtResource("3_a31hd")
-AutoActivationMode = 3
-AutoActivationMax = 1
-ActivatedAfterAction = false
-ActivatedOnlyIfTargetsMe = true
-ActivatedByActionWithFlags = Array[int]([])
-ActivatedEveryXTime = 100
-ActivatedByTurnStart = true
-ActivatedByTurnEnd = false
-ActivatedOnlyIfTurnIsMine = true
+[ext_resource type="Resource" uid="uid://b64vb5gwcuhjt" path="res://Resources/AnimationParameters/Explosion.tres" id="1_sofxy"]
+[ext_resource type="Script" uid="uid://dlielvlkyy72u" path="res://Entity/Action/Parameters/CostParameters.cs" id="2_ilglh"]
+[ext_resource type="Script" uid="uid://euxr8oq7be8c" path="res://Entity/Action/Parameters/MobFilterParameters.cs" id="3_wsjjh"]
+[ext_resource type="Script" uid="uid://cymsbo2ti71d8" path="res://Entity/Action/Parameters/TargetingParameters.cs" id="4_ww1wi"]
+[ext_resource type="Script" uid="uid://b82ddu4nyhy72" path="res://Entity/Action/Ability/Presets/AbilityAttack.cs" id="5_51fkq"]
 
 [sub_resource type="Resource" id="Resource_br68p"]
-script = ExtResource("4_g01tb")
+script = ExtResource("2_ilglh")
 Action = 0
 SubAction = 0
 Reaction = 0
 Move = 0
 
 [sub_resource type="Resource" id="Resource_etar6"]
-script = ExtResource("5_l6a5k")
+script = ExtResource("3_wsjjh")
 PickMobInTargetPos = true
 CannotAffectOwner = true
 CannotAffectAlly = false
@@ -35,7 +22,7 @@ CannotAffectEnemy = false
 MaximumHealthPercent = 1.0
 
 [sub_resource type="Resource" id="Resource_t5156"]
-script = ExtResource("6_461k0")
+script = ExtResource("4_ww1wi")
 Range = 1
 RangeStatBonus = -1
 MaxPositions = 1
@@ -47,7 +34,7 @@ AoEUsesPathing = -1
 AoESize = 2
 
 [resource]
-script = ExtResource("7_w4ka1")
+script = ExtResource("5_51fkq")
 StatModifiers = Dictionary[int, float]({
 0: 0.1
 })
@@ -61,8 +48,7 @@ Name = "Blood Burn"
 flags = Array[int]([1, 2])
 commands = Array[Object]([])
 TargetParams = SubResource("Resource_t5156")
-AnimationParams = ExtResource("1_i31yn")
+AnimationParams = ExtResource("1_sofxy")
 MobFilterParams = SubResource("Resource_etar6")
 CostParams = SubResource("Resource_br68p")
-AutoActivationParams = SubResource("Resource_yv1v3")
 metadata/_custom_type_script = "uid://b82ddu4nyhy72"

@@ -27,9 +27,9 @@ public partial class AbilityMove : Ability
         owner.CommandProcess(command);
     }
 
-	public override string GetDescription(bool includeBasics = true)
+	public override string GetDescription(bool includeBasics = true, bool assumeIsSetup = true)
 	{
-		string description = base.GetDescription(includeBasics);
+		string description = base.GetDescription(includeBasics, assumeIsSetup);
 		return description;
     }
 

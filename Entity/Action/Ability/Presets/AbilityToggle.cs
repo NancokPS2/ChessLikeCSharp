@@ -85,10 +85,10 @@ public partial class AbilityToggle : Ability
 		return false;
 	}
 
-	public override string GetDescription(bool includeBasics = true)
+	public override string GetDescription(bool includeBasics = true, bool assumeIsSetup = true)
 	{
 		return base
-			.GetDescription(includeBasics)
+			.GetDescription(includeBasics, assumeIsSetup)
 			.Format(
 				new()
 				{

@@ -63,10 +63,12 @@ public partial class ActionEvent : Resource
 	public ActionEvent()
 	{
 		EventBus.InputActionSelected += OnInputActionSelected;
-		EventBus.MobActionAdded += OnMobActionAdded;
 	}
 
-
+	public virtual void Setup(Mob mob)
+	{
+		Owner = mob;
+	}
 
 
 	protected override void Dispose(bool disposing)
@@ -257,75 +259,75 @@ public partial class ActionEvent : Resource
 		return true;
 	}
 	#endregion
-/* 
-	#region  Auto Activation
-	[Export]
-	protected AutoActivationParameters AutoActivationParams
-	{
-		get => autoActivationParams;
-		set
+	/* 
+		#region  Auto Activation
+		[Export]
+		protected AutoActivationParameters AutoActivationParams
 		{
-			autoActivationParams = value;
-			AutoActivationReset();
+			get => autoActivationParams;
+			set
+			{
+				autoActivationParams = value;
+				AutoActivationReset();
+			}
 		}
-	}
-	private AutoActivationParameters autoActivationParams = new();
+		private AutoActivationParameters autoActivationParams = new();
 
-	protected bool AutoActivationEnabled = true;
+		protected bool AutoActivationEnabled = true;
 
-	protected float AutoActivationTimeSinceLast;
+		protected float AutoActivationTimeSinceLast;
 
-	protected int AutoActivationLeft;
+		protected int AutoActivationLeft;
 
-	[Obsolete("Defer all this to status effects.")]
-	private void AutoActivationSetup()
-	{
-		EventBus.ActionQueued += OnActionQueued;
-
-		EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
-
-		EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
-		EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
-	}
-
-	protected int GetAutoActivationsLeft() => AutoActivationLeft;
-
-	protected void AutoActivationReset()
-	{
-		AutoActivationLeft = AutoActivationParams.AutoActivationMax;
-		AutoActivationTimeSinceLast = 0;
-	}
-
-	protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
-		=> new(
-			Owner ?? throw new Exception("Owner missing!"),
-			parameters.GridRef,
-			this);
-			//{ PositionsTargeted = new(){Owner.GetPosition()}};
-	protected virtual UsageParameters GetAutoActivationUsageParameters()
-		=> new(
-			Owner ?? throw new Exception("Owner missing!"),
-			CombatScene.GetGrid(),
-			this);
-			//{ PositionsTargeted = new(){Owner.GetPosition()}};
-
-	protected void AutoActivationRequest(UsageParameters parameters)
-	{
-		//Can't activate if it ran out.
-		if (AutoActivationLeft <= 0)
+		[Obsolete("Defer all this to status effects.")]
+		private void AutoActivationSetup()
 		{
-			throw new Exception("Should already be removed?");
+			EventBus.ActionQueued += OnActionQueued;
+
+			EventBus.TurnTimePassed += OnAutoActivationProcessTimePassed;
+
+			EventBus.MobTurnStarted += OnAutoActivationProcessTurnStarted;
+			EventBus.MobTurnEnded += OnAutoActivationProcessTurnEnded;
 		}
 
-		EventBus.ActionEventAutoActivated?.Invoke(
-			GetAutoActivationUsageParametersFromReaction(parameters),
-			parameters
-			);
-		AutoActivationLeft -= 1;
-		AutoActivationTimeSinceLast = 0;
-	}
-	#endregion
- */
+		protected int GetAutoActivationsLeft() => AutoActivationLeft;
+
+		protected void AutoActivationReset()
+		{
+			AutoActivationLeft = AutoActivationParams.AutoActivationMax;
+			AutoActivationTimeSinceLast = 0;
+		}
+
+		protected virtual UsageParameters GetAutoActivationUsageParametersFromReaction(UsageParameters parameters)
+			=> new(
+				Owner ?? throw new Exception("Owner missing!"),
+				parameters.GridRef,
+				this);
+				//{ PositionsTargeted = new(){Owner.GetPosition()}};
+		protected virtual UsageParameters GetAutoActivationUsageParameters()
+			=> new(
+				Owner ?? throw new Exception("Owner missing!"),
+				CombatScene.GetGrid(),
+				this);
+				//{ PositionsTargeted = new(){Owner.GetPosition()}};
+
+		protected void AutoActivationRequest(UsageParameters parameters)
+		{
+			//Can't activate if it ran out.
+			if (AutoActivationLeft <= 0)
+			{
+				throw new Exception("Should already be removed?");
+			}
+
+			EventBus.ActionEventAutoActivated?.Invoke(
+				GetAutoActivationUsageParametersFromReaction(parameters),
+				parameters
+				);
+			AutoActivationLeft -= 1;
+			AutoActivationTimeSinceLast = 0;
+		}
+		#endregion
+	 */
 	#region General
 	public virtual string GetUseText(UsageParameters parameters)
 	{
@@ -501,14 +503,5 @@ public partial class ActionEvent : Resource
 			new(Owner ?? throw new Exception("Owner missing!"), CombatScene.GetGrid(), this)
 		);
 	}
-
-	private void OnMobActionAdded(Mob mob, ActionEvent action)
-	{
-		if (action != this) return;
-
-		//AutoActivationSetup();
-
-		Owner = mob;
-	}
-    #endregion
+	#endregion
 }

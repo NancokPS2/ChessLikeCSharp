@@ -33,13 +33,12 @@ public partial class Ability : ActionEvent
 
 	}
 
-
 	public override void Use(UsageParameters usageParams)
 	{
 		base.Use(usageParams);
 	}
 
-	public virtual string GetDescription(bool includeBasics = true)
+	public virtual string GetDescription(bool includeBasics = true, bool assumeIsSetup = true)
     {
 		string output = "";
 		if (includeBasics)
@@ -67,13 +66,11 @@ public partial class Ability : ActionEvent
 			output = output.NewLine(canHit);
 		}
 		//It is not using the parent's GetDescription() method.
-		output += Description.Format(
-			new Dictionary<string, string>()
-			{
-				{"AbilityName", Name},
-				{"OwnerName", Owner.DisplayedName},
-			}
-		);
+		Dictionary<string, string> formatDict = assumeIsSetup ?
+			new Dictionary<string, string>() { { "AbilityName", Name }, { "OwnerName", Owner?.DisplayedName ?? throw new Exception() } } :
+			new Dictionary<string, string>() { { "AbilityName", Name }, { "OwnerName", Owner?.DisplayedName ?? "someone" } }; 
+
+		output += Description.Format( formatDict );
 
 		return output;
     }
