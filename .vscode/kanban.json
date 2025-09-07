@@ -9,10 +9,6 @@
                     "id": "i0dffrkr7jasc714h26awpds"
                 },
                 {
-                    "text": "Status effect entries in the UI need a tooltip",
-                    "id": "oxhmxxl7ulcdh3ap9tgblcqk"
-                },
-                {
                     "text": "The Mobs should be setup during the preparation stage, atm it only gets setup when the MobScene is added to the scene.",
                     "id": "v5s3p59tjyel22uuvieilujy"
                 },
@@ -123,8 +119,8 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Movement abilities are not ignoring the Y axis. Where it can climb to feels completely arbitrary",
-                    "id": "n3rf1pwozhagi1r9v0bvoas7"
+                    "text": "TurnManager still fails to make sure the new turn is from a different ITurn ",
+                    "id": "t2n0qigx8ep5biido38vjdmc"
                 },
                 {
                     "text": "ControlExtension.Activate() does not handle mouse_filter properly.",
@@ -133,10 +129,6 @@
                 {
                     "text": "PartyGeneralUI is not showing the player's party.",
                     "id": "zyknrdobe3w8njcl0m9z6r99"
-                },
-                {
-                    "text": "Must test the party inventory UI after fixing",
-                    "id": "a9o1ag24nu5w7v2842giq6ry"
                 },
                 {
                     "text": "GridBuilder.SanitizeGridMap() is not working?",
@@ -184,5 +176,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1756617753789
+    "timestamp": 1757263437809
 }

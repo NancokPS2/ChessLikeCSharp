@@ -49,6 +49,12 @@ public partial class Camera : Camera3D
 	[Export]
 	public bool pivot_rotation_only = true;
 
+	[Export]
+	protected float PivotDistanceMinimum = 3;
+
+	[Export]
+	protected float PivotDistanceMaximum = 30;
+
 	[ExportCategory("Mode")]
 	[Export]
 	public Mode mode = Mode.DELEGATED_PIVOT;
@@ -147,6 +153,8 @@ public partial class Camera : Camera3D
 		pivot_rotation += relative_input.X * (float)delta;
 		pivot_distance += relative_input.Y * (float)delta;
 
+		pivot_distance = Mathf.Clamp(pivot_distance, PivotDistanceMinimum, PivotDistanceMaximum);
+
 		if (!pivot_rotation_only)
 		{
 			//Directional
@@ -178,9 +186,9 @@ public partial class Camera : Camera3D
 
 		//Distance
 		pivot_distance += directional_input.Z * sensitivity_vertical * SENSITIVITY_MOD;
+		pivot_distance = Mathf.Clamp(pivot_distance, PivotDistanceMinimum, PivotDistanceMaximum);
 
 		pivot_elevation = pivot_distance;
-
 
 		//Step on top of the pivot point
 		GlobalPosition = pivot_point;

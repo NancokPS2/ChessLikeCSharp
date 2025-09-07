@@ -1,6 +1,7 @@
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Extension;
+using ChessLike.StatusEffect;
 using ChessLike.World;
 using Godot;
 using System;
@@ -13,11 +14,17 @@ public partial class MobScene : Node3D
 
 	public Mob MobUsing;
 
-	protected PackedScene FloatingIconScene = GD.Load<PackedScene>("uid://bmm3h2202bdkq");
+	public static PopupText3D FloatingTextScene
+	{
+		get
+		{
+			return GD.Load<PackedScene>("uid://ia3s65kbmt7u").Instantiate<PopupText3D>();
+		}
+	}
 
-	public StatusEffectIcon StatusEffectIcon { get => statusEffectIcon ?? throw new Exception(); set => statusEffectIcon = value; }
+
 	[Export]
-	private StatusEffectIcon? statusEffectIcon;
+	public StatusEffectIcon StatusEffectNode = null!;
 
 	public Node3D MarkerOverhead { get => markerOverhead ?? throw new Exception(); set => markerOverhead = value; }
 	[Export]
@@ -54,6 +61,7 @@ public partial class MobScene : Node3D
 		EventBus.ActionUsed += OnActionUsed;
 		EventBus.InventoryChanged += OnInventoryChanged;
 		EventBus.InputCheatEntered += OnInputCheatEntered;
+		EventBus.StatusEffectAdded += OnStatusEffectChanged;
 
 		MobUsing.TemplateUpdate(true, true);
 		MobUsing.EquipmentStatBoostsUpdate();
@@ -64,7 +72,6 @@ public partial class MobScene : Node3D
 		ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
 		OnInventoryChanged(MobUsing.EquipmentInventory);
 	}
-
 
 	public override void _Process(double delta)
 	{
@@ -145,7 +152,10 @@ public partial class MobScene : Node3D
 		}
 	}
 
-
+	public void AnimateUpdateStatusEffects()
+	{
+		StatusEffectNode.StatusEffects = MobUsing.GetAllStatusEffects();
+	}
 	#endregion
 
 	#region Model
@@ -420,6 +430,12 @@ public partial class MobScene : Node3D
 			default:
 				break;
 		}
+	}
+
+	private void OnStatusEffectChanged(Mob mob, Status statusEffect)
+	{
+		if (mob != MobUsing) return;
+		AnimateUpdateStatusEffects();
 	}
     #endregion
 

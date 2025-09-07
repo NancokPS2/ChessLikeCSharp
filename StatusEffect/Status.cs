@@ -32,7 +32,7 @@ public partial class Status : Resource
 	protected string Description = "Undefined description."; 
 
 	[Export]
-	protected Texture2D? Icon;
+	public Texture2D? Icon;
 
 	public List<EStatusFlag> Flags = new();
 
@@ -48,7 +48,10 @@ public partial class Status : Resource
 
 	public int ActivationsLeft { protected set; get; }
 
-	protected UsageParameters? ReactedToUsageParams;
+	/// <summary>
+	/// Stores the UsageParameters of an action during the reaction to it. Then it is disposed.
+	/// </summary>
+	public UsageParameters? ReactedToUsageParams { private set; get; }
 
 	public virtual void Setup(Mob mob)
 	{
@@ -66,7 +69,7 @@ public partial class Status : Resource
 		EventBus.MobTurnStarted -= OnMobTurnStarted;
 		EventBus.ActionPreUsed -= OnActionPreUsed;
 		EventBus.ActionUsed -= OnActionUsed;
-		TargetMob.RemoveStatusEffect(this);
+		TargetMob?.RemoveStatusEffect(this);
 	}
 
 	protected override void Dispose(bool disposing)
@@ -157,6 +160,10 @@ public partial class Status : Resource
 
 		return true;
 	}
+
+	public bool IsBuff() => Flags.Contains(EStatusFlag.BUFF);
+	public bool IsDebuff() => Flags.Contains(EStatusFlag.DEBUFF);
+
 
 	#region Event Handling
 	protected virtual void OnMobTurnStarted(Mob mob)

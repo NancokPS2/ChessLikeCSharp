@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="StatusActivateAbility" load_steps=5 format=3 uid="uid://c4pdm1ly6nhb4"]
+[gd_resource type="Resource" script_class="StatusActivateAbility" load_steps=6 format=3 uid="uid://c4pdm1ly6nhb4"]
 
 [ext_resource type="Script" uid="uid://c0g8h5mmjg5ni" path="res://StatusEffect/AutoActivationParameters.cs" id="1_i50yo"]
 [ext_resource type="Resource" uid="uid://dy1xyuvu7g2xn" path="res://Resources/Ability/BloodBurn.tres" id="1_jijgr"]
 [ext_resource type="Script" uid="uid://fn3s6307o6n4" path="res://StatusEffect/Presets/StatusActivateAbility.cs" id="2_jijgr"]
+[ext_resource type="Texture2D" uid="uid://dpjoensagfxex" path="res://assets/Texture/status_effect/BloodBurn.png" id="2_tyi5v"]
 
 [sub_resource type="Resource" id="Resource_i50yo"]
 script = ExtResource("1_i50yo")
@@ -20,6 +21,7 @@ script = ExtResource("2_jijgr")
 abilityActivated = ExtResource("1_jijgr")
 Name = "Blood Burn"
 Description = "You are suffering from {Ability}"
+Icon = ExtResource("2_tyi5v")
 flags = null
 AutoParams = SubResource("Resource_i50yo")
 metadata/_custom_type_script = "uid://fn3s6307o6n4"
