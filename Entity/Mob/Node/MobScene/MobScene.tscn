@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://wvcu0ur5w0tj" path="res://Entity/Mob/Node/MobScene/MobScene.cs" id="1_uddu2"]
 [ext_resource type="PackedScene" uid="uid://bmm3h2202bdkq" path="res://Entity/Mob/Node/MobScene/StatusEffectIcon.tscn" id="3_s5cf0"]
 
-[node name="MobScene" type="Node3D" node_paths=PackedStringArray("StatusEffectNode", "markerOverhead", "markerCenterBody", "markerBase")]
+[node name="MobScene" type="Node3D" node_paths=PackedStringArray("StatusEffectNode", "MarkerOverhead", "MarkerCenterBody", "MarkerBase")]
 script = ExtResource("1_uddu2")
 StatusEffectNode = NodePath("OverheadMarker/FloatingStatusIcon")
-markerOverhead = NodePath("OverheadMarker")
-markerCenterBody = NodePath("CenterBodyMarker")
-markerBase = NodePath("BaseMarker")
+MarkerOverhead = NodePath("OverheadMarker")
+MarkerCenterBody = NodePath("CenterBodyMarker")
+MarkerBase = NodePath("BaseMarker")
 metadata/_custom_type_script = "uid://wvcu0ur5w0tj"
 
 [node name="OverheadMarker" type="Marker3D" parent="."]

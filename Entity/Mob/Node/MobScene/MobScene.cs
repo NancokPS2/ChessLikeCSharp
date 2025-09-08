@@ -7,12 +7,15 @@ using Godot;
 using System;
 using System.Diagnostics;
 
+/// <summary>
+/// Visual representation for Mobs.
+/// </summary>
 [GlobalClass]
 public partial class MobScene : Node3D
 {
 	const string MODEL_META_ATTACHED_NODE = "ATTACHED_MODEL_FROM_MobScene";
 
-	public Mob MobUsing;
+	public Mob? MobUsing;
 
 	public static PopupText3D FloatingTextScene
 	{
@@ -26,17 +29,20 @@ public partial class MobScene : Node3D
 	[Export]
 	public StatusEffectIcon StatusEffectNode = null!;
 
-	public Node3D MarkerOverhead { get => markerOverhead ?? throw new Exception(); set => markerOverhead = value; }
 	[Export]
-	private Node3D? markerOverhead;
+	public Node3D MarkerOverhead = null!;
 
-	public Node3D MarkerCenterBody { get => markerCenterBody ?? throw new Exception(); set => markerCenterBody = value; }
 	[Export]
-	private Node3D? markerCenterBody;
+	public Node3D MarkerCenterBody = null!;
 
-	public Node3D MarkerBase { get => markerBase ?? throw new Exception(); set => markerBase = value; }
 	[Export]
-	private Node3D? markerBase;
+	public Node3D MarkerBase = null!;
+
+	[Export]
+	public bool BecomeSelected = false;
+
+	[Export]
+	public bool IgnoreMobPosition = false;
 
 	protected MobModel? ModelResource;
 	private Node3D? ModelNode;
@@ -51,7 +57,7 @@ public partial class MobScene : Node3D
 	public override void _Ready()
 	{
 		base._Ready();
-		if (MobUsing is null) throw new Exception("Lacks a MobUsing");
+		if (MobUsing is null && !BecomeSelected) throw new Exception("Lacks a MobUsing");
 
 		EventBus.MobMoved += OnMobMoved;
 		EventBus.MobStatChanged += OnMobStatChanged;
@@ -63,21 +69,63 @@ public partial class MobScene : Node3D
 		EventBus.InputCheatEntered += OnInputCheatEntered;
 		EventBus.StatusEffectAdded += OnStatusEffectChanged;
 
-		MobUsing.TemplateUpdate(true, true);
-		MobUsing.EquipmentStatBoostsUpdate();
+		//WIP (move this update shit out of here, this node is for visuals only)
 
-		MovementResetPosition();
+		if (MobUsing is not null)
+		{
+			MobUsing.TemplateUpdate(true, true);
+			MobUsing.EquipmentStatBoostsUpdate();
+			MovementResetPosition();
+			ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
+			OnInventoryChanged(MobUsing.EquipmentInventory);
+		}
 
-		//WIP
-		ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
-		OnInventoryChanged(MobUsing.EquipmentInventory);
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
+
 		MovementProcess();
 	}
+
+	#region Visual Updates
+	public void VisualUpdateAll()
+	{
+		VisualUpdateEquipment();
+		VisualUpdateStatusEffects();
+	}
+
+	protected void VisualUpdateEquipment()
+	{
+		ModelClearAttached();
+
+		foreach (var slotItemPair in MobUsing.EquipmentInventory.GetSlotItemTuples())
+		{
+			//If the item does not have a model, skip.
+			if (slotItemPair.Item2.Model is null) continue;
+
+			//Decide which bone the item will attach to.
+			(EMobModelBone, int) boneIndexPair = slotItemPair.Item1 switch
+			{
+				EMobEquipmentSlot.LEFT_HAND => (EMobModelBone.HAND, 0),
+				EMobEquipmentSlot.RIGHT_HAND => (EMobModelBone.HAND, 1),
+				EMobEquipmentSlot.ARMOR => (EMobModelBone.TORSO, 0),
+				_ => (EMobModelBone.INVALID, 0)
+			};
+
+			//If no bone exists for this slot, skip.
+			if (boneIndexPair.Item1 == EMobModelBone.INVALID) continue;
+			Node toAttach = slotItemPair.Item2.Model.Instantiate<Node>();
+			ModelAttachNode(boneIndexPair.Item1, toAttach, boneIndexPair.Item2);
+		}
+	}
+
+	public void VisualUpdateStatusEffects()
+	{
+		StatusEffectNode.StatusEffects = MobUsing.GetAllStatusEffects();
+	}
+	#endregion
 
 	#region Particles
 
@@ -150,11 +198,6 @@ public partial class MobScene : Node3D
 			effectNode?.QueueFree();
 			EffectNodes.Remove(effect);
 		}
-	}
-
-	public void AnimateUpdateStatusEffects()
-	{
-		StatusEffectNode.StatusEffects = MobUsing.GetAllStatusEffects();
 	}
 	#endregion
 
@@ -231,6 +274,8 @@ public partial class MobScene : Node3D
 	#region Movement
 	public void MovementProcess()
 	{
+		if (IgnoreMobPosition) return;
+
 		//Reached the end of the list, we are done.
 		if (MovementStored.Count == 0)
 		{
@@ -363,8 +408,9 @@ public partial class MobScene : Node3D
 
 	private void OnMobSelected(Mob mob)
 	{
-		if (mob != MobUsing) return;
-
+		if (!BecomeSelected) return;
+		MobUsing = mob;
+		VisualUpdateAll();
 	}
 
 	private void OnActionUsed(UsageParameters parameters)
@@ -385,29 +431,9 @@ public partial class MobScene : Node3D
 		if (obj != MobUsing.EquipmentInventory) return;
 
 		MobUsing.EquipmentStatBoostsUpdate();
-
-		ModelClearAttached();
-
-		foreach (var slotItemPair in MobUsing.EquipmentInventory.GetSlotItemTuples())
-		{
-			//If the item does not have a model, skip.
-			if (slotItemPair.Item2.Model is null) continue;
-
-			//Decide which bone the item will attach to.
-			(EMobModelBone, int) boneIndexPair = slotItemPair.Item1 switch
-			{
-				EMobEquipmentSlot.LEFT_HAND => (EMobModelBone.HAND, 0),
-				EMobEquipmentSlot.RIGHT_HAND => (EMobModelBone.HAND, 1),
-				EMobEquipmentSlot.ARMOR => (EMobModelBone.TORSO, 0),
-				_ => (EMobModelBone.INVALID, 0)
-			};
-
-			//If no bone exists for this slot, skip.
-			if (boneIndexPair.Item1 == EMobModelBone.INVALID) continue;
-			Node toAttach = slotItemPair.Item2.Model.Instantiate<Node>();
-			ModelAttachNode(boneIndexPair.Item1, toAttach, boneIndexPair.Item2);
-		}
+		VisualUpdateEquipment();
 	}
+
 
 	private void OnInputCheatEntered(Command.ECheat obj)
 	{
@@ -435,7 +461,7 @@ public partial class MobScene : Node3D
 	private void OnStatusEffectChanged(Mob mob, Status statusEffect)
 	{
 		if (mob != MobUsing) return;
-		AnimateUpdateStatusEffects();
+		VisualUpdateStatusEffects();
 	}
     #endregion
 

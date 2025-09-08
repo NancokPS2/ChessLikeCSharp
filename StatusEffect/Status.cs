@@ -74,8 +74,8 @@ public partial class Status : Resource
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		UnSetup();
+		base.Dispose(disposing);
 	}
 
 	protected virtual void Use()

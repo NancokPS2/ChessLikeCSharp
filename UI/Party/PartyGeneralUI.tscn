@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://byh0x8syok53h"]
+[gd_scene load_steps=10 format=3 uid="uid://byh0x8syok53h"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
 [ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://UI/Mob/MobListUI.tscn" id="2_ospk4"]
 [ext_resource type="PackedScene" uid="uid://dvcptks4lh3ps" path="res://UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
+[ext_resource type="PackedScene" uid="uid://k16lil2fu57n" path="res://Entity/Mob/Node/MobScene/MobScene.tscn" id="5_3rfsk"]
+[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="6_51nsv"]
 [ext_resource type="PackedScene" uid="uid://c7lfcu2mi4uaj" path="res://UI/Party/PartyJobChangeUI.tscn" id="6_rogee"]
 [ext_resource type="PackedScene" uid="uid://cf8b0b72i4xse" path="res://UI/Base/MassInventoryUI.tscn" id="7_51nsv"]
+[ext_resource type="PackedScene" uid="uid://b3msvq7mc7i1q" path="res://UI/Mob/MobUI.tscn" id="7_rhtdr"]
 [ext_resource type="Script" uid="uid://coe0lb8uk60be" path="res://UI/Party/PartyInventoryUI.cs" id="8_0f6g6"]
 
 [node name="PartyGeneralUI" type="Control"]
@@ -16,33 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ucgmu")
 
-[node name="PartyUnitListUI" parent="." instance=ExtResource("2_ospk4")]
-layout_mode = 1
-anchors_preset = -1
-anchor_bottom = 0.197531
-metadata/_edit_use_anchors_ = true
-
-[node name="MobJobChangeUI" parent="." instance=ExtResource("6_rogee")]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.777778
-anchor_top = 0.197531
-anchor_bottom = 0.91358
-script = null
-metadata/_edit_use_anchors_ = true
-
-[node name="PartyInventoryUI" type="Control" parent="." node_paths=PackedStringArray("EquipmentUI", "MassUI")]
-layout_mode = 1
-anchor_top = 0.206
-anchor_right = 0.5
-anchor_bottom = 1.0
-script = ExtResource("8_0f6g6")
-EquipmentUI = NodePath("HBoxContainer/MobEquipmentUI")
-MassUI = NodePath("HBoxContainer/MassInventoryUI")
-metadata/_custom_type_script = "uid://coe0lb8uk60be"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PartyInventoryUI"]
+[node name="TopVerticalSeparation" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,26 +27,100 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MassInventoryUI" parent="PartyInventoryUI/HBoxContainer" instance=ExtResource("7_51nsv")]
+[node name="PartyUnitListUI" parent="TopVerticalSeparation" instance=ExtResource("2_ospk4")]
+custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
-AutoUpdateOnEnterTree = true
+metadata/_edit_use_anchors_ = true
 
-[node name="MobEquipmentUI" parent="PartyInventoryUI/HBoxContainer" instance=ExtResource("3_k8mmi")]
+[node name="MobAndOptionsSeparator" type="HBoxContainer" parent="TopVerticalSeparation"]
 layout_mode = 2
-AutoUpdateOnEnterTree = true
+size_flags_vertical = 3
 
-[node name="MenuButton" type="MenuButton" parent="."]
+[node name="TabContainer" type="TabContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+current_tab = 1
+
+[node name="Inventory" type="Control" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer" node_paths=PackedStringArray("EquipmentUI", "MassUI")]
+visible = false
+layout_mode = 2
+script = ExtResource("8_0f6g6")
+EquipmentUI = NodePath("HBoxContainer/MobEquipmentUI")
+MassUI = NodePath("HBoxContainer/MassInventoryUI")
+metadata/_custom_type_script = "uid://coe0lb8uk60be"
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer/Inventory"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.777556
-anchor_top = 0.938
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.255981
-offset_top = -3.82404
-offset_bottom = 5.0
-grow_horizontal = 0
-grow_vertical = 0
-text = "Debug"
-flat = false
-metadata/_edit_use_anchors_ = true
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MassInventoryUI" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer/Inventory/HBoxContainer" instance=ExtResource("7_51nsv")]
+layout_mode = 2
+size_flags_stretch_ratio = 1.4
+AutoUpdateOnEnterTree = true
+
+[node name="MobEquipmentUI" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer/Inventory/HBoxContainer" instance=ExtResource("3_k8mmi")]
+layout_mode = 2
+AutoUpdateOnEnterTree = true
+
+[node name="Job" type="Control" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer/Job"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MobJobChangeUI" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer/Job/HBoxContainer" instance=ExtResource("6_rogee")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MobUI" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer" instance=ExtResource("7_rhtdr")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/MobUI" index="1"]
+visible = false
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer"]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(383, 256)
+render_target_update_mode = 4
+
+[node name="MobScene" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("5_3rfsk")]
+BecomeSelected = true
+IgnoreMobPosition = true
+
+[node name="Node3D" type="Node3D" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport"]
+transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.642788, -0.383022, 0.663414, 0, 0.3, 0)
+
+[node name="Camera3D" type="Camera3D" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+cull_mask = 4294967295
+
+[node name="Outside" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("6_51nsv")]
+
+[editable path="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/MobUI"]
