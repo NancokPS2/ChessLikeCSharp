@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://khyr66d6toln" path="res://UI/Mob/MobListUI.cs" id="1_la5gv"]
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_nk17s"]
 
-[node name="MobListUI" type="Control" node_paths=PackedStringArray("NodeFactionNameLabel", "Container")]
+[node name="MobListUI" type="Control" node_paths=PackedStringArray("NodeFactionNameLabel", "ContainerOverride")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_vertical = 2
 theme = ExtResource("1_nk17s")
 script = ExtResource("1_la5gv")
 NodeFactionNameLabel = NodePath("FactionNameLabel")
-Container = NodePath("PortraitContainer")
+ContainerOverride = NodePath("PortraitContainer")
 metadata/_custom_type_script = "uid://khyr66d6toln"
 
 [node name="Panel" type="Panel" parent="."]

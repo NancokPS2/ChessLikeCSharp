@@ -82,7 +82,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MobJobChangeUI" parent="TopVerticalSeparation/MobAndOptionsSeparator/TabContainer/Job/HBoxContainer" instance=ExtResource("6_rogee")]
-unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -115,7 +114,7 @@ BecomeSelected = true
 IgnoreMobPosition = true
 
 [node name="Node3D" type="Node3D" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport"]
-transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.642788, -0.383022, 0.663414, 0, 0.3, 0)
+transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.642788, -0.383022, 0.663414, 0, 0.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport/Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)

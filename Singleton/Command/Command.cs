@@ -98,7 +98,7 @@ public partial class Command: Node
 
     private void AllCombatUnitsSetHP(float amount)
     {
-        Global.ManagerMob.GetPooledInCombat().ForEach(
+        Mob.GetInstancesInCombat().ForEach(
             x => x.Stats.SetValue(ChessLike.Entity.EValueName.HEALTH, amount)            
             );
     }

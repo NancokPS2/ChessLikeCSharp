@@ -153,7 +153,7 @@ public partial class CombatScene : Node3D
 
 	public static EncounterData GetEncounterData() => EncounterData;
 
-	public static List<Mob> GetMobsInCombat() => Global.ManagerMob.GetPooledInCombat();
+	public static List<Mob> GetMobsInCombat() => Mob.GetInstancesInCombat();
 
 	public static MobMovement GetMobMovement() => MobMovementNode;
 

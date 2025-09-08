@@ -41,9 +41,9 @@ public partial class EncounterData : Resource
 
     public virtual bool IsFinished()
     {
-        bool no_hostiles_remaining = !Global.ManagerMob
-            .GetPooledInCombat()
-            .Any(x => x.GetFaction().IsEnemy(EFaction.PLAYER));
+        bool no_hostiles_remaining = !Mob.GetInstancesInCombat()
+            .Any(x => x.GetFaction()
+			.IsEnemy(EFaction.PLAYER));
 
         bool turn_limit_reached = RoundLimit > 0 && RoundCount >= RoundLimit;
 

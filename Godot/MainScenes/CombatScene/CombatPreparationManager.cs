@@ -51,7 +51,7 @@ public partial class CombatPreparationManager : Node3D
 
     protected bool RemoveMob(Vector3i cellPos)
     {
-        List<Mob> mobs = Global.ManagerMob.GetPooledInCombat().FilterInPosition(cellPos);
+        List<Mob> mobs = Mob.GetInstancesInCombat().FilterInPosition(cellPos);
 
         if (mobs.IsEmpty())
         {

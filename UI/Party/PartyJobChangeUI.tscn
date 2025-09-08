@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7lfcu2mi4uaj"]
+[gd_scene load_steps=5 format=3 uid="uid://c7lfcu2mi4uaj"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_lvy4g"]
+[ext_resource type="Script" uid="uid://bq4gu5y4x1a7q" path="res://UI/Party/PartyJobChangeUI.cs" id="2_hakre"]
 [ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://UI/Base/HelpTooltip.tscn" id="3_svj7g"]
+[ext_resource type="Script" uid="uid://q2xla7h3pe44" path="res://UI/Party/BaseButtonMenuMobTemplateJob.cs" id="4_u0o3h"]
 
-[node name="MobJobChangeUI" type="Control"]
+[node name="PartyJobChangeUI" type="Control" node_paths=PackedStringArray("CurrentJobMenu", "AvailableJobMenu")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,6 +13,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_lvy4g")
+script = ExtResource("2_hakre")
+CurrentJobMenu = NodePath("MarginContainer/VSplitContainer/CurrentJobsMenu")
+AvailableJobMenu = NodePath("MarginContainer/VSplitContainer/AvailableJobsMenu")
+metadata/_custom_type_script = "uid://bq4gu5y4x1a7q"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -33,13 +39,20 @@ theme = ExtResource("1_lvy4g")
 [node name="VSplitContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="JobsOwned" type="Label" parent="MarginContainer/VSplitContainer"]
+[node name="Current" type="Label" parent="MarginContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"LabelHeader"
-text = "Jobs"
+text = "Current"
 
-[node name="SelectedJobs" type="HBoxContainer" parent="MarginContainer/VSplitContainer"]
+[node name="CurrentJobsMenu" type="Control" parent="MarginContainer/VSplitContainer" node_paths=PackedStringArray("ContainerOverride")]
+layout_mode = 2
+script = ExtResource("4_u0o3h")
+MinimumSlots = 2
+ContainerOverride = NodePath("../CurrentJobs")
+metadata/_custom_type_script = "uid://q2xla7h3pe44"
+
+[node name="CurrentJobs" type="HBoxContainer" parent="MarginContainer/VSplitContainer"]
 custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_vertical = 3
@@ -50,6 +63,12 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"LabelHeader"
 text = "Available"
+
+[node name="AvailableJobsMenu" type="Control" parent="MarginContainer/VSplitContainer" node_paths=PackedStringArray("ContainerOverride")]
+layout_mode = 2
+script = ExtResource("4_u0o3h")
+ContainerOverride = NodePath("../AvailableJobs")
+metadata/_custom_type_script = "uid://q2xla7h3pe44"
 
 [node name="AvailableJobs" type="VBoxContainer" parent="MarginContainer/VSplitContainer"]
 layout_mode = 2

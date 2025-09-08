@@ -49,7 +49,8 @@ public partial class PartyInventoryUI : Control
 		MassUI.Update(Global.ManagerFaction.ResourceGet(
 			identifier ?? throw new Exception(),
 			true,
-			true).Inventory);
+			true)
+			.Inventory);
 
 		EventBus.MobSelected += OnMobSelected;
 		EventBus.SceneChanged += OnSceneChanged;

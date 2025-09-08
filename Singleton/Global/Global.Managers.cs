@@ -24,8 +24,10 @@ public partial class Global
 
 	public static List<IResourcePack> GetAllResourcePacks()
 	{
+		//IMPORTANT: The order here can help with failure to load resources. Apparently, the more dependencies, the further up it should go.
 		return new()
 		{
+			ManagerEncounter,
 			ManagerAbility,
 			ManagerMob,
 			ManagerFaction,
@@ -34,7 +36,6 @@ public partial class Global
 			ManagerParticle,
 			ManagerMaterial,
 			ManagerFont,
-			ManagerEncounter,
 			ManagerMobTemplate,
 		};
 	}

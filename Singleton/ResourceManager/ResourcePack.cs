@@ -14,7 +14,6 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 
     protected Dictionary<string, TRes> Contents = new();
     protected Dictionary<string, TRes> ContentsPersistent = new();
-    protected List<TRes> Pooled = new();
     public bool AutoPoolPersistent = true;
     public readonly string PackIdentifier = "";
 
@@ -30,24 +29,6 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
         PrepareDirectories();
     }
 
-    #region Pooled
-    public void PooledAdd(TRes res)
-    {
-        Pooled.Add(res);
-    }
-
-    public void PooledRemove(TRes res)
-    {
-        Pooled.Remove(res);
-    }
-
-	[Obsolete("These pooled things are not being helpful.")]
-    public List<TRes> PooledGetAll()
-		=> new(Pooled);
-
-    public List<TRes> PooledGetWithTag(string tag)
-        => new(from res in Pooled where TagGet(res).Contains(tag) select res);
-	#endregion
 
 	#region Resource
 	public void ResourceAddPersistent(string identifier, TRes resource)
@@ -110,11 +91,24 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 
         return output;
     }
+
+	public List<TRes> ResourceGetAll(bool persistent)
+	{
+		if (persistent)
+		{
+			return ContentsPersistent.Values.ToList();
+		}
+		else
+		{
+			return Contents.Values.ToList();
+		}
+	}
+
     public List<TRes> ResourcesGetWithTag(string tag, bool persistent = false)
-        => (from identifier
-            in persistent ? Contents.Keys : ContentsPersistent.Keys
-            select ResourceGet(identifier, persistent)
-            ).ToList();
+		=> (from identifier
+			in persistent ? Contents.Keys : ContentsPersistent.Keys
+			select ResourceGet(identifier, persistent)
+			).ToList();
 
     protected TRes? GetDefaultResource()
     {
@@ -228,6 +222,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 		{
 			string loadPath = path + "/" + item;
 			TRes res = GD.Load<TRes>(loadPath);
+			//If this throws, make sure the load order of the resource packs is correct.
 			if (res is null) throw new Exception($"Loaded resource at {loadPath} is null.");
 			string identifier = GetResourceIdentifier(res);
 
@@ -250,7 +245,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 		bool success = true;
 		List<TRes> toSave =
 			ContentsPersistent.Values.Where(x => TagIn(x, TAG_PERSISTENT))
-			.Concat(PooledGetWithTag(TAG_PERSISTENT)).ToList();
+			.ToList();
 
 		foreach (var item in toSave)
 		{

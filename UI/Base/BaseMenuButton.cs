@@ -11,10 +11,11 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 	public delegate void ButtonInteraction(TButton button, TAssociatedParam param);
 	public event ButtonInteraction? ButtonPressed;
 
+	protected (TButton, TAssociatedParam)? TupleHovered;
 	protected (TButton, TAssociatedParam)? TupleSelected;
 
 	[Export]
-	public Control? Container;
+	public Control? ContainerOverride;
 
 	[Export]
 	public SizeFlags ButtonHorizontalFlags = SizeFlags.ExpandFill;
@@ -31,9 +32,8 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 	[Export]
 	public bool AutoUpdateOnEnterTree;
 
-	protected (TButton, TAssociatedParam)? TupleHovered;
 
-	private List<TAssociatedParam>? _last_update;
+	private List<TAssociatedParam>? LastUpdate;
 	protected List<ButtonInstance> ButtonInstances = new();
 
 	public BaseButtonMenu()
@@ -42,7 +42,7 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 
 	public BaseButtonMenu(Control container) : this()
 	{
-		Container = container;
+		ContainerOverride = container;
 	}
 
 	public override void _EnterTree()
@@ -53,13 +53,12 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 
 	public void Update()
 	{
-		if (_last_update is null) { GD.PushWarning("Nothing to update with. The last updated value is null or it was never set."); return; }
-		Update(_last_update);
+		if (LastUpdate is null) { GD.PushWarning("Nothing to update with. The last updated value is null or it was never set."); return; }
+		Update(LastUpdate);
 	}
 
-	public void Update(List<TAssociatedParam> parameter_list)
+	public void Update(List<TAssociatedParam> parameterList)
 	{
-		Control used_container = Container ?? this;
 		foreach (var item in ButtonInstances)
 		{
 			ButtonDelete(item);
@@ -67,20 +66,28 @@ public abstract partial class BaseButtonMenu<TButton, TAssociatedParam> : Contro
 
 		ButtonInstances.Clear();
 
-		foreach (var parameter in parameter_list)
+		foreach (var parameter in parameterList)
 		{
-			ButtonInstance button_instance = ButtonCreate(parameter);
-			_ButtonCreated(button_instance.NodeReference, button_instance.ParameterReference);
-			used_container.AddChild(button_instance.NodeReference);
+			ButtonCreate(parameter);
 		}
 
-		_Update();
-		_last_update = parameter_list;
+		_Update(parameterList);
+		LastUpdate = parameterList;
 	}
 
-	protected virtual void _Update() { }
+	protected virtual void _Update(List<TAssociatedParam> parameterList) { }
 
-	protected virtual ButtonInstance ButtonCreate(TAssociatedParam param)
+	private Control GetCurrentContainer()
+		=> ContainerOverride ?? this;
+
+	protected void ButtonCreate(TAssociatedParam parameter)
+	{
+		ButtonInstance button_instance = ButtonGetNew(parameter);
+		_ButtonCreated(button_instance.NodeReference, button_instance.ParameterReference);
+		GetCurrentContainer().AddChild(button_instance.NodeReference);
+	}
+
+	protected virtual ButtonInstance ButtonGetNew(TAssociatedParam param)
 	{
 		TButton button = new()
 		{

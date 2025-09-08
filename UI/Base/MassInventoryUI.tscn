@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="2_ur38u"]
 [ext_resource type="PackedScene" uid="uid://1o62s57ghh6r" path="res://UI/Base/HelpTooltip.tscn" id="3_krg0q"]
 
-[node name="MassInventoryUI" type="Control" node_paths=PackedStringArray("Container")]
+[node name="MassInventoryUI" type="Control" node_paths=PackedStringArray("ContainerOverride")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("1_n28j5")
-Container = NodePath("Inventory")
+ContainerOverride = NodePath("Inventory")
 metadata/_custom_type_script = "uid://u6ju1u5ctdmk"
 
 [node name="Panel" type="Panel" parent="."]

@@ -2,10 +2,9 @@ using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Extension;
 using ChessLike.StatusEffect;
-using ChessLike.World;
 using Godot;
-using System;
-using System.Diagnostics;
+
+
 
 /// <summary>
 /// Visual representation for Mobs.
@@ -76,8 +75,8 @@ public partial class MobScene : Node3D
 			MobUsing.TemplateUpdate(true, true);
 			MobUsing.EquipmentStatBoostsUpdate();
 			MovementResetPosition();
-			ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
 			OnInventoryChanged(MobUsing.EquipmentInventory);
+			VisualUpdateAll();
 		}
 
 	}
@@ -92,9 +91,19 @@ public partial class MobScene : Node3D
 	#region Visual Updates
 	public void VisualUpdateAll()
 	{
+		VisualUpdateModel();
 		VisualUpdateEquipment();
 		VisualUpdateStatusEffects();
 	}
+
+	[Obsolete("Must take the race into account.")]
+	protected void VisualUpdateModel()
+	{
+		MobTemplateRace race = MobUsing.TemplateGet<MobTemplateRace>().First();
+
+		ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
+	}
+
 
 	protected void VisualUpdateEquipment()
 	{

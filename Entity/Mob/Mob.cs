@@ -15,54 +15,68 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class Mob : Resource
 {
-    [Export]
-    public string DisplayedName = "UNNAMED";
+	protected static List<Mob> Instances = new();
 
-    [Export]
-    private Godot.Collections.Array<ActionEvent> actions
-    {
-        set => Actions = new(value);
-        get => new(Actions);
-    }
-    private List<ActionEvent> Actions = new();
+	[Export]
+	public string DisplayedName = "UNNAMED";
 
-    public List<MobTemplate> Templates = new();
-    [Export]
-    private Godot.Collections.Array<MobTemplate> templates
-    {
-        set => Templates = new(value);
+	[Export]
+	private Godot.Collections.Array<ActionEvent> actions
+	{
+		set => Actions = new(value);
+		get => new(Actions);
+	}
+	private List<ActionEvent> Actions = new();
 
-        get => new(Templates);
-    }
+	public List<MobTemplate> Templates = new();
+	[Export]
+	private Godot.Collections.Array<MobTemplate> templates
+	{
+		set => Templates = new(value);
 
-    [Export]
-    public EFaction Faction = EFaction.NEUTRAL;
+		get => new(Templates);
+	}
 
-    private EMobState mobState = EMobState.BENCHED;
-    public EMobState MobState
-    {
-        get => mobState;
+	[Export]
+	public EFaction Faction = EFaction.NEUTRAL;
 
-        set
-        {
-            mobState = value;
-            EventBus.MobStateChanged?.Invoke(this, mobState);
-        }
+	private EMobState mobState = EMobState.BENCHED;
+	public EMobState MobState
+	{
+		get => mobState;
 
-    }
+		set
+		{
+			mobState = value;
+			EventBus.MobStateChanged?.Invoke(this, mobState);
+		}
+
+	}
 
 	public MobStatSet Stats = MobStatSet.GetDefault();
 
-    private Vector3i Position;
+	private Vector3i Position;
 
-    public Mob()
-    {
-        //TODO: Move this somewhere else
-        Global.ManagerMob.PooledAdd(this);
+	public Mob()
+	{
+		//TODO: Move this somewhere else
+		Instances.Add(this);
 
-        //Default stats
-        Stats = MobStatSet.GetDefault();
-    }
+		//Default stats
+		Stats = MobStatSet.GetDefault();
+	}
+
+	#region Instances
+	public static List<Mob> GetInstancesInCombat()
+		=> Instances.FilterInCombat();
+
+	public static List<Mob> GetInstancesInPosition(Vector3i position)
+		=> Instances.FilterInPosition(position);
+
+	public static List<Mob> GetInstancesInFaction(EFaction faction)
+		=> Instances.FilterInFaction(faction);
+	#endregion
+
 	#region MobTemplate
 	public List<string> GetRaceNames()
 		=> (from template in Templates where template is MobTemplateRace select template.TemplateName).ToList();
@@ -70,17 +84,17 @@ public partial class Mob : Resource
 	public List<string> GetJobNames()
 		=> (from template in Templates where template is MobTemplateRace select template.TemplateName).ToList();
 
-    public void TemplateSet(MobTemplateBase template)
-        => TemplateSet(new List<MobTemplateBase>(){template});
+	public void TemplateSet(MobTemplateBase template)
+		=> TemplateSet(new List<MobTemplateBase>() { template });
 
-    public void TemplateSet(MobTemplateRace template)
-        => TemplateSet(new List<MobTemplateRace>(){template});
+	public void TemplateSet(MobTemplateRace template)
+		=> TemplateSet(new List<MobTemplateRace>() { template });
 
-    public void TemplateSet(MobTemplateJob template)
-        => TemplateSet(new List<MobTemplateJob>(){template});
+	public void TemplateSet(MobTemplateJob template)
+		=> TemplateSet(new List<MobTemplateJob>() { template });
 
-    public void TemplateSet(MobTemplateIdentity template)
-        => TemplateSet(new List<MobTemplateIdentity>(){template});
+	public void TemplateSet(MobTemplateIdentity template)
+		=> TemplateSet(new List<MobTemplateIdentity>() { template });
 
 	protected void TemplateSet<TTemplate>(List<TTemplate> template)
 	where TTemplate : MobTemplate
@@ -88,28 +102,28 @@ public partial class Mob : Resource
 		TemplateClear<TTemplate>();
 		Templates.AddRange(template);
 		TemplateUpdate(false, true);
-    }
+	}
 
-    public List<TTemplate> TemplateGet<TTemplate>()
-    where TTemplate : MobTemplate
-    {
-        List<TTemplate> output = new();
-        foreach (var item in Templates)
-        {
-            if (item is TTemplate tTemp) output.Add(tTemp);
-        }
-        return output;
-    }
+	public List<TTemplate> TemplateGet<TTemplate>()
+	where TTemplate : MobTemplate
+	{
+		List<TTemplate> output = new();
+		foreach (var item in Templates)
+		{
+			if (item is TTemplate tTemp) output.Add(tTemp);
+		}
+		return output;
+	}
 
-    protected void TemplateClear()
-        => TemplateClear<MobTemplate>();
+	protected void TemplateClear()
+		=> TemplateClear<MobTemplate>();
 
-    protected void TemplateClear<TTemplate>()
-    where TTemplate : MobTemplate
-    {
-        Templates.RemoveAll(x => x is TTemplate);
+	protected void TemplateClear<TTemplate>()
+	where TTemplate : MobTemplate
+	{
+		Templates.RemoveAll(x => x is TTemplate);
 		TemplateUpdate(false, true);
-    }
+	}
 
 	public void TemplateUpdate(bool refillValues, bool reset = true)
 	{
@@ -133,14 +147,15 @@ public partial class Mob : Resource
 
 		if (refillValues) Stats.RefillValues();
 
-		MsgLog.LogInfoMsg($"Updated templates for mob {DisplayedName} (Refilled? {refillValues})\n" 
+		MsgLog.LogInfoMsg($"Updated templates for mob {DisplayedName} (Refilled? {refillValues})\n"
 		+ $"Base: {TemplateGet<MobTemplateBase>().ToStringList()}|"
 		+ $"Race: {TemplateGet<MobTemplateRace>().ToStringList()}|"
 		+ $"Job: {TemplateGet<MobTemplateJob>().ToStringList()}|"
 		+ $"Identity: {TemplateGet<MobTemplateIdentity>().ToStringList()}"
 		);
-    }
+	}
 	#endregion
+
 
 	#region Inventory
 	[Export]
@@ -190,7 +205,7 @@ public partial class Mob : Resource
 
 	#region Faction
 	public AStar3D Navigation;
-    public Faction GetFaction()
+	public Faction GetFaction()
 		=> Global.ManagerFaction.ResourceGet(
 			Global.ManagerFaction.FindIdentifier(Faction) ?? throw new Exception(),
 			true,
@@ -200,9 +215,9 @@ public partial class Mob : Resource
 
 	#region Movement
 	public Vector3i GetPosition()
-    {
-        return Position;
-    }
+	{
+		return Position;
+	}
 
 	public void SetPosition(Vector3i where)
 	{
@@ -260,10 +275,10 @@ public partial class Mob : Resource
 		}
 		EventBus.MobCellListChanged?.Invoke(this);
 	}
-	
+
 	public void Move(Vector3i to, MovementParameters moveParams)
 		=> Move(new List<Vector3i>() { to }, moveParams);
-    public void Move(List<Vector3i> path, MovementParameters moveParams)
+	public void Move(List<Vector3i> path, MovementParameters moveParams)
 	{
 		if (path.Count == 0) MsgLog.Log(EMessageType.ERROR, "Received empty path.");
 
@@ -281,16 +296,16 @@ public partial class Mob : Resource
 		EventBus.MobMovementPathRequested?.Invoke(this, path, moveParams);
 	}
 
-    public void MoveRelative(Vector3i relative, MovementParameters moveParams)
-    {
-        Move(GetPosition() + relative, moveParams);
-    }
+	public void MoveRelative(Vector3i relative, MovementParameters moveParams)
+	{
+		Move(GetPosition() + relative, moveParams);
+	}
 
-    #endregion
+	#endregion
 
-    #region Actions
+	#region Actions
 
-    public void AddAction<T>(T action, bool copy = true) where T : ActionEvent
+	public void AddAction<T>(T action, bool copy = true) where T : ActionEvent
 		=> AddAction(new List<T>() { action }, copy);
 
 	public void AddAction<T>(List<T> actions, bool copy = true) where T : ActionEvent
@@ -308,20 +323,20 @@ public partial class Mob : Resource
 			x => x.TargetParams.TargetingUsesPathing != EMovementMode.INVALID || x.TargetParams.AoEUsesPathing != EMovementMode.INVALID)
 			)
 			UpdateCellList();
-    }
+	}
 
-    public void RemoveAction(ActionEvent action) => RemoveAction(new List<ActionEvent>() { action });
+	public void RemoveAction(ActionEvent action) => RemoveAction(new List<ActionEvent>() { action });
 
-    public void RemoveAction(List<ActionEvent> actions)
-    {
-        List<ActionEvent> to_delete = new(actions);
-        foreach (var item in to_delete)
-        {
-            Actions.Remove(item);
-            EventBus.MobActionRemoved?.Invoke(this, item);
-        }
+	public void RemoveAction(List<ActionEvent> actions)
+	{
+		List<ActionEvent> to_delete = new(actions);
+		foreach (var item in to_delete)
+		{
+			Actions.Remove(item);
+			EventBus.MobActionRemoved?.Invoke(this, item);
+		}
 
-    }
+	}
 
 	public void ClearAction()
 		=> new List<ActionEvent>(Actions)
@@ -339,10 +354,10 @@ public partial class Mob : Resource
 		}
 		return output;
 	}
-    #endregion
+	#endregion
 
-    #region Per Turn Values
-    public bool TurnActive;
+	#region Per Turn Values
+	public bool TurnActive;
 	#endregion
 
 	#region Status Effects
@@ -378,28 +393,60 @@ public partial class Mob : Resource
 	public bool IsInCombat() => mobState == EMobState.COMBAT;
 
 	public override string ToString()
-    {
-        string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {GetRaceNames().ToStringList()} \n";
+	{
+		string output = $"Name: {DisplayedName} \nFaction: {Faction} \nRace: {GetRaceNames().ToStringList()} \n";
 
-        return output;
-    }
+		return output;
+	}
 
-    public string ToStringStats() => $"---\nStats: {Stats}";
+	public string ToStringStats() => $"---\nStats: {Stats}";
 
-    public string ToStringActions()
-    {
-        string output = "";
-        output += $"---\nAbilities: {GetAbilities().ToStringList()}";
-        //output += $"---\nPassives: {GetPassives().ToStringList()}";
-        output += $"---\nTemplates: {Templates.ToStringList()}";
-        return output;
-    }
+	public string ToStringActions()
+	{
+		string output = "";
+		output += $"---\nAbilities: {GetAbilities().ToStringList()}";
+		//output += $"---\nPassives: {GetPassives().ToStringList()}";
+		output += $"---\nTemplates: {Templates.ToStringList()}";
+		return output;
+	}
 
 	public static Mob GetDefault()
-    {
-        Mob output = new Mob();
+	{
+		Mob output = new Mob();
 		output.DisplayedName = "DEFAULT MOB";
+		return output;
+	}
+	#endregion
+}
+
+#region Extension
+public static class MobExtensions
+{
+	public static List<Mob> FilterInCombat(this List<Mob> mobs)
+		=> mobs.Where(x => x.MobState == EMobState.COMBAT).ToList();
+
+	public static List<Mob> FilterInPosition(this List<Mob> mobs, Vector3i position)
+		=> mobs.Where(x => x.GetPosition() == position).ToList();
+
+	public static List<Mob> FilterInFaction(this List<Mob> mobs, EFaction faction)
+		=> mobs.Where(x => x.Faction == faction).ToList();
+		
+	public static List<Mob> FilterHostileToFaction(this List<Mob> mobs, EFaction factionToCheck)
+    {
+        List<Mob> output = new();
+        Faction thisFaction = Global.ManagerFaction.ResourceGet(factionToCheck, true) ?? throw new Exception("No faction exists with this enum");
+
+        foreach (var mob in mobs)
+        {
+            Faction otherFaction = Global.ManagerFaction.ResourceGet(mob.Faction, true);
+			
+            if (thisFaction.IsEnemy(otherFaction.Identifier))
+			{
+				output.Add(mob);
+			}
+        }
+
         return output;
     }
-    #endregion
 }
+#endregion
