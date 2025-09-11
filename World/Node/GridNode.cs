@@ -70,8 +70,8 @@ public partial class GridNode : Node3D
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		EventBus.GridChanged -= OnGridChanged;
+		base.Dispose(disposing);
 	}
 
 

@@ -1,14 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://byh0x8syok53h"]
+[gd_scene load_steps=9 format=3 uid="uid://byh0x8syok53h"]
 
 [ext_resource type="Theme" uid="uid://0vkdn3hdeppa" path="res://assets/Theme/Default.tres" id="1_ucgmu"]
 [ext_resource type="PackedScene" uid="uid://ce7s8n4563cyy" path="res://UI/Mob/MobListUI.tscn" id="2_ospk4"]
 [ext_resource type="PackedScene" uid="uid://dvcptks4lh3ps" path="res://UI/Mob/MobEquipmentUI.tscn" id="3_k8mmi"]
-[ext_resource type="PackedScene" uid="uid://k16lil2fu57n" path="res://Entity/Mob/Node/MobScene/MobScene.tscn" id="5_3rfsk"]
-[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="6_51nsv"]
 [ext_resource type="PackedScene" uid="uid://c7lfcu2mi4uaj" path="res://UI/Party/PartyJobChangeUI.tscn" id="6_rogee"]
 [ext_resource type="PackedScene" uid="uid://cf8b0b72i4xse" path="res://UI/Base/MassInventoryUI.tscn" id="7_51nsv"]
 [ext_resource type="PackedScene" uid="uid://b3msvq7mc7i1q" path="res://UI/Mob/MobUI.tscn" id="7_rhtdr"]
 [ext_resource type="Script" uid="uid://coe0lb8uk60be" path="res://UI/Party/PartyInventoryUI.cs" id="8_0f6g6"]
+[ext_resource type="PackedScene" uid="uid://cs6c3nmvweb1x" path="res://UI/Mob/MobSubViewport.tscn" id="8_51nsv"]
 
 [node name="PartyGeneralUI" type="Control"]
 layout_mode = 3
@@ -96,30 +95,7 @@ size_flags_vertical = 3
 [node name="Label" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/MobUI" index="1"]
 visible = false
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer"]
+[node name="SubViewportContainer" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer" instance=ExtResource("8_51nsv")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer"]
-own_world_3d = true
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(383, 256)
-render_target_update_mode = 4
-
-[node name="MobScene" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("5_3rfsk")]
-BecomeSelected = true
-IgnoreMobPosition = true
-
-[node name="Node3D" type="Node3D" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport"]
-transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.642788, -0.383022, 0.663414, 0, 0.5, 0)
-
-[node name="Camera3D" type="Camera3D" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
-cull_mask = 4294967295
-
-[node name="Outside" parent="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("6_51nsv")]
 
 [editable path="TopVerticalSeparation/MobAndOptionsSeparator/VBoxContainer/MobUI"]

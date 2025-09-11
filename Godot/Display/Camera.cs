@@ -68,9 +68,9 @@ public partial class Camera : Camera3D
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		EventBus.CombatStateChanged -= OnBattleStateChanged;
 		EventBus.MobSelected -= OnMobSelected;
+		base.Dispose(disposing);
 	}
 
 	public override void _Input(InputEvent @event)

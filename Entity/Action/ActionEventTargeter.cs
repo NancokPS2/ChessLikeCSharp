@@ -51,9 +51,9 @@ public partial class ActionEventTargeter : Node3D
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		EventBus.CombatStateChanged -= OnBattleStateChanged;
 		EventBus.CellInputReceived -= OnCellInputReceived;
+		base.Dispose(disposing);
 	}
 
 	public void UpdateMarkers()

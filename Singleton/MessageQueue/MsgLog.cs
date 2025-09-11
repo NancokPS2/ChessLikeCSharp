@@ -89,9 +89,9 @@ public partial class MsgLog : Node
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		LogFile.Flush();
 		LogFile.Close();
+		base.Dispose(disposing);
 	}
 
 

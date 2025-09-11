@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using LightInject;
 
 namespace ChessLike.Entity;
 
 [GlobalClass]
 public partial class MobSceneManager : Node3D
 {
+	public static MobSceneManager? Instance { get => IsInstanceValid(instance) ? instance : null; set => instance = value; }
+	private static MobSceneManager? instance;
+
 	[Export]
 	protected float CursorSpeed = 15;
 	protected Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
@@ -19,6 +23,8 @@ public partial class MobSceneManager : Node3D
 
 	protected Mob? SelectedMob;
 	protected MobScene? SelectedMobScene;
+
+
 	public MobSceneManager()
 	{
 	}
@@ -26,6 +32,8 @@ public partial class MobSceneManager : Node3D
 	public override void _Ready()
 	{
 		base._Ready();
+		Instance = this;
+
 		EventBus.MobStateChanged += OnMobStateChanged;
 		EventBus.CellPositionSelected += OnCellSelected;
 		EventBus.CellPositionHovered += OnCellHovered;
@@ -41,11 +49,12 @@ public partial class MobSceneManager : Node3D
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		EventBus.MobStateChanged -= OnMobStateChanged;
 		EventBus.CellPositionSelected -= OnCellSelected;
 		EventBus.CellPositionHovered -= OnCellHovered;
 		EventBus.MobTurnStarted -= OnMobTurnStarted;
+		Instance = null;
+		base.Dispose(disposing);
 	}
 
 
@@ -83,7 +92,12 @@ public partial class MobSceneManager : Node3D
 	private bool HasInstance(Mob mob)
 		=> InstancedMobs.Any(x => x.MobUsing == mob);
 
-	private MobScene? GetInstance(Mob? mob)
+	public static MobScene? GetMobScene(Mob mob)
+	{
+		return Instance?.GetInstance(mob);
+	}
+
+	private MobScene? GetInstance(Mob mob)
 	{
 		List<MobScene> instancesFound = InstancedMobs.FindAll(x => x.MobUsing == mob);
 		if (instancesFound.Count > 1)

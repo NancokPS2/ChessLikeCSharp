@@ -93,39 +93,26 @@ public partial class TurnManager : Node3D
 
 		//Make sure there is a turn order.
 		if (TurnOrder.IsEmpty())
-		{
 			TurnOrder = new(Participants);
-			SortByDelay(ref TurnOrder);
 
-			//Make sure all of them have different delays.
-			int starter = TurnOrder.Count;
-			foreach (var item in TurnOrder)
-			{
-				item.DelayCurrent += starter;
-				starter--;
-			}
-		}
-		else
-		{
-			SortByDelay(ref TurnOrder);
-		}
-
+		SortByDelay(ref TurnOrder);
+		
 		//Update who is taking the current turn.
-			ITurn lowestDelayITurn = TurnOrder.Last();
-		CurrentTurnOwner = lowestDelayITurn;
+		CurrentTurnOwner = TurnOrder.Last();
 
 		//Decrease the delay of all participants.
-		float delayToDecrease = lowestDelayITurn.DelayCurrent;
+		float delayToDecrease = CurrentTurnOwner.DelayCurrent;
 		foreach (var item in Participants)
 		{
 			item.DelayCurrent -= delayToDecrease;
 		}
 
-		//Emit stuff
-		Mob mob = lowestDelayITurn as Mob ?? throw new Exception();
-
-        EventBus.TurnTimePassed?.Invoke(delayToDecrease);
-		EventBus.MobTurnStarted?.Invoke(mob);
+		//Emit stuff for
+		if (CurrentTurnOwner is Mob mob)
+		{
+			EventBus.TurnTimePassed?.Invoke(delayToDecrease);
+			EventBus.MobTurnStarted?.Invoke(mob);
+		}
     }
 
     public void EndTurn()
@@ -137,8 +124,8 @@ public partial class TurnManager : Node3D
 		if (TurnOrder.IsEmpty())
 			throw new Exception($"The turn order is empty, what is ending their turn!? Current owner {CurrentTurnOwner}");
 
-		ResetDelay(CurrentTurnOwner);
 		TurnOrder.Remove(CurrentTurnOwner);
+		ResetDelay(CurrentTurnOwner);
 
 		//Emit stuff.
 		if (CurrentTurnOwner is Mob mob)

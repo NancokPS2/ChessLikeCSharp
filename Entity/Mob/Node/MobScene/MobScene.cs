@@ -38,9 +38,6 @@ public partial class MobScene : Node3D
 	public Node3D MarkerBase = null!;
 
 	[Export]
-	public bool BecomeSelected = false;
-
-	[Export]
 	public bool IgnoreMobPosition = false;
 
 	protected MobModel? ModelResource;
@@ -56,13 +53,12 @@ public partial class MobScene : Node3D
 	public override void _Ready()
 	{
 		base._Ready();
-		if (MobUsing is null && !BecomeSelected) throw new Exception("Lacks a MobUsing");
+		if (MobUsing is null) throw new Exception("Lacks a MobUsing");
 
 		EventBus.MobMoved += OnMobMoved;
 		EventBus.MobStatChanged += OnMobStatChanged;
 		EventBus.MobStatValueChanged += OnMobStatValueChanged;
 		EventBus.MobTurnEnded += OnMobTurnEnded;
-		EventBus.MobSelected += OnMobSelected;
 		EventBus.ActionUsed += OnActionUsed;
 		EventBus.InventoryChanged += OnInventoryChanged;
 		EventBus.InputCheatEntered += OnInputCheatEntered;
@@ -385,7 +381,7 @@ public partial class MobScene : Node3D
 
 	private void OnMobStatValueChanged(Mob mob, EValueName stat, float change)
 	{
-		if (mob != MobUsing) return;
+		if (mob != MobUsing || !IsInsideTree()) return;
 		string text;
 		Godot.Color color = Colors.White;
 		if (change < 0)
@@ -413,13 +409,6 @@ public partial class MobScene : Node3D
 		if (mob != MobUsing) return;
 		mob.TurnActive = false;
 		AnimateAddEffect(EMobSceneEffect.TURN_ACTIVE, false);
-	}
-
-	private void OnMobSelected(Mob mob)
-	{
-		if (!BecomeSelected) return;
-		MobUsing = mob;
-		VisualUpdateAll();
 	}
 
 	private void OnActionUsed(UsageParameters parameters)

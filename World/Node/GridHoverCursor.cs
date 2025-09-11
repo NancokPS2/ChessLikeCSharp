@@ -13,8 +13,8 @@ public partial class GridHoverCursor : Node3D
 
 	protected override void Dispose(bool disposing)
 	{
-		base.Dispose(disposing);
 		EventBus.CellInputReceived -= OnCellInputReceived;
+		base.Dispose(disposing);
 	}
 
 
