@@ -1,25 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://cs6c3nmvweb1x"]
+[gd_scene load_steps=2 format=3 uid="uid://cs6c3nmvweb1x"]
 
-[ext_resource type="PackedScene" uid="uid://k16lil2fu57n" path="res://Entity/Mob/Node/MobScene/MobScene.tscn" id="1_75upw"]
 [ext_resource type="Script" uid="uid://cbqnil0wvej5k" path="res://UI/Mob/MobSubViewport.cs" id="1_hpbtr"]
-[ext_resource type="PackedScene" uid="uid://cuaf4ikwj8s2t" path="res://Godot/Environments/Environment.tscn" id="2_hpbtr"]
 
-[node name="SubViewportContainer" type="SubViewportContainer"]
+[node name="SubViewportContainer" type="SubViewportContainer" node_paths=PackedStringArray("CameraOriginNode", "CameraNode", "ViewportNode")]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 script = ExtResource("1_hpbtr")
+CameraOriginNode = NodePath("SubViewport/Node3D")
+CameraNode = NodePath("SubViewport/Node3D/Camera3D")
+ViewportNode = NodePath("SubViewport")
+ShowIsolated = true
+metadata/_custom_type_script = "uid://cbqnil0wvej5k"
 
 [node name="SubViewport" type="SubViewport" parent="."]
-own_world_3d = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(2, 2)
 render_target_update_mode = 4
-
-[node name="MobScene" parent="SubViewport" instance=ExtResource("1_75upw")]
-BecomeSelected = true
-IgnoreMobPosition = true
 
 [node name="Node3D" type="Node3D" parent="SubViewport"]
 transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.642788, -0.383022, 0.663414, 0, 0.5, 0)
@@ -27,5 +25,4 @@ transform = Transform3D(0.766044, -0.321394, 0.55667, 0, 0.866025, 0.5, -0.64278
 [node name="Camera3D" type="Camera3D" parent="SubViewport/Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 cull_mask = 4294967295
-
-[node name="Outside" parent="SubViewport" instance=ExtResource("2_hpbtr")]
+current = true

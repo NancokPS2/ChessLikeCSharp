@@ -8,14 +8,14 @@ namespace ChessLike.Shared.GenericStruct;
 public class UniqueList<T> : List<T>
 {
     public bool Safe = true;
-    public bool Add(T obj, bool safe)
+    public bool Add(T obj, bool strict)
     {
         if (!Contains(obj))
         {
             base.Add(obj);
             return true;
         }
-        else if (safe)
+        else if (strict)
         {
             throw new Exception("Already in list");
         }

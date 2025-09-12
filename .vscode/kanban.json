@@ -5,6 +5,14 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Still have ot come up with a way to setup mobs on their own, the change in state should generate a MobScene automatically",
+                    "id": "zhv9s98esuen3jxs6c2jf71h"
+                },
+                {
+                    "text": "Test how Mob fares without MobScene mingling",
+                    "id": "rm9xdvwfhqlro0p6iq2moq9k"
+                },
+                {
                     "text": "Status effect related logs",
                     "id": "i0dffrkr7jasc714h26awpds"
                 },
@@ -176,5 +184,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1757263437809
+    "timestamp": 1757636543710
 }

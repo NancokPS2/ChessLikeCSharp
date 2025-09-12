@@ -2,5 +2,7 @@ namespace ChessLike.Entity;
 
 public enum EMobState
 {
-    COMBAT, BENCHED
+	INVALID = -1,
+    COMBAT,
+	BENCHED,
 }

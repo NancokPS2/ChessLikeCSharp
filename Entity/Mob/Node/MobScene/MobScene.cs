@@ -49,7 +49,6 @@ public partial class MobScene : Node3D
 
 	private Dictionary<EMobSceneEffect, Node3D> EffectNodes = new();
 
-	[Obsolete("Fix the shitcode")]
 	public override void _Ready()
 	{
 		base._Ready();
@@ -64,17 +63,8 @@ public partial class MobScene : Node3D
 		EventBus.InputCheatEntered += OnInputCheatEntered;
 		EventBus.StatusEffectAdded += OnStatusEffectChanged;
 
-		//WIP (move this update shit out of here, this node is for visuals only)
-
-		if (MobUsing is not null)
-		{
-			MobUsing.TemplateUpdate(true, true);
-			MobUsing.EquipmentStatBoostsUpdate();
-			MovementResetPosition();
-			OnInventoryChanged(MobUsing.EquipmentInventory);
-			VisualUpdateAll();
-		}
-
+		MovementResetPosition();
+		VisualUpdateAll();
 	}
 
 	public override void _Process(double delta)
@@ -95,6 +85,12 @@ public partial class MobScene : Node3D
 	[Obsolete("Must take the race into account.")]
 	protected void VisualUpdateModel()
 	{
+		if (MobUsing is null)
+		{
+			MsgLog.LogErrorMsg($"Cannot update MobScene because it has no Mob attached.");
+			return;
+		}
+		
 		MobTemplateRace race = MobUsing.TemplateGet<MobTemplateRace>().First();
 
 		ModelSet(GD.Load<MobModel>("uid://c65sicnohqi20"));
@@ -103,6 +99,12 @@ public partial class MobScene : Node3D
 
 	protected void VisualUpdateEquipment()
 	{
+		if (MobUsing is null)
+		{
+			MsgLog.LogErrorMsg($"Cannot update MobScene because it has no Mob attached.");
+			return;
+		}
+		
 		ModelClearAttached();
 
 		foreach (var slotItemPair in MobUsing.EquipmentInventory.GetSlotItemTuples())
@@ -128,6 +130,12 @@ public partial class MobScene : Node3D
 
 	public void VisualUpdateStatusEffects()
 	{
+		if (MobUsing is null)
+		{
+			MsgLog.LogErrorMsg($"Cannot update MobScene because it has no Mob attached.");
+			return;
+		}
+
 		StatusEffectNode.StatusEffects = MobUsing.GetAllStatusEffects();
 	}
 	#endregion
@@ -428,7 +436,6 @@ public partial class MobScene : Node3D
 	{
 		if (obj != MobUsing.EquipmentInventory) return;
 
-		MobUsing.EquipmentStatBoostsUpdate();
 		VisualUpdateEquipment();
 	}
 

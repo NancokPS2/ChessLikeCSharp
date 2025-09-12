@@ -66,6 +66,12 @@ public partial class Mob : Resource
 		Stats = MobStatSet.GetDefault();
 	}
 
+	public void ResetForCombat()
+	{
+		TemplateUpdate(true, true);
+		EquipmentStatBoostsUpdate();
+	}
+
 	#region Instances
 	public static List<Mob> GetInstancesInCombat()
 		=> Instances.FilterInCombat();
@@ -125,7 +131,7 @@ public partial class Mob : Resource
 		TemplateUpdate(false, true);
 	}
 
-	public void TemplateUpdate(bool refillValues, bool reset = true)
+	public void TemplateUpdate(bool refillValues, bool reset)
 	{
 		if (Templates.Count == 0) return;
 
@@ -430,23 +436,23 @@ public static class MobExtensions
 
 	public static List<Mob> FilterInFaction(this List<Mob> mobs, EFaction faction)
 		=> mobs.Where(x => x.Faction == faction).ToList();
-		
-	public static List<Mob> FilterHostileToFaction(this List<Mob> mobs, EFaction factionToCheck)
-    {
-        List<Mob> output = new();
-        Faction thisFaction = Global.ManagerFaction.ResourceGet(factionToCheck, true) ?? throw new Exception("No faction exists with this enum");
 
-        foreach (var mob in mobs)
-        {
-            Faction otherFaction = Global.ManagerFaction.ResourceGet(mob.Faction, true);
-			
-            if (thisFaction.IsEnemy(otherFaction.Identifier))
+	public static List<Mob> FilterHostileToFaction(this List<Mob> mobs, EFaction factionToCheck)
+	{
+		List<Mob> output = new();
+		Faction thisFaction = Global.ManagerFaction.ResourceGet(factionToCheck, true) ?? throw new Exception("No faction exists with this enum");
+
+		foreach (var mob in mobs)
+		{
+			Faction otherFaction = Global.ManagerFaction.ResourceGet(mob.Faction, true);
+
+			if (thisFaction.IsEnemy(otherFaction.Identifier))
 			{
 				output.Add(mob);
 			}
-        }
+		}
 
-        return output;
-    }
+		return output;
+	}
 }
 #endregion
