@@ -26,7 +26,7 @@ How many cells horizontally a [[Unit]] can move. The vertical amount depends on 
 
 ### Agility
 - Boosts damage of light weapons by 75% of its value.
-- Boosts delay decay rate by 10% of its value.
+- Boosts evasion by 20% of its value.
 
 ### Intelligence
 - Boosts damage of some abilities by 75% of its value.
