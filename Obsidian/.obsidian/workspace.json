@@ -37,7 +37,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "templates/CombatJob.md",
+                "file": "Audio/Sound Effects.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -52,7 +52,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "CombatJob"
+              "title": "Sound Effects"
             }
           },
           {
@@ -191,8 +191,7 @@
               "title": "Tag Folder"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "horizontal",
@@ -260,13 +259,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "templates/CombatJob.md",
+                "file": "Audio/Sound Effects.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of CombatJob"
+              "title": "Outline of Sound Effects"
             }
           }
         ],
@@ -278,6 +277,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -287,8 +287,13 @@
       "publish:Publish changes...": false
     }
   },
-  "active": "58a5df14686a66a9",
+  "active": "292b87b9067f8b86",
   "lastOpenFiles": [
+    "Audio/Music.md",
+    "Audio/Sound Effects.md",
+    "Assets/HealthEffectValues.png",
+    "Audio",
+    "templates/CombatJob.md",
     "Teronova's day of worldly connection..md",
     "The buried mannequins.md",
     "World Map/General map layout.canvas",
@@ -313,12 +318,8 @@
     "Mechanics/Combat flow.md",
     "Mechanics/Encounter.md",
     "Mechanics/Character Stats.md",
-    "Mechanics/Mob Templates/Mob template.md",
-    "Mechanics/Passive.md",
-    "Race/Race.md",
     "Character Stats",
     "Mechanics/Mob Templates",
-    "Assets/HealthEffectValues.png",
     "Assets/HealthEffectValues.ods",
     "Assets",
     "Mechanics/UI",
@@ -328,7 +329,6 @@
     "Mechanics",
     "Plot",
     "Untitled 1.canvas",
-    "World Map",
     "Untitled 2.canvas"
   ]
 }

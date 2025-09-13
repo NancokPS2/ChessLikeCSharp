@@ -52,12 +52,12 @@ public class ModifierCollection
 		return priorityDiff;
 	}
 
-	public class Modifier
+	protected class Modifier
 	{
 		public EModifierType Type;
 		public float Value;
 		public int Priority;
-		public required string? Expression;
+		public string? Expression;
 
 		public Modifier(EModifierType type, float value, int priority)
 		{
@@ -80,7 +80,7 @@ public class ModifierCollection
 				EModifierType.ADDITION => valueToResolve += valueToResolve,
 				EModifierType.MULTIPLICATION => valueToResolve *= valueToResolve,
 				EModifierType.CUSTOM => ParseExpression(valueToResolve),
-				_ => throw new Exception();
+				_ => throw new Exception(),
 			};
 	}
 }

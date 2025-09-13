@@ -25,6 +25,9 @@ public partial class MobSceneManager : Node3D
 
 	protected double DialogueTimePassed;
 	protected double DialogueTimeThreshold;
+
+
+
 	protected void ConnectDialogue()
 	{
 		EventBus.MobTurnStarted += OnMobTurnStartedDialogue;
@@ -120,5 +123,5 @@ public partial class MobSceneManager : Node3D
 	}
 
 
-	
+
 }
