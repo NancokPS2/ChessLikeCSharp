@@ -41,7 +41,7 @@ public partial class EncounterData : Resource
 
     public virtual bool IsFinished()
     {
-        bool no_hostiles_remaining = !Mob.GetInstancesInCombat()
+        bool no_hostiles_remaining = !Mob.GetInstancesInState(EMobState.COMBAT)
             .Any(x => x.GetFaction()
 			.IsEnemy(EFaction.PLAYER));
 

@@ -11,9 +11,9 @@ using ExtendedXmlSerializer.ExtensionModel.Types.Sources;
 namespace Godot;
 
 [GlobalClass, Tool]
-public partial class GridNode : Node3D
+public partial class GridNode : Node3D, ISingleton<GridNode>
 {
-
+	public static GridNode Instance { get; set; } = null!;
     public enum Layer
     {
         BASE,
@@ -65,12 +65,13 @@ public partial class GridNode : Node3D
 	public override void _Ready()
 	{
 		base._Ready();
-		EventBus.GridChanged += OnGridChanged;
+		EventBus.CombatGridChanged += OnGridChanged;
+		Instance = this;
 	}
 
 	protected override void Dispose(bool disposing)
 	{
-		EventBus.GridChanged -= OnGridChanged;
+		EventBus.CombatGridChanged -= OnGridChanged;
 		base.Dispose(disposing);
 	}
 

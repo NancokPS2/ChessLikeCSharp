@@ -12,32 +12,35 @@ namespace ChessLike.Entity;
 //public Navigation navigation = new();
 
 [GlobalClass]
-public partial class MobMovement : Node3D
+public partial class MobMovementManager : Node3D, ISingleton<MobMovementManager>
 {
-	public Grid GridUsed = null!;
+	public static MobMovementManager Instance { get; set; } = null!;
+	public static Grid GridUsed = null!;
 
-	public Dictionary<(Mob, EMovementMode), MobAStar> AStars = new();
+	public static Dictionary<(Mob, EMovementMode), MobAStar> AStars = new();
 
 	public override void _Ready()
 	{
 		base._Ready();
 		EventBus.MobStateChanged += OnMobStateChanged;
-		EventBus.GridChanged += OnGridChanged;
+		EventBus.CombatGridChanged += OnGridChanged;
 		EventBus.MobMovementPathRequested += OnMobMoveRequested;
 		EventBus.MobCellListChanged += OnMobCellListChanged;
+
+		Instance = this;
 	}
 
 	protected override void Dispose(bool disposing)
 	{
 		base.Dispose(disposing);
 		EventBus.MobStateChanged -= OnMobStateChanged;
-		EventBus.GridChanged -= OnGridChanged;
+		EventBus.CombatGridChanged -= OnGridChanged;
 		EventBus.MobMovementPathRequested -= OnMobMoveRequested;
 		EventBus.MobCellListChanged -= OnMobCellListChanged;
 	}
 
 
-	public List<Vector3i> GetPathablePositions(Mob mob, EMovementMode moveMode)
+	public static List<Vector3i> GetPathablePositions(Mob mob, EMovementMode moveMode)
 	{
 		ErrorOnMissingMove(mob, moveMode);
 		var aStar = GetAStar(mob, moveMode);
@@ -52,7 +55,7 @@ public partial class MobMovement : Node3D
 		return output;
 	}
 
-	private bool IsPositionReachable(Mob mob, Vector3i from, Vector3i target, EMovementMode moveMode)
+	private static bool IsPositionReachable(Mob mob, Vector3i from, Vector3i target, EMovementMode moveMode)
 	{
 		MobAStar aStar = GetAStar(mob, moveMode);
 		List<Vector3i> path = aStar.GetPath(from, target);
@@ -68,7 +71,7 @@ public partial class MobMovement : Node3D
 	}
 
 
-	public MobAStar GetAStar(Mob mob, EMovementMode moveMode, bool createIfMissing = false)
+	public static MobAStar GetAStar(Mob mob, EMovementMode moveMode, bool createIfMissing = false)
 	{
 		(Mob, EMovementMode) key = (mob, moveMode);
 		if (AStars.ContainsKey(key))
@@ -87,7 +90,7 @@ public partial class MobMovement : Node3D
 		}
 	}
 
-	protected MobAStar GetNewAStar(Mob mob, EMovementMode moveMode)
+	protected static MobAStar GetNewAStar(Mob mob, EMovementMode moveMode)
 	{
 		if (GridUsed is null) throw new Exception();
 
@@ -125,14 +128,14 @@ public partial class MobMovement : Node3D
 		return aStar;
 	}
 
-	public void ValidateAStarCache()
+	public static void ValidateAStarCache()
 	{
 		foreach (var item in AStars)
 		{
 			ValidateAStarCache(item.Key.Item1, item.Key.Item2);
 		}
 	}
-	public void ValidateAStarCache(Mob mob, EMovementMode moveMode)
+	public static void ValidateAStarCache(Mob mob, EMovementMode moveMode)
 	{
 		foreach (var item in GetAStar(mob, moveMode).GetPointPositionsCached())
 		{
@@ -141,7 +144,7 @@ public partial class MobMovement : Node3D
 		}
 	}
 
-	protected bool IsValidMove(Mob mob, Vector3i from, Vector3i to, EMovementMode mode)
+	protected static bool IsValidMove(Mob mob, Vector3i from, Vector3i to, EMovementMode mode)
 	{
 		bool canStandAtTarget = IsPositionValidToExist(mob, to);
 
@@ -165,7 +168,7 @@ public partial class MobMovement : Node3D
 		return reachable && canStandAtTarget;
 	}
 
-	public bool IsPositionValidToExist(Mob mob, Vector3i position)
+	public static bool IsPositionValidToExist(Mob mob, Vector3i position)
 	{
 		//Cannot step on the bottom of the world!!!
 		if (position.Y < 1) return false;
@@ -179,12 +182,27 @@ public partial class MobMovement : Node3D
 		return canExist && canStandOn;
 	}
 
-	public int GetHorizontalRange(Mob mob)
+	public bool IsPositionValidToSpawn(Vector3i position, Mob mob)
+	{
+		if (mob is null) throw new Exception();
+
+		//The position must be valid for this mob.
+		if (!IsPositionValidToExist(mob, position))
+			return false;
+
+		//Must be a valid spot to place mobs
+		if (GridUsed.GetCell(position).FactionSpawn != mob.Faction)
+			return false;
+
+		return true;
+	}
+
+	public static int GetHorizontalRange(Mob mob)
 	{
 		return (int)mob.Stats.GetStat(EStatName.MOVEMENT);
 	}
 
-	public int GetVerticalRange(Mob mob)
+	public static int GetVerticalRange(Mob mob)
 	{
 		return (int)mob.Stats.GetStat(EStatName.JUMP);
 	}
@@ -222,7 +240,7 @@ public partial class MobMovement : Node3D
 		}
 	}
 
-	public void ErrorOnMissingMove(Mob mob, EMovementMode moveMode)
+	public static void ErrorOnMissingMove(Mob mob, EMovementMode moveMode)
 	{
 		if (!mob.GetMovementModesFromAbilities().Contains(moveMode))
 			MsgLog.Log(EMessageType.ERROR, $"Making a MobAStar with mode {moveMode} for {mob.DisplayedName}. Which does not have that mode.");

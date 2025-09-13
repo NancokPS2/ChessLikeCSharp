@@ -123,7 +123,7 @@ public partial class ActionEvent : Resource
 		//If it uses pathing, just query that directly and move on.
 		if (TargetParams.TargetingUsesPathing != EMovementMode.INVALID)
 		{
-			output = CombatScene.GetMobMovement().GetPathablePositions(owner, TargetParams.TargetingUsesPathing);
+			output = MobMovementManager.GetPathablePositions(owner, TargetParams.TargetingUsesPathing);
 			return output;
 		}
 
@@ -181,7 +181,7 @@ public partial class ActionEvent : Resource
 			if (usageParams.PositionsTargeted.Count != 1)
 				MsgLog.Log(EMessageType.ERROR, $"{Name} uses pathing but also used {usageParams.PositionsTargeted.Count} targets, can't move to multiple locations!");
 
-			CombatScene.GetMobMovement()
+			MobMovementManager
 				.GetAStar(Owner, TargetParams.TargetingUsesPathing)
 				.GetPath(Owner.GetPosition(), usageParams.PositionsTargeted.First());
 		}

@@ -73,8 +73,14 @@ public partial class Mob : Resource
 	}
 
 	#region Instances
+	public static List<Mob> GetInstances()
+		=> Instances;
+
+	public static List<Mob> GetInstancesInState(EMobState state)
+		=> Instances.FilterInState(state);
+		
 	public static List<Mob> GetInstancesInCombat()
-		=> Instances.FilterInCombat();
+		=> Instances.FilterInState(EMobState.COMBAT);
 
 	public static List<Mob> GetInstancesInPosition(Vector3i position)
 		=> Instances.FilterInPosition(position);
@@ -428,8 +434,8 @@ public partial class Mob : Resource
 #region Extension
 public static class MobExtensions
 {
-	public static List<Mob> FilterInCombat(this List<Mob> mobs)
-		=> mobs.Where(x => x.MobState == EMobState.COMBAT).ToList();
+	public static List<Mob> FilterInState(this List<Mob> mobs, EMobState state)
+		=> mobs.Where(x => x.MobState == state).ToList();
 
 	public static List<Mob> FilterInPosition(this List<Mob> mobs, Vector3i position)
 		=> mobs.Where(x => x.GetPosition() == position).ToList();

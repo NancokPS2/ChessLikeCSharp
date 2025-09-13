@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Godot;
 
 namespace ChessLikeCSharp.Shared.GenericStruct.Modifier;
 
-public class ModifierCollection
+[GlobalClass]
+public partial class ModifierCollection : Resource
 {
 	public enum EModifierType
 	{
@@ -16,12 +18,37 @@ public class ModifierCollection
 		MULTIPLICATION,
 	}
 
+	[Export, Obsolete("Still does not save the priority.")]
+	protected Godot.Collections.Dictionary<EModifierType, float> ModifierExport
+	{
+		set
+		{
+			ClearModifiers();
+			foreach (var item in value)
+			{
+				AddModifier(item.Key, item.Value);
+			}
+		}
+		get
+		{
+			return new(
+				Modifiers.ToDictionary(
+					x => x.Type,
+					y => y.Value
+				)
+			);
+		}
+	}
+
 	protected List<Modifier> Modifiers = new();
 
 	public void AddModifier(EModifierType type, float value, int priority = 0)
 	{
-		Modifiers.Add( new(type, value, priority) );
+		Modifiers.Add(new(type, value, priority));
 	}
+
+	public void ClearModifiers()
+		=> Modifiers.Clear();
 
 	public float Resolve(float value)
 	{

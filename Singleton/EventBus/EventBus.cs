@@ -52,15 +52,17 @@ public partial class EventBus : Node
     public static GridCellInput? CellPositionInputReceived;
     public static GridCellInput? CellInputReceived;
     public static GridPositionsLayered? GridMeshRequested;
-    #endregion
+	#endregion
 
-    #region Battle Encounter
-    //Encounter
-    public static ObjectChange<Grid>? GridChanged;
+	#region Battle Encounter
+	//Encounter
+	public delegate void EncounterMobCreation( Mob mob, Vector3i where );
+    public static ObjectChange<Grid>? CombatGridChanged;
     public static ObjectChange<EncounterData>? EncounterLoaded;
+	public static EncounterMobCreation? EncounterMobCreated;
 
     //Combat start and end
-    public static Event? CombatPreparationStarted;
+	public static Event? CombatPreparationStarted;
     public static Event? CombatPreparationEnded;
     public static Event? CombatStarted;
     public static Event? CombatEnded;

@@ -8,18 +8,24 @@ using LightInject;
 namespace ChessLike.Entity;
 
 [GlobalClass]
-public partial class MobSceneManager : Node3D
+public partial class MobSceneManager : Node3D, ISingleton<MobSceneManager>
 {
+	protected const string META_ALLOWED_IN_STORAGE = "META_MobSceneManager_IS_ALLOWED_IN_STORAGE";
 	public const uint STORAGE_MAX_INSTANCES = 200;
 	protected readonly static Godot.Vector3 STORAGE_ROOT_POSITION = new Godot.Vector3(0, float.MaxValue * 0.6f, 0);
 	protected readonly static float STORAGE_SPACING = 4;
-	protected static Dictionary<Godot.Vector3, MobScene?> StoragePositions = new();
+
+	protected static (Vector3i, Godot.Vector3)[] StoragePositions;
+	protected static Camera3D? StorageLastCamera;
+	protected static Mob[] StorageShownMobs = [];
 
 	public static MobSceneManager? Instance { get => IsInstanceValid(instance) ? instance : null; set => instance = value; }
-	private static MobSceneManager? instance;
+	private static MobSceneManager instance;
 
 	[Export]
 	protected float CursorSpeed = 15;
+	[Export]
+	protected Camera3D StorageCamera = null!;
 	protected Node3D NodeSelectionCursor = GD.Load<PackedScene>("uid://4cikkiw1mfd").Instantiate<Node3D>();
 	protected Node3D NodeHoveringCursor = GD.Load<PackedScene>("uid://cu1nlfq5x61rn").Instantiate<Node3D>();
 	protected Node3D NodeCurrentlySelected = GD.Load<PackedScene>("uid://dsomybklmhgee").Instantiate<Node3D>();
@@ -32,11 +38,13 @@ public partial class MobSceneManager : Node3D
 
 	public MobSceneManager()
 	{
-		Godot.Vector3 currentPos = STORAGE_ROOT_POSITION;
+		Vector3i gridPos = Vector3i.ZERO;
+		
 		for (int i = 0; i < STORAGE_MAX_INSTANCES; i++)
 		{
-			StoragePositions[currentPos] = null;
-			currentPos += Godot.Vector3.Forward * STORAGE_SPACING;
+			Godot.Vector3 realPos = gridPos.ToGVector3() * STORAGE_SPACING;
+			StoragePositions[i] = (gridPos, realPos);
+			gridPos += Vector3i.FORWARD;
 		}
 	}
 
@@ -135,7 +143,7 @@ public partial class MobSceneManager : Node3D
 		return newInstance;
 	}
 
-	private void AddInstance(Mob mob, bool inStorage)
+	private void AddInstance(Mob mob)
 	{
 		MobScene instance = GetInstance(mob) ?? CreateInstance(mob);
 
@@ -144,8 +152,6 @@ public partial class MobSceneManager : Node3D
 		InstancedMobs.Add(instance, false);
 		AddChild(instance);
 		instance.MovementResetPosition();
-
-		ToggleStorage(mob, inStorage);
 	}
 
 	public void FreeInstance(Mob mob)
@@ -157,7 +163,7 @@ public partial class MobSceneManager : Node3D
 		InstancedMobs.Remove(instance);
 	}
 
-	public MobScene? GetInstanceByPosition(Vector3i cellPos)
+	protected MobScene? GetInstanceByPosition(Vector3i cellPos)
 	{
 		foreach (var instance in InstancedMobs)
 		{
@@ -169,27 +175,7 @@ public partial class MobSceneManager : Node3D
 		return null;
 	}
 
-	protected void ToggleStorage(Mob mob, bool toStorage)
-	{
-		MobScene? instance = GetInstance(mob) ?? throw new Exception($"This Mob ({mob}) does not have a MobScene yet.");
-		instance.IgnoreMobPosition = toStorage;
-
-		if (toStorage)
-		{
-			Godot.Vector3 selectedPos = StoragePositions.First((x) => x.Value == null).Key;
-			StoragePositions[selectedPos] = instance;
-			instance.GlobalPosition = selectedPos;
-		}
-		else
-		{
-			Godot.Vector3 occupiedPos = StoragePositions.Single(x => x.Value == instance).Key;
-			instance.MovementResetPosition();
-			if (!StoragePositions.Remove(occupiedPos))
-				throw new Exception();
-		}
-	}
-
-	protected void SelectMob(MobScene scene)
+protected void SelectMob(MobScene scene)
 		=> SelectMob(scene.MobUsing);
 
 	protected void SelectMob(Mob mob)
@@ -220,6 +206,66 @@ public partial class MobSceneManager : Node3D
 		if (!HasInstance(mob)) throw new Exception();
 	}
 
+	#region Storage
+	protected void StorageSetAllowed(Mob mob, bool allowed)
+	{
+		MobScene? instance = GetInstance(mob) ?? throw new Exception($"This Mob ({mob}) does not have a MobScene yet.");
+		instance.SetMeta(META_ALLOWED_IN_STORAGE, allowed);
+	}
+
+	protected bool StorageIsMobAllowed(Mob mob)
+	{
+		return mob.GetMeta(META_ALLOWED_IN_STORAGE, false).As<bool>();
+	}
+
+	protected Mob[] GetStorageMobs(EMobState requiredState)
+		=> Mob.GetInstancesInState(requiredState).Where(x => StorageIsMobAllowed(x)).ToArray();
+
+	public void StorageShow(EMobState state, EFaction[] factions)
+	{
+		StorageHide();
+
+		//Update the camera so it can return there.
+		Camera3D currentCamera = GetViewport().GetCamera3D();
+		if (StorageCamera != currentCamera)
+		{
+			StorageLastCamera = currentCamera;
+		}
+		StorageCamera.MakeCurrent();
+
+		//Prepare to decide which mobs will go in the storage
+		StorageShownMobs = GetStorageMobs(state);
+
+		StorageSpreadInstances(StorageShownMobs);
+	}
+
+	public void StorageHide()
+	{
+		foreach (var item in StorageShownMobs)
+		{
+			if (GetInstance(item) is MobScene scene)
+				scene.IgnoreMobPosition = false;
+		}
+		StorageLastCamera?.MakeCurrent();
+	}
+
+	protected void StorageSpreadInstances(Mob[] mobs)
+	{
+		//Godot.Vector3 spacing = Godot.Vector3.Forward * STORAGE_SPACING;
+		//Godot.Vector3 spacingNewLine = Godot.Vector3.Right * STORAGE_SPACING;
+		//Vector3i vec3i = Vector3i.ZERO;
+		int count = 0;
+		foreach (var item in mobs)
+		{
+			MobScene instance = GetInstance(item) ?? CreateInstance(item);
+			Godot.Vector3 designatedPos = StoragePositions[count].Item2;
+			instance.IgnoreMobPosition = true;
+			instance.GlobalPosition = designatedPos;
+			count++;
+		}
+	}
+	#endregion
+
 	#region Event Handling
 	private void OnMobSelected(Mob obj)
 	{
@@ -233,12 +279,12 @@ public partial class MobSceneManager : Node3D
 			//Has an instance, skip and keep using that.
 			if (HasInstance(mob)) return;
 			//Add an instance for this mob.
-			AddInstance(mob, false);
+			AddInstance(mob);
 		}
 		else if (state == EMobState.BENCHED)
 		{
 			//Send it to storage.
-			AddInstance(mob, true);
+			AddInstance(mob);
 		}
 		else
 		{

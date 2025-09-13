@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using ChessLike.Entity;
 using ChessLike.Extension;
@@ -12,46 +13,33 @@ public partial class CombatPreparationManager : Node3D
 {
     protected Mob? SelectedMob;
 
-    public override void _Ready()
-    {
-        base._Ready();
-        EventBus.MobSelected += OnMobSelected;
-        EventBus.CellInputReceived += OnCellInputReceived;
-        EventBus.InputPreparationFinished += OnInputPreparationFinished;
+	public override void _Ready()
+	{
+		base._Ready();
+		EventBus.MobSelected += OnMobSelected;
+		EventBus.CellInputReceived += OnCellInputReceived;
+		EventBus.InputPreparationFinished += OnInputPreparationFinished;
     }
 
-    protected bool PlaceMob(Vector3i cellPos, GridCell cell, Mob selectedMob)
-    {
-        //Mob must be selected
-        if (selectedMob is null) return false;
 
-        //The position must be valid for this mob.
-        if (!CombatScene.GetMobMovement().IsPositionValidToExist(selectedMob, cellPos))
-        {
-            MsgLog.AddMessage($"{selectedMob.DisplayedName} cannot stand there.");
-            return false;
-        }
+	protected bool PlaceMob(Vector3i cellPos, GridCell cell, Mob selectedMob)
+	{
+		var movement = MobMovementManager.Instance;
 
-        //Must be a valid spot to place mobs
-        if (cell.FactionSpawn != selectedMob.Faction)
-        {
-            MsgLog.AddMessage($"{selectedMob.DisplayedName} cannot start there.");
-            return false;
-        }
+		//Make sure it is valid.
+		if (!movement.IsPositionValidToSpawn(cellPos, selectedMob))
+		{
+			MsgLog.AddMessage($"{selectedMob.DisplayedName} cannot start there.");
+			return false;
+		}
 
-        //If it passed all checks, add it to combat.
-        if (selectedMob.MobState != EMobState.COMBAT)
-        {
-            selectedMob.MobState = EMobState.COMBAT;
-        }
-
-        CombatScene.GetMobMovement().ForceMobPosition(selectedMob, cellPos);
-        return true;
-    }
+		movement.ForceMobPosition(selectedMob, cellPos);
+		return true;
+	}
 
     protected bool RemoveMob(Vector3i cellPos)
     {
-        List<Mob> mobs = Mob.GetInstancesInCombat().FilterInPosition(cellPos);
+        List<Mob> mobs = Mob.GetInstancesInState(EMobState.COMBAT).FilterInPosition(cellPos);
 
         if (mobs.IsEmpty())
         {
@@ -63,29 +51,26 @@ public partial class CombatPreparationManager : Node3D
             return true;
         }
     }
-
     #region Event Handling
-    private void OnInputPreparationFinished()
-    {
-        EventBus.CombatPreparationEnded?.Invoke();
-    }
+	private void OnInputPreparationFinished()
+	{
+		EventBus.CombatPreparationEnded?.Invoke();
+	}
 
     private void OnCellInputReceived(Vector3i cellPos, GridCell cell, ECellInput input)
     {
         if (CombatScene.GetState() != ECombatState.PREPARATION) return;
-        bool placedMob;
-        bool removedMob;
 
         //Must be a PRIMARY input
         switch (input)
         {
             case ECellInput.PRIMARY:
                 if (SelectedMob is null) break;
-                placedMob = PlaceMob(cellPos, cell, SelectedMob);
+                PlaceMob(cellPos, cell, SelectedMob);
                 break;
 
             case ECellInput.SECONDARY:
-                removedMob = RemoveMob( cellPos);
+                RemoveMob( cellPos);
                 break;
 
             default: break;

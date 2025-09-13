@@ -26,14 +26,6 @@ public partial class CombatScene : Node3D
 	}
 	protected static GridNode GridNode;
 
-	[Export]
-	private MobMovement mobMovement
-	{
-		set => MobMovementNode = value;
-		get => MobMovementNode;
-	}
-	protected static MobMovement MobMovementNode;
-
 	protected static Grid GridResource;
 
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -66,7 +58,7 @@ public partial class CombatScene : Node3D
 	{
 		EncounterData = encounterToLoad;
 		GridResource = EncounterData.Grid;
-		EventBus.GridChanged?.Invoke(EncounterData.Grid);
+		EventBus.CombatGridChanged?.Invoke(EncounterData.Grid);
 
 		//Create mobs
 		List<EFaction> factionsPresent = new();
@@ -85,7 +77,7 @@ public partial class CombatScene : Node3D
 				mob = spawn.GetNewMob();
 			}
 
-			mob.MobState = ChessLike.Entity.EMobState.COMBAT;
+			mob.MobState = EMobState.COMBAT;
 			mobsToAdd.Add(mob);
 			if (!factionsPresent.Contains(mob.Faction))
 				factionsPresent.Add(mob.Faction);
@@ -114,15 +106,15 @@ public partial class CombatScene : Node3D
 				.Item1;
 
 			//Make sure the mob can be there.
-			if (!MobMovementNode.IsPositionValidToExist(mob, pos))
-				throw new Exception($"Mob {mob.DisplayedName} has been spawned in an invalid location {pos}");
+			if (!MobMovementManager.IsPositionValidToExist(mob, pos))
+				throw new Exception($"Mob {mob.DisplayedName} has been set to be spawned in an invalid location {pos}");
 
-			//WIP This should be used automatically
-			GetMobMovement().ForceMobPosition(mob, pos);
+			//This goes to the CombatPreparationManager
+			EventBus.EncounterMobCreated?.Invoke(mob, pos);
 		}
 
 		EventBus.EncounterLoaded?.Invoke(encounterToLoad);
-		EventBus.GridChanged?.Invoke(GetGrid());
+		EventBus.CombatGridChanged?.Invoke(GetGrid());
 		//Everything must be loaded by now.
 		EventBus.CombatPreparationStarted?.Invoke();
 	}
@@ -153,9 +145,7 @@ public partial class CombatScene : Node3D
 
 	public static EncounterData GetEncounterData() => EncounterData;
 
-	public static List<Mob> GetMobsInCombat() => Mob.GetInstancesInCombat();
-
-	public static MobMovement GetMobMovement() => MobMovementNode;
+	public static List<Mob> GetMobsInCombat() => Mob.GetInstancesInState(EMobState.COMBAT);
 
 	#region Event Handling
 	private void OnCombatPreparationStarted()
