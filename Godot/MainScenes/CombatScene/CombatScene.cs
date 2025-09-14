@@ -77,7 +77,6 @@ public partial class CombatScene : Node3D
 				mob = spawn.GetNewMob();
 			}
 
-			mob.MobState = EMobState.COMBAT;
 			mobsToAdd.Add(mob);
 			if (!factionsPresent.Contains(mob.Faction))
 				factionsPresent.Add(mob.Faction);

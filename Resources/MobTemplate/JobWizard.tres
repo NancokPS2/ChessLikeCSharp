@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="MobTemplateJob" load_steps=5 format=3 uid="uid://2whr8ii52bei"]
+[gd_resource type="Resource" script_class="MobTemplateJob" load_steps=4 format=3 uid="uid://2whr8ii52bei"]
 
-[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_optjk"]
 [ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_vsera"]
 [ext_resource type="Script" uid="uid://dw1wcfbf5rr8e" path="res://Entity/Mob/Template/MobTemplateJob.cs" id="3_b2wuk"]
 
@@ -17,7 +16,7 @@ metadata/_custom_type_script = "uid://r4d46yixqo3f"
 
 [resource]
 script = ExtResource("3_b2wuk")
-Abilities = Array[ExtResource("1_optjk")]([])
+Abilities = []
 StatBoosts = Array[ExtResource("2_vsera")]([SubResource("Resource_optjk")])
 TemplateName = "Wizard"
 metadata/_custom_type_script = "uid://dw1wcfbf5rr8e"

@@ -17,7 +17,7 @@ public class FactionResourcePack : ResourcePack<Faction>
 
 	public string? FindIdentifier(EFaction faction)
 	{
-		foreach (var item in Contents)
+		foreach (var item in ContentBase)
 		{
 			if (item.Value.Identifier == faction) return item.Key;
 		}

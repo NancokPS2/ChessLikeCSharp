@@ -9,6 +9,7 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobTemplateIdentity : MobTemplate
 {
+	public static readonly MobTemplateIdentity DEFAULT = GD.Load<MobTemplateIdentity>("uid://dahthmavek0s0");
 	[Export]
 	public Godot.Collections.Array<string> Names = new();
 

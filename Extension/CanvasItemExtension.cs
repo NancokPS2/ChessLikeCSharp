@@ -27,8 +27,12 @@ public static class CanvasItemExtension
     private static void DeleteMetaTween(this CanvasItem @this, string meta_key)
     {
         if(!GodotObject.IsInstanceValid(@this)){return;}
+		if (!@this.HasMeta(meta_key))
+		{
+			return;
+		}
 
-        Tween meta = (Tween)@this.GetMeta(meta_key);
+		Tween meta = (Tween)@this.GetMeta(meta_key);
         if (meta is Tween tween && GodotObject.IsInstanceValid(tween))
         {
             tween.Kill();

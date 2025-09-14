@@ -30,11 +30,35 @@ public partial class MobSpawn : Resource
 	public Mob GetNewMob()
 	{
 		Mob mob = new();
-		if (TemplatesBase.Count != 0) mob.TemplateSet(TemplatesBase.PickRandom());
-		if (TemplatesRace.Count != 0) mob.TemplateSet(TemplatesRace.PickRandom());
-		if (TemplatesIdentity.Count != 0) mob.TemplateSet(TemplatesIdentity.PickRandom());
-		if (TemplatesJob.Count != 0) mob.TemplateSet(TemplatesJob.PickRandom());
-		mob.TemplateUpdate(true, true);
+		if (TemplatesBase.Count != 0)
+		{
+			mob.TemplateSet(TemplatesBase.PickRandom());
+		}
+		else
+			mob.TemplateSet((MobTemplateBase)MobTemplateBase.DEFAULT.Duplicate(true));
+
+		if (TemplatesRace.Count != 0)
+		{
+			mob.TemplateSet(TemplatesRace.PickRandom());
+		}
+		else
+			mob.TemplateSet((MobTemplateRace)MobTemplateRace.DEFAULT.Duplicate(true));
+
+		if (TemplatesIdentity.Count != 0)
+		{
+			mob.TemplateSet(TemplatesIdentity.PickRandom());
+		}
+		else
+			mob.TemplateSet((MobTemplateIdentity)MobTemplateIdentity.DEFAULT.Duplicate(true));
+
+		if (TemplatesJob.Count != 0)
+		{
+			mob.TemplateSet(TemplatesJob.PickRandom());
+		}
+		else
+			mob.TemplateSet((MobTemplateJob)MobTemplateJob.DEFAULT.Duplicate(true));
+
+		mob.ResetForCombat();
 
 		return mob;
 	}

@@ -10,6 +10,7 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobTemplateRace : MobTemplate
 {
+	public static readonly MobTemplateRace DEFAULT = GD.Load<MobTemplateRace>("uid://dbjwh1u3lm8r5");
 
 	[Export]
 	protected Godot.Collections.Array<Ability> Abilities = new();

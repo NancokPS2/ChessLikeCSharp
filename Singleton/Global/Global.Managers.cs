@@ -70,10 +70,7 @@ public partial class Global
 	{
 		foreach (var item in GetAllResourcePacks())
 		{
-			item.ResourceClear(false);
-			item.ResourceClear(true);
-			item.LoadContent();
-			item.LoadContentPersistent(userFolder);
+			item.LoadContent(false, userFolder);
 		}
 	}
 
@@ -84,7 +81,7 @@ public partial class Global
 			item.CreateDefault();
 			item.ResourceClear(false);
 			item.ResourceClear(true);
-			item.LoadContent();
+			item.LoadContent(true, "");
 		}
 	}
 }

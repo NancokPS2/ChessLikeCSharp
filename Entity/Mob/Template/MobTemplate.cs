@@ -15,13 +15,13 @@ namespace ChessLike.Entity;
 public partial class MobTemplate : Resource
 {
     public enum ETemplateType
-    {
-        INVALID = -1,
-        JOB,
-        RACE,
-        BASE,
-        IDENTITY
-    }
+	{
+		INVALID = -1,
+		JOB,
+		RACE,
+		BASE,
+		IDENTITY
+	}
 
     public readonly ETemplateType Type;
 

@@ -31,7 +31,7 @@ public partial class PreparationUI : Control
 		{
 			if (!IsInsideTree()) this.AddSelf();
 			(MobListUINode ?? throw new Exception())
-				.Update(Global.ManagerFaction.ResourceGet(EPackIDFaction.Player.ToString(), true, true));
+				.Update(Mob.GetInstancesInFaction(EFaction.PLAYER));
 		}
 		else if (obj != ECombatState.PREPARATION && IsInsideTree())
 		{

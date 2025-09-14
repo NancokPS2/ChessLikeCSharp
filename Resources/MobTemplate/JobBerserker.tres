@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="MobTemplateJob" load_steps=7 format=3 uid="uid://c7xjygdqapj8r"]
+[gd_resource type="Resource" script_class="MobTemplateJob" load_steps=8 format=3 uid="uid://c7xjygdqapj8r"]
 
 [ext_resource type="Resource" uid="uid://cj6gtpi4q31de" path="res://Resources/Ability/AttackLowHealthBoost.tres" id="1_05h7u"]
+[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_40spp"]
 [ext_resource type="Script" uid="uid://dw1wcfbf5rr8e" path="res://Entity/Mob/Template/MobTemplateJob.cs" id="1_j34c6"]
 [ext_resource type="Resource" uid="uid://lxeeydfxlhko" path="res://Resources/Ability/RockFling.tres" id="2_kuips"]
 [ext_resource type="Resource" uid="uid://mdb67p1lesix" path="res://Resources/Ability/AddStatusBloodBurn.tres" id="3_6hh5x"]
@@ -19,7 +20,7 @@ metadata/_custom_type_script = "uid://r4d46yixqo3f"
 
 [resource]
 script = ExtResource("1_j34c6")
-Abilities = [ExtResource("1_05h7u"), ExtResource("2_kuips"), ExtResource("3_6hh5x")]
+Abilities = Array[ExtResource("1_40spp")]([ExtResource("1_05h7u"), ExtResource("2_kuips"), ExtResource("3_6hh5x")])
 StatBoosts = Array[ExtResource("3_g6qpm")]([SubResource("Resource_6hh5x")])
 TemplateName = "Berserker"
 metadata/_custom_type_script = "uid://dw1wcfbf5rr8e"

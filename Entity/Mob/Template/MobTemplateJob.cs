@@ -10,6 +10,8 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class MobTemplateJob : MobTemplate
 {
+	public static readonly MobTemplateJob DEFAULT = GD.Load<MobTemplateJob>("uid://fyno1t3mv1hw");
+
     [Export]
     protected Godot.Collections.Array<Ability> Abilities = new();
 

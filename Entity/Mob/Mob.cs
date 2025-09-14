@@ -15,7 +15,7 @@ namespace ChessLike.Entity;
 [GlobalClass]
 public partial class Mob : Resource
 {
-	protected static List<Mob> Instances = new();
+	protected static UniqueList<Mob> Instances = new();
 
 	[Export]
 	public string DisplayedName = "UNNAMED";
@@ -40,7 +40,7 @@ public partial class Mob : Resource
 	[Export]
 	public EFaction Faction = EFaction.NEUTRAL;
 
-	private EMobState mobState = EMobState.BENCHED;
+	private EMobState mobState = EMobState.INVALID;
 	public EMobState MobState
 	{
 		get => mobState;
@@ -60,7 +60,7 @@ public partial class Mob : Resource
 	public Mob()
 	{
 		//TODO: Move this somewhere else
-		Instances.Add(this);
+		Instances.Add(this, false);
 
 		//Default stats
 		Stats = MobStatSet.GetDefault();
@@ -78,7 +78,7 @@ public partial class Mob : Resource
 
 	public static List<Mob> GetInstancesInState(EMobState state)
 		=> Instances.FilterInState(state);
-		
+
 	public static List<Mob> GetInstancesInCombat()
 		=> Instances.FilterInState(EMobState.COMBAT);
 
@@ -137,7 +137,7 @@ public partial class Mob : Resource
 		TemplateUpdate(false, true);
 	}
 
-	public void TemplateUpdate(bool refillValues, bool reset)
+	protected void TemplateUpdate(bool refillValues, bool reset)
 	{
 		if (Templates.Count == 0) return;
 
@@ -190,7 +190,7 @@ public partial class Mob : Resource
 
 	private MobEquipmentInventory equipmentInventory = new();
 
-	public void EquipmentStatBoostsUpdate()
+	protected void EquipmentStatBoostsUpdate()
 	{
 		MobStatBoost outputStatBoost = new(ItemEquipment.BOOST_SOURCE);
 

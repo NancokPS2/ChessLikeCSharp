@@ -5,20 +5,12 @@
             "title": "To-Do",
             "tasks": [
                 {
-                    "text": "Still have ot come up with a way to setup mobs on their own, the change in state should generate a MobScene automatically",
-                    "id": "zhv9s98esuen3jxs6c2jf71h"
-                },
-                {
-                    "text": "Test how Mob fares without MobScene mingling",
-                    "id": "rm9xdvwfhqlro0p6iq2moq9k"
+                    "text": "MobSceneManager storage system is incomplete",
+                    "id": "fs7njxmp6w5xx9wdtfx72ydp"
                 },
                 {
                     "text": "Status effect related logs",
                     "id": "i0dffrkr7jasc714h26awpds"
-                },
-                {
-                    "text": "The Mobs should be setup during the preparation stage, atm it only gets setup when the MobScene is added to the scene.",
-                    "id": "v5s3p59tjyel22uuvieilujy"
                 },
                 {
                     "text": "Complete cycle:\nMainMenuScene (Starts game) > WorldMap (Enter encounter) > CombatScene (play out combat) > WorldMap (vibe)",
@@ -127,36 +119,16 @@
             "title": "Bugs",
             "tasks": [
                 {
-                    "text": "Characters don't have any skills, did the MobTemplate resources break again?",
-                    "id": "i30lilz9s1aatb7xa6nfzz22"
+                    "text": "MobSubView remains borked (it should interact with the MobSceneManager storage system)",
+                    "id": "m4xl9nlsot447uvcvxott88e"
                 },
                 {
                     "text": "TurnManager still fails to make sure the new turn is from a different ITurn ",
                     "id": "t2n0qigx8ep5biido38vjdmc"
                 },
                 {
-                    "text": "ControlExtension.Activate() does not handle mouse_filter properly.",
-                    "id": "f3sy0vzzkozb887qngr5ax4t"
-                },
-                {
-                    "text": "PartyGeneralUI is not showing the player's party.",
-                    "id": "zyknrdobe3w8njcl0m9z6r99"
-                },
-                {
                     "text": "GridBuilder.SanitizeGridMap() is not working?",
                     "id": "jhq9lz9is9wa7gq3h8oq6gac"
-                },
-                {
-                    "text": "CombatTurnUI not updating Delay (?)",
-                    "id": "qcxop4agrjcyrx897e7t91nk"
-                },
-                {
-                    "text": "AOE targeting mesh is not being removed, possible issue in the Grid script.",
-                    "id": "jymqaz1w8nlnkbvm9ut3n62v"
-                },
-                {
-                    "text": "Animation SHAKE_AT_END is not shaking :(\n(Just kill it)",
-                    "id": "ukkuhb3u7rmv1btijf3pkei5"
                 }
             ],
             "id": "iv64sofsa6d5xpucq3jyksjg",
@@ -188,5 +160,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1757823894331
+    "timestamp": 1757862516985
 }

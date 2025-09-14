@@ -69,7 +69,6 @@ public partial class Status : Resource
 		EventBus.MobTurnStarted -= OnMobTurnStarted;
 		EventBus.ActionPreUsed -= OnActionPreUsed;
 		EventBus.ActionUsed -= OnActionUsed;
-		TargetMob?.RemoveStatusEffect(this);
 	}
 
 	protected override void Dispose(bool disposing)

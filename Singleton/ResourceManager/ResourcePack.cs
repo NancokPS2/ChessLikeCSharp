@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
+using ChessLike.Extension;
 
 namespace Godot;
 
@@ -12,8 +13,10 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
     public const string METAKEY_IDENTIFIER = "ResPackIdentifier";
     public const string TAG_PERSISTENT = "persistent";
 
-    protected Dictionary<string, TRes> Contents = new();
-    protected Dictionary<string, TRes> ContentsPersistent = new();
+	protected event EventHandler ContentLoaded;
+
+    protected Dictionary<string, TRes> ContentBase = new();
+    protected Dictionary<string, TRes> ContentRuntime = new();
     public bool AutoPoolPersistent = true;
     public readonly string PackIdentifier = "";
 
@@ -38,7 +41,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
     protected void ResourceAdd(string identifier, TRes resource, bool replace = false, bool persistent = false)
 	{
 		Dictionary<string, TRes> contentsCollection = persistent
-			? ContentsPersistent : Contents;
+			? ContentRuntime : ContentBase;
 
 		if (contentsCollection.ContainsKey(identifier) && !replace)
 		{
@@ -46,67 +49,80 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 		}
 
 		contentsCollection[identifier] = resource;
-
-		_Loaded(identifier, resource);
 	}
 
     protected void RemoveResource(string identifier, bool persistent = false)
     {
         Dictionary<string, TRes> contentsCollection = persistent
-            ? ContentsPersistent : Contents;
+            ? ContentRuntime : ContentBase;
         contentsCollection.Remove(identifier);
     }
 
-	public void ResourceClear(bool persistent)
+	public void ResourceClear(bool onlyPersistent)
 	{
-		if (persistent)
-			ContentsPersistent.Clear();
+		if (onlyPersistent)
+			ContentRuntime.Clear();
 		else
-			Contents.Clear();
+		{
+			ContentBase.Clear();
+			ContentRuntime.Clear();
+		}
 	}
 
     public bool HasResource(string identifier, bool persistent = false)
 	{
 		Dictionary<string, TRes> contentsCollection = persistent
-			? ContentsPersistent : Contents;
+			? ContentRuntime : ContentBase;
 
 		return contentsCollection.ContainsKey(identifier);
 	}
 
-    public TRes ResourceGet(string identifier, bool persistent = false, bool contentsFallback = true)
+    public virtual TRes ResourceGet(string identifier, bool getBase = false, bool duplicate = true)
     {
         TRes? output;
 
-        Dictionary<string, TRes> contentsCollection = persistent
-            ? ContentsPersistent : Contents;
+		//Select what content to get from.
+		Dictionary<string, TRes> contentsCollection;
+		if (getBase)
+		{
+			contentsCollection = ContentBase;
+		}
+		else
+		{
+			contentsCollection = ContentRuntime;
+		}
+
         contentsCollection.TryGetValue(identifier, out output);
 
-        if (output is null && contentsFallback) Contents.TryGetValue(identifier, out output);
+		if (output is null)
+		{
+			ContentBase.TryGetValue(identifier, out output);
+			if (output is not null)
+				MsgLog.LogInfoMsg($"{identifier} resource from pack {PackIdentifier} was not found in runtime content and had to be fetched from base content");
+		}
+
         //If it does not exist, throw
-        if (output is null) throw new Exception($"Resource {identifier} not found.");
+		if (output is null) throw new Exception($"Resource {identifier} not found in either the base or runtime content.");
 
-		//Make a copy if it is not persistent, otherwise just keep modifying it.
-		if (!persistent)
-        	output = (TRes)output.Duplicate(true);
 
-        return output;
+		return duplicate ? (TRes)output.Duplicate(true) : output;
     }
 
 	public List<TRes> ResourceGetAll(bool persistent)
 	{
 		if (persistent)
 		{
-			return ContentsPersistent.Values.ToList();
+			return ContentRuntime.Values.ToList();
 		}
 		else
 		{
-			return Contents.Values.ToList();
+			return ContentBase.Values.ToList();
 		}
 	}
 
     public List<TRes> ResourcesGetWithTag(string tag, bool persistent = false)
 		=> (from identifier
-			in persistent ? Contents.Keys : ContentsPersistent.Keys
+			in persistent ? ContentBase.Keys : ContentRuntime.Keys
 			select ResourceGet(identifier, persistent)
 			).ToList();
 
@@ -136,7 +152,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 
     public void TagRemove(string identifier, string tag)
     {
-        if (Contents.ContainsKey(identifier))
+        if (ContentBase.ContainsKey(identifier))
             throw new Exception("No resource with that identifier was found");
 
         Collections.Array<string> tags = TagGet(identifier);
@@ -147,7 +163,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
     public static void TagSet(TRes res, Collections.Array<string> tags)
         => res.SetMeta(METAKEY_TAG, tags);
     protected void TagSet(string identifier, Godot.Collections.Array<string> tags)
-        => TagSet(Contents[identifier], tags);
+        => TagSet(ContentBase[identifier], tags);
 
     public void TagClear(string identifier)
     {
@@ -161,7 +177,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
         => res.GetMeta(METAKEY_TAG, new Collections.Array<string>())
             .As<Collections.Array<string>>();
     public Collections.Array<string> TagGet(string identifier)
-        => TagGet(Contents[identifier]);
+        => TagGet(ContentBase[identifier]);
 
     [Obsolete("The saved resource is kinda fucked.")]
     protected void TagFormatRes(string path, TRes res)
@@ -187,32 +203,43 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 
 	#region Load
 	//Load all resources.
-	public void LoadContent()
+	public void LoadContent(bool loadBase, string persistentFolder = "")
 	{
-		//Add the new elements.
+		if (!loadBase && persistentFolder == "")
+			throw new Exception("Skipping base content AND persistent content, this call can't load anything.");
+
+		if (!loadBase && ContentBase.IsEmpty())
+			throw new Exception("The loading of base content was skipped, but no base content has been loaded beforehand.");
+
+		//Start by loading the regular content.
+		if (!loadBase)
+			goto runtimeContent;
+
+		ResourceClear(false);
 		foreach (var item in LoadGetAllInFolder(GetDirectory()))
 		{
-			Contents.Add(item.Key, item.Value);
+			ContentBase.Add(item.Key, item.Value);
 
 			//If it is persistent, also put it in said dictionary.
 			//This may throw if it was already added in the user section, this should simply not run after loading user content
-			if (item.Value.TagIn(TAG_PERSISTENT)) ContentsPersistent.Add(item.Key, item.Value);
+			//if (item.Value.TagIn(TAG_PERSISTENT)) ContentRuntime.Add(item.Key, item.Value);
+			ContentRuntime.Add(item.Key, item.Value);
 		}
-		//CreateEnums();
-	}
 
-	public void LoadContentPersistent(string baseFolder)
-	{
-		foreach (var item in LoadGetAllInFolder($"{baseFolder}/{PackIdentifier}"))
+	runtimeContent:
+		//Then the persistent content
+		string persistentDir = $"{persistentFolder}/{PackIdentifier}";
+		foreach (var item in LoadGetAllInFolder(persistentDir))
 		{
-			//If it is persistent, also put it in said dictionary.
-			//This may throw if it was already added in the user section, this should simply not run after loading user content
+			//If this was fetched from the save file folder, it is supposed to be persistent.
 			if (!item.Value.TagIn(TAG_PERSISTENT))
-				throw new Exception($"Found content ({item.Value}) that is not set as persistent on the save file folder: {baseFolder}.");
+				throw new Exception($"Found content ({item.Value}) that is not set as persistent on the save file folder: {persistentDir}.");
 
 			//Content from the save file always overrides existing content
-			ContentsPersistent[item.Key] = item.Value;
+			ContentRuntime[item.Key] = item.Value;
 		}
+
+		ContentLoaded?.Invoke(this, new EventArgs());
 	}
 
     public Dictionary<string, TRes> LoadGetAllInFolder(string path)
@@ -232,19 +259,14 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 		}
 		return output;
 	}
-
-    public virtual void _Loaded(string identifier, TRes res)
-    {
-
-    }
 	#endregion
 
 	#region Save
-	public bool SavePersistent(string baseFolder)
+	public bool SavePersistent(string persistentFolder)
 	{
 		bool success = true;
 		List<TRes> toSave =
-			ContentsPersistent.Values.Where(x => TagIn(x, TAG_PERSISTENT))
+			ContentRuntime.Values.Where(x => TagIn(x, TAG_PERSISTENT))
 			.ToList();
 
 		foreach (var item in toSave)
@@ -252,7 +274,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 			string profileName = SaveManager.GetCurrentSave()?.ProfileName ?? throw new Exception();
 			int slot = SaveManager.GetCurrentSlot();
 			//baseFolder = SaveFile.GetSaveResourceFolder(profileName, slot);
-			string savePath = $"{baseFolder}/{PackIdentifier}/{GetResourceIdentifier(item)}{GetExtension()}";
+			string savePath = $"{persistentFolder}/{PackIdentifier}/{GetResourceIdentifier(item)}{GetExtension()}";
 
 			string dirPath = savePath.GetBaseDir();
 			Error dirError = DirAccess.MakeDirRecursiveAbsolute(dirPath);
@@ -327,7 +349,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 		string text =
 		$"public enum {enumName} \n"
 		+ "{\n";
-		foreach (var item in Contents)
+		foreach (var item in ContentBase)
 		{
 			text += item.Key + ",\n";
 		}
@@ -383,9 +405,7 @@ public class ResourcePack<TRes> : IResourcePack where TRes : Resource, new()
 #region Interface
 public interface IResourcePack
 {
-	public void LoadContent();
-
-	public void LoadContentPersistent(string baseFolder);
+	public void LoadContent(bool loadBase, string persistentFolder = "");
 
 	public bool SavePersistent(string baseFolder);
 

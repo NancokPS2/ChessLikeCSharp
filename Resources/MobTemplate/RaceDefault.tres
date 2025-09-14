@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MobTemplateRace" load_steps=4 format=3 uid="uid://dbjwh1u3lm8r5"]
+
+[ext_resource type="Script" uid="uid://r2wtknux1ih3" path="res://Entity/Action/Ability/Ability.cs" id="1_1g7qb"]
+[ext_resource type="Script" uid="uid://r4d46yixqo3f" path="res://Entity/Mob/StatSet/MobStatBoost.cs" id="2_rq80x"]
+[ext_resource type="Script" uid="uid://unt05ws8ip6w" path="res://Entity/Mob/Template/MobTemplateRace.cs" id="3_45767"]
+
+[resource]
+script = ExtResource("3_45767")
+Abilities = Array[ExtResource("1_1g7qb")]([])
+StatBoosts = Array[ExtResource("2_rq80x")]([])
+MovementModes = Array[int]([])
+TemplateName = "Entity"
+metadata/_custom_type_script = "uid://unt05ws8ip6w"
