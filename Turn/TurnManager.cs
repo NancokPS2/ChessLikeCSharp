@@ -64,7 +64,7 @@ public partial class TurnManager : Node3D
 
     public void Add(ITurn participant)
     {
-        Participants.Add(participant);
+        Participants.Add(participant, false);
         ResetDelay(participant);
     }
 

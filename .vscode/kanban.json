@@ -127,6 +127,10 @@
             "title": "Bugs",
             "tasks": [
                 {
+                    "text": "Characters don't have any skills, did the MobTemplate resources break again?",
+                    "id": "i30lilz9s1aatb7xa6nfzz22"
+                },
+                {
                     "text": "TurnManager still fails to make sure the new turn is from a different ITurn ",
                     "id": "t2n0qigx8ep5biido38vjdmc"
                 },
@@ -184,5 +188,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1757636543710
+    "timestamp": 1757823894331
 }

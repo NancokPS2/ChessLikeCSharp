@@ -42,7 +42,7 @@ public partial class PreparationUI : Control
 	private void OnConfirmed()
 	{
 		//There must be enough player units to start combat.
-		if (CombatScene.GetMobsInCombat().Where(x => x.Faction == ChessLike.Entity.EFaction.PLAYER).Count() == 0)
+		if (Mob.GetInstancesInState(EMobState.COMBAT).Where(x => x.Faction == ChessLike.Entity.EFaction.PLAYER).Count() == 0)
 		{
 			MsgLog.AddMessage("No player units in combat.");
 			return;

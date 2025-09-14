@@ -39,6 +39,7 @@ public partial class MobSceneManager : Node3D, ISingleton<MobSceneManager>
 	public MobSceneManager()
 	{
 		Vector3i gridPos = Vector3i.ZERO;
+		StoragePositions = new (Vector3i, Godot.Vector3)[STORAGE_MAX_INSTANCES];
 		
 		for (int i = 0; i < STORAGE_MAX_INSTANCES; i++)
 		{
