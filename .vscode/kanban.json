@@ -5,6 +5,10 @@
             "title": "To-Do",
             "tasks": [
                 {
+                    "text": "Give SoundManager a \"default\" sound channel that makes the AudioStreamPlayer unreachable.",
+                    "id": "kniusmkohogw7bznsn89a7ab"
+                },
+                {
                     "text": "MobSceneManager storage system is incomplete",
                     "id": "fs7njxmp6w5xx9wdtfx72ydp"
                 },
@@ -160,5 +164,5 @@
     ],
     "autosave": true,
     "saveToFile": true,
-    "timestamp": 1757862516985
+    "timestamp": 1758369787819
 }

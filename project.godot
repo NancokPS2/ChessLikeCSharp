@@ -31,6 +31,7 @@ TooltipServer="*res://Singleton/TooltipServer/TooltipServer.cs"
 Command="*res://Singleton/Command/Command.cs"
 LoadingScreen="res://Singleton/LoadingScreen/LoadingScreen.tscn"
 InputManager="res://Singleton/InputManager/InputManager.cs"
+Sound="*res://Singleton/SoundManager/SoundManager.tscn"
 
 [debug]
 
