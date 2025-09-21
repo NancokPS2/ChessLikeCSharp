@@ -20,7 +20,7 @@ public partial class SaveManager : Node
 	const string CFKEY_PLAYERFACTION = "PlayerFaction";
 	private const string SAVE_IDENTIFIER_DEFAULT = "__UNDEFINED";
 
-	private static SaveManager? Instance;
+	public static SaveManager? Instance { protected set; get; }
 
 	public SaveManager() { Instance = this; }
 

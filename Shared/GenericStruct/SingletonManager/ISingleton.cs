@@ -6,5 +6,5 @@ using Godot;
 
 public interface ISingleton<TObject> where TObject : GodotObject
 {
-	public static abstract TObject? Instance { get; set; }
+	public static abstract TObject? Instance { protected set; get; }
 }

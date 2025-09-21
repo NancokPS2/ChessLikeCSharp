@@ -46,10 +46,12 @@ public partial class SceneChanger : Node
 
 		CombatScene node = Readonly.Scenes.MAIN_COMBAT;
 
-		await AsyncSceneChange(node);
+		//await AsyncSceneChange(node);
+		GetCommonParent().AddChild(node);
+		CurrentScene = node;
+		EventBus.SceneChanged?.Invoke(node);
 
 		node.Setup(data);
-		
 	}
 
 	private static async void ChangeToTravelMap()
@@ -59,7 +61,10 @@ public partial class SceneChanger : Node
 
 		TravelMapScene node = Readonly.Scenes.MAIN_TRAVEL_MAP;
 
-		await AsyncSceneChange(node);
+		//await AsyncSceneChange(node);
+		GetCommonParent().CallDeferred("add_child", node);
+		CurrentScene = node;
+		EventBus.SceneChanged?.Invoke(node);
 		LoadingScreen.SetLoading(ELoadingReason.CHANGING_SCENE, false);
 	}
 
@@ -71,7 +76,10 @@ public partial class SceneChanger : Node
 
 		MainMenuScene node = Readonly.Scenes.MAIN_MENU;
 
-		await AsyncSceneChange(node);
+		//await AsyncSceneChange(node);
+		GetCommonParent().AddChild(node);
+		CurrentScene = node;
+		EventBus.SceneChanged?.Invoke(node);
 		LoadingScreen.SetLoading(ELoadingReason.CHANGING_SCENE, false);
 	}
 
