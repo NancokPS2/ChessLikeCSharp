@@ -41,10 +41,6 @@ settings/crash_handler/message="Your crash report, my liege."
 
 project/assembly_name="ChessLike"
 
-[editor]
-
-run/main_run_args="++profile=nuevo"
-
 [file_customization]
 
 folder_colors={

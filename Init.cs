@@ -43,7 +43,7 @@ public partial class Init : Node
 		}
 
 		if (argumentProfile != "")
-			AutoStart(argumentProfile);
+			SaveManager.LoadSave(argumentProfile, 0);
 		else
 			SceneChanger.ChangeToMainMenu();
 	}

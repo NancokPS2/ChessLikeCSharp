@@ -39,7 +39,7 @@ public partial class SceneChanger : Node
 		CurrentScene = null;
 	}
 
-	public static async void ChangeToCombat(EncounterData data)
+	public static void ChangeToCombat(EncounterData data)
 	{
 		LoadingScreen.SetLoading(ELoadingReason.CHANGING_SCENE, true);
 		RemoveCurrent();
@@ -54,7 +54,7 @@ public partial class SceneChanger : Node
 		node.Setup(data);
 	}
 
-	private static async void ChangeToTravelMap()
+	private static void ChangeToTravelMap()
 	{
 		LoadingScreen.SetLoading(ELoadingReason.CHANGING_SCENE, true);
 		RemoveCurrent();
@@ -69,7 +69,7 @@ public partial class SceneChanger : Node
 	}
 
 
-	public static async void ChangeToMainMenu()
+	public static void ChangeToMainMenu()
 	{
 		LoadingScreen.SetLoading(ELoadingReason.CHANGING_SCENE, true);
 		RemoveCurrent();
