@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Drawing.Text;
 using System.Reflection.Metadata.Ecma335;
+using ChessLike.Context;
 using ChessLike.Extension;
 using ChessLike.World;
 using ChessLike.WorldMap;
@@ -24,7 +25,7 @@ public partial class MobMovementManager : Node3D, ISingleton<MobMovementManager>
 		base._Ready();
 		EventBus.MobStateChanged += OnMobStateChanged;
 		EventBus.CombatGridChanged += OnGridChanged;
-		EventBus.MobMovementPathRequested += OnMobMoveRequested;
+		EventBus.MobMovementPathRequested += OnMobMovementRequested;
 		EventBus.MobCellListChanged += OnMobCellListChanged;
 
 		Instance = this;
@@ -35,7 +36,7 @@ public partial class MobMovementManager : Node3D, ISingleton<MobMovementManager>
 		base.Dispose(disposing);
 		EventBus.MobStateChanged -= OnMobStateChanged;
 		EventBus.CombatGridChanged -= OnGridChanged;
-		EventBus.MobMovementPathRequested -= OnMobMoveRequested;
+		EventBus.MobMovementPathRequested -= OnMobMovementRequested;
 		EventBus.MobCellListChanged -= OnMobCellListChanged;
 	}
 
@@ -216,7 +217,7 @@ public partial class MobMovementManager : Node3D, ISingleton<MobMovementManager>
 	public void ForceMobPosition(Mob mob, Vector3i where)
 	{
 		mob.SetPosition(where);
-		EventBus.MobMoved?.Invoke(mob, new List<Vector3i>() { where }, new(EMovementMode.PLACE));
+		EventBus.MobMoved?.Invoke(new MobMovementContext(mob, EMovementMode.PLACE, new(){where}));
 	}
 
 	private void UpdateAStar()
@@ -259,16 +260,18 @@ public partial class MobMovementManager : Node3D, ISingleton<MobMovementManager>
 		UpdateAStar(mob);
 	}
 
-	private void OnMobMoveRequested(Mob mob, List<Vector3i> path, MovementParameters moveParams)
+	private void OnMobMovementRequested(MobMovementContext context)
 	{
-		EMovementMode moveMode = moveParams.MovementMode;
+		var path = context.Path;
+		var mob = context.Mover;
+		EMovementMode moveMode = context.MovementMode;
 		if (IsPositionReachable(mob, mob.GetPosition(), path.Last(), moveMode))
 		{
 			foreach (var pos in path)
 			{
 				mob.SetPosition(pos);
 			}
-			EventBus.MobMoved?.Invoke(mob, path, moveParams);
+			EventBus.MobMoved?.Invoke(context);
 		}
 		else
 		{

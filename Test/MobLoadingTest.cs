@@ -1,3 +1,4 @@
+using ChessLike.Context;
 using ChessLike.Entity;
 using ChessLike.Entity.MobCommand;
 using Godot;
@@ -72,15 +73,15 @@ public partial class MobLoadingTest : Node3D
         Console.WriteLine(path);
 
         EventBus.MobMoved += TestMovementReportMove;
-        mob.Move(path, new(EMovementMode.PLACE));
+        mob.Move(new(mob, EMovementMode.PLACE, path));
         EventBus.MobMoved -= TestMovementReportMove;
 
         TestChange("Movement", false);
     }
 
-	private void TestMovementReportMove(Mob mob, List<Vector3i> path, MovementParameters moveParams)
+	private void TestMovementReportMove(MobMovementContext context)
 	{
-        Console.WriteLine($"Mob {mob.DisplayedName} moved from {path.First()} to {path.Last()}");
+        Console.WriteLine($"Mob {mob.DisplayedName} moved from {context.Path.First()} to {context.Path.Last()}");
 	}
 
     public void TestMobCommands()

@@ -32,9 +32,14 @@ public partial class UsageParameters
 	/// <returns></returns>
 	public UniqueList<Mob> MobsTargeted = new();
 
-	public bool Cancelled = false; 
+	public bool Cancelled = false;
+
+	public bool Used = false;
 
 	public int Priority = 0;
+
+	public bool Animating { get; internal set; }
+
 
 	public UsageParameters(Mob owner, Grid grid, ActionEvent action_reference)
 	{

@@ -1,3 +1,4 @@
+using ChessLike.Context;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.MobCommand;
@@ -106,10 +107,9 @@ public partial class EventBus : Node
     #endregion
 
     #region Mob - Movement
-    public delegate void MobMovementPath(Mob mob, List<Vector3i> path, MovementParameters moveParams);
-	public delegate void MobMovement(Mob mob, Vector3i target, MovementParameters moveParams);
-    public static MobMovementPath? MobMovementPathRequested;
-	public static MobMovementPath? MobMoved;
+    public delegate void MobMovement(MobMovementContext context);
+	public static MobMovement? MobMovementPathRequested;
+	public static MobMovement? MobMoved;
 	public static ObjectChange<Mob>? MobCellListChanged;
     #endregion
 

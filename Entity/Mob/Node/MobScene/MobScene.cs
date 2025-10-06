@@ -1,3 +1,4 @@
+using ChessLike.Context;
 using ChessLike.Entity;
 using ChessLike.Entity.Action;
 using ChessLike.Extension;
@@ -362,11 +363,11 @@ public partial class MobScene : Node3D
 	#endregion
 
 	#region Event Handling
-	private void OnMobMoved(Mob mob, List<Vector3i> path, MovementParameters moveParams)
+	private void OnMobMoved(MobMovementContext context)
 	{
-		if (mob != MobUsing) return;
-		MovementModeCurrent = moveParams.MovementMode;
-		MovementStored.AddRange(path);
+		if (context.Mover != MobUsing) return;
+		MovementModeCurrent = context.MovementMode;
+		MovementStored.AddRange(context.Path);
 	}
 
 	private void OnMobStatChanged(Mob mob, EStatName stat, float change)

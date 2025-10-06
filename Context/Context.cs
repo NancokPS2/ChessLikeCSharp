@@ -13,5 +13,5 @@ public abstract class Context
 {
 	public delegate void Step<TEnum>(Context context, TEnum enumerator) where TEnum : notnull, Enum;
 
-	public abstract void Finish();
+	//public abstract void Finish();
 }

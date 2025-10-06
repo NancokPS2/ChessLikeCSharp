@@ -1,3 +1,4 @@
+using ChessLike.Context;
 using ChessLike.Entity.Action;
 using ChessLike.Entity.MobCommand;
 using ChessLike.Extension;
@@ -288,11 +289,10 @@ public partial class Mob : Resource
 		EventBus.MobCellListChanged?.Invoke(this);
 	}
 
-	public void Move(Vector3i to, MovementParameters moveParams)
-		=> Move(new List<Vector3i>() { to }, moveParams);
-	public void Move(List<Vector3i> path, MovementParameters moveParams)
+	public void Move(MobMovementContext context)
 	{
-		if (path.Count == 0) MsgLog.Log(EMessageType.ERROR, "Received empty path.");
+		if (context.Path.Count == 0)
+			MsgLog.Log(EMessageType.ERROR, "Received empty path.");
 
 		/* foreach (var position in path)
 		{
@@ -305,12 +305,7 @@ public partial class Mob : Resource
 			}
 		}
  */
-		EventBus.MobMovementPathRequested?.Invoke(this, path, moveParams);
-	}
-
-	public void MoveRelative(Vector3i relative, MovementParameters moveParams)
-	{
-		Move(GetPosition() + relative, moveParams);
+		EventBus.MobMovementPathRequested?.Invoke(context);
 	}
 
 	#endregion

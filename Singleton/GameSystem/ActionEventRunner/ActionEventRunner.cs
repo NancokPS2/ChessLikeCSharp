@@ -17,33 +17,81 @@ namespace ChessLike.Entity.Action;
 [GlobalClass]
 public partial class ActionEventRunner : Node3D
 {
-	public delegate void ActionQueue(ActionEvent action, UsageParameters parameters);
-	public delegate void Delegate();
+	public static event EventBus.ObjectChange<ActionEventRunner>? QueueEmptied; 
+
+	public static ActionEventRunner Instance = null!;
 
 	#region Queue
-	protected bool ReadyToStartRun;
+	protected bool QueueProcessing;
 	private List<UsageParameters> Queue = new();
 
 	public override void _Ready()
 	{
 		base._Ready();
+		Instance = this;
 		EventBus.CombatStateChanged += OnBattleStateChanged;
 		EventBus.ActionQueueRequested += OnActionQueueRequested;
 	}
 
-	public override void _Process(double delta)
+	public static void StartQueueProcessing(bool enabled)
+		=> Instance.QueueProcessing = enabled;
+
+	public override void _PhysicsProcess(double delta)
 	{
-		base._Process(delta);
-		if (ReadyToStartRun)
-		{
-			//If the CombatScene has defined any parameters, add them first.
-			if (CombatScene.UsageParameters is not null)
-				QueueAdd(CombatScene.UsageParameters);
-				
-			QueueRun();
-		}
+		base._PhysicsProcess(delta);
+
+		if (!QueueProcessing)
+			return;
+
+		//If the CombatScene has defined any parameters, add them first.
+		if (CombatScene.UsageParameters is not null)
+			QueueAdd(CombatScene.UsageParameters);
+
+		QueueRunNext();
+
 	}
 
+	public void QueueProcess()
+	{
+		if (!QueueProcessing)
+			return;
+
+		UsageParameters? currentParams = Queue.FirstOrDefault();
+
+		//Nothing to process, stop processing.
+		if (currentParams is null)
+		{
+			QueueProcessing = false;
+			return;
+		}
+
+		//Discard if it was cancelled.
+		if (currentParams.Cancelled)
+		{
+			Queue.Remove(currentParams);
+			return;
+		}
+
+		//Discard if it was used.
+		if (currentParams.Used && !currentParams.Animating)
+		{
+			Queue.Remove(currentParams);
+			return;
+		}
+
+		//Make sure it is ready for use.
+		bool ownerNull = currentParams.OwnerRef is null;
+		bool gridNull = currentParams.GridRef is null;
+		bool positionsEmpty = currentParams.PositionsTargeted.IsEmpty();
+		bool positionsAndMobsNotAffected = currentParams.PositionsAffected.IsEmpty() && currentParams.MobsTargeted.IsEmpty();
+		if (ownerNull || gridNull || positionsEmpty || positionsAndMobsNotAffected)
+			return;
+
+		QueueRunNext();
+	}
+
+	public List<UsageParameters> GetQueue()
+		=> Queue;
 
 	public void QueueAdd(UsageParameters parameters)
 	{
@@ -89,28 +137,26 @@ public partial class ActionEventRunner : Node3D
 	#region Run Logic
 	// RUN LOGIC
 
-	public void QueueRun()
+	public void QueueRunNext()
 	{
-		ReadyToStartRun = false;
-
 		if (Queue.Count == 0) { throw new Exception("Nothing to run."); }
 
-		for (int queueIndex = 0; queueIndex < Queue.Count; queueIndex++)
-		{
-			//Select the action to run.
-			UsageParameters parametersToUse = Queue[queueIndex];
+		UsageParameters parametersToUse = Queue.First();
+		if (parametersToUse.Cancelled)
+			throw new Exception("This was cancelled!");
 
-			//Use it
+		//Use it
 			if (!parametersToUse.Cancelled)
 			{
 				EventBus.ActionPreUsed?.Invoke(parametersToUse);
 				parametersToUse.ActionRef.Use(parametersToUse);
+				parametersToUse.Used = true;
 				MsgLog.LogGameMsg(parametersToUse.ActionRef.GetUseText(parametersToUse));
 			}
-		}
+		
 		EventBus.ActionEventQueueFinished?.Invoke(Queue);
 
-		Console.WriteLine($"Ran queued actions: {Queue.ToStringList()}");
+		MsgLog.LogInfoMsg($"Ran queued actions: {Queue.ToStringList()}");
 
 		QueueClear();
 	}
@@ -121,14 +167,13 @@ public partial class ActionEventRunner : Node3D
 	{
 		if (state == ECombatState.ACTION_RUNNING)
 		{
-			ReadyToStartRun = true;
+			QueueProcessing = true;
 		}
 	}
 
 	private void OnActionQueueRequested(UsageParameters parameters)
 	{
 		QueueAdd(parameters);
-		ReadyToStartRun = true;
 	}
     #endregion
 }
